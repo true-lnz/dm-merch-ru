@@ -1,5 +1,7 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+﻿## Encoding Safety (mandatory)
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+- Files containing Cyrillic text dont be unicode symbols.
+- Do not rewrite such files with `Set-Content` / `Out-File` unless `-Encoding UTF8` is explicitly provided.
+- If shell rewriting is unavoidable, always use explicit UTF-8 output encoding.
+- After editing Cyrillic strings, verify there is no mojibake in touched files (examples: `Р`, `С`, `Ð`, `Ñ` inside Russian text).
+- Do not run broad repo-wide encoding rewrites unless the user explicitly asks.
