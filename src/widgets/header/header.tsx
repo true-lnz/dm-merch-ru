@@ -13,14 +13,12 @@ import {
   NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
 import { siteNavigation } from "@/shared/config/navigation";
-import { siteInfo } from "@/shared/config/site-info";
 import { cn } from "@/shared/lib/cn";
+import { SiteContacts } from "@/shared/ui/site-contacts";
 
 const headerNavigation = siteNavigation.filter((item) => item.href !== "/");
 const navLinkClassName =
   "text-base tracking-[-0.02em] text-[#404040] transition-colors hover:text-[var(--accent)]";
-const contactLinkClassName =
-  "cta-link inline-flex min-h-[38px] items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] px-[0.56rem] py-[0.55rem] text-[0.88rem]";
 
 export function Header() {
   const pathname = usePathname();
@@ -42,8 +40,8 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--surface-header)]/95 px-[var(--layout-side-padding)] backdrop-blur-md transition-shadow",
-        isScrolled && "shadow-[0_4px_8px_rgba(0,0,0,0.03)]",
+        "sticky top-0 z-30 border-b border-[transparent] bg-[var(--surface-header)]/95 px-[var(--layout-side-padding)] backdrop-blur-md transition-shadow",
+        isScrolled && "border-[var(--border)]",
       )}
     >
       <div className="flex min-h-[93px] items-center justify-between gap-5 py-4 max-[1280px]:min-h-0">
@@ -118,26 +116,7 @@ export function Header() {
           </NavigationMenu>
         </div>
 
-        <div className="hidden flex-wrap items-center justify-end gap-2 lg:flex">
-          <div className="inline-flex gap-2" aria-label="Социальные сети">
-            {siteInfo.socials.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                className="inline-flex size-[38px] overflow-hidden rounded-[10px]"
-                aria-label={social.label}
-              >
-                <Image src={social.iconSrc} alt="" width={38} height={38} aria-hidden="true" />
-              </a>
-            ))}
-          </div>
-          <a href={`mailto:${siteInfo.email}`} className={contactLinkClassName}>
-            {siteInfo.email}
-          </a>
-          <a href={`tel:${siteInfo.phone.replace(/\D+/g, "")}`} className={contactLinkClassName}>
-            {siteInfo.phone}
-          </a>
-        </div>
+        <SiteContacts className="hidden lg:flex" />
       </div>
     </header>
   );
