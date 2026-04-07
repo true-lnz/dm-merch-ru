@@ -1,13 +1,13 @@
 import { siteInfo } from "@/shared/config/site-info";
-import { ContactPills } from "@/shared/ui/contact-pills";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
+import { ContactPills } from "@/shared/ui/contact-pills";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 
-const PRIVACY_CHECKBOX_ID = "blog-cta-privacy";
+const PRIVACY_CHECKBOX_ID = "request-cta-privacy";
 
-export function BlogCta() {
+export function RequestCta() {
   return (
     <section className="relative overflow-hidden py-16 md:py-24" aria-label="Форма заявки">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr]">

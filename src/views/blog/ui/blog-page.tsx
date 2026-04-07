@@ -1,7 +1,7 @@
 import { blogPostsMock } from "@/entities/blog-post";
 import { PageHeader } from "../../../shared/ui/page-header";
-import { BlogCta } from "@/widgets/blog-cta";
 import { BlogFeed } from "@/widgets/blog-feed";
+import { RequestCta } from "@/widgets/request-cta";
 
 export function BlogPage() {
   return (
@@ -14,7 +14,7 @@ export function BlogPage() {
         ]}
       />
       <BlogFeed posts={blogPostsMock} />
-      <BlogCta />
+      <RequestCta />
     </div>
   );
 }
