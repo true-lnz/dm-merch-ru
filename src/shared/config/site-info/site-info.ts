@@ -1,8 +1,7 @@
 export type SocialLink = {
+  icon: "vk" | "max";
   label: string;
   href: string;
-  iconSrc: string;
-  iconAlt: string;
 };
 
 export const siteInfo = {
@@ -13,16 +12,14 @@ export const siteInfo = {
   address: "г. Уфа, ул. Энтузиастов, д. 6",
   socials: [
     {
+      icon: "vk",
       label: "VK",
       href: "#",
-      iconSrc: "/social-vk.svg",
-      iconAlt: "VK",
     },
     {
+      icon: "max",
       label: "MAX",
       href: "#",
-      iconSrc: "/social-max.svg",
-      iconAlt: "MAX",
     },
   ] satisfies SocialLink[],
   privacyLabel: "Политика конфиденциальности",

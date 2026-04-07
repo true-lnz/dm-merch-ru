@@ -1,10 +1,10 @@
 import type { PropsWithChildren } from "react";
 
-type PageTitleProps = PropsWithChildren;
+type PageHeaderProps = PropsWithChildren;
 
-export function PageTitle({
+export function PageHeader({
   children,
-}: PageTitleProps) {
+}: PageHeaderProps) {
   return (
       <h1 className="page-title-heading">{children}</h1>
   );

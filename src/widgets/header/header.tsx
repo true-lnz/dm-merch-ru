@@ -3,117 +3,59 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/shared/ui/navigation-menu";
-import { siteNavigation } from "@/shared/config/navigation";
+import { headerNavigation } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
+import { buttonVariants } from "@/shared/ui/button";
 import { SiteContacts } from "@/shared/ui/site-contacts";
 
-const headerNavigation = siteNavigation.filter((item) => item.href !== "/");
-const navLinkClassName =
-  "text-base tracking-[-0.02em] text-[#404040] transition-colors hover:text-[var(--accent)]";
+const navLinkClassName = buttonVariants({
+  variant: "ghost",
+  size: "sm",
+  className:
+    "h-auto rounded-full px-4 py-2 text-base font-medium tracking-[-0.02em] text-[#404040] hover:bg-white hover:text-[var(--accent)]",
+});
+
+function isActiveRoute(pathname: string | null, href: string) {
+  if (!pathname) {
+    return false;
+  }
+
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export function Header() {
   const pathname = usePathname();
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-30 border-b border-[transparent] bg-[var(--surface-header)]/95 px-[var(--layout-side-padding)] backdrop-blur-md transition-shadow",
-        isScrolled && "border-[var(--border)]",
-      )}
-    >
+    <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--surface-header)]/95 px-[var(--layout-side-padding)] backdrop-blur-md">
       <div className="flex min-h-[93px] items-center justify-between gap-5 py-4 max-[1280px]:min-h-0">
         <div className="flex min-w-0 items-center gap-8 xl:gap-[6.85rem]">
           <Link href="/" className="inline-flex items-center" aria-label="На главную страницу">
             <Image src="/logo-dm.svg" alt="Держи Марку" width={273} height={37} priority />
           </Link>
 
-          <NavigationMenu
-            align="start"
-            className="hidden flex-none items-center lg:flex"
-            aria-label="Основная навигация"
-          >
-            <NavigationMenuList className="gap-[2.1rem]">
+          <nav aria-label="Основная навигация" className="hidden lg:block">
+            <ul className="flex items-center gap-2">
               {headerNavigation.map((item) => {
-                const isActive = pathname?.startsWith(item.href);
-
-                if (!item.children?.length) {
-                  return (
-                    <NavigationMenuItem key={item.href}>
-                      <Link
-                        href={item.href}
-                        className={cn(navLinkClassName, isActive && "text-[var(--accent)]")}
-                      >
-                        {item.label}
-                      </Link>
-                    </NavigationMenuItem>
-                  );
-                }
+                const isActive = isActiveRoute(pathname, item.href);
 
                 return (
-                  <NavigationMenuItem key={item.href}>
-                    <NavigationMenuTrigger
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       className={cn(
-                        "h-auto gap-1 rounded-none bg-transparent px-0 py-0 text-base font-medium tracking-[-0.02em] text-[#404040] shadow-none hover:bg-transparent hover:text-[var(--accent)] focus:bg-transparent focus-visible:ring-0 data-[open]:bg-transparent data-[popup-open]:bg-transparent",
-                        isActive && "text-[var(--accent)]",
+                        navLinkClassName,
+                        isActive && "bg-white text-[var(--accent)] hover:bg-white",
                       )}
                     >
                       {item.label}
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent className="w-[min(580px,calc(100vw-4rem))] rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-2 shadow-[0_18px_60px_rgba(15,23,42,0.12)]">
-                      <div className="grid gap-1 md:grid-cols-2">
-                        {item.children.map((child, index) => {
-                          const isChildActive = index === 0 && pathname === item.href;
-
-                          return (
-                            <NavigationMenuLink
-                              key={child.href}
-                              href={child.href}
-                              className={cn(
-                                "flex min-h-[88px] flex-col items-start justify-start gap-1 rounded-[16px] px-4 py-3 text-left hover:bg-[var(--surface-header)] focus:bg-[var(--surface-header)]",
-                                isChildActive && "bg-[var(--surface-header)]",
-                              )}
-                            >
-                              <span className="text-sm font-medium text-[var(--heading)]">
-                                {child.label}
-                              </span>
-                              {child.description ? (
-                                <span className="text-xs leading-5 text-[var(--text-muted)]">
-                                  {child.description}
-                                </span>
-                              ) : null}
-                            </NavigationMenuLink>
-                          );
-                        })}
-                      </div>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
+                    </Link>
+                  </li>
                 );
               })}
-            </NavigationMenuList>
-          </NavigationMenu>
+            </ul>
+          </nav>
         </div>
 
         <SiteContacts className="hidden lg:flex" />

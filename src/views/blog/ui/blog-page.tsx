@@ -1,6 +1,6 @@
 import { blogPostsMock } from "@/entities/blog-post";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
-import { PageTitle } from "@/shared/ui/page-title";
+import { PageHeader } from "../../../shared/ui/page-header";
 import { BlogCta } from "@/widgets/blog-cta";
 import { BlogFeed } from "@/widgets/blog-feed";
 
@@ -13,7 +13,7 @@ export function BlogPage() {
           { label: "Блог" },
         ]}
       />
-      <PageTitle>Блог</PageTitle>
+      <PageHeader>Блог</PageHeader>
       <BlogFeed posts={blogPostsMock} />
       <BlogCta />
     </div>

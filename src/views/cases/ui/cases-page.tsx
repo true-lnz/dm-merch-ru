@@ -1,12 +1,12 @@
-﻿import { PageTitle } from "@/shared/ui/page-title";
+﻿import { PageHeader } from "../../../shared/ui/page-header";
 import { Section } from "@/shared/ui/section";
 
 export function CasesPage() {
   return (
     <div className="page">
-      <PageTitle>
+      <PageHeader>
         Кейсы
-      </PageTitle>
+      </PageHeader>
       <Section className="content-card">
         <p>
           Здесь будет витрина работ: задачи клиента, формат мерча, сроки и эффект
