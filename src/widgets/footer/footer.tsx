@@ -1,6 +1,7 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { siteNavigation } from "@/shared/config/navigation";
 import { siteInfo } from "@/shared/config/site-info";
+import { SocialLinks } from "@/shared/ui/social-links";
 
 const footerNavigation = siteNavigation.filter((item) => item.href !== "/");
 
@@ -8,14 +9,7 @@ export function Footer() {
   return (
     <footer className="site-footer mt-auto bg-[var(--accent)] text-white">
       <div className="footer-main">
-        <div className="footer-socials" aria-label="Социальные сети">
-          <a href="#" aria-label="VK" className="footer-social">
-            VK
-          </a>
-          <a href="#" aria-label="Instagram" className="footer-social">
-            IG
-          </a>
-        </div>
+        <SocialLinks variant="footer" />
 
         <div className="footer-column">
           <h2 className="footer-title">Навигация</h2>

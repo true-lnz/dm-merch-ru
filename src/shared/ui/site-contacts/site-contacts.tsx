@@ -1,18 +1,20 @@
-import Image from "next/image";
 import { siteInfo } from "@/shared/config/site-info";
 import { cn } from "@/shared/lib/cn";
 import { ContactPills } from "@/shared/ui/contact-pills";
+import { SocialLinks } from "@/shared/ui/social-links";
 
 type SiteContactsProps = {
   className?: string;
   direction?: "row" | "column";
   showSocials?: boolean;
+  socialVariant?: "header" | "footer" | "cta";
 };
 
 export function SiteContacts({
   className,
   direction = "row",
   showSocials = true,
+  socialVariant = "header",
 }: SiteContactsProps) {
   const isColumn = direction === "column";
 
@@ -24,20 +26,7 @@ export function SiteContacts({
         className,
       )}
     >
-      {showSocials ? (
-        <div className="inline-flex gap-2" aria-label="Социальные сети">
-          {siteInfo.socials.map((social) => (
-            <a
-              key={social.label}
-              href={social.href}
-              className="inline-flex size-[38px] overflow-hidden rounded-[10px]"
-              aria-label={social.label}
-            >
-              <Image src={social.iconSrc} alt="" width={38} height={38} aria-hidden="true" />
-            </a>
-          ))}
-        </div>
-      ) : null}
+      {showSocials ? <SocialLinks variant={socialVariant} /> : null}
       <ContactPills email={siteInfo.email} phone={siteInfo.phone} direction={direction} />
     </div>
   );
