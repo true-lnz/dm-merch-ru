@@ -1,6 +1,7 @@
-﻿import { siteInfo } from "@/shared/config/site-info";
+import { siteInfo } from "@/shared/config/site-info";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
+import { ContactPills } from "@/shared/ui/contact-pills";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 
@@ -17,22 +18,13 @@ export function BlogCta() {
           <p className="max-w-[600px] text-base text-[var(--text)] md:text-2xl">
             Ответим в течение 30 минут. Подскажем формат, сроки и бюджет.
           </p>
-          <div className="space-y-3">
-            <a
-              href={`mailto:${siteInfo.email}`}
-              className="inline-flex rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
-            >
-              {siteInfo.email}
-            </a>
-            <div>
-              <a
-                href={`tel:${siteInfo.phone.replace(/\D+/g, "")}`}
-                className="inline-flex rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
-              >
-                {siteInfo.phone}
-              </a>
-            </div>
-          </div>
+          <ContactPills
+            email={siteInfo.email}
+            phone={siteInfo.phone}
+            direction="column"
+            variant="cta"
+            className="blog-cta-contact-pills"
+          />
         </div>
 
         <form className="space-y-4" noValidate>

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { siteNavigation } from "@/shared/config/navigation";
 import { siteInfo } from "@/shared/config/site-info";
 import { cn } from "@/shared/lib/cn";
+import { ContactPills } from "@/shared/ui/contact-pills";
 
 const headerNavigation = siteNavigation.filter((item) => item.href !== "/");
 
@@ -87,16 +88,11 @@ export function Header() {
               <Image src="/social-max.svg" alt="" width={38} height={38} aria-hidden="true" />
             </a>
           </div>
-          <a href={`mailto:${siteInfo.email}`} className="header-contact-pill" aria-label="Написать на email">
-            {siteInfo.email}
-          </a>
-          <a
-            href={`tel:${siteInfo.phone.replace(/\D+/g, "")}`}
-            className="header-contact-pill"
-            aria-label="Позвонить"
-          >
-            {siteInfo.phone}
-          </a>
+          <ContactPills
+            email={siteInfo.email}
+            phone={siteInfo.phone}
+            variant="header"
+          />
         </div>
       </div>
     </header>
