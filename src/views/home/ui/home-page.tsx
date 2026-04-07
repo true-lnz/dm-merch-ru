@@ -1,12 +1,10 @@
-﻿import { PageHeader } from "../../../shared/ui/page-header";
+import { PageHeader } from "../../../shared/ui/page-header";
 import { Section } from "@/shared/ui/section";
 
 export function HomePage() {
   return (
     <div className="page">
-      <PageHeader>
-        Главная
-      </PageHeader>
+      <PageHeader title="Главная" />
       <Section className="content-card">
         <h2>Мерч как инструмент роста бренда</h2>
         <p>
