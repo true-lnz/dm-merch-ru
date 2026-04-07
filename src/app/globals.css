@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter");
+  font-family: "Adderley";
+  src: url("/Adderley-Bold.woff") format("woff");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
 }
 
 :root {
@@ -70,6 +73,55 @@ a {
 
 .page {
   padding: 2.5rem 0 0;
+}
+
+.page-title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.page-title-crumbs {
+  margin-top: 2rem;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--text-muted);
+}
+
+.page-title-crumbs a {
+  color: inherit;
+}
+
+.page-title-heading {
+  margin: 0;
+  font-family: "Adderley", sans-serif;
+  font-size: 6.215rem;
+  color: var(--heading);
+  line-height: 1.125;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+}
+
+.page-title-default {
+  gap: 0.5rem;
+}
+
+.page-title-default .page-title-heading {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.page-title-hero {
+  margin-bottom: 3rem;
+}
+
+.page-title-subtitle {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
 .surface {
@@ -213,7 +265,7 @@ a {
 }
 
 .blog-page {
-  row-gap: 2.5rem;
+  row-gap: 2rem;
   display: flex;
   flex-direction: column;
 }
@@ -305,6 +357,23 @@ a {
 
   .page {
     padding-top: 1.5rem;
+  }
+
+  .page-title-hero {
+    margin-bottom: 2rem;
+  }
+
+  .page-title-crumbs {
+    margin-bottom: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .page-title-hero .page-title-heading {
+    font-size: 3.5rem;
+  }
+
+  .page-title-subtitle {
+    font-size: 0.9375rem;
   }
 
   .footer-main {
