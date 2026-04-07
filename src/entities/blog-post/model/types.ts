@@ -9,8 +9,7 @@ export type BlogPostDto = {
   id: string;
   slug: string;
   title: string;
-  excerpt: string;
-  category: string;
+  excerpt?: string | null;
   image: CmsImage;
 };
 
@@ -18,8 +17,7 @@ export type BlogPost = {
   id: string;
   slug: string;
   title: string;
-  excerpt: string;
-  category: string;
+  excerpt?: string | null;
   image: CmsImage;
   href: string;
 };

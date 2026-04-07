@@ -235,6 +235,10 @@ a {
   gap: 0.5rem;
 }
 
+.cta-link {
+  color: white;
+}
+
 .header-social-link {
   display: inline-flex;
   width: 38px;
