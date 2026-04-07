@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/utils"
+import { cn } from "@/shared/lib/cn"
 
 function AspectRatio({
   ratio,
@@ -18,5 +18,3 @@ function AspectRatio({
     />
   )
 }
-
-export { AspectRatio }

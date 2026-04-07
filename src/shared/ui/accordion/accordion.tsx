@@ -68,5 +68,3 @@ function AccordionContent({
     </AccordionPrimitive.Panel>
   )
 }
-
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
