@@ -4,7 +4,7 @@ import { Section } from "@/shared/ui/section";
 export function CasesPage() {
   return (
     <div className="page">
-      <PageTitle subtitle="Кейсы реализованных проектов с результатами.">
+      <PageTitle>
         Кейсы
       </PageTitle>
       <Section className="content-card">

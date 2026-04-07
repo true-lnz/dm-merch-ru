@@ -4,7 +4,7 @@ import { Section } from "@/shared/ui/section";
 export function ContactsPage() {
   return (
     <div className="page">
-      <PageTitle subtitle="Контакты и форма первичного брифа.">
+      <PageTitle>
         Контакты
       </PageTitle>
       <Section className="content-card">

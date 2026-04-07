@@ -1,9 +1,11 @@
 import { siteInfo } from "@/shared/config/site-info";
 import { Button } from "@/shared/ui/button";
-import { Checkbox } from "@/shared/ui/checkbox";
 import { ContactPills } from "@/shared/ui/contact-pills";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
+import {Checkbox} from "@radix-ui/react-checkbox";
+
+const PRIVACY_CHECKBOX_ID = "blog-cta-privacy";
 
 export function BlogCta() {
   return (
@@ -45,11 +47,13 @@ export function BlogCta() {
             <Textarea placeholder="Сообщение" name="message" />
           </label>
 
-          <label className="flex items-start gap-3 text-xs text-[var(--field-text)]">
-            <Checkbox name="privacy" required className="mt-0.5" />
-            Нажимая на кнопку &quot;Отправить&quot;, Вы соглашаетесь с Политикой
-            конфиденциальности.
-          </label>
+          <div className="flex items-start gap-3 text-xs text-[var(--field-text)]">
+            <Checkbox id={PRIVACY_CHECKBOX_ID} name="privacy" required className="mt-0.5" />
+            <label htmlFor={PRIVACY_CHECKBOX_ID}>
+              Нажимая на кнопку &quot;Отправить&quot;, Вы соглашаетесь с Политикой
+              конфиденциальности.
+            </label>
+          </div>
 
           <Button type="submit" className="w-full sm:w-[320px]">
             Отправить заявку

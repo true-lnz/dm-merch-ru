@@ -4,7 +4,7 @@ import { Section } from "@/shared/ui/section";
 export function CatalogPage() {
   return (
     <div className="page">
-      <PageTitle subtitle="Список товарных категорий и карточек продукции.">
+      <PageTitle>
         Каталог
       </PageTitle>
       <Section className="content-card">

@@ -14,7 +14,6 @@ export function BlogFeed({ posts }: BlogFeedProps) {
             key={post.id}
             title={post.title}
             excerpt={post.excerpt}
-            category={post.category}
             href={post.href}
             image={post.image}
           />

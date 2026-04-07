@@ -4,7 +4,7 @@ import { Section } from "@/shared/ui/section";
 export function HomePage() {
   return (
     <div className="page">
-      <PageTitle subtitle="Базовая стартовая страница с вводным позиционированием.">
+      <PageTitle>
         Главная
       </PageTitle>
       <Section className="content-card">
