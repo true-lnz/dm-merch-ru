@@ -1,2 +1,2 @@
-﻿export { siteNavigation } from "./navigation";
-export type { NavigationItem } from "./navigation";
+export { siteNavigation } from "./navigation";
+export type { NavigationChildItem, NavigationItem } from "./navigation";

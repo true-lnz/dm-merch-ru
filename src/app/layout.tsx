@@ -3,7 +3,7 @@ import "./globals.css";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
 import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/cn";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 

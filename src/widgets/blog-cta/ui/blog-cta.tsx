@@ -1,9 +1,9 @@
 import { siteInfo } from "@/shared/config/site-info";
 import { ContactPills } from "@/shared/ui/contact-pills";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/shared/ui/button";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
 
 const PRIVACY_CHECKBOX_ID = "blog-cta-privacy";
 
@@ -20,13 +20,7 @@ export function BlogCta() {
           <p className="max-w-[600px] text-base text-[var(--text)] md:text-2xl">
             Ответим в течение 30 минут. Подскажем формат, сроки и бюджет.
           </p>
-          <ContactPills
-            email={siteInfo.email}
-            phone={siteInfo.phone}
-            direction="column"
-            variant="cta"
-            className="blog-cta-contact-pills"
-          />
+          <ContactPills email={siteInfo.email} phone={siteInfo.phone} direction="column" />
         </div>
 
         <form className="space-y-4" noValidate>
