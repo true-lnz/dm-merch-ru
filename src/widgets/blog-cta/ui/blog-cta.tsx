@@ -1,9 +1,9 @@
 import { siteInfo } from "@/shared/config/site-info";
-import { Button } from "@/shared/ui/button";
 import { ContactPills } from "@/shared/ui/contact-pills";
-import { Input } from "@/shared/ui/input";
-import { Textarea } from "@/shared/ui/textarea";
-import {Checkbox} from "@radix-ui/react-checkbox";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const PRIVACY_CHECKBOX_ID = "blog-cta-privacy";
 
@@ -32,30 +32,57 @@ export function BlogCta() {
         <form className="space-y-4" noValidate>
           <label className="block">
             <span className="sr-only">Имя</span>
-            <Input placeholder="Имя*" name="name" required />
+            <Input
+              placeholder="Имя*"
+              name="name"
+              required
+              className="h-11 rounded-none border-0 border-b border-[var(--field-border)] bg-transparent px-0 py-2 text-sm text-[var(--text)] shadow-none placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] focus-visible:ring-0"
+            />
           </label>
           <label className="block">
             <span className="sr-only">Телефон</span>
-            <Input placeholder="Телефон*" name="phone" required />
+            <Input
+              placeholder="Телефон*"
+              name="phone"
+              required
+              className="h-11 rounded-none border-0 border-b border-[var(--field-border)] bg-transparent px-0 py-2 text-sm text-[var(--text)] shadow-none placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] focus-visible:ring-0"
+            />
           </label>
           <label className="block">
             <span className="sr-only">Email</span>
-            <Input placeholder="Email" type="email" name="email" />
+            <Input
+              placeholder="Email"
+              type="email"
+              name="email"
+              className="h-11 rounded-none border-0 border-b border-[var(--field-border)] bg-transparent px-0 py-2 text-sm text-[var(--text)] shadow-none placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] focus-visible:ring-0"
+            />
           </label>
           <label className="block">
             <span className="sr-only">Сообщение</span>
-            <Textarea placeholder="Сообщение" name="message" />
+            <Textarea
+              placeholder="Сообщение"
+              name="message"
+              className="min-h-24 rounded-none border-0 border-b border-[var(--field-border)] bg-transparent px-0 py-2 text-sm text-[var(--text)] shadow-none placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] focus-visible:ring-0"
+            />
           </label>
 
           <div className="flex items-start gap-3 text-xs text-[var(--field-text)]">
-            <Checkbox id={PRIVACY_CHECKBOX_ID} name="privacy" required className="mt-0.5" />
+            <Checkbox
+              id={PRIVACY_CHECKBOX_ID}
+              name="privacy"
+              required
+              className="mt-0.5 border-[var(--field-border)] bg-transparent text-white focus-visible:border-[var(--accent)] focus-visible:ring-0 data-checked:border-[var(--accent)] data-checked:bg-[var(--accent)]"
+            />
             <label htmlFor={PRIVACY_CHECKBOX_ID}>
               Нажимая на кнопку &quot;Отправить&quot;, Вы соглашаетесь с Политикой
               конфиденциальности.
             </label>
           </div>
 
-          <Button type="submit" className="w-full sm:w-[320px]">
+          <Button
+            type="submit"
+            className="h-11 w-full bg-[var(--accent)] px-5 text-sm font-semibold tracking-[-0.02em] text-white hover:bg-[var(--accent-hover)] sm:w-[320px]"
+          >
             Отправить заявку
           </Button>
         </form>
