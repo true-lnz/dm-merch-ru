@@ -15,19 +15,19 @@ export function SocialLinks({
 
   return (
     <nav className={className} aria-label={ariaLabel}>
-      <ul className="flex items-center justify-center gap-2">
+      <ul className="flex items-center gap-2">
         {[
           { href: "#", label: "VK" as const },
           { href: "#", label: "MAX" as const },
         ].map((social) => (
-          <li key={social.label} className="size-[39px]">
+          <li key={social.label} className="size-[37px]">
             <a
               href={social.href}
               aria-label={social.label}
               target="_blank"
               rel="noreferrer"
               className={cn(
-                  "inline-flex size-[39px] items-center justify-center rounded-[10px] transition-colors",
+                  "inline-flex size-[37px] items-center justify-center rounded-[10px] transition-colors",
                   variant === "white"
                       ? "bg-white hover:bg-[#f3f3ff]"
                       : "bg-[var(--accent)] hover:bg-[var(--accent-hover)]",
