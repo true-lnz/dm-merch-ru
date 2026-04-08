@@ -60,7 +60,7 @@ export function RequestCta() {
             <Textarea
               placeholder="Сообщение"
               name="message"
-              className="min-h-24 rounded-none border-0 border-b border-[var(--field-border)] bg-transparent px-0 py-2 text-sm text-[var(--text)] shadow-none placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] focus-visible:ring-0"
+              className="min-h-24 resize-none rounded-none border-0 border-b border-[var(--field-border)] bg-transparent px-0 py-2 text-sm text-[var(--text)] shadow-none placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] focus-visible:ring-0"
             />
           </label>
 
