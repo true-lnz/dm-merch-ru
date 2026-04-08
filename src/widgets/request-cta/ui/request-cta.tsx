@@ -79,7 +79,7 @@ export function RequestCta() {
           <Button
             type="submit"
             variant="blue"
-            className="w-full lg:w-[440px]"
+            className="w-full lg:w-[440px] cursor-pointer"
           >
             Отправить заявку
           </Button>
