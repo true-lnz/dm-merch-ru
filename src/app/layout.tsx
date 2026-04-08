@@ -4,8 +4,7 @@ import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
 import { Geist } from "next/font/google";
 import { cn } from "@/shared/lib/cn";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+import { Toaster } from "@/shared/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -21,13 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={cn("font-sans", geist.variable)}>
+    <html lang="ru" >
       <body>
         <div className="site-shell">
           <Header />
           <main className="site-main">{children}</main>
           <Footer />
         </div>
+        <Toaster />
       </body>
     </html>
   );
