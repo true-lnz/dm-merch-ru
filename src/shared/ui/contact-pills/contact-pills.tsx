@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import { useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { toast } from "sonner";
 
@@ -8,6 +10,7 @@ type ContactPillsProps = {
   phone: string;
   direction?: "row" | "column";
   className?: string;
+  variant?: "default" | "cta";
 };
 
 function isMobileDevice() {
@@ -44,62 +47,124 @@ async function copyToClipboard(value: string) {
   }
 }
 
+const ctaIconClassName =
+  "text-white hidden p-[0.55rem] items-center justify-center rounded-[10px] bg-[var(--accent)] transition hover:bg-[var(--accent-hover)] lg:inline-flex";
+
+const ctaTextClassName =
+  "text-white inline-flex w-full items-center justify-center rounded-[10px] border border-[var(--accent)] bg-transparent px-4 py-3 text-sm font-medium text-[var(--accent)] transition lg:w-[171px] lg:whitespace-nowrap lg:border-transparent lg:bg-[var(--accent)] lg:px-[0.8rem] lg:py-[0.55rem] lg:text-[0.88rem] lg:font-normal lg:text-white lg:hover:bg-[var(--accent-hover)]";
+
+const defaultTextClassName =
+  "text-white inline-flex items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] py-[0.55rem] text-[0.88rem] transition hover:bg-[var(--accent-hover)]";
+
 export function ContactPills({
   email,
   phone,
   direction = "row",
   className,
+  variant = "default",
 }: ContactPillsProps) {
-  async function handleEmailClick(event: React.MouseEvent<HTMLAnchorElement>) {
-    event.preventDefault();
+  const [activePair, setActivePair] = useState<"email" | "phone" | null>(null);
+  const isCta = variant === "cta";
 
-    try {
-      await copyToClipboard(email);
-      toast.success("Почта скопирована");
-    } catch {
-      toast.error("Не удалось скопировать почту");
-    }
-  }
-
-  async function handlePhoneClick(event: React.MouseEvent<HTMLAnchorElement>) {
-    if (isMobileDevice()) {
+  async function handleCopy(
+    event: React.MouseEvent<HTMLAnchorElement>,
+    value: string,
+    successMessage: string,
+    errorMessage: string,
+    allowNativeAction = false,
+  ) {
+    if (allowNativeAction) {
       return;
     }
 
     event.preventDefault();
 
     try {
-      await copyToClipboard(phone);
-      toast.success("Номер скопирован");
+      await copyToClipboard(value);
+      toast.success(successMessage);
     } catch {
-      toast.error("Не удалось скопировать номер");
+      toast.error(errorMessage);
     }
   }
+
+  const emailHref = `mailto:${email}`;
+  const phoneHref = `tel:${phone.replace(/\D+/g, "")}`;
+  const contactItems = [
+    {
+      key: "email" as const,
+      href: emailHref,
+      label: email,
+      iconSrc: "/contact-pill-mail.png",
+      ariaLabel: isCta ? "Скопировать email" : "Написать на email",
+      textClassName: isCta ? "!bg-red" : "!bg-red px-[0.8rem]",
+      onClick: (event: React.MouseEvent<HTMLAnchorElement>) =>
+        handleCopy(event, email, "Почта скопирована", "Не удалось скопировать почту"),
+    },
+    {
+      key: "phone" as const,
+      href: phoneHref,
+      label: phone,
+      iconSrc: "/contact-pill-phone.png",
+      ariaLabel: isCta ? "Позвонить или скопировать номер" : "Позвонить",
+      textClassName: isCta ? "px-[1rem]" : "px-[0.9rem]",
+      onClick: (event: React.MouseEvent<HTMLAnchorElement>) =>
+        handleCopy(
+          event,
+          phone,
+          "Номер скопирован",
+          "Не удалось скопировать номер",
+          isMobileDevice(),
+        ),
+    },
+  ];
 
   return (
     <div
       className={cn(
-        "inline-flex flex-wrap gap-2",
-        direction === "column" ? "flex-col items-start" : "items-center",
+        isCta
+          ? "inline-flex flex-col items-start gap-[10px]"
+          : "inline-flex flex-wrap gap-2",
+        !isCta && (direction === "column" ? "flex-col items-start" : "items-center"),
         className,
       )}
     >
-      <a
-        href={`mailto:${email}`}
-        onClick={handleEmailClick}
-        className="cta-link inline-flex items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] px-[0.8rem] py-[0.55rem] text-[0.88rem] transition hover:bg-[var(--accent-hover)]"
-        aria-label="Написать на email"
-      >
-        {email}
-      </a>
-      <a
-        href={`tel:${phone.replace(/\D+/g, "")}`}
-        onClick={handlePhoneClick}
-        className="cta-link inline-flex items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] px-[0.9rem] py-[0.55rem] text-[0.88rem] transition hover:bg-[var(--accent-hover)]"
-        aria-label="Позвонить"
-      >
-        {phone}
-      </a>
+      {contactItems.map((item) => {
+        const isActive = activePair === item.key;
+
+        return (
+          <div
+            key={item.key}
+            className={cn(isCta && "flex w-full items-center gap-[10px] lg:w-auto")}
+            onMouseEnter={isCta ? () => setActivePair(item.key) : undefined}
+            onMouseLeave={isCta ? () => setActivePair(null) : undefined}
+            onFocus={isCta ? () => setActivePair(item.key) : undefined}
+            onBlur={isCta ? () => setActivePair(null) : undefined}
+          >
+            {isCta ? (
+              <a
+                href={item.href}
+                onClick={item.onClick}
+                className={cn(ctaIconClassName, isActive && "bg-[var(--accent-hover)]")}
+                aria-label={item.ariaLabel}
+              >
+                <Image src={item.iconSrc} alt="" width={20} height={20} aria-hidden="true" />
+              </a>
+            ) : null}
+            <a
+              href={item.href}
+              onClick={item.onClick}
+              className={cn(
+                isCta ? ctaTextClassName : defaultTextClassName,
+                item.textClassName,
+                isCta && isActive && "lg:bg-[var(--accent-hover)]",
+              )}
+              aria-label={item.ariaLabel}
+            >
+              {item.label}
+            </a>
+          </div>
+        );
+      })}
     </div>
   );
 }

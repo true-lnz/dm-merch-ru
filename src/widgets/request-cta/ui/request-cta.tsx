@@ -3,6 +3,7 @@ import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { ContactPills } from "@/shared/ui/contact-pills";
 import { Input } from "@/shared/ui/input";
+import { PageSubheader } from "@/shared/ui/page-subheader";
 import { Textarea } from "@/shared/ui/textarea";
 
 const PRIVACY_CHECKBOX_ID = "request-cta-privacy";
@@ -10,20 +11,23 @@ const PRIVACY_CHECKBOX_ID = "request-cta-privacy";
 export function RequestCta() {
   return (
     <section className="relative overflow-hidden py-16 md:py-24" aria-label="Форма заявки">
-      <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr]">
+      <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-[auto_1fr]">
         <div className="space-y-5">
-          <h2 className="font-heading text-[56px] uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)] md:text-[84.48px]">
-            Обсудим задачу
-            <br />
-            и рассчитаем проект
-          </h2>
+          <PageSubheader
+          title={
+            <>
+              Обсудим задачу
+              <br />
+              и рассчитаем проект
+            </>
+          }
+          />
           <p className="max-w-[800px] text-base text-[var(--text)] md:text-[21.6px] tracking-[0.0354]">
             Ответим в течение 30 минут. Подскажем формат, сроки и бюджет.
           </p>
-          <ContactPills email={siteInfo.email} phone={siteInfo.phone} direction="column" />
         </div>
 
-        <form className="space-y-4" noValidate>
+        <form className="space-y-4 lg:row-span-2" noValidate>
           <label className="block">
             <span className="sr-only">Имя</span>
             <Input
@@ -75,11 +79,18 @@ export function RequestCta() {
           <Button
             type="submit"
             variant="blue"
-            className="sm:w-[440px]"
+            className="w-full lg:w-[440px]"
           >
             Отправить заявку
           </Button>
         </form>
+
+        <ContactPills
+          email={siteInfo.email}
+          phone={siteInfo.phone}
+          variant="cta"
+          className="w-full lg:w-auto lg:self-end"
+        />
       </div>
     </section>
   );
