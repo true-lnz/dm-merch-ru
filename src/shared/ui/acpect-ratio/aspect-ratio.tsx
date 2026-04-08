@@ -1,6 +1,6 @@
 import { cn } from "@/shared/lib/cn"
 
-function AspectRatio({
+export function AspectRatio({
   ratio,
   className,
   ...props

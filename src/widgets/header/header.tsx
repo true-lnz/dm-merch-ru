@@ -5,15 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { headerNavigation } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
-import { buttonVariants } from "@/shared/ui/button";
 import { SiteContacts } from "@/shared/ui/site-contacts";
 
-const navLinkClassName = buttonVariants({
-  variant: "ghost",
-  size: "sm",
-  className:
-    "h-auto rounded-full px-4 py-2 text-base font-medium tracking-[-0.02em] text-[#404040] hover:bg-white hover:text-[var(--accent)]",
-});
+const navLinkClassName =
+  "inline-flex items-center justify-center rounded-full px-4 py-2 text-base font-medium tracking-[-0.02em] text-[#404040] transition-colors hover:text-[var(--text-muted)]";
 
 function isActiveRoute(pathname: string | null, href: string) {
   if (!pathname) {
@@ -46,7 +41,7 @@ export function Header() {
                       aria-current={isActive ? "page" : undefined}
                       className={cn(
                         navLinkClassName,
-                        isActive && "bg-white text-[var(--accent)] hover:bg-white",
+                        isActive && "text-[var(--accent)] hover:text-[--accent-hover]",
                       )}
                     >
                       {item.label}

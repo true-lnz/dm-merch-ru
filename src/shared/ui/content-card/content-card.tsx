@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { buttonVariants } from "@/shared/ui/button";
 
 type ContentCardImage = {
   url: string;
@@ -39,7 +40,7 @@ export function ContentCard({ title, excerpt, href, image }: ContentCardProps) {
         <Link
           href={href}
           aria-label={`Открыть: ${title}`}
-          className="cta-link inline-flex h-11 w-full items-center justify-center bg-[var(--accent)] px-5 tracking-[-0.02em] transition-colors hover:bg-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+          className={buttonVariants()}
         >
           Перейти
         </Link>

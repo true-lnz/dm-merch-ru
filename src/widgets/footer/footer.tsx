@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="site-footer mt-auto bg-[var(--accent)] text-white">
       <div className="footer-main">
-        <SocialLinks variant="footer" />
+        <SocialLinks variant="white" />
 
         <div className="footer-column">
           <h2 className="footer-title">Навигация</h2>

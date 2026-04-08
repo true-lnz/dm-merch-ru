@@ -12,12 +12,12 @@ export function RequestCta() {
     <section className="relative overflow-hidden py-16 md:py-24" aria-label="Форма заявки">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr]">
         <div className="space-y-5">
-          <h2 className="font-heading text-[56px] uppercase leading-[0.95] tracking-[-0.03em] text-[var(--heading)] md:text-[84px]">
+          <h2 className="font-heading text-[56px] uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)] md:text-[84.48px]">
             Обсудим задачу
             <br />
             и рассчитаем проект
           </h2>
-          <p className="max-w-[600px] text-base text-[var(--text)] md:text-2xl">
+          <p className="max-w-[800px] text-base text-[var(--text)] md:text-[21.6px] tracking-[0.0354]">
             Ответим в течение 30 минут. Подскажем формат, сроки и бюджет.
           </p>
           <ContactPills email={siteInfo.email} phone={siteInfo.phone} direction="column" />
@@ -60,9 +60,8 @@ export function RequestCta() {
             />
           </label>
 
-          <div className="flex items-start gap-3 text-xs text-[var(--field-text)]">
+          <div className="flex items-center gap-3 text-xs text-[var(--field-text)]">
             <Checkbox
-              id={PRIVACY_CHECKBOX_ID}
               name="privacy"
               required
               className="mt-0.5 border-[var(--field-border)] bg-transparent text-white focus-visible:border-[var(--accent)] focus-visible:ring-0 data-checked:border-[var(--accent)] data-checked:bg-[var(--accent)]"
@@ -75,7 +74,8 @@ export function RequestCta() {
 
           <Button
             type="submit"
-            className="h-11 w-full bg-[var(--accent)] px-5 text-sm font-semibold tracking-[-0.02em] text-white hover:bg-[var(--accent-hover)] sm:w-[320px]"
+            variant="blue"
+            className="sm:w-[440px]"
           >
             Отправить заявку
           </Button>

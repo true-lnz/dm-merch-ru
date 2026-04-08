@@ -23,14 +23,14 @@ export function ContactPills({
     >
       <a
         href={`mailto:${email}`}
-        className="cta-link inline-flex items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] px-[0.8rem] py-[0.55rem] text-[0.88rem]"
+        className="cta-link inline-flex items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] px-[0.8rem] py-[0.55rem] text-[0.88rem] transition hover:bg-[var(--accent-hover)]"
         aria-label="Написать на email"
       >
         {email}
       </a>
       <a
         href={`tel:${phone.replace(/\D+/g, "")}`}
-        className="cta-link inline-flex items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] px-[0.9rem] py-[0.55rem] text-[0.88rem]"
+        className="cta-link inline-flex items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] px-[0.9rem] py-[0.55rem] text-[0.88rem] transition hover:bg-[var(--accent-hover)]"
         aria-label="Позвонить"
       >
         {phone}

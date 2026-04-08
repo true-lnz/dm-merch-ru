@@ -7,14 +7,14 @@ type SiteContactsProps = {
   className?: string;
   direction?: "row" | "column";
   showSocials?: boolean;
-  socialVariant?: "header" | "footer" | "cta";
+  socialVariant?: "default" | "white";
 };
 
 export function SiteContacts({
   className,
   direction = "row",
   showSocials = true,
-  socialVariant = "header",
+  socialVariant = "default",
 }: SiteContactsProps) {
   const isColumn = direction === "column";
 
