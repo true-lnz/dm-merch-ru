@@ -48,10 +48,10 @@ async function copyToClipboard(value: string) {
 }
 
 const ctaIconClassName =
-  "text-white hidden p-[0.55rem] items-center justify-center rounded-[10px] bg-[var(--accent)] transition hover:bg-[var(--accent-hover)] lg:inline-flex";
+  "text-white hidden p-[0.55rem] items-center justify-center rounded-[10px] bg-[var(--accent)] transition hover:bg-[var(--accent-hover)] lg:inline-flex border border-[var(--accent)]";
 
 const ctaTextClassName =
-  "text-white inline-flex w-full items-center justify-center rounded-[10px] border border-[var(--accent)] bg-transparent px-4 py-3 text-sm font-medium text-[var(--accent)] transition lg:w-[171px] lg:whitespace-nowrap lg:border-transparent lg:bg-[var(--accent)] lg:px-[0.8rem] lg:py-[0.55rem] lg:text-[0.88rem] lg:font-normal lg:text-white lg:hover:bg-[var(--accent-hover)]";
+  "text-white inline-flex w-full items-center justify-center rounded-[10px] border border-[var(--accent)] bg-transparent px-4 py-[0.55rem] text-sm font-medium text-[var(--accent)] transition lg:w-[170px] lg:whitespace-nowrap lg:border-[transparent] lg:bg-[var(--accent)] lg:px-[0.8rem] lg:py-[0.55rem] lg:text-[0.88rem] lg:font-normal lg:text-white lg:hover:bg-[var(--accent-hover)]";
 
 const defaultTextClassName =
   "text-white inline-flex items-center justify-center whitespace-nowrap rounded-[10px] bg-[var(--accent)] py-[0.55rem] text-[0.88rem] transition hover:bg-[var(--accent-hover)]";
@@ -96,7 +96,7 @@ export function ContactPills({
       label: email,
       iconSrc: "/contact-pill-mail.png",
       ariaLabel: isCta ? "Скопировать email" : "Написать на email",
-      textClassName: isCta ? "!bg-red" : "!bg-red px-[0.8rem]",
+      textClassName: isCta ? "px-[0.8rem]" : "px-[0.8rem]",
       onClick: (event: React.MouseEvent<HTMLAnchorElement>) =>
         handleCopy(event, email, "Почта скопирована", "Не удалось скопировать почту"),
     },
