@@ -13,4 +13,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPayload(nextConfig);
+const payloadConfig = withPayload(nextConfig);
+const experimentalConfig = payloadConfig.experimental as
+  | (NextConfig["experimental"] & { enableServerFastRefresh?: boolean })
+  | undefined;
+
+if (experimentalConfig) {
+  delete experimentalConfig.enableServerFastRefresh;
+}
+
+export default payloadConfig;
