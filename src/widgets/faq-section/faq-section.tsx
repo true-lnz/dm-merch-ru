@@ -17,34 +17,39 @@ export type FaqItem = {
   answer: string;
 };
 
+const FAQ_DESKTOP_IMAGE = {
+  src: "/cases/faq/art-kvadrat-bottles.jpg",
+  alt: "Фирменные бутылки Арт-Квадрат",
+};
+
+const FAQ_MOBILE_DECORATION = {
+  src: "/cases/faq/faq-mobile-decor.svg",
+  alt: "",
+};
+
+const FAQ_TITLE = "Частые вопросы перед запуском проекта";
+
 type FaqSectionProps = {
-  title: string;
   items: FaqItem[];
-  image: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };
   className?: string;
 };
 
 export function FaqSection({
-  title,
   items,
-  image,
   className,
 }: FaqSectionProps) {
   return (
-    <section className={cn("grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start", className)}>
+    <section
+      className={cn(
+        "grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start",
+        className
+      )}
+    >
       <div>
-        <PageSubheader title={title} />
+        <PageSubheader title={FAQ_TITLE} />
 
         <div className="mt-4 md:mt-5">
-          <Accordion
-            defaultValue={items[0] ? [items[0].question] : []}
-            className="w-full"
-          >
+          <Accordion className="w-full">
             {items.map((item) => (
               <AccordionItem
                 key={item.question}
@@ -67,13 +72,24 @@ export function FaqSection({
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-[22.5px] bg-white">
-        <AspectRatio ratio={1} className="w-full">
+      <div className="-mx-[var(--layout-side-padding)] relative overflow-hidden bg-transparent lg:mx-0 lg:rounded-[22.5px] lg:bg-white">
+        <AspectRatio ratio={2} className="w-full lg:hidden">
           <Image
-            src={image.src}
-            alt={image.alt}
+            src={FAQ_MOBILE_DECORATION.src}
+            alt={FAQ_MOBILE_DECORATION.alt}
             fill
-            sizes="(max-width: 1024px) 100vw, 43vw"
+            sizes="(max-width: 1023px) 100vw"
+            unoptimized
+            className="object-contain object-left-bottom"
+          />
+        </AspectRatio>
+
+        <AspectRatio ratio={1} className="hidden w-full lg:block">
+          <Image
+            src={FAQ_DESKTOP_IMAGE.src}
+            alt={FAQ_DESKTOP_IMAGE.alt}
+            fill
+            sizes="43vw"
             className="object-cover"
           />
         </AspectRatio>

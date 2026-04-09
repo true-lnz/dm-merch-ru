@@ -60,7 +60,7 @@ export function CaseCard({ item }: CaseCardProps) {
 
   return (
     <article className="lg:rounded-[20px] lg:bg-[var(--card-bg)] lg:p-[30px]">
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,48.7%)] lg:items-start lg:gap-[30px]">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,50.7%)] lg:items-start lg:gap-[30px]">
         <CaseTextBlock
           item={item}
           sections={sections}

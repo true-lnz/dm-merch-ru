@@ -2,14 +2,13 @@
 
 import { useMemo, useState } from "react";
 
+import { FaqSection } from "@/widgets/faq-section";
 import { RequestCta } from "@/widgets/request-cta";
 import { cn } from "@/shared/lib/cn";
-import { FaqSection } from "@/shared/ui/faq-section";
 import { PageHeader } from "@/shared/ui/page-header";
 
 import { CaseCard } from "./case-card";
 import {
-  casesFaqImage,
   casesFaqItems,
   casesPageItems,
   caseThemes,
@@ -38,7 +37,7 @@ export function CasesPage() {
       />
 
       <section className="mt-8 grid gap-6 xl:grid-cols-[245.7px_minmax(0,1fr)] xl:gap-[63px]">
-        <aside className="overflow-hidden xl:sticky xl:top-28 xl:self-start">
+        <aside className="overflow-hidden xl:sticky xl:top-28 xl:self-start -mr-[var(--layout-side-padding)] lg:mr-0">
           <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden xl:grid xl:gap-[18px] xl:overflow-visible xl:pb-0">
             {caseThemes.map((theme) => {
               const isActive = activeTheme === theme;
@@ -66,8 +65,8 @@ export function CasesPage() {
           {visibleCases.length > 0 ? (
             visibleCases.map((item) => <CaseCard key={item.id} item={item} />)
           ) : (
-            <div className="rounded-[18px] bg-[var(--card-bg)] px-6 py-8 text-[15px] leading-[1.4] text-[var(--text-muted)] md:px-8 md:py-10">
-              Пока для этого фильтра нет карточек в первой версии страницы.
+            <div className="rounded-[18px] bg-[var(--card-bg)] p-4 text-[15px] leading-[1.4] text-[var(--text-muted)] md:px-4 md:py-6">
+              К сожалению, для этого фильтра пока нет карточек кейсов.
             </div>
           )}
         </div>
@@ -75,9 +74,7 @@ export function CasesPage() {
 
       <FaqSection
         className="mt-14 md:mt-[90px]"
-        title="Частые вопросы перед запуском проекта"
         items={casesFaqItems}
-        image={casesFaqImage}
       />
 
       <div className="mt-14 md:mt-[90px]">

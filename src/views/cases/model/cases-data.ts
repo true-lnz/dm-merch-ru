@@ -1,4 +1,4 @@
-import type { FaqItem } from "@/shared/ui/faq-section";
+import type { FaqItem } from "@/widgets/faq-section";
 
 export type CaseGalleryImage = {
   src: string;
@@ -182,10 +182,3 @@ export const casesFaqItems: FaqItem[] = [
       "Да, можем собрать спортивные позиции и командную форму, если проект этого требует. Материалы и технологию подбираем под сценарий использования, частоту носки и визуальные требования бренда.",
   },
 ];
-
-export const casesFaqImage = {
-  src: "/cases/faq/art-kvadrat-bottles.jpg",
-  alt: "Фирменные бутылки Арт-Квадрат",
-  width: 830,
-  height: 804,
-};

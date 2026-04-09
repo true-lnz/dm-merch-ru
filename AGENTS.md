@@ -5,3 +5,7 @@
 - If shell rewriting is unavoidable, always use explicit UTF-8 output encoding.
 - After editing Cyrillic strings, verify there is no mojibake in touched files (examples: `Р`, `С`, `Ð`, `Ñ` inside Russian text).
 - Do not run broad repo-wide encoding rewrites unless the user explicitly asks.
+
+## Environment
+
+- Start the coding environment with elevated permissions so `apply_patch` can be used reliably.
