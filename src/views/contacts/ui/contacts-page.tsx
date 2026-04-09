@@ -1,16 +1,181 @@
-import { PageHeader } from "../../../shared/ui/page-header";
-import { Section } from "@/shared/ui/section";
+import Image from "next/image";
+import { siteInfo } from "@/shared/config/site-info";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/shared/ui/breadcrumb";
+
+const contactLinks = [
+  {
+    href: `tel:${siteInfo.phone.replace(/\D+/g, "")}`,
+    label: siteInfo.phone,
+  },
+  {
+    href: `mailto:${siteInfo.email}`,
+    label: siteInfo.email,
+  },
+] as const;
+
+const discussionHref = `mailto:${siteInfo.email}?subject=${encodeURIComponent("Обсуждение проекта")}`;
+
+function ContactLeadLink({
+  href,
+  label,
+}: {
+  href: string;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="block whitespace-nowrap font-heading text-[28px] sm:text-[35.6px] leading-none tracking-[0.015em] text-[var(--heading)] transition-opacity hover:opacity-80 md:text-[5.125rem]"
+    >
+      {label}
+    </a>
+  );
+}
+
+function ContactsMapCard() {
+  return (
+    <div>
+      <p className="mb-4 text-[12px] tracking-[-0.04em] text-[#404040] md:text-[14px] xl:mb-[29px] xl:text-[20px]">
+        {siteInfo.address}
+      </p>
+
+      <div className="relative aspect-square overflow-hidden rounded-[12px] border-[5px] border-[var(--accent)] bg-white md:h-[360px] md:aspect-auto md:rounded-[16px] xl:h-[225px] xl:w-[550px] xl:max-w-full xl:rounded-[20px] xl:border-[6px]">
+        <iframe
+          src="https://yandex.ru/map-widget/v1/?um=constructor%3A2e9b208469abe1de8e95846291aa4dabe3dfe17e43c809d2d443869166ae1c41&amp;source=constructor"
+          title="Карта офиса Держи Марку"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full border-0"
+          allowFullScreen
+        />
+      </div>
+    </div>
+  );
+}
+
+function DiscussionCta() {
+  return (
+    <a
+      href={discussionHref}
+      className="flex h-[60px] items-center justify-between rounded-[10px] bg-[var(--accent)] px-5 text-white transition-colors hover:bg-[var(--accent-hover)] md:max-w-[320px] xl:h-[72px] xl:w-[302px] xl:max-w-none xl:px-3"
+    >
+      <span className="flex min-w-0 flex-col items-start">
+        <span className="text-[16px] leading-[1.3] tracking-[-0.04em] xl:text-[19px]">
+          Обсудить задачу
+        </span>
+        <span className="mt-[2px] text-[9px] leading-[1.3] tracking-[-0.04em] text-white/50 xl:text-[11px]">
+          Минимальный бюджет - от 50 000 ₽
+        </span>
+      </span>
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-[5px] bg-white xl:size-12">
+        <Image
+          src="/contacts/contacts-cta-arrow.svg"
+          alt=""
+          width={16}
+          height={16}
+          aria-hidden="true"
+          className="size-4"
+        />
+      </span>
+    </a>
+  );
+}
+
+function MobileContactsHero() {
+  return (
+    <div className="xl:hidden mb-[70px]">
+      <div className="overflow-hidden rounded-[20px] md:mx-auto md:max-w-[760px]">
+        <div className="relative aspect-[340/256] overflow-hidden md:aspect-[16/11]">
+          <Image
+            src="/contacts/im_contacts.png"
+            alt="Команда в фирменном мерче"
+            fill
+            priority
+            sizes="(max-width: 767px) 340px, 760px"
+            className="object-cover object-top"
+          />
+        </div>
+      </div>
+
+      <div className="rounded-[20px] bg-[rgba(236,235,230,0.86)] p-5 backdrop-blur-[7.5px] md:p-7">
+        <h1 className="sr-only">Контакты</h1>
+
+        <div className="space-y-2 md:space-y-3">
+          {contactLinks.map((item) => (
+            <ContactLeadLink key={item.href} href={item.href} label={item.label} />
+          ))}
+        </div>
+
+        <div className="mt-8 md:mt-10">
+          <ContactsMapCard />
+        </div>
+
+        <div className="mt-6 md:mt-8">
+          <DiscussionCta />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DesktopContactsHero() {
+  return (
+    <div className="relative hidden h-[720px] xl:block">
+      <div className="absolute inset-y-0 right-[calc(var(--layout-side-padding)*-1)] w-[65%]">
+        <Image
+          src="/contacts/im_contacts.png"
+          alt="Команда в фирменном мерче"
+          fill
+          priority
+          className="object-cover object-right-top"
+        />
+      </div>
+
+      <div className="absolute inset-y-0 left-0 z-10 mb-[75px] flex w-fit max-w-[min(771px,calc(100%-140px))] flex-col justify-between rounded-[20px] bg-[rgba(236,235,230,0.75)] px-[50px] py-[43px] backdrop-blur-[8px]">
+        <div>
+          <h1 className="sr-only">Контакты</h1>
+
+          <div className="space-y-[2px]">
+            {contactLinks.map((item) => (
+              <ContactLeadLink key={item.href} href={item.href} label={item.label} />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <ContactsMapCard />
+          <div className="mt-[44px]">
+            <DiscussionCta />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function ContactsPage() {
   return (
-    <div className="page">
-      <PageHeader title="Контакты" />
-      <Section className="content-card">
-        <p>
-          В следующей итерации добавим форму заявки, карту и каналы связи для
-          разных типов запросов.
-        </p>
-      </Section>
+    <div className="page pb-16 md:pb-20 xl:pb-24">
+      <Breadcrumb className="mb-8 text-[12px] tracking-[-0.03em] text-[#404040] md:mb-10 md:text-[12.6px] xl:mb-5">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Главная</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Контакты</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <MobileContactsHero />
+      <DesktopContactsHero />
     </div>
   );
 }
