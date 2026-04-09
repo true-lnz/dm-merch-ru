@@ -43,7 +43,7 @@ export function PageHeader({
         </Breadcrumb>
       ) : null}
 
-      <h1 className="m-0 font-heading md:text-[6.125rem] font-bold uppercase leading-none tracking-[0.015em] text-[var(--heading)]">
+      <h1 className="m-0 font-heading text-[35.6px] md:text-[6.125rem] font-bold uppercase leading-none tracking-[0.015em] text-[var(--heading)]">
         {title}
       </h1>
     </header>

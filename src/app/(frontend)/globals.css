@@ -2,8 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
-
 @font-face {
   font-family: "Adderley";
   src: url("/Adderley-Bold.woff") format("woff");
@@ -178,7 +176,7 @@ a {
 
 @media (max-width: 1280px) {
   :root {
-    --layout-side-padding: 32px;
+    --layout-side-padding: 60px;
   }
 
   .footer-main {
@@ -188,7 +186,7 @@ a {
 
 @media (max-width: 992px) {
   :root {
-    --layout-side-padding: 16px;
+    --layout-side-padding: 30px;
   }
 
   .page {
