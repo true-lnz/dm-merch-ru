@@ -59,58 +59,19 @@ export function CaseCard({ item }: CaseCardProps) {
   };
 
   return (
-    <article className="md:rounded-[18px] md:bg-[var(--card-bg)] md:p-[27px]">
-      <div className="grid gap-0 md:gap-6 xl:grid-cols-[minmax(0,1fr)_50.8%] xl:items-start">
-        <div className="order-1 rounded-[18px] bg-[var(--card-bg)] px-[18px] pb-[18px] pt-[18px] md:rounded-none md:bg-transparent md:p-0">
-          <div className="space-y-4 md:space-y-[11px]">
-            <h2 className="font-heading text-[34px] leading-[0.95] uppercase text-[var(--heading)] md:text-[43.2px]">
-              {item.company}
-            </h2>
-            <p className="text-[14.4px] leading-[1.3] text-[#404040]">{item.teaser}</p>
-            <p className="text-[14.4px] leading-[1.3] text-[#404040]">{item.intro}</p>
-          </div>
+    <article className="lg:rounded-[20px] lg:bg-[var(--card-bg)] lg:p-[30px]">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,48.7%)] lg:items-start lg:gap-[30px]">
+        <CaseTextBlock
+          item={item}
+          sections={sections}
+          isExpanded={isExpanded}
+          toggleLabel={toggleLabel}
+          onToggle={() => setIsExpanded((value) => !value)}
+        />
 
-          <div className="mt-4 md:hidden">
-            <button
-              type="button"
-              onClick={() => setIsExpanded((value) => !value)}
-              className="mb-6 cursor-pointer border-b border-current pb-0.5 text-[15px] font-semibold leading-none text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
-            >
-              {toggleLabel}
-            </button>
-          </div>
-
-          <div className="hidden mt-[25px] h-px bg-[rgba(42,42,42,0.12)] md:block" />
-
-          <div className="hidden space-y-[22px] pt-[24px] md:block">
-            {sections.map((section) => (
-              <CaseSection key={section.heading} {...section} />
-            ))}
-          </div>
-
+        <div className="">
           <div
-            className={cn(
-              "grid md:hidden transition-[grid-template-rows] duration-300 ease-out",
-              isExpanded ? "mt-4 grid-rows-[1fr]" : "grid-rows-[0fr]"
-            )}
-          >
-            <div className="overflow-hidden">
-              <div className="mb-4 h-px bg-[rgba(42,42,42,0.12)]" />
-              <div className="space-y-5">
-                {sections.map((section) => (
-                  <CaseSection key={section.heading} {...section} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="order-2 pb-[18px] md:w-auto md:px-0 md:pb-0"
-          style={{ width: "calc(100vw - var(--layout-side-padding) * 2)" }}
-        >
-          <div
-            className="cursor-grab overflow-hidden rounded-[18px] bg-white active:cursor-grabbing md:rounded-[9px]"
+            className="cursor-grab overflow-hidden rounded-[10px] bg-white active:cursor-grabbing mb-[14px]"
             ref={emblaRef}
           >
             <div className="flex">
@@ -121,7 +82,7 @@ export function CaseCard({ item }: CaseCardProps) {
                       src={image.src}
                       alt={image.alt}
                       fill
-                      sizes="(max-width: 767px) 100vw, (max-width: 1280px) 100vw, 42vw"
+                      sizes="(max-width: 1023px) calc(100vw - var(--layout-side-padding) * 2), (max-width: 1440px) 42vw, 680px"
                       className="object-cover"
                       style={{ objectPosition: image.objectPosition ?? "center" }}
                     />
@@ -131,7 +92,7 @@ export function CaseCard({ item }: CaseCardProps) {
             </div>
           </div>
 
-          <div className="mt-[14px] hidden gap-[9px] md:flex">
+          <div className="hidden gap-[9px] lg:flex">
             {item.gallery.map((image, index) => (
               <ThumbnailButton
                 key={`${item.id}-thumb-${index}`}
@@ -142,7 +103,7 @@ export function CaseCard({ item }: CaseCardProps) {
             ))}
           </div>
 
-          <div className="mt-[14px] grid grid-cols-4 gap-[9px] md:hidden">
+          <div className="grid grid-cols-4 gap-[9px] lg:hidden">
             {mobileThumbs.map((image, index) => (
               <ThumbnailButton
                 key={`${item.id}-mobile-thumb-${index}`}
@@ -156,6 +117,67 @@ export function CaseCard({ item }: CaseCardProps) {
         </div>
       </div>
     </article>
+  );
+}
+
+function CaseTextBlock({
+  item,
+  sections,
+  isExpanded,
+  toggleLabel,
+  onToggle,
+}: {
+  item: CaseItem;
+  sections: Array<{ heading: string; text: string }>;
+  isExpanded: boolean;
+  toggleLabel: string;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="rounded-[20px] bg-[var(--card-bg)] px-5 pb-5 pt-5 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
+      <div className="space-y-4 lg:space-y-[11px]">
+        <h2 className="font-heading text-[34px] leading-[0.95] uppercase text-[var(--heading)] lg:text-[43.2px]">
+          {item.company}
+        </h2>
+        <p className="text-[14.4px] leading-[1.3] text-[#404040]">{item.teaser}</p>
+        <p className="text-[14.4px] leading-[1.3] text-[#404040]">{item.intro}</p>
+      </div>
+
+      <div className="mt-4 lg:hidden">
+        <button
+          type="button"
+          onClick={onToggle}
+          className="cursor-pointer border-b border-current pb-0.5 text-[15px] font-semibold leading-none text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+        >
+          {toggleLabel}
+        </button>
+      </div>
+
+      <div className="hidden lg:block">
+        <div className="mt-[25px] h-px bg-[rgba(42,42,42,0.12)]" />
+        <div className="space-y-[22px] pt-[24px]">
+          {sections.map((section) => (
+            <CaseSection key={section.heading} {...section} />
+          ))}
+        </div>
+      </div>
+
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows,margin-top] duration-300 ease-out lg:hidden",
+          isExpanded ? "mt-4 grid-rows-[1fr]" : "grid-rows-[0fr]"
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="mb-4 h-px bg-[rgba(42,42,42,0.12)]" />
+          <div className="space-y-5">
+            {sections.map((section) => (
+              <CaseSection key={section.heading} {...section} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
