@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { siteInfo } from "@/shared/config/site-info";
+import { YandexMapCard } from "./yandex-map-card";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -47,13 +48,7 @@ function ContactsMapCard() {
       </p>
 
       <div className="relative aspect-square overflow-hidden rounded-[12px] border-[5px] border-[var(--accent)] bg-white md:h-[360px] md:aspect-auto md:rounded-[16px] xl:h-[225px] xl:w-[550px] xl:max-w-full xl:rounded-[20px] xl:border-[6px]">
-        <iframe
-          src="https://yandex.ru/map-widget/v1/?um=constructor%3A2e9b208469abe1de8e95846291aa4dabe3dfe17e43c809d2d443869166ae1c41&amp;source=constructor"
-          title="Карта офиса Держи Марку"
-          loading="lazy"
-          className="absolute inset-0 h-full w-full border-0"
-          allowFullScreen
-        />
+        <YandexMapCard />
       </div>
     </div>
   );
@@ -69,18 +64,18 @@ function DiscussionCta() {
         <span className="text-[16px] leading-[1.3] tracking-[-0.04em] xl:text-[19px]">
           Обсудить задачу
         </span>
-        <span className="mt-[2px] text-[9px] leading-[1.3] tracking-[-0.04em] text-white/50 xl:text-[11px]">
+        <span className="mt-[2px] hidden text-[9px] leading-[1.3] tracking-[-0.04em] text-white/50 xl:block xl:text-[11px]">
           Минимальный бюджет - от 50 000 ₽
         </span>
       </span>
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-[5px] bg-white xl:size-12">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-[4px] bg-white xl:size-12 xl:rounded-[5px]">
         <Image
           src="/contacts/contacts-cta-arrow.svg"
           alt=""
           width={16}
           height={16}
           aria-hidden="true"
-          className="size-4"
+          className="size-3.5 xl:size-4"
         />
       </span>
     </a>
@@ -103,7 +98,7 @@ function MobileContactsHero() {
         </div>
       </div>
 
-      <div className="rounded-[20px] bg-[rgba(236,235,230,0.86)] p-5 backdrop-blur-[7.5px] md:p-7">
+      <div className="rounded-[20px] bg-[rgba(232,231,226,0.7)] p-5 backdrop-blur-[15px] md:p-7">
         <h1 className="sr-only">Контакты</h1>
 
         <div className="space-y-2 md:space-y-3">
@@ -127,7 +122,7 @@ function MobileContactsHero() {
 function DesktopContactsHero() {
   return (
     <div className="relative hidden h-[720px] xl:block">
-      <div className="absolute inset-y-0 right-[calc(var(--layout-side-padding)*-1)] w-[65%]">
+      <div className="absolute inset-y-0 right-[calc(var(--layout-side-padding)*-1)] w-[68%]">
         <Image
           src="/contacts/im_contacts.png"
           alt="Команда в фирменном мерче"
@@ -137,7 +132,7 @@ function DesktopContactsHero() {
         />
       </div>
 
-      <div className="absolute inset-y-0 left-0 z-10 mb-[75px] flex w-fit max-w-[min(771px,calc(100%-140px))] flex-col justify-between rounded-[20px] bg-[rgba(236,235,230,0.75)] px-[50px] py-[43px] backdrop-blur-[8px]">
+      <div className="absolute inset-y-0 left-0 z-10 mb-[75px] flex w-fit max-w-[min(771px,calc(100%-140px))] flex-col justify-between rounded-[20px] bg-[rgba(232,231,226,0.5)] p-5 backdrop-blur-[15px] px-[50px] py-[43px]">
         <div>
           <h1 className="sr-only">Контакты</h1>
 
