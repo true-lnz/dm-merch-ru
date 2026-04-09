@@ -2,7 +2,7 @@
 import { HomePage } from "@/views/home";
 
 export const metadata: Metadata = {
-  title: "Главная",
+  // TODO: тут написать чтото для SEO
 };
 
 export default function Page() {

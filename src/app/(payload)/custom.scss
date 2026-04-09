@@ -1,0 +1,16 @@
+.login__brand {
+  .graphic-logo {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    max-width: 220px;
+    width: 100%;
+  }
+
+  .graphic-logo__image {
+    height: auto;
+    max-height: 72px;
+    object-fit: contain;
+    width: 100%;
+  }
+}

@@ -5,28 +5,47 @@ import { Header } from "@/widgets/header";
 import { Toaster } from "@/shared/ui/sonner";
 
 export const metadata: Metadata = {
-    title: {
-        default: "DM Merch",
-        template: "%s | DM Merch",
-    },
-    description: "Мерч-агентство: каталог, кейсы, блог и контакты.",
+  title: {
+    default: "Держи Марку!",
+    template: "%s — Держи Марку!",
+  },
+  description: "Мерч-агентство: каталог, кейсы, блог и контакты.",
+  manifest: "/favicon/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon/favicon.ico", sizes: "any" },
+      { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180" }],
+    other: [
+      {
+        rel: "android-chrome",
+        url: "/favicon/android-chrome-192x192.png",
+      },
+      {
+        rel: "android-chrome",
+        url: "/favicon/android-chrome-512x512.png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
+  children,
+}: Readonly<{
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="ru" >
-        <body>
+  return (
+    <html lang="ru">
+      <body>
         <div className="site-shell">
-            <Header />
-            <main className="site-main">{children}</main>
-            <Footer />
+          <Header />
+          <main className="site-main">{children}</main>
+          <Footer />
         </div>
         <Toaster />
-        </body>
-        </html>
-    );
+      </body>
+    </html>
+  );
 }
