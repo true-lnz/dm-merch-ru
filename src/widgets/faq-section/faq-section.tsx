@@ -102,7 +102,6 @@ export function FaqSection() {
             alt={FAQ_MOBILE_DECORATION.alt}
             fill
             sizes="(max-width: 1023px) 100vw"
-            unoptimized
             className="object-contain object-left-bottom"
           />
         </AspectRatio>

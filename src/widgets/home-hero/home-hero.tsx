@@ -31,6 +31,7 @@ export function HomeHero() {
             alt={HERO_IMAGE.alt}
             fill
             priority
+            unoptimized
             sizes="42vw"
             className="object-cover object-[130%_top]"
           />
