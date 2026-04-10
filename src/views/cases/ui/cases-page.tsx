@@ -69,11 +69,8 @@ export function CasesPage() {
         </div>
       </section>
 
-      <FaqSection className="mt-14 md:mt-[90px]" />
-
-      <div className="mt-14 md:mt-[90px]">
-        <RequestCta />
-      </div>
+      <FaqSection />
+      <RequestCta />
     </div>
   );
 }

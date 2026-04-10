@@ -5,7 +5,7 @@ import { RequestForm } from "@/shared/ui/request-form";
 
 export function RequestCta() {
   return (
-    <section className="relative overflow-hidden py-16 md:py-24" aria-label="Форма заявки">
+    <section className="relative overflow-hidden" aria-label="Форма заявки">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-[auto_1fr]">
         <div className="space-y-5">
           <PageSubheader
