@@ -62,7 +62,7 @@ export function FaqSection({
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pr-12">
-                  <p className="max-w-[680px] pb-4 text-[15px] leading-[1.35] text-[var(--text-muted)] md:pb-5 md:text-[16.2px]">
+                  <p className="max-w-[680px] pb-4 text-[15px] leading-[1.35] text-[var(--text-muted)] md:pb-5 md:text-[16.2px] whitespace-pre-line">
                     {item.answer}
                   </p>
                 </AccordionContent>
