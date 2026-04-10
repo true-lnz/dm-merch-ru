@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { PageHeader } from "@/shared/ui/page-header";
 import { FaqSection } from "@/widgets/faq-section";
-import { RequestCta } from "@/widgets/request-cta";
+import { RequestCta } from "@/features/request-cta";
 import { CaseCard } from "./case-card";
 import {
   casesPageItems,

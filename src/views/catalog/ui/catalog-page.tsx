@@ -1,4 +1,4 @@
-import { PageHeader } from "../../../shared/ui/page-header";
+import { PageHeader } from "@/shared/ui/page-header";
 import { Section } from "@/shared/ui/section";
 
 export function CatalogPage() {

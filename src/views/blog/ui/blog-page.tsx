@@ -1,7 +1,7 @@
 import { blogPostsMock } from "@/entities/blog-post";
-import { PageHeader } from "../../../shared/ui/page-header";
+import { PageHeader } from "@/shared/ui/page-header";
 import { BlogFeed } from "@/widgets/blog-feed";
-import { RequestCta } from "@/widgets/request-cta";
+import { RequestCta } from "@/features/request-cta";
 
 export function BlogPage() {
   return (
