@@ -162,7 +162,7 @@ export function MobileMenu({
             </ul>
           </nav>
 
-          <div className="mt-10 flex flex-col items-start gap-4">
+          <div className="my-10 flex flex-col items-start gap-4">
             <SocialLinks size="menu" />
             <ContactPills
               email={siteInfo.email}
