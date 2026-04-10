@@ -131,7 +131,7 @@ function DesktopContactsHero() {
 
 export function ContactsPage() {
   return (
-    <div className="page pb-16 md:pb-20 xl:pb-24">
+    <>
       <Breadcrumb className="mb-8 text-[12px] tracking-[-0.03em] text-[#404040] md:mb-10 md:text-[12.6px] xl:mb-5">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -146,6 +146,6 @@ export function ContactsPage() {
 
       <MobileContactsHero />
       <DesktopContactsHero />
-    </div>
+    </>
   );
 }

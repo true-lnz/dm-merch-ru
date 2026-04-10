@@ -12,7 +12,7 @@ import { RequestCta } from "@/widgets/request-cta";
 
 export function HomePage() {
   return (
-    <div className="page w-full pb-16 md:pb-24">
+    <>
       <HomeHero />
       <HomeDigest />
       <HomeResultsSlider />
@@ -25,6 +25,6 @@ export function HomePage() {
       <HomeCompetitiveAdvantages />
       <FaqSection />
       <RequestCta />
-    </div>
+    </>
   );
 }
