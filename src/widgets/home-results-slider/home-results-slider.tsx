@@ -82,7 +82,7 @@ export function HomeResultsSlider() {
   const activeSlide = RESULT_SLIDES[activeIndex];
 
   return (
-    <section className="py-14 md:py-20 xl:py-[118px]">
+    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <PageSubheading
         title={activeSlide.title}
         description={activeSlide.description}

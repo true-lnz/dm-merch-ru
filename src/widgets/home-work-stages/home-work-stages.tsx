@@ -41,7 +41,7 @@ const WORK_STAGES = [
 
 export function HomeWorkStages() {
   return (
-    <section className="py-14 md:py-20 xl:py-[110px]">
+    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <div className="relative overflow-hidden rounded-[24px] bg-[var(--accent)] px-5 py-6 text-white md:px-8 md:py-8 xl:px-[45px] xl:py-[44px]">
         <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between opacity-20">
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" />

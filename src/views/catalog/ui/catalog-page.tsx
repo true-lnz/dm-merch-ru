@@ -13,7 +13,7 @@ export function CatalogPage() {
         }}
       />
 
-      <Section className="content-card">
+      <Section className="my-[63px] md:my-[72px] xl:my-[90px] content-card">
         <p>
           На следующем этапе здесь появятся фильтры, карточки позиций и блоки с
           ценовыми пакетами.

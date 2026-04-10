@@ -26,13 +26,13 @@ function MobileHeaderActions({ onOpenMenu }: { onOpenMenu: () => void }) {
       <HeaderIconLink
         href={getPhoneHref()}
         ariaLabel="Позвонить"
-        iconSrc="/contact-pill-phone.png"
+        iconSrc="/icons/ic_contact_pill_phone.png"
         size={actionSize}
       />
       <HeaderIconLink
         href={getEmailHref()}
         ariaLabel="Написать на email"
-        iconSrc="/contact-pill-mail.png"
+        iconSrc="/icons/ic_contact_pill_mail.png"
         size={actionSize}
       />
       <button
@@ -43,7 +43,7 @@ function MobileHeaderActions({ onOpenMenu }: { onOpenMenu: () => void }) {
         aria-controls="mobile-header-menu"
       >
         <Image
-          src="/burger-icon.svg"
+          src="/icons/ic_menu_header.svg"
           alt=""
           width={50}
           height={28}

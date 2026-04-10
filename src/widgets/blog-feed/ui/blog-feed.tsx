@@ -7,7 +7,7 @@ type BlogFeedProps = {
 
 export function BlogFeed({ posts }: BlogFeedProps) {
   return (
-    <section aria-label="Список статей блога">
+    <section className="mb-[63px] md:mb-[72px] xl:mb-[90px]" aria-label="Список статей блога">
       <div className="grid gap-9 md:grid-cols-2 xl:grid-cols-3">
         {posts.map((post) => (
           <ContentCard

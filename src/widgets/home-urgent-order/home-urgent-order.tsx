@@ -9,7 +9,7 @@ const URGENT_ORDER_IMAGE = {
 
 export function HomeUrgentOrder() {
   return (
-    <section className="py-14 md:py-20 xl:py-[110px]">
+    <section className="my-[63px] md:my-[72px] xl:my-[90px] ">
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,360px)] xl:items-end xl:gap-[40px]">
         <div className="overflow-hidden rounded-[24px]">
           <div className="relative aspect-[340/326] md:aspect-[16/10] xl:min-h-[648px]">

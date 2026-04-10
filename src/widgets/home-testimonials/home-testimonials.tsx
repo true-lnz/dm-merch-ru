@@ -66,7 +66,7 @@ export function HomeTestimonials() {
   const activeItem = TESTIMONIALS[activeIndex];
 
   return (
-    <section className="py-14 md:py-20 xl:py-[110px]">
+    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <PageSubheading title={TESTIMONIALS_TITLE} />
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)] xl:gap-[40px]">

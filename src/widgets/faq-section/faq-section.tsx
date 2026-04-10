@@ -16,12 +16,12 @@ type FaqItem = {
 };
 
 const FAQ_DESKTOP_IMAGE = {
-  src: "/cases/faq/img_faq_cover_desktop.jpg",
+  src: "/faq/img_faq_cover_desktop.jpg",
   alt: "Фото фирменных бутылок Арт-Квадрат",
 };
 
 const FAQ_MOBILE_DECORATION = {
-  src: "/cases/faq/img_faq_cover_mobile.svg",
+  src: "/faq/img_faq_cover_mobile.svg",
   alt: "",
 };
 
@@ -67,7 +67,7 @@ const FAQ_ITEMS = [
 
 export function FaqSection() {
   return (
-    <section className={"grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start"}>
+    <section className="my-[63px] md:my-[72px] xl:my-[90px] grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start">
       <div>
         <PageSubheading title={FAQ_TITLE} />
 

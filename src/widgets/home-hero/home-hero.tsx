@@ -21,7 +21,7 @@ const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
 export function HomeHero() {
   return (
-    <section className="relative w-full overflow-visible">
+    <section className="mb-[63px] md:mb-[72px] xl:mb-[90px] relative w-full overflow-visible">
       <div
         className="flex min-h-0 w-full justify-start xl:h-[80vh] xl:justify-start 2xl:h-[90vh]"
       >

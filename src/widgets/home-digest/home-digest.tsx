@@ -75,7 +75,7 @@ const DIGEST_ITEMS = [
     description:
       "Одежда под реальные условия эксплуатации, которая сохраняет визуальный стандарт компании.",
     image: {
-      src: "/cases/faq/img_faq_cover_desktop.jpg",
+      src: "/faq/img_faq_cover_desktop.jpg",
       alt: "Корпоративная спецодежда",
     },
   },
@@ -117,7 +117,7 @@ export function HomeDigest() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="py-14 md:py-20 xl:py-[110px]">
+    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <PageSubheading
         title={DIGEST_TITLE}
         description={DIGEST_DESCRIPTION}

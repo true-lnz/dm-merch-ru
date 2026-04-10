@@ -46,7 +46,7 @@ const PARTNER_PRODUCTS = [
     title: "Кепки",
     description: "Под мероприятия, outdoor-форматы и летние наборы.",
     image: {
-      src: "/cases/faq/img_faq_cover_desktop.jpg",
+      src: "/faq/img_faq_cover_desktop.jpg",
       alt: "Кепки и аксессуары",
     },
     href: "/catalog",
@@ -91,7 +91,7 @@ export function HomePartnerProducts() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="py-14 md:py-20 xl:py-[110px]">
+    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <PageSubheading
         title={PARTNER_PRODUCTS_TITLE}
         description={PARTNER_PRODUCTS_DESCRIPTION}

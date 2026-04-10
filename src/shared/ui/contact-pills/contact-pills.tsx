@@ -101,7 +101,7 @@ export function ContactPills({
       key: "email" as const,
       href: emailHref,
       label: email,
-      iconSrc: "/ic_contact_pill_mail.png",
+      iconSrc: "/icons/ic_contact_pill_mail.png",
       ariaLabel: isCta || isMenu ? "Скопировать email" : "Написать на email",
       textClassName: isCta || isMenu ? "px-[0.8rem]" : "px-[0.8rem]",
       onClick: (event: React.MouseEvent<HTMLAnchorElement>) =>
@@ -111,7 +111,7 @@ export function ContactPills({
       key: "phone" as const,
       href: phoneHref,
       label: phone,
-      iconSrc: "/ic_contact_pill_phone.png",
+      iconSrc: "/icons/ic_contact_pill_phone.png",
       ariaLabel: isCta || isMenu ? "Позвонить или скопировать номер" : "Позвонить",
       textClassName: isCta || isMenu ? "px-[1rem]" : "px-[0.9rem]",
       onClick: (event: React.MouseEvent<HTMLAnchorElement>) =>
