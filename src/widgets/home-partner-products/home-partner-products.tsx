@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { PageSubheader } from "@/shared/ui/page-subheader";
-import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
-import { buttonVariants } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/cn";
+import { buttonVariants } from "@/shared/ui/button";
+import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
+import { PageSubheader } from "@/shared/ui/page-subheader";
 
 type HomeProductItem = {
   title: string;
@@ -18,11 +18,49 @@ type HomeProductItem = {
   href: string;
 };
 
-type HomePartnerProductsProps = {
-  title: string;
-  description: string;
-  items: HomeProductItem[];
-};
+const PARTNER_PRODUCTS_TITLE = "Более 500 товаров для брендирования";
+
+const PARTNER_PRODUCTS_DESCRIPTION =
+  "Базовые позиции и изделия под задачу: от одежды команды до аксессуаров и промо-продукции.";
+
+const PARTNER_PRODUCTS = [
+  {
+    title: "Футболки и поло",
+    description: "Для команды, мероприятий и ежедневного использования.",
+    image: {
+      src: "/cases/mvk/coffee-shirt.jpg",
+      alt: "Футболки и поло",
+    },
+    href: "/catalog",
+  },
+  {
+    title: "Худи",
+    description: "Для командных наборов, формы и сезонного мерча.",
+    image: {
+      src: "/cases/ufaoil/hoodie-team.jpg",
+      alt: "Худи",
+    },
+    href: "/catalog",
+  },
+  {
+    title: "Кепки",
+    description: "Под мероприятия, outdoor-форматы и летние наборы.",
+    image: {
+      src: "/cases/faq/art-kvadrat-bottles.jpg",
+      alt: "Кепки и аксессуары",
+    },
+    href: "/catalog",
+  },
+  {
+    title: "Шопперы",
+    description: "Практичный носитель бренда для офиса, событий и подарков.",
+    image: {
+      src: "/cases/ufaoil/honey-pump.jpg",
+      alt: "Шопперы и аксессуары",
+    },
+    href: "/catalog",
+  },
+] satisfies HomeProductItem[];
 
 function ProductCard({ item }: { item: HomeProductItem }) {
   return (
@@ -36,8 +74,12 @@ function ProductCard({ item }: { item: HomeProductItem }) {
           className="object-cover"
         />
       </div>
-      <h3 className="mt-5 font-heading text-[30px] leading-[0.95] tracking-[0.015em] text-[var(--heading)] uppercase md:text-[32px]">{item.title}</h3>
-      <p className="mt-3 min-h-[2lh] text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[17px]">{item.description}</p>
+      <h3 className="mt-5 font-heading text-[30px] leading-[0.95] tracking-[0.015em] text-[var(--heading)] uppercase md:text-[32px]">
+        {item.title}
+      </h3>
+      <p className="mt-3 min-h-[2lh] text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[17px]">
+        {item.description}
+      </p>
       <Link href={item.href} className={cn(buttonVariants(), "mt-6 h-[49px] rounded-[10px]")}>
         Узнать подробнее
       </Link>
@@ -45,18 +87,14 @@ function ProductCard({ item }: { item: HomeProductItem }) {
   );
 }
 
-export function HomePartnerProducts({
-  title,
-  description,
-  items,
-}: HomePartnerProductsProps) {
+export function HomePartnerProducts() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <section className="py-14 md:py-20 xl:py-[110px]">
       <PageSubheader
-        title={title}
-        description={description}
+        title={PARTNER_PRODUCTS_TITLE}
+        description={PARTNER_PRODUCTS_DESCRIPTION}
         descriptionPlacement="bottom"
         descriptionClassName="max-w-[40rem]"
       />
@@ -68,13 +106,14 @@ export function HomePartnerProducts({
             if (!api) {
               return;
             }
+
             api.on("select", () => {
               setActiveIndex(api.selectedScrollSnap());
             });
           }}
         >
           <CarouselContent className="-ml-0">
-            {items.map((item) => (
+            {PARTNER_PRODUCTS.map((item) => (
               <CarouselItem key={item.title} className="pl-0">
                 <ProductCard item={item} />
               </CarouselItem>
@@ -82,17 +121,20 @@ export function HomePartnerProducts({
           </CarouselContent>
         </Carousel>
         <div className="mt-5 flex justify-center gap-2">
-          {items.map((item, index) => (
+          {PARTNER_PRODUCTS.map((item, index) => (
             <span
               key={item.title}
-              className={cn("h-1.5 rounded-full bg-[var(--border)] transition-all", index === activeIndex ? "w-10 bg-[var(--accent)]" : "w-3")}
+              className={cn(
+                "h-1.5 rounded-full bg-[var(--border)] transition-all",
+                index === activeIndex ? "w-10 bg-[var(--accent)]" : "w-3",
+              )}
             />
           ))}
         </div>
       </div>
 
       <div className="mt-10 hidden gap-7 xl:grid xl:grid-cols-4">
-        {items.map((item) => (
+        {PARTNER_PRODUCTS.map((item) => (
           <ProductCard key={item.title} item={item} />
         ))}
       </div>

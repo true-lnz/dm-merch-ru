@@ -1,1 +1,1 @@
-export { HomeFeatureCards } from "./home-feature-cards";
+export { HomeBenefits, HomeCompetitiveAdvantages } from "./home-feature-cards";

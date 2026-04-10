@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { PageSubheader } from "@/shared/ui/page-subheader";
 import { cn } from "@/shared/lib/cn";
+import { PageSubheader } from "@/shared/ui/page-subheader";
 
 type HomeTestimonial = {
   company: string;
@@ -20,21 +20,54 @@ type HomeTestimonial = {
   };
 };
 
-type HomeTestimonialsProps = {
-  title: string;
-  items: HomeTestimonial[];
-};
+const TESTIMONIALS_TITLE = "Отзывы, которые закрывают ваши задачи";
 
-export function HomeTestimonials({
-  title,
-  items,
-}: HomeTestimonialsProps) {
+const TESTIMONIALS = [
+  {
+    company: "Ресторан «Магадан»",
+    name: "Эльнора",
+    role: "Управляющий ресторана",
+    quote: [
+      "Искали подрядчика для формы на фестиваль: важно было, чтобы команда выглядела стильно и премиально, а сотрудникам было удобно работать.",
+      "В итоге получили форму, которая поддержала наш имидж и выглядела уместно на мероприятии, без ощущения промо-одежды.",
+      "Гости фестиваля отдельно спрашивали, можно ли купить дождевики, и это был лучший индикатор, что мерч действительно получился сильным.",
+    ],
+    image: {
+      src: "/contacts/im_contacts.png",
+      alt: "Команда ресторана в мерче",
+    },
+    avatar: {
+      src: "/cases/mvk/coffee-shirt.jpg",
+      alt: "Портрет клиента",
+    },
+  },
+  {
+    company: "Уфаойл",
+    name: "Мария",
+    role: "Руководитель маркетинга",
+    quote: [
+      "Нужно было собрать подарочный набор для партнеров и сделать его не шаблонным, а по-настоящему полезным.",
+      "Команда помогла быстро собрать комплект, продумать упаковку и заранее показать образцы, поэтому запуск прошел спокойно.",
+      "Набор оказался сильным инструментом в переговорах: его запомнили и внутри компании, и у партнеров.",
+    ],
+    image: {
+      src: "/cases/ufaoil/blanket-gift.jpg",
+      alt: "Подарочный набор бренда",
+    },
+    avatar: {
+      src: "/cases/ufaoil/honey-pump.jpg",
+      alt: "Портрет клиента",
+    },
+  },
+] satisfies HomeTestimonial[];
+
+export function HomeTestimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeItem = items[activeIndex];
+  const activeItem = TESTIMONIALS[activeIndex];
 
   return (
     <section className="py-14 md:py-20 xl:py-[110px]">
-      <PageSubheader title={title} />
+      <PageSubheader title={TESTIMONIALS_TITLE} />
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)] xl:gap-[40px]">
         <div className="rounded-[24px] bg-[var(--card-bg)] p-5 md:p-8">
@@ -58,7 +91,7 @@ export function HomeTestimonials({
         </div>
 
         <div className="relative min-h-[320px] overflow-hidden rounded-[24px] bg-[var(--card-bg)] xl:min-h-[616px]">
-          {items.map((item, index) => (
+          {TESTIMONIALS.map((item, index) => (
             <div
               key={item.company}
               className={cn(
@@ -79,12 +112,15 @@ export function HomeTestimonials({
       </div>
 
       <div className="mt-6 flex justify-center gap-[18px]">
-        {items.map((item, index) => (
+        {TESTIMONIALS.map((item, index) => (
           <button
             key={item.company}
             type="button"
             onClick={() => setActiveIndex(index)}
-            className={cn("h-1.5 rounded-full bg-[var(--border)] transition-all", index === activeIndex ? "w-10 bg-[var(--accent)]" : "w-3")}
+            className={cn(
+              "h-1.5 rounded-full bg-[var(--border)] transition-all",
+              index === activeIndex ? "w-10 bg-[var(--accent)]" : "w-3",
+            )}
             aria-label={`Показать отзыв: ${item.company}`}
           />
         ))}

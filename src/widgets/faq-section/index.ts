@@ -1,1 +1,1 @@
-export { FaqSection, type FaqItem } from "./faq-section";
+export { FaqSection } from "./faq-section";

@@ -6,17 +6,61 @@ type HomeFeatureCard = {
   description: string;
 };
 
-type HomeFeatureCardsProps = {
+type FeatureCardsSectionProps = {
   title: string;
   description?: string;
   items: HomeFeatureCard[];
 };
 
-export function HomeFeatureCards({
+const HOME_BENEFITS = {
+  title: "Чувствуете, где мерч закрывает задачу",
+  items: [
+    {
+      title: "3 концепции в течение 5 рабочих дней",
+      description:
+        "Предлагаем несколько визуальных направлений, чтобы вы могли выбрать решение под задачу бренда, формат продукции и стиль компании.",
+    },
+    {
+      title: "Дизайн под производство",
+      description:
+        "Дизайн, который работает на изделии, а не только в макете. Наши дизайнеры работают с одеждой, а не с абстрактной графикой.",
+    },
+    {
+      title: "Сроки фиксируем в договоре",
+      description:
+        "Не \"стараемся успеть\", а берем ответственность за результат и прозрачные этапы проекта.",
+    },
+  ] satisfies HomeFeatureCard[],
+} as const;
+
+const HOME_COMPETITIVE_ADVANTAGES = {
+  title: "Наши преимущества перед конкурентами",
+  description:
+    "Фокус не на красивых обещаниях, а на понятных производственных преимуществах, которые снижают риск для клиента.",
+  items: [
+    {
+      title: "Готовый мерч в среднем за 14 рабочих дней",
+      description:
+        "Делаем быстрее рынка без потери качества и держим сроки по договору.",
+    },
+    {
+      title: "Образцы отправляем по всей России",
+      description:
+        "До тиража вы видите реальный продукт: ткань, посадку, нанесение и детали. Решение принимается не по рендеру, а по предмету.",
+    },
+    {
+      title: "Работаем с тканями и 10 видами нанесений",
+      description:
+        "Подбираем сочетание материалов и брендирования под задачу: вышивка, шелкография, тиснение, термопечать, DTF и другие технологии.",
+    },
+  ] satisfies HomeFeatureCard[],
+} as const;
+
+function FeatureCardsSection({
   title,
   description,
   items,
-}: HomeFeatureCardsProps) {
+}: FeatureCardsSectionProps) {
   return (
     <section className="py-14 md:py-20 xl:py-[110px]">
       <PageSubheader
@@ -44,5 +88,19 @@ export function HomeFeatureCards({
         ))}
       </div>
     </section>
+  );
+}
+
+export function HomeBenefits() {
+  return <FeatureCardsSection title={HOME_BENEFITS.title} items={HOME_BENEFITS.items} />;
+}
+
+export function HomeCompetitiveAdvantages() {
+  return (
+    <FeatureCardsSection
+      title={HOME_COMPETITIVE_ADVANTAGES.title}
+      description={HOME_COMPETITIVE_ADVANTAGES.description}
+      items={HOME_COMPETITIVE_ADVANTAGES.items}
+    />
   );
 }

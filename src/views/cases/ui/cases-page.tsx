@@ -1,15 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-import { FaqSection } from "@/widgets/faq-section";
-import { RequestCta } from "@/widgets/request-cta";
 import { cn } from "@/shared/lib/cn";
 import { PageHeader } from "@/shared/ui/page-header";
-
+import { FaqSection } from "@/widgets/faq-section";
+import { RequestCta } from "@/widgets/request-cta";
 import { CaseCard } from "./case-card";
 import {
-  casesFaqItems,
   casesPageItems,
   caseThemes,
   type CaseTheme,
@@ -37,7 +34,7 @@ export function CasesPage() {
       />
 
       <section className="mt-8 grid gap-6 xl:grid-cols-[245.7px_minmax(0,1fr)] xl:gap-[63px]">
-        <aside className="overflow-hidden xl:sticky xl:top-28 xl:self-start -mr-[var(--layout-side-padding)] lg:mr-0">
+        <aside className="-mr-[var(--layout-side-padding)] overflow-hidden xl:sticky xl:top-28 xl:self-start lg:mr-0">
           <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden xl:grid xl:gap-[18px] xl:overflow-visible xl:pb-0">
             {caseThemes.map((theme) => {
               const isActive = activeTheme === theme;
@@ -51,7 +48,7 @@ export function CasesPage() {
                     "flex min-h-[90px] w-[75%] shrink-0 cursor-pointer snap-start flex-col items-start justify-start rounded-[18px] px-[18px] py-4 text-left font-heading text-[28.8px] leading-[0.95] uppercase transition-colors xl:w-full",
                     isActive
                       ? "bg-[var(--accent)] text-white"
-                      : "bg-[var(--card-bg)] text-[#404040] hover:bg-[#e1e0db]"
+                      : "bg-[var(--card-bg)] text-[#404040] hover:bg-[#e1e0db]",
                   )}
                 >
                   {theme}
@@ -72,10 +69,7 @@ export function CasesPage() {
         </div>
       </section>
 
-      <FaqSection
-        className="mt-14 md:mt-[90px]"
-        items={casesFaqItems}
-      />
+      <FaqSection className="mt-14 md:mt-[90px]" />
 
       <div className="mt-14 md:mt-[90px]">
         <RequestCta />

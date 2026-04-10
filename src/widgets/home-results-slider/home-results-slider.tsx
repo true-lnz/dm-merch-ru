@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { RequestDialog } from "@/features/request-dialog";
-import { PageSubheader } from "@/shared/ui/page-subheader";
 import { cn } from "@/shared/lib/cn";
+import { PageSubheader } from "@/shared/ui/page-subheader";
 
 type HomeResultSlide = {
   title: string;
@@ -18,9 +18,38 @@ type HomeResultSlide = {
   };
 };
 
-type HomeResultsSliderProps = {
-  slides: HomeResultSlide[];
-};
+const RESULT_SLIDES = [
+  {
+    title: "Кейсы с результатом",
+    description:
+      "Как мерч решает конкретную бизнес-задачу: от запроса до узнаваемого результата на площадке.",
+    before:
+      "Для ресторана «Магадан» нужно было полностью экипировать команду для уличного фестиваля и учесть разную погоду: жару, ветер и дождь.",
+    after:
+      "Подобрали комплект из футболок, кепок, худи и дождевиков под разные сценарии. Весь образ команды собрали в единую систему.",
+    result:
+      "Команда выглядела собранно и узнаваемо весь фестиваль, а мерч помог сохранить комфорт сотрудников и единый образ бренда.",
+    image: {
+      src: "/contacts/im_contacts.png",
+      alt: "Команда ресторана в фирменном мерче",
+    },
+  },
+  {
+    title: "Кейсы с результатом",
+    description:
+      "Второй сценарий из макета: меняем продуктовый состав, но сохраняем структуру слайда и подачу результата.",
+    before:
+      "У клиента не было работающего набора фирменных вещей для деловых встреч и подарков партнерам.",
+    after:
+      "Собрали набор из пледа, термокружки и аксессуаров в единой визуальной системе, подготовили упаковку и образцы.",
+    result:
+      "Набор стал регулярным инструментом работы с партнерами и усилил премиальное восприятие бренда без перегруза по бюджету.",
+    image: {
+      src: "/cases/ufaoil/blanket-gift.jpg",
+      alt: "Подарочный набор с пледом",
+    },
+  },
+] satisfies HomeResultSlide[];
 
 function SliderControl({
   direction,
@@ -48,9 +77,9 @@ function SliderControl({
   );
 }
 
-export function HomeResultsSlider({ slides }: HomeResultsSliderProps) {
+export function HomeResultsSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeSlide = slides[activeIndex];
+  const activeSlide = RESULT_SLIDES[activeIndex];
 
   return (
     <section className="py-14 md:py-20 xl:py-[118px]">
@@ -65,20 +94,26 @@ export function HomeResultsSlider({ slides }: HomeResultsSliderProps) {
         <div className="space-y-6">
           <article>
             <h3 className="font-heading text-[28px] leading-none uppercase text-[var(--heading)] md:text-[43px]">Было</h3>
-            <p className="mt-3 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">{activeSlide.before}</p>
+            <p className="mt-3 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">
+              {activeSlide.before}
+            </p>
           </article>
           <article>
             <h3 className="font-heading text-[28px] leading-none uppercase text-[var(--heading)] md:text-[43px]">Стало</h3>
-            <p className="mt-3 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">{activeSlide.after}</p>
+            <p className="mt-3 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">
+              {activeSlide.after}
+            </p>
           </article>
           <article>
             <h3 className="font-heading text-[28px] leading-none uppercase text-[var(--heading)] md:text-[43px]">Результат</h3>
-            <p className="mt-3 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">{activeSlide.result}</p>
+            <p className="mt-3 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">
+              {activeSlide.result}
+            </p>
           </article>
         </div>
 
         <div className="relative min-h-[320px] overflow-hidden rounded-[24px] bg-[var(--card-bg)] xl:col-span-2 xl:min-h-[705px]">
-          {slides.map((slide, index) => (
+          {RESULT_SLIDES.map((slide, index) => (
             <div
               key={slide.image.src}
               className={cn(
@@ -101,8 +136,16 @@ export function HomeResultsSlider({ slides }: HomeResultsSliderProps) {
       <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:mt-8">
         <RequestDialog className="lg:w-[239px]" label="Оставить заявку" showCaption={false} />
         <div className="flex items-center justify-center gap-[18px]">
-          <SliderControl direction="prev" onClick={() => setActiveIndex((activeIndex - 1 + slides.length) % slides.length)} />
-          <SliderControl direction="next" onClick={() => setActiveIndex((activeIndex + 1) % slides.length)} />
+          <SliderControl
+            direction="prev"
+            onClick={() =>
+              setActiveIndex((activeIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)
+            }
+          />
+          <SliderControl
+            direction="next"
+            onClick={() => setActiveIndex((activeIndex + 1) % RESULT_SLIDES.length)}
+          />
         </div>
       </div>
     </section>

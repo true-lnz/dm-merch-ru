@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useState } from "react";
 import { RequestDialog } from "@/features/request-dialog";
+import { cn } from "@/shared/lib/cn";
 import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
 import { PageSubheader } from "@/shared/ui/page-subheader";
-import { cn } from "@/shared/lib/cn";
 
 type HomeDigestItem = {
   title: string;
@@ -17,11 +17,69 @@ type HomeDigestItem = {
   accent?: boolean;
 };
 
-type HomeDigestProps = {
-  title: string;
-  description: string;
-  items: HomeDigestItem[];
-};
+const DIGEST_TITLE = "Весь спектр задач и форматов";
+
+const DIGEST_DESCRIPTION =
+  "Собираем мерч-системы под разные бизнес-сценарии: для команды, клиентов, партнеров, мероприятий и повседневной корпоративной среды.";
+
+const DIGEST_ITEMS = [
+  {
+    title: "Подарки для партнеров",
+    description:
+      "Подарок, который продолжает деловые отношения и поддерживает впечатление о бренде.",
+    image: {
+      src: "/cases/ufaoil/blanket-gift.jpg",
+      alt: "Подарочный набор для партнера",
+    },
+  },
+  {
+    title: "Мерч для мероприятий",
+    description:
+      "Когда бренд должен запомниться, а команда выглядеть цельно и заметно.",
+    image: {
+      src: "/cases/mvk/coffee-shirt.jpg",
+      alt: "Мерч для мероприятия",
+    },
+  },
+  {
+    title: "Мерч для команды",
+    description:
+      "Для внутренних событий, welcome-наборов и повседневной корпоративной среды.",
+    image: {
+      src: "/contacts/im_contacts.png",
+      alt: "Команда в брендированной одежде",
+    },
+    accent: true,
+  },
+  {
+    title: "Сувенирная продукция",
+    description:
+      "Практичные брендированные решения для клиентов, выставок и корпоративных активностей.",
+    image: {
+      src: "/cases/ufaoil/honey-pump.jpg",
+      alt: "Сувенирная продукция",
+    },
+    accent: true,
+  },
+  {
+    title: "Корпоративная униформа",
+    description:
+      "Когда команда должна выглядеть собранно, а бренд оставаться узнаваемым в работе.",
+    image: {
+      src: "/cases/ufaoil/hoodie-team.jpg",
+      alt: "Корпоративная униформа",
+    },
+  },
+  {
+    title: "Корпоративная спецодежда",
+    description:
+      "Одежда под реальные условия эксплуатации, которая сохраняет визуальный стандарт компании.",
+    image: {
+      src: "/cases/faq/art-kvadrat-bottles.jpg",
+      alt: "Корпоративная спецодежда",
+    },
+  },
+] satisfies HomeDigestItem[];
 
 function DigestCard({ item }: { item: HomeDigestItem }) {
   return (
@@ -48,29 +106,21 @@ function DigestCard({ item }: { item: HomeDigestItem }) {
           {item.description}
         </p>
         <div className="mt-auto pt-6">
-          <RequestDialog
-            className="lg:w-full"
-            label="Отправить заявку"
-            showCaption={false}
-          />
+          <RequestDialog className="lg:w-full" label="Отправить заявку" showCaption={false} />
         </div>
       </div>
     </article>
   );
 }
 
-export function HomeDigest({
-  title,
-  description,
-  items,
-}: HomeDigestProps) {
+export function HomeDigest() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <section className="py-14 md:py-20 xl:py-[110px]">
       <PageSubheader
-        title={title}
-        description={description}
+        title={DIGEST_TITLE}
+        description={DIGEST_DESCRIPTION}
         descriptionPlacement="side"
         descriptionClassName="xl:max-w-[718px]"
       />
@@ -89,7 +139,7 @@ export function HomeDigest({
           }}
         >
           <CarouselContent className="-ml-0">
-            {items.map((item) => (
+            {DIGEST_ITEMS.map((item) => (
               <CarouselItem key={item.title} className="basis-full pl-0">
                 <DigestCard item={item} />
               </CarouselItem>
@@ -97,7 +147,7 @@ export function HomeDigest({
           </CarouselContent>
         </Carousel>
         <div className="mt-5 flex justify-center gap-2">
-          {items.map((item, index) => (
+          {DIGEST_ITEMS.map((item, index) => (
             <span
               key={item.title}
               className={cn(
@@ -111,12 +161,12 @@ export function HomeDigest({
 
       <div className="mt-10 hidden gap-7 xl:grid xl:grid-cols-4">
         <div className="contents">
-          {items.slice(0, 3).map((item) => (
+          {DIGEST_ITEMS.slice(0, 3).map((item) => (
             <DigestCard key={item.title} item={item} />
           ))}
         </div>
         <div className="contents">
-          {items.slice(3).map((item) => (
+          {DIGEST_ITEMS.slice(3).map((item) => (
             <DigestCard key={item.title} item={item} />
           ))}
         </div>
