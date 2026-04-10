@@ -18,7 +18,7 @@ type FaqItem = {
 
 const FAQ_DESKTOP_IMAGE = {
   src: "/cases/faq/art-kvadrat-bottles.jpg",
-  alt: "Фирменные бутылки Арт-Квадрат",
+  alt: "Фото фирменных бутылок Арт-Квадрат",
 };
 
 const FAQ_MOBILE_DECORATION = {
@@ -66,18 +66,9 @@ const FAQ_ITEMS = [
   },
 ] satisfies FaqItem[];
 
-type FaqSectionProps = {
-  className?: string;
-};
-
-export function FaqSection({ className }: FaqSectionProps) {
+export function FaqSection() {
   return (
-    <section
-      className={cn(
-        "grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start",
-        className,
-      )}
-    >
+    <section className={"grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start"}>
       <div>
         <PageSubheader title={FAQ_TITLE} />
 
