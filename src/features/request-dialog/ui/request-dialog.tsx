@@ -15,7 +15,7 @@ export function RequestDialog({ className }: RequestDialogProps) {
     <Dialog>
       <DialogTrigger
         className={cn(
-          "group cursor-pointer flex h-[60px] items-center justify-between gap-4 rounded-[10px] bg-[var(--accent)] px-5 text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] xl:h-[72px] xl:px-3",
+          "group cursor-pointer flex h-[60px] w-full lg:w-auto items-center justify-between gap-4 rounded-[10px] bg-[var(--accent)] px-5 text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] xl:h-[72px] xl:px-3",
           className,
         )}
       >
