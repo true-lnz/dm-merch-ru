@@ -1,12 +1,12 @@
 import { blogPostsMock } from "@/entities/blog-post";
-import { PageHeader } from "@/shared/ui/page-header";
+import { PageHeading } from "../../../shared/ui/page-heading";
 import { BlogFeed } from "@/widgets/blog-feed";
 import { RequestCta } from "@/features/request-cta";
 
 export function BlogPage() {
   return (
     <>
-      <PageHeader
+      <PageHeading
         title="Блог"
         breadcrumb={{
             labelFrom: "Главная",

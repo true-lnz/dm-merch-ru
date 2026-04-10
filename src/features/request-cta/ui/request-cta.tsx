@@ -1,6 +1,6 @@
 import { siteInfo } from "@/shared/config/site-info";
 import { ContactPills } from "@/shared/ui/contact-pills";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../../shared/ui/page-subheading";
 import { RequestForm } from "@/shared/ui/request-form";
 
 export function RequestCta() {
@@ -8,7 +8,7 @@ export function RequestCta() {
     <section className="relative overflow-hidden" aria-label="Форма заявки">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-[auto_1fr]">
         <div className="space-y-5">
-          <PageSubheader
+          <PageSubheading
           title={
             <>
               Обсудим задачу

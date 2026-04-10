@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeStage = {
   index: string;
@@ -55,7 +55,7 @@ export function HomeWorkStages() {
         </div>
 
         <div className="relative z-10">
-          <PageSubheader
+          <PageSubheading
             title={WORK_STAGES_TITLE}
             description={WORK_STAGES_DESCRIPTION}
             descriptionPlacement="side"

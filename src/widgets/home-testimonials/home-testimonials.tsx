@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/shared/lib/cn";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeTestimonial = {
   company: string;
@@ -33,7 +33,7 @@ const TESTIMONIALS = [
       "Гости фестиваля отдельно спрашивали, можно ли купить дождевики, и это был лучший индикатор, что мерч действительно получился сильным.",
     ],
     image: {
-      src: "/contacts/im_contacts.png",
+      src: "/contacts/img_contacts_cover.png",
       alt: "Команда ресторана в мерче",
     },
     avatar: {
@@ -67,7 +67,7 @@ export function HomeTestimonials() {
 
   return (
     <section className="py-14 md:py-20 xl:py-[110px]">
-      <PageSubheader title={TESTIMONIALS_TITLE} />
+      <PageSubheading title={TESTIMONIALS_TITLE} />
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)] xl:gap-[40px]">
         <div className="rounded-[24px] bg-[var(--card-bg)] p-5 md:p-8">

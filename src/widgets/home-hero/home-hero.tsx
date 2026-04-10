@@ -3,10 +3,10 @@ import Link from "next/link";
 import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
-import {PageHeader} from "@/shared/ui/page-header";
+import {PageHeading} from "../../shared/ui/page-heading";
 
 const HERO_IMAGE = {
-  src: "/home/home_hero_image2343.png",
+  src: "/home/img_home_hero_cover.png",
   alt: "Команда в фирменном мерче",
 } as const;
 
@@ -16,8 +16,8 @@ const HERO_FEATURES = [
   { text: "Отправляем образцы по всей России: покажем материалы, посадку и качество до запуска основного тиража" },
 ] as const;
 
-const FEATURE_ICON_SRC = "/home/hero-feature-icon.svg";
-const SECONDARY_ARROW_ICON_SRC = "/home/hero-arrow-primary.svg";
+const FEATURE_ICON_SRC = "/icons/ic_feature.svg";
+const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
 export function HomeHero() {
   return (
@@ -40,7 +40,7 @@ export function HomeHero() {
         <div className="relative z-10 mb-16 flex w-full justify-center xl:block xl:w-1/2 xl:max-w-[50%]">
           <div className="flex w-full flex-col gap-8 px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between xl:rounded-[20px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
             <div className="flex flex-col gap-5 xl:gap-[30px]">
-              <PageHeader title="Мерч, который работает на бизнес" />
+              <PageHeading title="Мерч, который работает на бизнес" />
               <p className="max-w-[340px] text-[14px] leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
                 Создаём корпоративный мерч и подарки, которые носят, помнят и связывают с брендом.
               </p>

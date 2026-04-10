@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/shared/ui/accordion";
 import { AspectRatio } from "@/shared/ui/acpect-ratio";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type FaqItem = {
   question: string;
@@ -16,12 +16,12 @@ type FaqItem = {
 };
 
 const FAQ_DESKTOP_IMAGE = {
-  src: "/cases/faq/art-kvadrat-bottles.jpg",
+  src: "/cases/faq/img_faq_cover_desktop.jpg",
   alt: "Фото фирменных бутылок Арт-Квадрат",
 };
 
 const FAQ_MOBILE_DECORATION = {
-  src: "/cases/faq/faq-mobile-decor.svg",
+  src: "/cases/faq/img_faq_cover_mobile.svg",
   alt: "",
 };
 
@@ -69,7 +69,7 @@ export function FaqSection() {
   return (
     <section className={"grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start"}>
       <div>
-        <PageSubheader title={FAQ_TITLE} />
+        <PageSubheading title={FAQ_TITLE} />
 
         <div className="mt-4 md:mt-5">
           <Accordion className="w-full">

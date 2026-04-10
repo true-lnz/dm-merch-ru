@@ -5,7 +5,7 @@ import { useState } from "react";
 import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
 import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeDigestItem = {
   title: string;
@@ -46,7 +46,7 @@ const DIGEST_ITEMS = [
     description:
       "Для внутренних событий, welcome-наборов и повседневной корпоративной среды.",
     image: {
-      src: "/contacts/im_contacts.png",
+      src: "/contacts/img_contacts_cover.png",
       alt: "Команда в брендированной одежде",
     },
     accent: true,
@@ -75,7 +75,7 @@ const DIGEST_ITEMS = [
     description:
       "Одежда под реальные условия эксплуатации, которая сохраняет визуальный стандарт компании.",
     image: {
-      src: "/cases/faq/art-kvadrat-bottles.jpg",
+      src: "/cases/faq/img_faq_cover_desktop.jpg",
       alt: "Корпоративная спецодежда",
     },
   },
@@ -118,7 +118,7 @@ export function HomeDigest() {
 
   return (
     <section className="py-14 md:py-20 xl:py-[110px]">
-      <PageSubheader
+      <PageSubheading
         title={DIGEST_TITLE}
         description={DIGEST_DESCRIPTION}
         descriptionPlacement="side"

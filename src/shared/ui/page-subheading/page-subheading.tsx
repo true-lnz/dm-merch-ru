@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/shared/lib/cn";
 
-type PageSubheaderProps = {
+type PageSubheadingProps = {
   title: ReactNode;
   description?: ReactNode;
   descriptionPlacement?: "side" | "bottom";
@@ -11,7 +11,7 @@ type PageSubheaderProps = {
   descriptionClassName?: string;
 };
 
-export function PageSubheader({
+export function PageSubheading({
   title,
   description,
   descriptionPlacement = "bottom",
@@ -19,7 +19,7 @@ export function PageSubheader({
   containerClassName,
   titleClassName,
   descriptionClassName,
-}: PageSubheaderProps) {
+}: PageSubheadingProps) {
   if (!description) {
     return (
       <h2

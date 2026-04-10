@@ -6,7 +6,7 @@ import { useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeProductItem = {
   title: string;
@@ -46,7 +46,7 @@ const PARTNER_PRODUCTS = [
     title: "Кепки",
     description: "Под мероприятия, outdoor-форматы и летние наборы.",
     image: {
-      src: "/cases/faq/art-kvadrat-bottles.jpg",
+      src: "/cases/faq/img_faq_cover_desktop.jpg",
       alt: "Кепки и аксессуары",
     },
     href: "/catalog",
@@ -92,7 +92,7 @@ export function HomePartnerProducts() {
 
   return (
     <section className="py-14 md:py-20 xl:py-[110px]">
-      <PageSubheader
+      <PageSubheading
         title={PARTNER_PRODUCTS_TITLE}
         description={PARTNER_PRODUCTS_DESCRIPTION}
         descriptionPlacement="bottom"

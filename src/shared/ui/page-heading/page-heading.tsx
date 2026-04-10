@@ -1,6 +1,6 @@
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 
-type PageHeaderProps = {
+type PageHeadingProps = {
   title: string;
   breadcrumb?: {
       labelFrom: string;
@@ -9,10 +9,10 @@ type PageHeaderProps = {
   };
 };
 
-export function PageHeader({
+export function PageHeading({
   title,
   breadcrumb,
-}: PageHeaderProps) {
+}: PageHeadingProps) {
   return (
     <section className="flex flex-col gap-12">
       {breadcrumb?.href ? (

@@ -1,5 +1,5 @@
 import { SparklesIcon } from "lucide-react";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeFeatureCard = {
   title: string;
@@ -63,7 +63,7 @@ function FeatureCardsSection({
 }: FeatureCardsSectionProps) {
   return (
     <section className="py-14 md:py-20 xl:py-[110px]">
-      <PageSubheader
+      <PageSubheading
         title={title}
         description={description}
         descriptionPlacement="bottom"

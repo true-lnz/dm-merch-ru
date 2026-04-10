@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 import { RequestForm } from "@/shared/ui/request-form";
 
 const LEAD_CTA_IMAGE = {
-  src: "/contacts/im_contacts.png",
+  src: "/contacts/img_contacts_cover.png",
   alt: "Примеры корпоративного мерча",
 };
 
@@ -23,7 +23,7 @@ export function HomeLeadCta() {
           </div>
         </div>
         <div className="rounded-[24px] bg-[var(--card-bg)] px-5 py-5 md:px-8 md:py-8 xl:px-[37px] xl:py-[43px]">
-          <PageSubheader
+          <PageSubheading
             title="Отправим примеры мерча"
             description="На основе наших работ для 500+ компаний покажем реальные форматы, материалы и связки под вашу задачу."
             descriptionPlacement="bottom"

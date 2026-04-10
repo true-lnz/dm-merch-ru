@@ -1,10 +1,10 @@
-import { PageHeader } from "@/shared/ui/page-header";
+import { PageHeading } from "../../../shared/ui/page-heading";
 import { Section } from "@/shared/ui/section";
 
 export function CatalogPage() {
   return (
     <>
-      <PageHeader
+      <PageHeading
         title="Каталог"
         breadcrumb={{
           labelFrom: "Главная",

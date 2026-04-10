@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeResultSlide = {
   title: string;
@@ -30,7 +30,7 @@ const RESULT_SLIDES = [
     result:
       "Команда выглядела собранно и узнаваемо весь фестиваль, а мерч помог сохранить комфорт сотрудников и единый образ бренда.",
     image: {
-      src: "/contacts/im_contacts.png",
+      src: "/contacts/img_contacts_cover.png",
       alt: "Команда ресторана в фирменном мерче",
     },
   },
@@ -83,7 +83,7 @@ export function HomeResultsSlider() {
 
   return (
     <section className="py-14 md:py-20 xl:py-[118px]">
-      <PageSubheader
+      <PageSubheading
         title={activeSlide.title}
         description={activeSlide.description}
         descriptionPlacement="side"

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { RequestDialog } from "@/features/request-dialog";
-import { PageSubheader } from "@/shared/ui/page-subheader";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 const URGENT_ORDER_IMAGE = {
   src: "/cases/mvk/coffee-shirt.jpg",
@@ -26,7 +26,7 @@ export function HomeUrgentOrder() {
           <p className="text-[16px] leading-[1.35] tracking-[-0.03em] text-[#404040] md:text-[18px]">
             Быстрые тиражи под событие, запуск или срочную поставку.
           </p>
-          <PageSubheader
+          <PageSubheading
             title="Экспресс-мерч, когда нужен вчера"
             className="mt-3"
             titleClassName="text-[38px] md:text-[54px]"

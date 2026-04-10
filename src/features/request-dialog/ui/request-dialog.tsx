@@ -19,7 +19,7 @@ type RequestDialogProps = {
 
 const DEFAULT_LABEL = "Обсудить задачу";
 const DEFAULT_CAPTION = "Минимальный бюджет - от 50 000 ₽";
-const DEFAULT_ICON_SRC = "/home/hero-arrow-primary.svg";
+const DEFAULT_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
 export function RequestDialog({
   className,
