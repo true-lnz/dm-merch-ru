@@ -39,11 +39,11 @@ export function RequestDialog({
         )}
       >
         <span className="flex min-w-0 flex-col items-start">
-          <span className="text-[16px] leading-[1.3] tracking-[-0.04em] xl:text-[19px]">
+          <span className="text-[16px] text-nowrap leading-[1.3] tracking-[-0.04em] xl:text-[19px]">
             {label}
           </span>
           {showCaption ? (
-            <span className="mt-[2px] hidden text-[9px] leading-[1.3] tracking-[-0.04em] text-white/50 transition-colors duration-200 group-hover:text-[var(--accent)]/60 xl:block xl:text-[11px]">
+            <span className="mt-[2px] hidden text-[9px] text-nowrap leading-[1.3] tracking-[-0.04em] text-white/50 transition-colors duration-200 group-hover:text-[var(--accent)]/60 lg:block xl:text-[11px]">
               {caption}
             </span>
           ) : null}

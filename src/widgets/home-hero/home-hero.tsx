@@ -92,7 +92,7 @@ export function HomeHero() {
                   "group hidden h-[60px] justify-between rounded-[10px] border-transparent bg-white px-5 text-[16px] font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white md:w-[284px] xl:flex xl:w-[283.6px] xl:rounded-[8px] xl:text-[19.46px] xl:tracking-[-0.04em]",
                 )}
               >
-                <span>К кейсам</span>
+                <span className="self-start pt-2">К кейсам</span>
                 <span className="inline-flex size-10 items-center justify-center rounded-[5px] bg-[var(--accent)] transition-colors duration-200 group-hover:bg-white xl:size-[39.52px] xl:rounded-[4px]">
                   <Image
                     src={SECONDARY_ARROW_ICON_SRC}
