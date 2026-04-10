@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { RequestDialog } from "@/features/request-dialog";
 import { siteInfo } from "@/shared/config/site-info";
 import { YandexMapCard } from "./yandex-map-card";
 import {
@@ -20,8 +21,6 @@ const contactLinks = [
     label: siteInfo.email,
   },
 ] as const;
-
-const discussionHref = `mailto:${siteInfo.email}?subject=${encodeURIComponent("Обсуждение проекта")}`;
 
 function ContactLeadLink({
   href,
@@ -55,31 +54,7 @@ function ContactsMapCard() {
 }
 
 function DiscussionCta() {
-  return (
-    <a
-      href={discussionHref}
-      className="flex h-[60px] items-center justify-between rounded-[10px] bg-[var(--accent)] px-5 text-white transition-colors hover:bg-[var(--accent-hover)] md:max-w-[320px] xl:h-[72px] xl:w-[302px] xl:max-w-none xl:px-3"
-    >
-      <span className="flex min-w-0 flex-col items-start">
-        <span className="text-[16px] leading-[1.3] tracking-[-0.04em] xl:text-[19px]">
-          Обсудить задачу
-        </span>
-        <span className="mt-[2px] hidden text-[9px] leading-[1.3] tracking-[-0.04em] text-white/50 xl:block xl:text-[11px]">
-          Минимальный бюджет - от 50 000 ₽
-        </span>
-      </span>
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-[4px] bg-white xl:size-12 xl:rounded-[5px]">
-        <Image
-          src="/contacts/contacts-cta-arrow.svg"
-          alt=""
-          width={16}
-          height={16}
-          aria-hidden="true"
-          className="size-3.5 xl:size-4"
-        />
-      </span>
-    </a>
-  );
+  return <RequestDialog />;
 }
 
 function MobileContactsHero() {
