@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { XIcon } from "lucide-react";
 import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import { cn } from "@/shared/lib/cn";
@@ -8,33 +9,61 @@ import { RequestForm } from "@/shared/ui/request-form";
 
 type RequestDialogProps = {
   className?: string;
+  label?: ReactNode;
+  caption?: ReactNode;
+  showCaption?: boolean;
+  iconSrc?: string;
+  iconContainerClassName?: string;
+  iconClassName?: string;
 };
 
-export function RequestDialog({ className }: RequestDialogProps) {
+const DEFAULT_LABEL = "Обсудить задачу";
+const DEFAULT_CAPTION = "Минимальный бюджет - от 50 000 ₽";
+const DEFAULT_ICON_SRC = "/home/hero-arrow-primary.svg";
+
+export function RequestDialog({
+  className,
+  label = DEFAULT_LABEL,
+  caption = DEFAULT_CAPTION,
+  showCaption = true,
+  iconSrc = DEFAULT_ICON_SRC,
+  iconContainerClassName,
+  iconClassName,
+}: RequestDialogProps) {
   return (
     <Dialog>
       <DialogTrigger
         className={cn(
-          "group cursor-pointer flex h-[60px] w-full lg:w-auto items-center justify-between gap-4 rounded-[10px] bg-[var(--accent)] px-5 text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] xl:h-[72px] xl:px-3",
+          "group cursor-pointer flex h-[60px] w-full lg:w-auto items-center justify-between gap-4 rounded-[10px] bg-[var(--accent)] px-3 text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] xl:px-5",
           className,
         )}
       >
-        <span className="flex min-w-0 flex-col items-start gap-2 ">
+        <span className="flex min-w-0 flex-col items-start">
           <span className="text-[16px] leading-[1.3] tracking-[-0.04em] xl:text-[19px]">
-            Обсудить задачу
+            {label}
           </span>
-          <span className="mt-[2px] hidden text-[9px] leading-[1.3] tracking-[-0.04em] text-white/50 transition-colors duration-200 group-hover:text-[var(--accent)]/60 xl:block xl:text-[11px]">
-            Минимальный бюджет - от 50 000 ₽
-          </span>
+          {showCaption ? (
+            <span className="mt-[2px] hidden text-[9px] leading-[1.3] tracking-[-0.04em] text-white/50 transition-colors duration-200 group-hover:text-[var(--accent)]/60 xl:block xl:text-[11px]">
+              {caption}
+            </span>
+          ) : null}
         </span>
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-[4px] bg-white transition-colors duration-200 group-hover:bg-[var(--accent)] xl:size-12 xl:rounded-[5px]">
+        <span
+          className={cn(
+            "inline-flex size-10 shrink-0 items-center justify-center rounded-[5px] bg-white transition-colors duration-200 group-hover:bg-[var(--accent)] xl:size-[39.52px] xl:rounded-[4px]",
+            iconContainerClassName,
+          )}
+        >
           <Image
-            src="/contacts/contacts-cta-arrow.svg"
+            src={iconSrc}
             alt=""
             width={16}
             height={16}
             aria-hidden="true"
-            className="size-3.5 transition-[transform,filter] duration-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:brightness-0 group-hover:invert xl:size-4"
+            className={cn(
+              "size-[17px] transition-[transform,filter] duration-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:brightness-0 group-hover:invert xl:size-[13.55px]",
+              iconClassName,
+            )}
           />
         </span>
       </DialogTrigger>

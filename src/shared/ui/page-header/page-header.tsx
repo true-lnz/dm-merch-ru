@@ -23,7 +23,7 @@ export function PageHeader({
   breadcrumbs = [],
 }: PageHeaderProps) {
   return (
-    <header className="mb-8 flex flex-col gap-11 md:mb-12">
+    <header className="flex flex-col gap-11">
       {breadcrumbs.length > 0 ? (
         <Breadcrumb>
           <BreadcrumbList>

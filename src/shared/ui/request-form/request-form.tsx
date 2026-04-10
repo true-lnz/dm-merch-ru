@@ -19,6 +19,7 @@ type RequestFormProps = {
   privacyCheckboxId?: string;
   formClassName?: string;
   submitClassName?: string;
+  submitLabel?: string;
 };
 
 export function RequestForm({
@@ -26,6 +27,7 @@ export function RequestForm({
   privacyCheckboxId = DEFAULT_PRIVACY_CHECKBOX_ID,
   formClassName,
   submitClassName,
+  submitLabel = "Отправить заявку",
 }: RequestFormProps) {
   return (
     <form className={cn("space-y-4", formClassName)} noValidate>
@@ -59,7 +61,7 @@ export function RequestForm({
       </div>
 
       <Button type="submit" variant="blue" className={cn("w-full cursor-pointer", submitClassName)}>
-        Отправить заявку
+        {submitLabel}
       </Button>
     </form>
   );

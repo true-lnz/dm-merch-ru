@@ -8,7 +8,7 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     title: "Как мерч влияет на имидж и узнаваемость бренда",
     excerpt: "",
     image: {
-      url: "https://www.figma.com/api/mcp/asset/b254c5d1-9e60-44da-b311-16449dad8b06",
+      url: "/blog/blog-brand-image.jpg",
       alt: "Модели в брендированной одежде",
       width: 553,
       height: 250,
@@ -20,7 +20,7 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     title: "Экспресс-мерч",
     excerpt: "Сроки, этапы и форматы быстрого запуска",
     image: {
-      url: "https://www.figma.com/api/mcp/asset/462d5770-48c9-43c1-aebd-d2a83e96f49c",
+      url: "/blog/blog-express-merch.jpg",
       alt: "Быстрое производство брендированной продукции",
       width: 553,
       height: 250,
@@ -32,7 +32,7 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     title: "Сколько стоит мерч",
     excerpt: "Факторы цены и реальный расчет",
     image: {
-      url: "https://www.figma.com/api/mcp/asset/882a6a19-da70-41be-9d87-e765c79e908a",
+      url: "/blog/blog-cost.jpg",
       alt: "Футболки и брендированные товары",
       width: 553,
       height: 250,
@@ -44,7 +44,7 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     title: "Как выбрать мерч под задачу",
     excerpt: "Руководство для бизнеса",
     image: {
-      url: "https://www.figma.com/api/mcp/asset/a3f88da2-3c64-4d99-820a-0c7d7768d10c",
+      url: "/blog/blog-merch-guide.jpg",
       alt: "Корпоративные наборы и аксессуары",
       width: 553,
       height: 250,
@@ -56,7 +56,7 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     title: "Корпоративный мерч",
     excerpt: "Что это и зачем он бизнесу",
     image: {
-      url: "https://www.figma.com/api/mcp/asset/692938e7-a01f-482e-8820-4d9b9d2e4988",
+      url: "/blog/blog-corporate-merch.jpg",
       alt: "Команда в корпоративной одежде",
       width: 553,
       height: 250,
