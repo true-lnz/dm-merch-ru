@@ -1,51 +1,26 @@
-import { Fragment } from "react";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/shared/ui/breadcrumb";
-
-export type PageHeaderBreadcrumbItem = {
-  label: string;
-  href?: string;
-};
+import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 
 type PageHeaderProps = {
   title: string;
-  breadcrumbs?: PageHeaderBreadcrumbItem[];
+  breadcrumb?: {
+      labelFrom: string;
+      labelTo: string;
+      href: string;
+  };
 };
 
 export function PageHeader({
   title,
-  breadcrumbs = [],
+  breadcrumb,
 }: PageHeaderProps) {
   return (
-    <header className="flex flex-col gap-11">
-      {breadcrumbs.length > 0 ? (
-        <Breadcrumb>
-          <BreadcrumbList>
-            {breadcrumbs.map((item, index) => (
-              <Fragment key={`${item.label}-${index}`}>
-                <BreadcrumbItem>
-                  {item.href ? (
-                    <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
-                  ) : (
-                    <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                  )}
-                </BreadcrumbItem>
-                {index < breadcrumbs.length - 1 ? <BreadcrumbSeparator /> : null}
-              </Fragment>
-            ))}
-          </BreadcrumbList>
-        </Breadcrumb>
+    <section className="flex flex-col gap-12">
+      {breadcrumb?.href ? (
+          <PageBreadcrumb item={breadcrumb} />
       ) : null}
-
-      <h1 className="m-0 font-heading text-[35.6px] md:text-[6.125rem] font-bold uppercase leading-none tracking-[0.015em] text-[var(--heading)]">
+      <h1 className="m-0 font-heading text-[35.6px] font-bold uppercase leading-none tracking-[0.015em] text-[var(--heading)] md:text-[6.125rem]">
         {title}
       </h1>
-    </header>
+    </section>
   );
 }

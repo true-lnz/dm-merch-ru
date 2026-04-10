@@ -5,16 +5,17 @@ import { RequestCta } from "@/widgets/request-cta";
 
 export function BlogPage() {
   return (
-    <div className="page blog-page">
+    <>
       <PageHeader
         title="Блог"
-        breadcrumbs={[
-          { label: "Главная", href: "/" },
-          { label: "Блог" },
-        ]}
+        breadcrumb={{
+            labelFrom: "Главная",
+            labelTo: "Блог",
+            href: "/",
+        }}
       />
       <BlogFeed posts={blogPostsMock} />
       <RequestCta />
-    </div>
+    </>
   );
 }

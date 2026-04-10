@@ -24,13 +24,14 @@ export function CasesPage() {
   }, [activeTheme]);
 
   return (
-    <div className="page pb-16 md:pb-24">
+    <>
       <PageHeader
         title="Кейсы"
-        breadcrumbs={[
-          { label: "Главная", href: "/" },
-          { label: "Кейсы" },
-        ]}
+        breadcrumb={{
+            labelFrom: "Главная",
+            labelTo: "Кейсы",
+            href: "/",
+        }}
       />
 
       <section className="mt-8 grid gap-6 xl:grid-cols-[245.7px_minmax(0,1fr)] xl:gap-[63px]">
@@ -71,6 +72,6 @@ export function CasesPage() {
 
       <FaqSection />
       <RequestCta />
-    </div>
+    </>
   );
 }

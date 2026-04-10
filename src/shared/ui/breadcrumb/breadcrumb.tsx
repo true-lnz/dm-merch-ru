@@ -2,6 +2,15 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@/shared/lib/cn";
 
+type PageBreadcrumbProps = {
+  item: {
+    labelFrom: string;
+    labelTo: string;
+    href: string;
+  };
+  className?: string;
+};
+
 export function Breadcrumb({
   className,
   ...props
@@ -9,19 +18,10 @@ export function Breadcrumb({
   return (
     <nav
       aria-label="Хлебные крошки"
-      className={cn("text-[0.8125rem] leading-[1.3] tracking-[-0.02em] text-[var(--text-muted)]", className)}
-      {...props}
-    />
-  );
-}
-
-export function BreadcrumbList({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"ol">) {
-  return (
-    <ol
-      className={cn("flex flex-wrap items-center gap-2", className)}
+      className={cn(
+        "flex flex-wrap items-center gap-2 text-[0.8125rem] leading-[1.3] tracking-[-0.02em] text-[var(--text-muted)]",
+        className,
+      )}
       {...props}
     />
   );
@@ -30,8 +30,8 @@ export function BreadcrumbList({
 export function BreadcrumbItem({
   className,
   ...props
-}: ComponentPropsWithoutRef<"li">) {
-  return <li className={cn("inline-flex items-center gap-2", className)} {...props} />;
+}: ComponentPropsWithoutRef<"span">) {
+  return <span className={cn("inline-flex items-center gap-2", className)} {...props} />;
 }
 
 export function BreadcrumbLink({
@@ -53,6 +53,18 @@ export function BreadcrumbLink({
   );
 }
 
+export function BreadcrumbList({
+                                 className,
+                                 ...props
+                               }: ComponentPropsWithoutRef<"ol">) {
+  return (
+      <ol
+          className={cn("flex flex-wrap items-center gap-2", className)}
+          {...props}
+      />
+  );
+}
+
 export function BreadcrumbPage({
   className,
   ...props
@@ -64,10 +76,31 @@ export function BreadcrumbSeparator({
   className,
   children = "/",
   ...props
-}: ComponentPropsWithoutRef<"li">) {
+}: ComponentPropsWithoutRef<"span">) {
   return (
-    <li aria-hidden="true" className={className} {...props}>
+    <span aria-hidden="true" className={className} {...props}>
       {children}
-    </li>
+    </span>
+  );
+}
+
+export function PageBreadcrumb({
+  item,
+  className,
+}: PageBreadcrumbProps) {
+
+  return (
+    <Breadcrumb className={className}>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href={item.href}>{item.labelFrom}</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>{item.labelTo}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+
   );
 }

@@ -1,15 +1,8 @@
 import Image from "next/image";
 import { RequestDialog } from "@/features/request-dialog";
 import { siteInfo } from "@/shared/config/site-info";
+import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import { YandexMapCard } from "./yandex-map-card";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/shared/ui/breadcrumb";
 
 const contactLinks = [
   {
@@ -32,7 +25,7 @@ function ContactLeadLink({
   return (
     <a
       href={href}
-      className="block whitespace-nowrap font-heading text-[28px] sm:text-[35.6px] leading-none tracking-[0.015em] text-[var(--heading)] transition-opacity hover:opacity-80 md:text-[5.125rem]"
+      className="block whitespace-nowrap font-heading text-[28px] leading-none tracking-[0.015em] text-[var(--heading)] transition-opacity hover:opacity-80 sm:text-[35.6px] md:text-[5.125rem]"
     >
       {label}
     </a>
@@ -59,7 +52,7 @@ function DiscussionCta() {
 
 function MobileContactsHero() {
   return (
-    <div className="xl:hidden mb-[70px]">
+    <div className="mb-[70px] xl:hidden">
       <div className="overflow-hidden rounded-[20px] md:mx-auto md:max-w-[760px]">
         <div className="relative aspect-[340/256] overflow-hidden md:aspect-[16/11]">
           <Image
@@ -107,7 +100,7 @@ function DesktopContactsHero() {
         />
       </div>
 
-      <div className="absolute inset-y-0 left-0 z-10 mb-[75px] flex w-fit max-w-[min(771px,calc(100%-140px))] flex-col justify-between rounded-[20px] bg-[rgba(232,231,226,0.5)] p-5 backdrop-blur-[15px] px-[50px] py-[43px]">
+      <div className="absolute inset-y-0 left-0 z-10 mb-[75px] flex w-fit max-w-[min(771px,calc(100%-140px))] flex-col justify-between rounded-[20px] bg-[rgba(232,231,226,0.5)] p-5 px-[50px] py-[43px] backdrop-blur-[15px]">
         <div>
           <h1 className="sr-only">Контакты</h1>
 
@@ -132,17 +125,14 @@ function DesktopContactsHero() {
 export function ContactsPage() {
   return (
     <>
-      <Breadcrumb className="mb-8 text-[12px] tracking-[-0.03em] text-[#404040] md:mb-10 md:text-[12.6px] xl:mb-5">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Главная</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Контакты</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <PageBreadcrumb
+        className="mb-8 text-[12px] tracking-[-0.03em] text-[#404040] md:mb-10 md:text-[12.6px] xl:mb-5"
+        item={{
+            labelFrom: "Главная",
+            labelTo: "Контакты",
+            href: "/",
+        }}
+      />
 
       <MobileContactsHero />
       <DesktopContactsHero />

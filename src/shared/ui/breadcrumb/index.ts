@@ -2,7 +2,7 @@ export {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
+  PageBreadcrumb,
 } from "./breadcrumb";
