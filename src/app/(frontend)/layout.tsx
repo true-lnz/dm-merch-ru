@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { CookieWarning } from "@/widgets/cookie-warning";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
 import { Toaster } from "@/shared/ui/sonner";
@@ -43,6 +44,7 @@ export default function RootLayout({
           <Header />
           <main className="site-main">{children}</main>
           <Footer />
+          <CookieWarning />
         </div>
         <Toaster />
       </body>
