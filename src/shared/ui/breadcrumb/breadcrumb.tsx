@@ -19,7 +19,7 @@ export function Breadcrumb({
     <nav
       aria-label="Хлебные крошки"
       className={cn(
-        "flex flex-wrap items-center gap-2 text-[0.8125rem] leading-[1.3] tracking-[-0.02em] text-[var(--text-muted)]",
+        "flex flex-wrap items-center gap-2 text-xs md:text-sm leading-[1.3] tracking-[-0.02em] text-[var(--text-muted)]",
         className,
       )}
       {...props}
@@ -86,11 +86,10 @@ export function BreadcrumbSeparator({
 
 export function PageBreadcrumb({
   item,
-  className,
 }: PageBreadcrumbProps) {
 
   return (
-    <Breadcrumb className={className}>
+    <Breadcrumb className="mt-8 md:mt-12 xl:mt-[70px] mb-4 md:mb-4 xl:mb-[36px]">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href={item.href}>{item.labelFrom}</BreadcrumbLink>
@@ -101,6 +100,5 @@ export function PageBreadcrumb({
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-
   );
 }

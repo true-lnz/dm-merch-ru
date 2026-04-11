@@ -99,10 +99,10 @@ function DigestCard({ item }: { item: HomeDigestItem }) {
         />
       </div>
       <div className="flex h-full flex-col px-5 py-5 md:px-[30px] md:py-7">
-        <h3 className="font-heading text-[32px] leading-[0.95] tracking-[0.015em] text-[var(--heading)] uppercase md:text-[40px]">
+        <h3 className="font-heading text-2xl leading-[0.95] tracking-[0.015em] text-[var(--heading)] uppercase md:text-[40px]">
           {item.title}
         </h3>
-        <p className="mt-3 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">
+        <p className="mt-3 text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-lg">
           {item.description}
         </p>
         <div className="mt-auto pt-6">

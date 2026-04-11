@@ -5,19 +5,19 @@ import { useEffect, useState } from "react";
 import { siteInfo } from "@/shared/config/site-info";
 
 export const navLinkClassName =
-  "inline-flex items-center justify-center !bg-transparent px-4 py-2 text-base font-medium tracking-[-0.02em] text-[#404040] transition-colors hover:!bg-transparent hover:text-[var(--text-muted)] focus:!bg-transparent focus-visible:!bg-transparent data-active:!bg-transparent";
+  "inline-flex items-center justify-center !bg-transparent px-4 py-2 font-medium tracking-[-0.02em] text-[#404040] transition-colors hover:!bg-transparent hover:text-[var(--text-muted)] focus:!bg-transparent focus-visible:!bg-transparent data-active:!bg-transparent";
 
 export const catalogTriggerClassName =
-  "h-auto cursor-pointer !bg-transparent px-4 py-2 text-base font-medium tracking-[-0.02em] text-[#404040] shadow-none hover:!bg-transparent hover:!text-[var(--text-muted)] focus:!bg-transparent focus-visible:!bg-transparent data-[popup-open]:!bg-transparent data-[open]:!bg-transparent data-[popup-open]:hover:!bg-transparent data-[open]:hover:!bg-transparent data-[popup-open]:!text-[var(--text-muted)] data-[open]:!text-[var(--text-muted)]";
+  "h-auto cursor-pointer !bg-transparent px-4 py-2 font-medium tracking-[-0.02em] text-[#404040] shadow-none hover:!bg-transparent hover:!text-[var(--text-muted)] focus:!bg-transparent focus-visible:!bg-transparent data-[popup-open]:!bg-transparent data-[open]:!bg-transparent data-[popup-open]:hover:!bg-transparent data-[open]:hover:!bg-transparent data-[popup-open]:!text-[var(--text-muted)] data-[open]:!text-[var(--text-muted)]";
 
 export const catalogMenuLinkClassName =
-  "group flex w-full items-center justify-between !bg-transparent px-5 py-[7px] text-[14px] leading-[1.35] tracking-[-0.04em] text-[#727272] hover:!bg-transparent hover:!text-[var(--accent)] focus:!bg-transparent focus:!text-[var(--accent)] data-active:!bg-transparent data-active:!text-[var(--accent)]";
+  "group flex w-full items-center justify-between !bg-transparent px-5 py-[7px] text-base leading-[1.35] tracking-[-0.04em] text-[#727272] hover:!bg-transparent hover:!text-[var(--accent)] focus:!bg-transparent focus:!text-[var(--accent)] data-active:!bg-transparent data-active:!text-[var(--accent)]";
 
 export const mobileMenuLinkClassName =
-  "text-[13px] leading-[1.35] tracking-[-0.04em] text-[#727272] transition-colors hover:text-[var(--accent)] focus-visible:text-[var(--accent)]";
+  "text-sm leading-[1.35] tracking-[-0.04em] text-[#727272] transition-colors hover:text-[var(--accent)] focus-visible:text-[var(--accent)]";
 
 export const mobilePrimaryLinkClassName =
-  "text-[13px] font-medium leading-[1.35] tracking-[-0.03em] text-[#404040] transition-colors hover:text-[var(--accent)]";
+  "text-sm font-medium leading-[1.35] tracking-[-0.03em] text-[#404040] transition-colors hover:text-[var(--accent)]";
 
 const headerIconLinkClassName =
   "inline-flex items-center justify-center rounded-[6px] bg-[var(--accent)] transition-colors hover:bg-[var(--accent-hover)]";

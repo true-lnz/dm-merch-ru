@@ -21,7 +21,7 @@ const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
 export function HomeHero() {
   return (
-    <section className="mb-[63px] md:mb-[72px] xl:mb-[90px] relative w-full overflow-visible">
+    <section className="mb-[63px] md:mb-[72px] xl:mb-[90px] mt-[36px] relative w-full overflow-visible">
       <div
         className="flex min-h-0 w-full justify-start xl:h-[80vh] xl:justify-start 2xl:h-[90vh]"
       >
@@ -41,8 +41,8 @@ export function HomeHero() {
           <div className="flex w-full flex-col gap-8 px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between xl:rounded-[20px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
             <div className="flex flex-col gap-5 xl:gap-[30px]">
               <PageHeading title="Мерч, который работает на бизнес" />
-              <p className="max-w-[340px] text-[14px] leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
-                Создаём корпоративный мерч и подарки, которые носят, помнят и связывают с брендом.
+              <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
+                Создаём корпоративный мерч и подарки, которые носят, помнят и связывают с брендом.
               </p>
             </div>
 
@@ -76,7 +76,7 @@ export function HomeHero() {
                       aria-hidden="true"
                       className="mt-[5px] size-[21px] shrink-0 xl:mb-[15px] xl:mt-0"
                     />
-                    <p className="text-[14px] leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] md:text-[16px] xl:text-[14.4px] xl:font-light xl:text-[#404040]">
+                    <p className="text-sm md:text-base leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] xl:font-light xl:text-[#404040]">
                       {feature.text}
                     </p>
                   </div>

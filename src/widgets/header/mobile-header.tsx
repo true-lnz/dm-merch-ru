@@ -109,7 +109,7 @@ export function MobileMenu({
                 <li className="border-b border-[var(--border)] pb-4">
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between text-left text-[13px] font-medium leading-[1.35] tracking-[-0.03em] text-[#404040] transition-colors hover:text-[var(--accent)]"
+                    className="flex w-full items-center justify-between text-left text-sm font-medium leading-[1.35] tracking-[-0.03em] text-[#404040] transition-colors hover:text-[var(--accent)]"
                     onClick={onToggleCatalog}
                     aria-expanded={isCatalogOpen}
                     aria-controls="mobile-catalog-submenu"
@@ -170,7 +170,7 @@ export function MobileMenu({
               variant="menu"
               className="gap-[9px]"
             />
-            <p className="text-[11px] leading-[1.35] tracking-[-0.04em] text-[#404040]">
+            <p className="text-sm leading-[1.35] tracking-[-0.04em] text-[#404040]">
               Офис: {siteInfo.address}
             </p>
           </div>

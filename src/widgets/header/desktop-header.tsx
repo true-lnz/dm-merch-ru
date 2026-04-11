@@ -41,7 +41,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
                   <NavigationMenuTrigger
                     className={cn(
                       catalogTriggerClassName,
-                      "px-3 lg:text-[15px] xl:px-4 xl:text-base",
+                      "px-3 text-base xl:text-lg xl:px-4",
                       isActive && "!text-[var(--text-muted)]",
                     )}
                   >
@@ -72,7 +72,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
                     navLinkClassName,
-                    "px-3 lg:text-[15px] xl:px-4 xl:text-base",
+                    "px-3 text-base xl:text-lg xl:px-4",
                     isActive && "text-[var(--accent)] hover:text-[var(--accent-hover)]",
                   )}
                 >

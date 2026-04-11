@@ -39,14 +39,14 @@ function AccordionTrigger({
         {...props}
       >
         {children}
-        <span className="ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-transparent text-[var(--accent)] transition-colors group-hover/accordion-trigger:bg-[var(--card-bg)]">
+        <span className="ml-auto flex h-6 w-6 md:h-9 md:w-9 shrink-0 items-center justify-center rounded-full bg-transparent text-[var(--accent)] transition-colors group-hover/accordion-trigger:bg-[var(--card-bg)]">
           <PlusIcon
             data-slot="accordion-trigger-icon"
-            className="pointer-events-none size-8 shrink-0 transition-transform duration-300 group-aria-expanded/accordion-trigger:scale-0"
+            className="pointer-events-none size-5 md:size-8 shrink-0 transition-transform duration-300 group-aria-expanded/accordion-trigger:scale-0"
           />
           <MinusIcon
             data-slot="accordion-trigger-icon"
-            className="pointer-events-none absolute size-8 shrink-0 scale-0 transition-transform duration-300 group-aria-expanded/accordion-trigger:scale-100"
+            className="pointer-events-none absolute size-5 md:size-8 shrink-0 scale-0 transition-transform duration-300 group-aria-expanded/accordion-trigger:scale-100"
           />
         </span>
       </AccordionPrimitive.Trigger>

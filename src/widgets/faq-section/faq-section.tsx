@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
 } from "@/shared/ui/accordion";
 import { AspectRatio } from "@/shared/ui/acpect-ratio";
+import Image from "next/image";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type FaqItem = {
@@ -25,7 +25,7 @@ const FAQ_MOBILE_DECORATION = {
   alt: "",
 };
 
-const FAQ_TITLE = "Частые вопросы перед запуском проекта";
+const FAQ_TITLE = "Частые вопросы перед запуском проекта";
 
 const FAQ_ITEMS = [
   {
@@ -80,12 +80,12 @@ export function FaqSection() {
                 className="border-b border-[rgba(42,42,42,0.12)]"
               >
                 <AccordionTrigger className="py-3 md:py-5">
-                  <span className="flex flex-1 items-center font-heading text-[24px] leading-none uppercase text-[#404040] md:text-[28.8px]">
+                  <span className="flex flex-1 items-center font-heading text-lg md:2xl xl:text-3xl leading-none uppercase text-[#404040]">
                     {item.question}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pr-12">
-                  <p className="max-w-[680px] whitespace-pre-line pb-4 text-[15px] leading-[1.35] text-[var(--text-muted)] md:pb-5 md:text-[16.2px]">
+                  <p className="max-w-[680px] whitespace-pre-line pb-4 text-xs md:text-sm leading-[1.35] text-[var(--text-muted)] md:pb-5">
                     {item.answer}
                   </p>
                 </AccordionContent>

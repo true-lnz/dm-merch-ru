@@ -25,7 +25,7 @@ function ContactLeadLink({
   return (
     <a
       href={href}
-      className="block whitespace-nowrap font-heading text-[28px] leading-none tracking-[0.015em] text-[var(--heading)] transition-opacity hover:opacity-80 sm:text-[35.6px] md:text-[5.125rem]"
+      className="block whitespace-nowrap font-heading text-4xl sm:text-5xl md:text-6xl leading-none tracking-[0.015em] text-[var(--heading)] transition-opacity hover:opacity-80"
     >
       {label}
     </a>
@@ -35,7 +35,7 @@ function ContactLeadLink({
 function ContactsMapCard() {
   return (
     <div>
-      <p className="mb-4 text-[12px] tracking-[-0.04em] text-[#404040] md:text-[14px] xl:mb-[29px] xl:text-[20px]">
+      <p className="mb-4 text-sm md:text-lg xl:text-xl tracking-[-0.04em] text-[#404040] xl:mb-[29px]">
         {siteInfo.address}
       </p>
 
@@ -126,7 +126,7 @@ export function ContactsPage() {
   return (
     <>
       <PageBreadcrumb
-        className="mb-8 text-[12px] tracking-[-0.03em] text-[#404040] md:mb-10 md:text-[12.6px] xl:mb-5"
+        className="mb-8 md:mb-10 xl:mb-5"
         item={{
             labelFrom: "Главная",
             labelTo: "Контакты",

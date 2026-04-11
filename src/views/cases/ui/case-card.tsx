@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
 import { AspectRatio } from "@/shared/ui/acpect-ratio";
@@ -136,18 +136,18 @@ function CaseTextBlock({
   return (
     <div className="rounded-[20px] bg-[var(--card-bg)] px-5 pb-5 pt-5 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
       <div className="space-y-4 lg:space-y-[11px]">
-        <h2 className="font-heading text-[34px] leading-[0.95] uppercase text-[var(--heading)] lg:text-[43.2px]">
+        <h2 className="font-heading text-3xl md:text-5xl leading-[0.95] uppercase text-[var(--heading)]">
           {item.company}
         </h2>
-        <p className="text-[14.4px] leading-[1.3] text-[#404040]">{item.teaser}</p>
-        <p className="text-[14.4px] leading-[1.3] text-[#404040]">{item.intro}</p>
+        <p className="text-xs md:text-sm xl:text-base leading-[1.3] text-[#404040]">{item.teaser}</p>
+        <p className="text-xs md:text-sm xl:text-base leading-[1.3] text-[#404040]">{item.intro}</p>
       </div>
 
       <div className="mt-4 lg:hidden">
         <button
           type="button"
           onClick={onToggle}
-          className="cursor-pointer border-b border-current pb-0.5 text-[15px] font-semibold leading-none text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+          className="text-sm md:text-base cursor-pointer border-b border-current pb-0.5 text-base font-semibold leading-none text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
         >
           {toggleLabel}
         </button>
@@ -184,10 +184,10 @@ function CaseTextBlock({
 function CaseSection({ heading, text }: { heading: string; text: string }) {
   return (
     <section>
-      <h3 className="font-heading text-[28.8px] leading-none uppercase text-[#404040]">
+      <h3 className="font-heading text-lg md:text-3xl leading-none uppercase text-[#404040]">
         {heading}
       </h3>
-      <p className="mt-[9px] text-[14.4px] leading-[1.35] text-[#404040]">{text}</p>
+      <p className="mt-[9px] text-xs md:text-base leading-[1.35] text-[#404040]">{text}</p>
     </section>
   );
 }
@@ -208,7 +208,7 @@ function ThumbnailButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "relative flex-1 cursor-pointer overflow-hidden rounded-[9px] border-2 border-[var(--card-bg)] bg-white transition-colors",
+        "relative flex-1 cursor-pointer overflow-hidden rounded-[8px] border-2 border-[var(--card-bg)] bg-white transition-colors",
         isActive && "border-[var(--accent)]"
       )}
       aria-pressed={isActive}
@@ -224,7 +224,7 @@ function ThumbnailButton({
         />
       </div>
       {overlay ? (
-        <span className="absolute inset-0 flex items-center justify-center bg-[rgba(42,42,42,0.68)] font-heading text-[22px] uppercase text-white">
+        <span className="absolute inset-0 flex items-center justify-center bg-[rgba(42,42,42,0.68)] font-heading text-xl uppercase text-white">
           {overlay}
         </span>
       ) : null}

@@ -17,7 +17,7 @@ export function RequestCta() {
             </>
           }
           />
-          <p className="max-w-[800px] text-base text-[var(--text)] md:text-[21.6px] tracking-[0.0354]">
+          <p className="max-w-[800px] text-[var(--text)] text-base md:text-2xl tracking-[0.0354]">
             Ответим в течение 30 минут. Подскажем формат, сроки и бюджет.
           </p>
         </div>

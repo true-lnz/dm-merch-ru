@@ -45,14 +45,14 @@ export function CookieWarning() {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 px-[var(--layout-side-padding)] md:bottom-[16px]">
       <div className="pointer-events-auto ml-auto flex w-full max-w-[739px] flex-col gap-4 rounded-[10px] bg-[var(--accent)] shadow-[0_20px_45px_rgba(255,255,255,0.15)] px-4 py-4 md:min-h-[80px] md:flex-row md:items-center md:justify-between md:gap-6 md:px-[25px] md:py-5">
-        <p className="m-0 max-w-[540px] text-[14px] leading-[1.2] tracking-[-0.04em] text-white md:text-[16px]">
+        <p className="m-0 max-w-[540px] text-sm leading-[1.2] tracking-[-0.04em] text-white">
           {COOKIE_TEXT}
         </p>
 
         <button
           type="button"
           onClick={handleAccept}
-          className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center self-start rounded-[8px] bg-[#f5f4ef] px-5 text-[16px] leading-normal font-medium tracking-[-0.04em] text-[#404040] transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:w-[106px] md:self-auto"
+          className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center self-start rounded-[8px] bg-[#f5f4ef] px-5 text-base leading-normal font-medium tracking-[-0.04em] text-[#404040] transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:w-[106px] md:self-auto"
         >
           {COOKIE_BUTTON_LABEL}
         </button>
