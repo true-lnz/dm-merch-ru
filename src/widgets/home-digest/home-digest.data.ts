@@ -1,5 +1,13 @@
+export type HomeDigestCardId =
+  | "partners"
+  | "events"
+  | "team"
+  | "souvenirs"
+  | "uniform"
+  | "workwear";
+
 export type HomeDigestDefaultCard = {
-  id: string;
+  id: HomeDigestCardId;
   variant: "default";
   title: string;
   description: string;
@@ -12,7 +20,7 @@ export type HomeDigestDefaultCard = {
 };
 
 export type HomeDigestWildCard = {
-  id: string;
+  id: HomeDigestCardId;
   variant: "wild";
   title: string;
   description: string;

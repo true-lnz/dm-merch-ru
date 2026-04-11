@@ -1,0 +1,174 @@
+"use client";
+
+import { cn } from "@/shared/lib/cn";
+import Image from "next/image";
+import { DigestRequestDialog } from "./digest-request-dialog";
+import { DIGEST_CTA_LABEL, type HomeDigestCard, type HomeDigestDefaultCard, type HomeDigestWildCard } from "./home-digest.data";
+
+export type DigestCardLayout = "mobile" | "grid";
+
+type DigestCardProps = {
+  item: HomeDigestCard;
+  layout: DigestCardLayout;
+  isContentVisible?: boolean;
+};
+
+function renderTitleLines(title: string) {
+  return title.split("\n").map((line) => (
+    <span key={line} className="block">
+      {line}
+    </span>
+  ));
+}
+
+function getContentTransitionClass(layout: DigestCardLayout, isContentVisible: boolean) {
+  if (layout !== "mobile") {
+    return "";
+  }
+
+  return cn(
+    "transition-opacity duration-200 ease-out",
+    isContentVisible ? "opacity-100" : "opacity-0",
+  );
+}
+
+function DigestDefaultCard({
+  item,
+  layout,
+  isContentVisible,
+}: {
+  item: HomeDigestDefaultCard;
+  layout: DigestCardLayout;
+  isContentVisible: boolean;
+}) {
+  const contentTransitionClass = getContentTransitionClass(layout, isContentVisible);
+
+  return (
+    <article className="flex h-full min-h-[447px] flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)] md:min-h-[540px]">
+      <div className={cn("relative h-[228px] overflow-hidden bg-white md:h-[250px]", contentTransitionClass)}>
+        <Image
+          src={item.image.src}
+          alt={item.image.alt}
+          fill
+          sizes={item.image.sizes}
+          className={cn("object-contain object-center", item.image.imageClassName)}
+        />
+      </div>
+
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-[18px] md:px-[30px] md:pb-[30px] md:pt-[30px]">
+        <div className={cn("flex-1", contentTransitionClass)}>
+          <h3 className="font-heading text-[32px] leading-[0.94] tracking-[0.015em] text-[var(--heading)] uppercase md:text-[48px]">
+            {renderTitleLines(item.title)}
+          </h3>
+          <p className="mt-[10px] max-w-[19rem] text-[14px] leading-[1.3] tracking-[-0.04em] text-[#404040] md:mt-3 md:max-w-[17.5rem] md:text-[16px]">
+            {item.description}
+          </p>
+        </div>
+
+        <div className="pt-[22px] md:pt-6">
+          <DigestRequestDialog
+            className="h-[48px] rounded-[8px] text-[16px] transition-colors duration-200 md:h-[52px]"
+            label={DIGEST_CTA_LABEL}
+            variant="accent"
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function DigestWildCard({
+  item,
+  layout,
+  isContentVisible,
+}: {
+  item: HomeDigestWildCard;
+  layout: DigestCardLayout;
+  isContentVisible: boolean;
+}) {
+  const isMobile = layout === "mobile";
+  const contentTransitionClass = getContentTransitionClass(layout, isContentVisible);
+
+  return (
+    <article
+      className={cn(
+        "relative overflow-hidden rounded-[20px]",
+        isMobile ? "flex min-h-[447px] flex-col" : "flex min-h-[500px] xl:min-h-[540px]",
+      )}
+    >
+      <div
+        className={cn(
+          "relative overflow-hidden bg-white",
+          isMobile ? "h-[228px]" : "w-[calc(50%-15px)] shrink-0",
+          contentTransitionClass,
+        )}
+      >
+        <Image
+          src={item.image.src}
+          alt={item.image.alt}
+          fill
+          sizes={item.image.sizes}
+          className={cn("object-contain object-center", item.image.imageClassName)}
+        />
+      </div>
+
+      <div
+        className={cn(
+          "min-w-0 overflow-hidden bg-[var(--accent)] text-white",
+          isMobile
+            ? "flex flex-1 flex-col px-5 pb-5 pt-[18px]"
+            : "flex flex-[0_0_calc(50%+15px)] flex-col px-7 pb-7 pt-8 md:px-10 md:pb-[30px] md:pt-[34px] xl:px-[40px] xl:pt-[50px]",
+        )}
+        style={{
+          backgroundImage: `url("${item.backgroundImageSrc}")`,
+          backgroundPosition: "right bottom",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
+      >
+        <div className={cn("flex flex-1 flex-col", isMobile ? contentTransitionClass : "")}>
+          <h3
+            className={cn(
+              "font-heading leading-[0.94] tracking-[0.015em] uppercase",
+              isMobile ? "text-[32px]" : "text-[40px] md:text-[44px] xl:text-[48px]",
+            )}
+          >
+            {renderTitleLines(item.title)}
+          </h3>
+          <p
+            className={cn(
+              "leading-[1.3] tracking-[-0.04em] text-white/80",
+              isMobile ? "mt-[10px] max-w-[19rem] text-[14px] text-white/82" : "mt-4 text-[15px] md:text-[16px]",
+            )}
+          >
+            {isMobile ? item.mobileDescription : item.description}
+          </p>
+          {!isMobile ? (
+            <p className="mt-3 text-[15px] leading-[1.3] tracking-[-0.04em] text-white/80 md:text-[16px]">
+              {item.details}
+            </p>
+          ) : null}
+        </div>
+
+        <div className={cn(isMobile ? "pt-[22px]" : "mt-auto pt-6")}>
+          <DigestRequestDialog
+            className={cn(
+              "rounded-[8px] text-[16px] transition-colors duration-200",
+              isMobile ? "h-[48px]" : "h-[52px] w-full",
+            )}
+            label={DIGEST_CTA_LABEL}
+            variant="light"
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export function DigestCard({ item, layout, isContentVisible = true }: DigestCardProps) {
+  return item.variant === "wild" ? (
+    <DigestWildCard item={item} layout={layout} isContentVisible={isContentVisible} />
+  ) : (
+    <DigestDefaultCard item={item} layout={layout} isContentVisible={isContentVisible} />
+  );
+}
