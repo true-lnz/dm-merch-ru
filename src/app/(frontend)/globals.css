@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "Adderley";
-  src: url("/public/fonts/Adderley-Bold.woff") format("woff");
+  src: url("/fonts/Adderley-Bold.woff") format("woff");
   font-style: normal;
   font-weight: 700;
   font-display: swap;

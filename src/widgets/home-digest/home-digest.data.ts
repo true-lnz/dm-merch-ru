@@ -1,8 +1,8 @@
-export type HomeDigestSmallCard = {
+export type HomeDigestDefaultCard = {
   id: string;
-  variant: "small";
+  variant: "default";
   title: string;
-  lead: string;
+  description: string;
   image: {
     src: string;
     alt: string;
@@ -11,12 +11,14 @@ export type HomeDigestSmallCard = {
   };
 };
 
-export type HomeDigestWideCard = {
+export type HomeDigestWildCard = {
   id: string;
-  variant: "wide";
+  variant: "wild";
   title: string;
-  lead: string;
+  description: string;
+  mobileDescription: string;
   details: string;
+  backgroundImageSrc: string;
   image: {
     src: string;
     alt: string;
@@ -25,7 +27,7 @@ export type HomeDigestWideCard = {
   };
 };
 
-export type HomeDigestCard = HomeDigestSmallCard | HomeDigestWideCard;
+export type HomeDigestCard = HomeDigestDefaultCard | HomeDigestWildCard;
 
 export const DIGEST_TITLE = "1571+ проект\nпод задачи бизнеса";
 
@@ -37,9 +39,9 @@ export const DIGEST_CTA_LABEL = "Отправить заявку";
 export const DIGEST_CARDS: HomeDigestCard[] = [
   {
     id: "partners",
-    variant: "small",
+    variant: "default",
     title: "Подарки\nдля партнеров",
-    lead: "Подарок — продолжение деловых отношений",
+    description: "Подарок — продолжение деловых отношений",
     image: {
       src: "/home/digest-partners.png",
       alt: "Подарок для партнеров",
@@ -49,9 +51,9 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
   },
   {
     id: "events",
-    variant: "small",
+    variant: "default",
     title: "Мерч\nдля мероприятий",
-    lead: "Когда бренд должен запомниться, а не потеряться",
+    description: "Когда бренд должен запомниться, а не потеряться",
     image: {
       src: "/home/digest-events.png",
       alt: "Мерч для мероприятий",
@@ -61,11 +63,14 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
   },
   {
     id: "team",
-    variant: "wide",
+    variant: "wild",
     title: "Мерч\nдля команды",
-    lead:
+    description:
       "Мерч для сотрудников, который помогает формировать чувство принадлежности, поддерживать корпоративную культуру и делать бренд частью повседневной среды.",
+    mobileDescription:
+      "Подходит для внутренних мероприятий, подарочных наборов и командных событий",
     details: "Подходит для адаптации, внутренних мероприятий, подарочных наборов и командных событий.",
+    backgroundImageSrc: "/home/img_card_cover_home_digest_v1.svg",
     image: {
       src: "/home/digest-team.png",
       alt: "Мерч для команды",
@@ -75,12 +80,15 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
   },
   {
     id: "souvenirs",
-    variant: "wide",
+    variant: "wild",
     title: "Сувенирная\nпродукция",
-    lead:
+    description:
       "Сувенирная продукция для клиентов, партнеров и сотрудников: для мероприятий, деловых подарков, выставок, корпоративных активностей и welcome-наборов.",
+    mobileDescription:
+      "Практичные и брендированные решения, которые усиливают узнаваемость компании",
     details:
       "Практичные и брендированные решения, которые усиливают узнаваемость компании и поддерживают имидж бренда.",
+    backgroundImageSrc: "/home/img_card_cover_home_digest_v2.svg",
     image: {
       src: "/home/digest-souvenirs.png",
       alt: "Сувенирная продукция",
@@ -90,9 +98,9 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
   },
   {
     id: "uniform",
-    variant: "small",
+    variant: "default",
     title: "Корпоративная\nуниформа",
-    lead: "Когда команда должна выглядеть собранно, а бренд - узнаваемо",
+    description: "Когда команда должна выглядеть собранно, а бренд - узнаваемо",
     image: {
       src: "/home/digest-uniform.png",
       alt: "Корпоративная униформа",
@@ -102,9 +110,9 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
   },
   {
     id: "workwear",
-    variant: "small",
+    variant: "default",
     title: "Корпоративная\nспецодежда",
-    lead: "Внешний вид — продолжение стандарта компании",
+    description: "Внешний вид — продолжение стандарта компании",
     image: {
       src: "/home/digest-workwear.png",
       alt: "Корпоративная спецодежда",
