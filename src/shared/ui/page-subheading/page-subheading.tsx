@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { cn } from "@/shared/lib/cn";
+import type { ReactNode } from "react";
 
 type PageSubheadingProps = {
   title: ReactNode;
@@ -24,7 +24,7 @@ export function PageSubheading({
     return (
       <h2
         className={cn(
-          "font-heading text-4xl md:text-5xl xl:text-6xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)] md:text-[84.48px]",
+          "font-heading break-keep text-4xl md:text-5xl xl:text-6xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)] md:text-[84.48px]",
           className,
           titleClassName,
         )}

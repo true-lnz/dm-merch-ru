@@ -1,11 +1,11 @@
 "use client";
 
+import { cn } from "@/shared/lib/cn";
 import Image from "next/image";
 import { useState } from "react";
-import { cn } from "@/shared/lib/cn";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
-type HomeTestimonial = {
+type HomeReview = {
   company: string;
   name: string;
   role: string;
@@ -20,7 +20,7 @@ type HomeTestimonial = {
   };
 };
 
-const TESTIMONIALS_TITLE = "Отзывы, которые закрывают ваши задачи";
+const TESTIMONIALS_TITLE = "Отзывы наших клиентов";
 
 const TESTIMONIALS = [
   {
@@ -59,9 +59,9 @@ const TESTIMONIALS = [
       alt: "Портрет клиента",
     },
   },
-] satisfies HomeTestimonial[];
+] satisfies HomeReview[];
 
-export function HomeTestimonials() {
+export function HomeReviews() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeItem = TESTIMONIALS[activeIndex];
 

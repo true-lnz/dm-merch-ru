@@ -1,9 +1,10 @@
-import { SparklesIcon } from "lucide-react";
 import { PageSubheading } from "@/shared/ui/page-subheading";
+import { FeatureCard } from "./feature-card";
 
 type HomeFeatureCard = {
   title: string;
   description: string;
+  backgroundImageUrl: string;
 };
 
 type FeatureCardsSectionProps = {
@@ -13,22 +14,25 @@ type FeatureCardsSectionProps = {
 };
 
 const HOME_BENEFITS = {
-  title: "Чувствуете, где мерч закрывает задачу",
+  title: "Собственный дизайн-отдел",
   items: [
     {
-      title: "3 концепции в течение 5 рабочих дней",
+      title: "3 концепции \n– в течении 5 рабочих дней",
+      backgroundImageUrl: "/home/img_card_cover_home_benefits_v1.svg",
       description:
-        "Предлагаем несколько визуальных направлений, чтобы вы могли выбрать решение под задачу бренда, формат продукции и стиль компании.",
+        "Предлагаем несколько визуальных направлений, чтобы вы могли выбрать лучшее решение под задачи бренда, формат продукции и стиль компании.",
     },
     {
-      title: "Дизайн под производство",
+      title: "Дизайн\nпод производство",
+      backgroundImageUrl: "/home/img_card_cover_home_benefits_v2.svg",
       description:
-        "Дизайн, который работает на изделии, а не только в макете. Наши дизайнеры работают с одеждой, а не с абстрактной графикой.",
+        "Дизайн, который работает на изделии, а не только в макете. Наши дизайнеры работают с одеждой,а не с абстрактной графикой.",
     },
     {
-      title: "Сроки фиксируем в договоре",
+      title: "Сроки фиксируем в договоре",
+      backgroundImageUrl: "/home/img_card_cover_home_benefits_v3.svg",
       description:
-        "Не \"стараемся успеть\", а берем ответственность за результат и прозрачные этапы проекта.",
+        "Не «стараемся успеть», а берём ответственность за результат.",
     },
   ] satisfies HomeFeatureCard[],
 } as const;
@@ -40,18 +44,21 @@ const HOME_COMPETITIVE_ADVANTAGES = {
   items: [
     {
       title: "Готовый мерч в среднем за 14 рабочих дней",
+      backgroundImageUrl: "/home/img_card_cover_home_features_v1.svg",
       description:
-        "Делаем быстрее рынка без потери качества и держим сроки по договору.",
+        "Делаем быстрее рынка без потери качества. Сроки фиксируем и держим их по договору.",
     },
     {
       title: "Образцы отправляем по всей России",
+      backgroundImageUrl: "/home/img_card_cover_home_features_v2.svg",
       description:
-        "До тиража вы видите реальный продукт: ткань, посадку, нанесение и детали. Решение принимается не по рендеру, а по предмету.",
+        "Перед запуском тиража вы видите и трогаете реальный продукт: ткань, посадку, нанесение, детали. Отправляем образцы в любой город РФ, чтобы решение было осознанным, а не «по картинке».",
     },
     {
-      title: "Работаем с тканями и 10 видами нанесений",
+      title: "Работаем со всеми уровнями тканей и 10 видами нанесений",
+      backgroundImageUrl: "/home/img_card_cover_home_features_v3.svg",
       description:
-        "Подбираем сочетание материалов и брендирования под задачу: вышивка, шелкография, тиснение, термопечать, DTF и другие технологии.",
+        "Работаем с тканями, которые выглядят достойно и носятся долго. Подбираем оптимальный способ брендирования под задачу: вышивка, шелкография, термопечать, тиснение, DTF и другие.",
     },
   ] satisfies HomeFeatureCard[],
 } as const;
@@ -69,22 +76,16 @@ function FeatureCardsSection({
         descriptionPlacement="bottom"
         descriptionClassName="max-w-[43rem]"
       />
-      <div className="mt-8 grid gap-5 xl:grid-cols-3 xl:gap-[30px]">
-        {items.map((item) => (
-          <article
+      <div className="mt-8 grid auto-rows-fr grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-[36px]">
+        {items.map((item, index) => (
+          <FeatureCard
             key={item.title}
-            className="relative overflow-hidden rounded-[20px] bg-[var(--card-bg)] px-5 py-5 md:px-[30px] md:py-7"
-          >
-            <span className="inline-flex size-10 items-center justify-center rounded-full bg-white text-[var(--accent)] shadow-[0_8px_24px_rgba(2,82,197,0.12)]">
-              <SparklesIcon className="size-4" strokeWidth={2.2} />
-            </span>
-            <h3 className="mt-7 font-heading text-2xl leading-[0.95] tracking-[0.015em] text-[var(--heading)] uppercase md:text-3xl">
-              {item.title}
-            </h3>
-            <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">
-              {item.description}
-            </p>
-          </article>
+            title={item.title}
+            description={item.description}
+            backgroundImageUrl={item.backgroundImageUrl}
+            accent={index === 0}
+            className="h-full"
+          />
         ))}
       </div>
     </section>
@@ -95,7 +96,7 @@ export function HomeBenefits() {
   return <FeatureCardsSection title={HOME_BENEFITS.title} items={HOME_BENEFITS.items} />;
 }
 
-export function HomeCompetitiveAdvantages() {
+export function HomeFeatures() {
   return (
     <FeatureCardsSection
       title={HOME_COMPETITIVE_ADVANTAGES.title}

@@ -3,7 +3,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {};
 
-const payloadConfig = withPayload(nextConfig);
+const payloadConfig = withPayload(nextConfig, {
+  devBundleServerPackages: false,
+});
 const experimentalConfig = payloadConfig.experimental as
   | (NextConfig["experimental"] & { enableServerFastRefresh?: boolean })
   | undefined;

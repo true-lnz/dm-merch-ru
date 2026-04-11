@@ -1,131 +1,119 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
-import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
 import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
+import { ContentCard } from "@/shared/ui/content-card";
+import Image from "next/image";
+import { useState } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
+import { DigestRequestDialog } from "./digest-request-dialog";
+import {
+	DIGEST_CARDS,
+	DIGEST_CTA_LABEL,
+	DIGEST_DESCRIPTION,
+	DIGEST_TITLE,
+	type HomeDigestCard,
+	type HomeDigestSmallCard,
+	type HomeDigestWideCard,
+} from "./home-digest.data";
 
-type HomeDigestItem = {
-  title: string;
-  description: string;
-  image: {
-    src: string;
-    alt: string;
-  };
-  accent?: boolean;
-};
+const DIGEST_ROWS = [
+  ["partners", "events", "team"],
+  ["souvenirs", "uniform", "workwear"],
+] as const;
 
-const DIGEST_TITLE = "Весь спектр задач и форматов";
+const digestCardsById = new Map(DIGEST_CARDS.map((card) => [card.id, card]));
 
-const DIGEST_DESCRIPTION =
-  "Собираем мерч-системы под разные бизнес-сценарии: для команды, клиентов, партнеров, мероприятий и повседневной корпоративной среды.";
+function getDigestCard(cardId: string) {
+  return digestCardsById.get(cardId) ?? null;
+}
 
-const DIGEST_ITEMS = [
-  {
-    title: "Подарки для партнеров",
-    description:
-      "Подарок, который продолжает деловые отношения и поддерживает впечатление о бренде.",
-    image: {
-      src: "/cases/ufaoil/blanket-gift.jpg",
-      alt: "Подарочный набор для партнера",
-    },
-  },
-  {
-    title: "Мерч для мероприятий",
-    description:
-      "Когда бренд должен запомниться, а команда выглядеть цельно и заметно.",
-    image: {
-      src: "/cases/mvk/coffee-shirt.jpg",
-      alt: "Мерч для мероприятия",
-    },
-  },
-  {
-    title: "Мерч для команды",
-    description:
-      "Для внутренних событий, welcome-наборов и повседневной корпоративной среды.",
-    image: {
-      src: "/contacts/img_contacts_cover.png",
-      alt: "Команда в брендированной одежде",
-    },
-    accent: true,
-  },
-  {
-    title: "Сувенирная продукция",
-    description:
-      "Практичные брендированные решения для клиентов, выставок и корпоративных активностей.",
-    image: {
-      src: "/cases/ufaoil/honey-pump.jpg",
-      alt: "Сувенирная продукция",
-    },
-    accent: true,
-  },
-  {
-    title: "Корпоративная униформа",
-    description:
-      "Когда команда должна выглядеть собранно, а бренд оставаться узнаваемым в работе.",
-    image: {
-      src: "/cases/ufaoil/hoodie-team.jpg",
-      alt: "Корпоративная униформа",
-    },
-  },
-  {
-    title: "Корпоративная спецодежда",
-    description:
-      "Одежда под реальные условия эксплуатации, которая сохраняет визуальный стандарт компании.",
-    image: {
-      src: "/faq/img_faq_cover_desktop.jpg",
-      alt: "Корпоративная спецодежда",
-    },
-  },
-] satisfies HomeDigestItem[];
+function renderTitleLines(title: string) {
+  return title.split("\n").map((line) => (
+    <span key={line} className="block">
+      {line}
+    </span>
+  ));
+}
 
-function DigestCard({ item }: { item: HomeDigestItem }) {
+function DigestSmallCard({ item }: { item: HomeDigestSmallCard }) {
   return (
-    <article
-      className={cn(
-        "overflow-hidden rounded-[20px] bg-[var(--card-bg)]",
-        item.accent && "lg:grid lg:grid-cols-[minmax(280px,0.95fr)_minmax(0,1fr)]",
-      )}
-    >
-      <div className={cn("relative bg-white", item.accent ? "aspect-[413/540]" : "aspect-[412/250]")}>
+    <ContentCard
+      title={renderTitleLines(item.title)}
+      excerpt={item.lead}
+      image={{
+        url: item.image.src,
+        alt: item.image.alt,
+        width: 412,
+        height: 250,
+        sizes: item.image.sizes,
+        className: cn("object-contain object-center", item.image.imageClassName),
+      }}
+      renderCta={true}
+    />
+  );
+}
+
+function DigestWideCard({ item }: { item: HomeDigestWideCard }) {
+  return (
+    <article className="relative flex h-full flex-col overflow-hidden rounded-[20px] bg-[var(--accent)] md:min-h-[540px] xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <div className="relative h-[320px] overflow-hidden bg-white md:h-[420px] xl:h-full">
         <Image
           src={item.image.src}
           alt={item.image.alt}
           fill
-          sizes="(max-width: 1023px) 100vw, (max-width: 1279px) 50vw, 30vw"
-          className="object-cover"
+          sizes={item.image.sizes}
+          className={cn("object-contain object-center", item.image.imageClassName)}
         />
       </div>
-      <div className="flex h-full flex-col px-5 py-5 md:px-[30px] md:py-7">
-        <h3 className="font-heading text-2xl leading-[0.95] tracking-[0.015em] text-[var(--heading)] uppercase md:text-[40px]">
-          {item.title}
-        </h3>
-        <p className="mt-3 text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-lg">
-          {item.description}
-        </p>
-        <div className="mt-auto pt-6">
-          <RequestDialog className="lg:w-full" label="Отправить заявку" showCaption={false} />
+
+      <div className="relative flex flex-1 flex-col overflow-hidden px-5 pb-5 pt-6 text-white md:px-[30px] md:pb-[30px] md:pt-7 xl:px-[40px] xl:pb-[30px] xl:pt-[50px]">
+        <div className="pointer-events-none absolute -bottom-[34%] -right-[15%] size-[75%] rounded-full border-[28px] border-white/12" />
+        <div className="pointer-events-none absolute -bottom-[52%] -right-[2%] size-[86%] rounded-full border-[28px] border-white/10" />
+
+        <div className="relative z-10 flex h-full flex-col">
+          <h3 className="max-w-[14rem] font-heading text-[34px] leading-[0.94] tracking-[0.015em] uppercase md:text-[40px] xl:text-[48px]">
+            {renderTitleLines(item.title)}
+          </h3>
+          <p className="mt-4 max-w-[22rem] text-[15px] leading-[1.3] tracking-[-0.04em] text-white/80 md:text-base">
+            {item.lead}
+          </p>
+          <p className="mt-3 max-w-[22rem] text-[15px] leading-[1.3] tracking-[-0.04em] text-white/80 md:text-base">
+            {item.details}
+          </p>
+
+          <div className="mt-auto pt-6">
+            <DigestRequestDialog
+              className="h-[52px] rounded-[8px] lg:w-full"
+              label={DIGEST_CTA_LABEL}
+              variant="light"
+            />
+          </div>
         </div>
       </div>
     </article>
   );
 }
 
+function DigestCard({ item }: { item: HomeDigestCard }) {
+  return item.variant === "wide" ? <DigestWideCard item={item} /> : <DigestSmallCard item={item} />;
+}
+
 export function HomeDigest() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
+    <section className="my-[63px] rounded-t-[40px] px-0 pt-[52px] md:my-[72px] md:pt-16 xl:my-[90px] xl:pt-[76px]">
       <PageSubheading
-        title={DIGEST_TITLE}
+        title={renderTitleLines(DIGEST_TITLE)}
         description={DIGEST_DESCRIPTION}
         descriptionPlacement="side"
-        descriptionClassName="xl:max-w-[718px]"
+        className=""
+        titleClassName="text-[56px] leading-[0.97] md:text-[72px] xl:text-[96px] xl:leading-[0.97]"
+        descriptionClassName="text-[18px] leading-[1.3] tracking-[-0.04em] text-[#404040] xl:pb-5"
       />
 
-      <div className="mt-8 md:mt-10 xl:hidden">
+      <div className="mt-8 pb-[30px] md:hidden">
         <Carousel
           opts={{ align: "start", loop: false }}
           setApi={(api) => {
@@ -133,23 +121,24 @@ export function HomeDigest() {
               return;
             }
 
+            setActiveIndex(api.selectedScrollSnap());
             api.on("select", () => {
               setActiveIndex(api.selectedScrollSnap());
             });
           }}
         >
           <CarouselContent className="-ml-0">
-            {DIGEST_ITEMS.map((item) => (
-              <CarouselItem key={item.title} className="basis-full pl-0">
+            {DIGEST_CARDS.map((item) => (
+              <CarouselItem key={item.id} className="basis-full pl-0">
                 <DigestCard item={item} />
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
         <div className="mt-5 flex justify-center gap-2">
-          {DIGEST_ITEMS.map((item, index) => (
+          {DIGEST_CARDS.map((item, index) => (
             <span
-              key={item.title}
+              key={item.id}
               className={cn(
                 "h-1.5 rounded-full bg-[var(--border)] transition-all",
                 index === activeIndex ? "w-10 bg-[var(--accent)]" : "w-3",
@@ -159,17 +148,55 @@ export function HomeDigest() {
         </div>
       </div>
 
-      <div className="mt-10 hidden gap-7 xl:grid xl:grid-cols-4">
-        <div className="contents">
-          {DIGEST_ITEMS.slice(0, 3).map((item) => (
-            <DigestCard key={item.title} item={item} />
-          ))}
-        </div>
-        <div className="contents">
-          {DIGEST_ITEMS.slice(3).map((item) => (
-            <DigestCard key={item.title} item={item} />
-          ))}
-        </div>
+      <div className="mt-10 hidden pb-[45px] md:flex md:flex-col md:gap-[30px] xl:hidden">
+        {DIGEST_ROWS.map((row, rowIndex) => {
+          const firstCard = getDigestCard(row[0]);
+          const secondCard = getDigestCard(row[1]);
+          const wideCard = getDigestCard(row[2]);
+
+          return (
+            <div key={rowIndex} className="flex flex-col gap-[30px]">
+              <div className="flex gap-[30px]">
+                {firstCard ? (
+                  <div className="min-w-0 flex-1">
+                    <DigestCard item={firstCard} />
+                  </div>
+                ) : null}
+                {secondCard ? (
+                  <div className="min-w-0 flex-1">
+                    <DigestCard item={secondCard} />
+                  </div>
+                ) : null}
+              </div>
+
+              {wideCard ? <DigestCard item={wideCard} /> : null}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-[49px] hidden pb-[100px] xl:flex xl:flex-col xl:gap-[100px]">
+        {DIGEST_ROWS.map((row, rowIndex) => (
+          <div
+            key={rowIndex}
+            className={cn(
+              "grid min-h-[540px] gap-[30px]",
+              rowIndex === 0
+                ? "grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,2fr)]"
+                : "grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]",
+            )}
+          >
+            {row.map((cardId) => {
+              const card = getDigestCard(cardId);
+
+              if (!card) {
+                return null;
+              }
+
+              return <DigestCard key={card.id} item={card} />;
+            })}
+          </div>
+        ))}
       </div>
     </section>
   );
