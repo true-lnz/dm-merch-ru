@@ -1,7 +1,6 @@
 "use client";
 
-import { cn } from "@/shared/lib/cn";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { SliderControl } from "@/shared/ui/slider-control";
 import { useEffect, useRef, useState } from "react";
 import { DigestCard } from "./digest-card";
 import type { HomeDigestCard } from "./home-digest.data";
@@ -88,30 +87,18 @@ export function DigestMobileCarousel({ cards, className }: DigestMobileCarouselP
       </div>
 
       <div className="mt-5 flex justify-center gap-[18px]">
-        <button
-          type="button"
-          aria-label="Предыдущая карточка"
+        <SliderControl
+          direction="prev"
           onClick={() => commitCardChange(activeIndex - 1)}
           disabled={activeIndex === 0}
-          className={cn(
-            "inline-flex size-[58.8px] items-center justify-center rounded-[8px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
-            activeIndex === 0 ? "opacity-45" : "hover:bg-[#e3e1db]",
-          )}
-        >
-          <ChevronLeftIcon className="size-[24px]" strokeWidth={1.5} />
-        </button>
-        <button
-          type="button"
-          aria-label="Следующая карточка"
+          ariaLabel="Предыдущая карточка"
+        />
+        <SliderControl
+          direction="next"
           onClick={() => commitCardChange(activeIndex + 1)}
           disabled={activeIndex === cards.length - 1}
-          className={cn(
-            "inline-flex size-[58.8px] items-center justify-center rounded-[8px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
-            activeIndex === cards.length - 1 ? "opacity-45" : "hover:bg-[#e3e1db]",
-          )}
-        >
-          <ChevronRightIcon className="size-[24px]" strokeWidth={1.5} />
-        </button>
+          ariaLabel="Следующая карточка"
+        />
       </div>
     </div>
   );

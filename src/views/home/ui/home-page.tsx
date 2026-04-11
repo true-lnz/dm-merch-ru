@@ -4,6 +4,8 @@ import { HomeDigest } from "@/widgets/home-digest";
 import { HomeBenefits } from "@/widgets/home-feature-cards";
 import { HomeFeatures } from "@/widgets/home-feature-cards/home-feature-cards";
 import { HomeHero } from "@/widgets/home-hero";
+import { HomeLeadCta } from "@/widgets/home-lead-cta";
+import { HomeResults } from "@/widgets/home-results";
 import { HomeReviews } from "@/widgets/home-reviews";
 import { HomeWorkStages } from "@/widgets/home-work-stages";
 
@@ -12,9 +14,9 @@ export function HomePage() {
     <>
       <HomeHero />
       <HomeDigest />
-      {/* <HomeResultsSlider /> */}
+      <HomeResults />
       <HomeBenefits />
-      {/* <HomeLeadCta /> */}
+      <HomeLeadCta />
       {/* <HomePartnerProducts /> */}
       {/* <HomeUrgentOrder /> */}
       <HomeReviews />

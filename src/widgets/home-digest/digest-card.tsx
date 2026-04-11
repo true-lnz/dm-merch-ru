@@ -13,14 +13,6 @@ type DigestCardProps = {
   isContentVisible?: boolean;
 };
 
-function renderTitleLines(title: string) {
-  return title.split("\n").map((line) => (
-    <span key={line} className="block">
-      {line}
-    </span>
-  ));
-}
-
 function getContentTransitionClass(layout: DigestCardLayout, isContentVisible: boolean) {
   if (layout !== "mobile") {
     return "";
@@ -44,7 +36,7 @@ function DigestDefaultCard({
   const contentTransitionClass = getContentTransitionClass(layout, isContentVisible);
 
   return (
-    <article className="flex h-full min-h-[447px] flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)] md:min-h-[540px]">
+    <article className="flex h-full min-h-[420px] flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)] md:min-h-[540px]">
       <div className={cn("relative h-[228px] overflow-hidden bg-white md:h-[250px]", contentTransitionClass)}>
         <Image
           src={item.image.src}
@@ -57,10 +49,10 @@ function DigestDefaultCard({
 
       <div className="flex flex-1 flex-col px-5 pb-5 pt-[18px] md:px-[30px] md:pb-[30px] md:pt-[30px]">
         <div className={cn("flex-1", contentTransitionClass)}>
-          <h3 className="font-heading text-[32px] leading-[0.94] tracking-[0.015em] text-[var(--heading)] uppercase md:text-[48px]">
-            {renderTitleLines(item.title)}
+          <h3 className="font-heading text-3xl md:text-5xl leading-[0.94] tracking-[0.015em] text-[var(--heading)] uppercase">
+            {item.title}
           </h3>
-          <p className="mt-[10px] max-w-[19rem] text-[14px] leading-[1.3] tracking-[-0.04em] text-[#404040] md:mt-3 md:max-w-[17.5rem] md:text-[16px]">
+          <p className="mt-[10px] max-w-[19rem] text-sm md:text-base leading-[1.3] tracking-[-0.04em] text-[#404040] md:mt-3 md:max-w-[17.5rem]">
             {item.description}
           </p>
         </div>
@@ -93,7 +85,7 @@ function DigestWildCard({
     <article
       className={cn(
         "relative overflow-hidden rounded-[20px]",
-        isMobile ? "flex min-h-[447px] flex-col" : "flex min-h-[500px] xl:min-h-[540px]",
+        isMobile ? "flex min-h-[420px] flex-col" : "flex min-h-[500px] xl:min-h-[540px]",
       )}
     >
       <div
@@ -130,10 +122,10 @@ function DigestWildCard({
           <h3
             className={cn(
               "font-heading leading-[0.94] tracking-[0.015em] uppercase",
-              isMobile ? "text-[32px]" : "text-[40px] md:text-[44px] xl:text-[48px]",
+              isMobile ? "text-3xl" : "text-4xl md:text-5xl",
             )}
           >
-            {renderTitleLines(item.title)}
+            {item.title}
           </h3>
           <p
             className={cn(

@@ -1,0 +1,1 @@
+export { HomeResults } from "./home-results";

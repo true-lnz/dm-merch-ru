@@ -1,6 +1,7 @@
-import Image from "next/image";
-import { PageSubheading } from "../../shared/ui/page-subheading";
 import { RequestForm } from "@/shared/ui/request-form";
+import Image from "next/image";
+import type { CSSProperties } from "react";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 
 const LEAD_CTA_IMAGE = {
   src: "/contacts/img_contacts_cover.png",
@@ -10,9 +11,9 @@ const LEAD_CTA_IMAGE = {
 export function HomeLeadCta() {
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,870px)_minmax(0,1fr)] xl:items-stretch xl:gap-[40px]">
-        <div className="overflow-hidden rounded-[24px]">
-          <div className="relative aspect-[340/256] md:aspect-[16/10] xl:h-full xl:min-h-[648px] xl:aspect-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:items-stretch">
+        <div className="rounded-[24px] bg-white p-4 md:p-5 xl:p-6">
+          <div className="relative aspect-square overflow-hidden rounded-[20px] md:h-full md:min-h-[600px] md:aspect-auto">
             <Image
               src={LEAD_CTA_IMAGE.src}
               alt={LEAD_CTA_IMAGE.alt}
@@ -22,19 +23,32 @@ export function HomeLeadCta() {
             />
           </div>
         </div>
-        <div className="rounded-[24px] bg-[var(--card-bg)] px-5 py-5 md:px-8 md:py-8 xl:px-[37px] xl:py-[43px]">
+        <div
+          className="rounded-[24px] bg-[var(--accent)] px-5 py-5 text-white md:px-8 md:py-8 xl:px-[37px] xl:py-[43px]"
+          style={
+            {
+              "--heading": "#ffffff",
+              "--text-muted": "rgba(255,255,255,0.82)",
+              "--text": "#ffffff",
+              "--field-text": "rgba(255,255,255,0.64)",
+              "--field-border": "rgba(255,255,255,0.3)",
+              "--accent": "#0252c5",
+              "--accent-hover": "#0144a3",
+            } as CSSProperties
+          }
+        >
           <PageSubheading
             title="Отправим примеры мерча"
-            description="На основе наших работ для 500+ компаний покажем реальные форматы, материалы и связки под вашу задачу."
+            description="На основе наших работ для 500+ компаний в 2025 году"
             descriptionPlacement="bottom"
-            titleClassName="md:text-[72px] xl:text-[84px]"
-            descriptionClassName="max-w-[34rem]"
+            descriptionClassName="text-white"
           />
           <div className="mt-8">
             <RequestForm
               includeEmail={false}
               privacyCheckboxId="home-lead-cta-privacy"
               submitLabel="Получить примеры мерча"
+              submitClassName="border-white bg-white text-[var(--accent)] hover:bg-[#f3f7ff]"
             />
           </div>
         </div>
