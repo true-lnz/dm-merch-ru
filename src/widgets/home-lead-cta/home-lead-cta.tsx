@@ -11,9 +11,9 @@ const LEAD_CTA_IMAGE = {
 export function HomeLeadCta() {
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-      <div className="grid grid-cols-1 md:grid-cols-2 md:items-stretch">
+      <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
         <div className="rounded-[24px] bg-white">
-          <div className="relative aspect-square overflow-hidden rounded-[20px] md:h-full md:min-h-[600px] md:aspect-auto">
+          <div className="relative aspect-square overflow-hidden rounded-[20px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
             <Image
               src={LEAD_CTA_IMAGE.src}
               alt={LEAD_CTA_IMAGE.alt}

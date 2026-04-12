@@ -70,7 +70,7 @@ export function HomeResults() {
 							<div
 								key={`${slide.image.src}-mobile`}
 								className={cn(
-									"absolute inset-0 flex items-center justify-center transition-opacity duration-500",
+									"absolute inset-0 flex transition-opacity duration-500",
 									index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
 								)}
 							>
@@ -80,7 +80,7 @@ export function HomeResults() {
 									sizes="100vw"
 									width={1200}
 									height={1200}
-									className="h-auto w-full object-contain"
+									className="h-auto w-full object-cover"
 								/>
 							</div>
 						))}
