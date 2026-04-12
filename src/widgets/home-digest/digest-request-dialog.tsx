@@ -1,9 +1,9 @@
 "use client";
 
-import { XIcon } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import { RequestForm } from "@/shared/ui/request-form";
+import { XIcon } from "lucide-react";
 
 type DigestRequestDialogProps = {
   className?: string;
@@ -34,10 +34,10 @@ export function DigestRequestDialog({
 
       <DialogContent
         showCloseButton={false}
-        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[30px] sm:h-auto sm:rounded-[15px] md:grid md:w-[50vw] md:max-w-[50vw] xl:bg-[#ecebe6]"
+        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] md:p-[72px] sm:h-auto sm:rounded-[20px] md:grid md:w-[50vw] md:max-w-[50vw] xl:bg-[#ecebe6]"
       >
         <div className="mb-7 flex items-start justify-between gap-4 xl:mb-8">
-          <DialogTitle className="font-heading text-[40px] leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-[52px] xl:text-[64px]">
+          <DialogTitle className="font-heading text-4xl md:text-5xl xl:text-6xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">
             Обсудим задачу
             <br />
             и рассчитаем проект

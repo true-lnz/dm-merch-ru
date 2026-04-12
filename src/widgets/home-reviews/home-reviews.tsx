@@ -76,14 +76,14 @@ export function HomeReviews() {
               <Image src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="70px" className="object-cover" />
             </div>
             <div>
-              <p className="font-heading text-[28px] leading-none uppercase text-[var(--heading)] md:text-[40px]">{activeItem.name}</p>
+              <p className="font-heading text-[28px] leading-none uppercase text-[var(--heading)] md:text-4xl">{activeItem.name}</p>
               <p className="mt-1 text-[13px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[15px]">{activeItem.role}</p>
             </div>
           </div>
 
-          <h3 className="mt-5 font-heading text-[28px] leading-none uppercase text-[var(--heading)] md:text-[40px]">{activeItem.company}</h3>
+          <h3 className="mt-5 font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{activeItem.company}</h3>
 
-          <div className="mt-5 space-y-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[18px]">
+          <div className="mt-5 space-y-4 text-xs sm:text-sm lg:text-lg leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
             {activeItem.quote.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}

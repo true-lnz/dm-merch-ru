@@ -38,16 +38,16 @@ const HOME_SERVICES = [
 function ServiceRequestDialog() {
   return (
     <Dialog>
-      <DialogTrigger className="cursor-pointer text-left text-[14px] leading-[1.3] tracking-[-0.02em] text-[var(--accent)] transition-opacity hover:opacity-80 md:text-[18px]">
+      <DialogTrigger className="cursor-pointer text-left font-medium text-sm md:text-lg leading-[1.3] tracking-[-0.02em] text-[var(--accent)] transition-opacity hover:opacity-80">
         Обсудить задачу
       </DialogTrigger>
 
       <DialogContent
         showCloseButton={false}
-        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[30px] sm:h-auto md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[15px] xl:bg-[#ecebe6]"
+        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] md:p-[72px] sm:h-auto md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[20px] xl:bg-[#ecebe6]"
       >
         <div className="mb-7 flex items-start justify-between gap-4 xl:mb-8">
-          <DialogTitle className="font-heading text-[40px] leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-[52px] xl:text-[64px]">
+          <DialogTitle className="font-heading text-4xl md:text-5xl xl:text-6xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">
             Обсудим задачу
             <br />
             и рассчитаем проект
@@ -78,7 +78,7 @@ type ServiceCardProps = {
 
 function ServiceCard({ title, description }: ServiceCardProps) {
   return (
-    <article className="relative flex min-h-[215px] flex-col rounded-[24px] bg-[var(--card-bg)] p-5 md:min-h-[245px] md:p-[30px]">
+    <article className="relative flex min-h-[200px] flex-col rounded-[24px] bg-[var(--card-bg)] p-[18px] md:min-h-[245px] md:p-[27px]">
       <Image
         src="/icons/ic_feature.svg"
         alt=""
@@ -88,14 +88,14 @@ function ServiceCard({ title, description }: ServiceCardProps) {
         className="absolute right-5 top-5 size-7 md:right-[30px] md:top-[30px] md:size-8"
       />
 
-      <h3 className="max-w-[86%] font-heading text-[32px] leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-[40px] xl:text-[48px]">
+      <h3 className="font-heading text-3xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-4xl xl:text-5xl">
         {title}
       </h3>
-      <p className="mt-3 max-w-[92%] text-[14px] leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:mt-4 md:text-[17px] xl:text-[20px]">
+      <p className="mt-3 max-w-[92%] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:mt-4 md:text-lg xl:text-xl">
         {description}
       </p>
 
-      <div className="mt-6 md:mt-auto md:pt-6">
+      <div className="mt-auto md:pt-6">
         <ServiceRequestDialog />
       </div>
     </article>
@@ -110,13 +110,13 @@ export function HomeServices() {
       />
 
       <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2 xl:grid-rows-1 xl:gap-[36px]">
-        <div className="order-2 grid gap-4 xl:order-1 xl:gap-5">
+        <div className="grid gap-4 xl:gap-5">
           {HOME_SERVICES.map((item) => (
             <ServiceCard key={item.title} title={item.title} description={item.description} />
           ))}
         </div>
 
-        <div className="order-1 rounded-[24px] bg-white p-[10px] xl:order-2 xl:self-stretch xl:p-0">
+        <div className="rounded-[24px] bg-white p-[10px] xl:self-stretch xl:p-0">
           <div className="relative overflow-hidden rounded-[20px] bg-white aspect-square xl:h-full">
             <Image
               src={SERVICES_IMAGE.src}
