@@ -34,10 +34,16 @@ function DigestDefaultCard({
   isContentVisible: boolean;
 }) {
   const contentTransitionClass = getContentTransitionClass(layout, isContentVisible);
+  const isMobile = layout === "mobile";
 
   return (
-    <article className="flex h-full min-h-[420px] flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)] md:min-h-[540px]">
-      <div className={cn("relative h-[228px] overflow-hidden bg-white md:h-[250px]", contentTransitionClass)}>
+    <article
+      className={cn(
+        "flex h-full flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]",
+        isMobile ? "min-h-[420px]" : "",
+      )}
+    >
+      <div className={cn("relative aspect-3/2 overflow-hidden bg-white", contentTransitionClass)}>
         <Image
           src={item.image.src}
           alt={item.image.alt}
@@ -59,7 +65,7 @@ function DigestDefaultCard({
 
         <div className="pt-[22px] md:pt-6">
           <DigestRequestDialog
-            className="h-[48px] rounded-[8px] text-[16px] transition-colors duration-200 md:h-[52px]"
+            className="h-[48px] rounded-[8px] text-lg transition-colors duration-200 md:h-[47px]"
             label={DIGEST_CTA_LABEL}
             variant="accent"
           />
@@ -85,13 +91,13 @@ function DigestWildCard({
     <article
       className={cn(
         "relative overflow-hidden rounded-[20px]",
-        isMobile ? "flex min-h-[420px] flex-col" : "flex min-h-[500px] xl:min-h-[540px]",
+        isMobile ? "flex h-full min-h-[420px] flex-col" : "flex h-full",
       )}
     >
       <div
         className={cn(
           "relative overflow-hidden bg-white",
-          isMobile ? "h-[228px]" : "w-[calc(50%-15px)] shrink-0",
+          isMobile ? "aspect-3/2" : "w-[calc(50%-15px)] shrink-0",
           contentTransitionClass,
         )}
       >
@@ -136,7 +142,7 @@ function DigestWildCard({
             {isMobile ? item.mobileDescription : item.description}
           </p>
           {!isMobile ? (
-            <p className="mt-3 text-[15px] leading-[1.3] tracking-[-0.04em] text-white/80 md:text-[16px]">
+            <p className="mt-3 text-base leading-[1.3] tracking-[-0.04em] text-white/80 md:text-lg">
               {item.details}
             </p>
           ) : null}
@@ -145,8 +151,7 @@ function DigestWildCard({
         <div className={cn(isMobile ? "pt-[22px]" : "mt-auto pt-6")}>
           <DigestRequestDialog
             className={cn(
-              "rounded-[8px] text-[16px] transition-colors duration-200",
-              isMobile ? "h-[48px]" : "h-[52px] w-full",
+              "rounded-[8px] text-[16px] transition-colors duration-200 h-[47px] w-full",
             )}
             label={DIGEST_CTA_LABEL}
             variant="light"

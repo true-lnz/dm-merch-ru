@@ -25,7 +25,7 @@ export function DigestGrid({
         }
 
         return (
-          <div key={card.id} style={{ gridArea: area }}>
+          <div key={card.id} className="h-full" style={{ gridArea: area }}>
             <DigestCard item={card} layout="grid" />
           </div>
         );
