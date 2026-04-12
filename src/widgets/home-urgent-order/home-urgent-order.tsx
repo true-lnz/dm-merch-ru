@@ -1,4 +1,4 @@
-import { RequestDialog } from "@/features/request-dialog";
+import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
@@ -37,13 +37,15 @@ export function HomeUrgentOrder() {
 						Экспресс-мерч за 5 рабочих дней — для нас стандарт, а не обещание
 					</p>
           <div className="mt-auto">
-            <RequestDialog
-              className="border border-white bg-white text-[var(--accent)] hover:bg-[#f3f7ff] lg:w-full"
-              label="Рассчитать срочный заказ"
-              showCaption={false}
-              iconContainerClassName="bg-[var(--accent)]"
-              iconClassName="brightness-0 invert group-hover:brightness-100 group-hover:invert-0"
-            />
+            <RequestDialog>
+              <RequestDialogButton
+                className="border border-white bg-white text-[var(--accent)] hover:bg-[#f3f7ff] lg:w-full"
+                label="Рассчитать срочный заказ"
+                showCaption={false}
+                iconContainerClassName="bg-[var(--accent)]"
+                iconClassName="brightness-0 invert group-hover:brightness-100 group-hover:invert-0"
+              />
+            </RequestDialog>
           </div>
         </div>
         <div className="rounded-[24px] bg-white">

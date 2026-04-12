@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { RequestDialog } from "@/features/request-dialog";
+import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
 import {PageHeading} from "../../shared/ui/page-heading";
@@ -85,7 +85,9 @@ export function HomeHero() {
             </div>
 
             <div className="flex flex-col gap-[10px] md:flex-row">
-              <RequestDialog className="w-full" />
+              <RequestDialog>
+                <RequestDialogButton className="w-full" />
+              </RequestDialog>
               <Link
                 href="/cases"
                 className={cn(

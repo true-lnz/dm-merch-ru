@@ -1,4 +1,4 @@
-import { RequestDialog } from "@/features/request-dialog";
+import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import { siteInfo } from "@/shared/config/site-info";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import Image from "next/image";
@@ -47,7 +47,11 @@ function ContactsMapCard() {
 }
 
 function DiscussionCta() {
-  return <RequestDialog />;
+  return (
+    <RequestDialog>
+      <RequestDialogButton />
+    </RequestDialog>
+  );
 }
 
 function MobileContactsHero() {
@@ -56,7 +60,7 @@ function MobileContactsHero() {
       <div className="overflow-hidden rounded-[20px] md:mx-auto md:max-w-[760px]">
         <div className="relative aspect-[340/256] overflow-hidden md:aspect-[16/11]">
           <Image
-            src="/contacts/im_contacts.png"
+            src="/contacts/img_contacts.png"
             alt="Команда в фирменном мерче"
             fill
             priority

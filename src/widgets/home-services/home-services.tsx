@@ -1,10 +1,8 @@
 "use client";
 
 import { cn } from "@/shared/lib/cn";
-import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
+import { RequestDialog } from "@/features/request-dialog";
 import { PageSubheading } from "@/shared/ui/page-subheading";
-import { RequestForm } from "@/shared/ui/request-form";
-import { XIcon } from "lucide-react";
 import Image from "next/image";
 
 const SERVICES_IMAGE = {
@@ -37,37 +35,14 @@ const HOME_SERVICES = [
 
 function ServiceRequestDialog() {
   return (
-    <Dialog>
-      <DialogTrigger className="cursor-pointer text-left font-medium text-base md:text-lg leading-[1.3] tracking-[-0.02em] text-[var(--accent)] transition-opacity hover:opacity-80">
-        Обсудить задачу
-      </DialogTrigger>
-
-      <DialogContent
-        showCloseButton={false}
-        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] md:p-[72px] sm:h-auto md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[20px] xl:bg-[#ecebe6]"
+    <RequestDialog privacyCheckboxId="home-services-request-privacy">
+      <button
+        type="button"
+        className="cursor-pointer text-left font-medium text-base md:text-lg leading-[1.3] tracking-[-0.02em] text-[var(--accent)] transition-opacity hover:opacity-80"
       >
-        <div className="mb-7 flex items-start justify-between gap-4 xl:mb-8">
-          <DialogTitle className="font-heading text-4xl md:text-5xl xl:text-6xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">
-            Обсудим задачу
-            <br />
-            и рассчитаем проект
-          </DialogTitle>
-
-          <DialogClose
-            className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center text-[#b3b3b3] transition-colors hover:text-[#2a2a2a] xl:mt-1 xl:size-10"
-            aria-label="Закрыть модалку"
-          >
-            <XIcon className="size-5 xl:size-7" strokeWidth={2.5} />
-          </DialogClose>
-        </div>
-
-        <RequestForm
-          includeEmail={false}
-          privacyCheckboxId="home-services-request-privacy"
-          formClassName="space-y-3 xl:space-y-4"
-        />
-      </DialogContent>
-    </Dialog>
+        Обсудить задачу
+      </button>
+    </RequestDialog>
   );
 }
 

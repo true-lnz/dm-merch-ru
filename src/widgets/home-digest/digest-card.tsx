@@ -1,8 +1,10 @@
 "use client";
 
+import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
 import Image from "next/image";
-import { DigestRequestDialog } from "./digest-request-dialog";
+import { forwardRef } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import { DIGEST_CTA_LABEL, type HomeDigestCard, type HomeDigestDefaultCard, type HomeDigestWildCard } from "./home-digest.data";
 
 export type DigestCardLayout = "mobile" | "grid";
@@ -11,6 +13,11 @@ type DigestCardProps = {
   item: HomeDigestCard;
   layout: DigestCardLayout;
   isContentVisible?: boolean;
+};
+
+type DigestRequestButtonProps = Omit<ComponentPropsWithoutRef<"button">, "children"> & {
+  label: string;
+  variant?: "accent" | "light";
 };
 
 function getContentTransitionClass(layout: DigestCardLayout, isContentVisible: boolean) {
@@ -23,6 +30,38 @@ function getContentTransitionClass(layout: DigestCardLayout, isContentVisible: b
     isContentVisible ? "opacity-100" : "opacity-0",
   );
 }
+
+const DigestRequestButton = forwardRef<HTMLButtonElement, DigestRequestButtonProps>(
+  function DigestRequestButton(
+    {
+      className,
+      label,
+      variant = "accent",
+      type,
+      ...props
+    },
+    ref,
+  ) {
+    const isLight = variant === "light";
+
+    return (
+      <button
+        ref={ref}
+        type={type ?? "button"}
+        className={cn(
+          "group flex h-[52px] w-full cursor-pointer items-center justify-center rounded-[8px] px-6 text-center text-[16px] font-semibold tracking-[-0.02em] transition-colors duration-200",
+          isLight
+            ? "bg-[#f5f4ef] text-[var(--accent)] hover:bg-white"
+            : "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]",
+          className,
+        )}
+        {...props}
+      >
+        <span>{label}</span>
+      </button>
+    );
+  },
+);
 
 function DigestDefaultCard({
   item,
@@ -64,11 +103,13 @@ function DigestDefaultCard({
         </div>
 
         <div className="pt-[22px] md:pt-6">
-          <DigestRequestDialog
-            className="h-[48px] rounded-[8px] text-lg transition-colors duration-200 md:h-[47px]"
-            label={DIGEST_CTA_LABEL}
-            variant="accent"
-          />
+          <RequestDialog>
+            <DigestRequestButton
+              className="h-[48px] rounded-[8px] text-lg transition-colors duration-200 md:h-[47px]"
+              label={DIGEST_CTA_LABEL}
+              variant="accent"
+            />
+          </RequestDialog>
         </div>
       </div>
     </article>
@@ -149,13 +190,15 @@ function DigestWildCard({
         </div>
 
         <div className={cn(isMobile ? "pt-[22px]" : "mt-auto pt-6")}>
-          <DigestRequestDialog
-            className={cn(
-              "rounded-[8px] text-[16px] transition-colors duration-200 h-[47px] w-full",
-            )}
-            label={DIGEST_CTA_LABEL}
-            variant="light"
-          />
+          <RequestDialog>
+            <DigestRequestButton
+              className={cn(
+                "rounded-[8px] text-[16px] transition-colors duration-200 h-[47px] w-full",
+              )}
+              label={DIGEST_CTA_LABEL}
+              variant="light"
+            />
+          </RequestDialog>
         </div>
       </div>
     </article>

@@ -1,1 +1,1 @@
-export { RequestDialog } from "./ui/request-dialog";
+export { RequestDialog, RequestDialogButton } from "./ui/request-dialog";

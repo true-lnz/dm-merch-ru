@@ -5,10 +5,10 @@ import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "
 import { RequestForm } from "@/shared/ui/request-form";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactElement, ReactNode } from "react";
+import { forwardRef, useId } from "react";
 
-type RequestDialogProps = {
-  className?: string;
+type RequestDialogButtonProps = Omit<ComponentPropsWithoutRef<"button">, "children"> & {
   label?: ReactNode;
   caption?: ReactNode;
   showCaption?: boolean;
@@ -17,26 +17,39 @@ type RequestDialogProps = {
   iconClassName?: string;
 };
 
+type RequestDialogProps = {
+  children: ReactElement;
+  privacyCheckboxId?: string;
+};
+
 const DEFAULT_LABEL = "Обсудить задачу";
 const DEFAULT_CAPTION = "Минимальный бюджет - от 50 000 ₽";
 const DEFAULT_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
-export function RequestDialog({
-  className,
-  label = DEFAULT_LABEL,
-  caption = DEFAULT_CAPTION,
-  showCaption = true,
-  iconSrc = DEFAULT_ICON_SRC,
-  iconContainerClassName,
-  iconClassName,
-}: RequestDialogProps) {
-  return (
-    <Dialog>
-      <DialogTrigger
+export const RequestDialogButton = forwardRef<HTMLButtonElement, RequestDialogButtonProps>(
+  function RequestDialogButton(
+    {
+      className,
+      label = DEFAULT_LABEL,
+      caption = DEFAULT_CAPTION,
+      showCaption = true,
+      iconSrc = DEFAULT_ICON_SRC,
+      iconContainerClassName,
+      iconClassName,
+      type,
+      ...props
+    },
+    ref,
+  ) {
+    return (
+      <button
+        ref={ref}
+        type={type ?? "button"}
         className={cn(
           "group cursor-pointer flex h-[60px] w-full lg:w-auto items-center justify-between gap-4 rounded-[10px] bg-[var(--accent)] px-3 text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] xl:px-5",
           className,
         )}
+        {...props}
       >
         <span className="flex min-w-0 flex-col items-start">
           <span className="text-base md:text-lg xl:text-xl text-nowrap leading-[1.3] tracking-[-0.04em]">
@@ -66,11 +79,25 @@ export function RequestDialog({
             )}
           />
         </span>
-      </DialogTrigger>
+      </button>
+    );
+  },
+);
+
+export function RequestDialog({
+  children,
+  privacyCheckboxId,
+}: RequestDialogProps) {
+  const generatedPrivacyCheckboxId = useId();
+  const resolvedPrivacyCheckboxId = privacyCheckboxId ?? `request-dialog-privacy-${generatedPrivacyCheckboxId}`;
+
+  return (
+    <Dialog>
+      <DialogTrigger render={children} />
 
       <DialogContent
         showCloseButton={false}
-        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] md:p-[72px] sm:h-auto md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[20px] xl:bg-[#ecebe6]"
+        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] sm:p-[72px] sm:h-auto md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[20px] xl:bg-[#ecebe6]"
       >
         <div className="mb-7 flex items-start justify-between gap-4 xl:mb-8">
           <DialogTitle className="font-heading text-4xl md:text-5xl xl:text-6xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">
@@ -89,7 +116,7 @@ export function RequestDialog({
 
         <RequestForm
           includeEmail={false}
-          privacyCheckboxId="request-dialog-privacy"
+          privacyCheckboxId={resolvedPrivacyCheckboxId}
           formClassName="space-y-3 xl:space-y-4"
         />
       </DialogContent>

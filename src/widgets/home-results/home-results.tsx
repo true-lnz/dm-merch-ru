@@ -1,7 +1,6 @@
 "use client";
 
-import { RequestDialog } from "@/features/request-dialog";
-import { cn } from "@/shared/lib/cn";
+import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
 import { useState } from "react";
@@ -50,102 +49,66 @@ const RESULT_SLIDES = [
 export function HomeResults() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeSlide = RESULT_SLIDES[activeIndex];
+  const contentItems = [
+    { title: "Было", text: activeSlide.before },
+    { title: "Стало", text: activeSlide.after },
+    { title: "Результат", text: activeSlide.result },
+  ];
 
   return (
     <section className="mb-[63px] mt-[28.8px] md:mb-[72px] xl:mb-[90px]">
-      <div className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-10">
-        <div className="relative">
+      <div className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-x-10 xl:gap-y-0">
+        <div className="order-1 xl:order-1">
           <PageSubheading
             title={RESULTS_TITLE}
             description={RESULTS_DESCRIPTION}
             descriptionPlacement="bottom"
           />
+        </div>
 
-          <div className="my-[36px] grid grid-cols-1 gap-[20px] xl:my-[55px] xl:grid-cols-2 xl:gap-[55px]">
-            <article>
+        <div className="order-2 relative aspect-square xl:aspect-auto overflow-hidden rounded-[24px] bg-white xl:order-4 xl:col-start-2 xl:row-start-1 xl:row-span-3">
+          <Image
+            key={activeSlide.image.src}
+            src={activeSlide.image.src}
+            alt={activeSlide.image.alt}
+            fill
+            sizes="(max-width: 1279px) 100vw, 48vw"
+            className="object-cover"
+          />
+        </div>
+
+        <div className="order-3 my-[36px] grid grid-cols-1 gap-[20px] xl:order-2 xl:my-[55px] xl:grid-cols-2 xl:gap-x-[55px] xl:gap-y-[40px]">
+          {contentItems.map((item) => (
+            <article key={item.title}>
               <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">
-                Было
+                {item.title}
               </h3>
               <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">
-                {activeSlide.before}
+                {item.text}
               </p>
             </article>
-            <article>
-              <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">
-                Стало
-              </h3>
-              <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">
-                {activeSlide.after}
-              </p>
-            </article>
-            <article>
-              <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">
-                Результат
-              </h3>
-              <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">
-                {activeSlide.result}
-              </p>
-            </article>
-          </div>
+          ))}
+        </div>
 
-          <div className="relative aspect-square overflow-hidden rounded-[24px] bg-white xl:hidden">
-            {RESULT_SLIDES.map((slide, index) => (
-              <div
-                key={`${slide.image.src}-mobile`}
-                className={cn(
-                  "absolute inset-0 flex transition-opacity duration-500",
-                  index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
-                )}
-              >
-                <Image
-                  src={slide.image.src}
-                  alt={slide.image.alt}
-                  sizes="100vw"
-                  width={1200}
-                  height={1200}
-                  className="h-auto w-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:mt-8">
-            <SliderControl
-              className="order-1 mx-auto md:order-2 md:mx-0"
-              onPrevClick={() =>
-                setActiveIndex((activeIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)
-              }
-              onNextClick={() => setActiveIndex((activeIndex + 1) % RESULT_SLIDES.length)}
-              prevAriaLabel="Предыдущий слайд"
-              nextAriaLabel="Следующий слайд"
-            />
-            <RequestDialog
+        <div className="order-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:order-3">
+          <SliderControl
+            className="order-1 mx-auto md:order-2 md:mx-0"
+            onPrevClick={() =>
+              setActiveIndex((currentIndex) => (currentIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)
+            }
+            onNextClick={() =>
+              setActiveIndex((currentIndex) => (currentIndex + 1) % RESULT_SLIDES.length)
+            }
+            prevAriaLabel="Предыдущий слайд"
+            nextAriaLabel="Следующий слайд"
+          />
+          <RequestDialog>
+            <RequestDialogButton
               className="order-2 md:order-1 lg:w-[239px]"
               label="Обсудить задачу"
               showCaption={false}
             />
-          </div>
-        </div>
-
-        <div className="relative hidden overflow-hidden rounded-[24px] bg-white xl:block">
-          {RESULT_SLIDES.map((slide, index) => (
-            <div
-              key={slide.image.src}
-              className={cn(
-                "absolute inset-0 flex transition-opacity duration-500",
-                index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
-              )}
-            >
-              <Image
-                src={slide.image.src}
-                alt={slide.image.alt}
-                sizes="(max-width: 1279px) 100vw, 48vw"
-                width={1200}
-                height={1500}
-                className="h-auto w-full object-cover"
-              />
-            </div>
-          ))}
+          </RequestDialog>
         </div>
       </div>
     </section>
