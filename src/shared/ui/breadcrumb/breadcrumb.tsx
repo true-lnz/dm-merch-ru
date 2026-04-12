@@ -2,14 +2,48 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@/shared/lib/cn";
 
+type BreadcrumbLinkItem = {
+  label: string;
+  href: string;
+};
+
+type LegacyBreadcrumbItem = {
+  labelFrom: string;
+  labelTo: string;
+  href: string;
+};
+
 type PageBreadcrumbProps = {
-  item: {
-    labelFrom: string;
-    labelTo: string;
-    href: string;
-  };
+  item?: LegacyBreadcrumbItem;
+  items?: BreadcrumbLinkItem[];
+  currentLabel?: string;
   className?: string;
 };
+
+function normalizeBreadcrumbs({
+  item,
+  items,
+  currentLabel,
+}: Pick<PageBreadcrumbProps, "item" | "items" | "currentLabel">) {
+  if (items?.length) {
+    return {
+      items,
+      currentLabel,
+    };
+  }
+
+  if (item) {
+    return {
+      items: [{ label: item.labelFrom, href: item.href }],
+      currentLabel: item.labelTo,
+    };
+  }
+
+  return {
+    items: [],
+    currentLabel: undefined,
+  };
+}
 
 export function Breadcrumb({
   className,
@@ -19,7 +53,7 @@ export function Breadcrumb({
     <nav
       aria-label="Хлебные крошки"
       className={cn(
-        "flex flex-wrap items-center gap-2 text-xs md:text-sm leading-[1.3] tracking-[-0.02em] text-[var(--text-muted)]",
+        "flex flex-wrap items-center gap-2 text-xs leading-[1.3] tracking-[-0.02em] text-[var(--text-muted)] md:text-sm",
         className,
       )}
       {...props}
@@ -54,14 +88,14 @@ export function BreadcrumbLink({
 }
 
 export function BreadcrumbList({
-                                 className,
-                                 ...props
-                               }: ComponentPropsWithoutRef<"ol">) {
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"ol">) {
   return (
-      <ol
-          className={cn("flex flex-wrap items-center gap-2", className)}
-          {...props}
-      />
+    <ol
+      className={cn("flex flex-wrap items-center gap-2", className)}
+      {...props}
+    />
   );
 }
 
@@ -86,17 +120,27 @@ export function BreadcrumbSeparator({
 
 export function PageBreadcrumb({
   item,
+  items,
+  currentLabel,
+  className,
 }: PageBreadcrumbProps) {
+  const normalized = normalizeBreadcrumbs({ item, items, currentLabel });
+
+  if (!normalized.items.length || !normalized.currentLabel) {
+    return null;
+  }
 
   return (
-    <Breadcrumb className="mt-8 md:mt-12 xl:mt-[70px] mb-4 md:mb-4 xl:mb-[36px]">
+    <Breadcrumb className={cn("mb-4 mt-8 md:mb-4 md:mt-12 xl:mb-[36px] xl:mt-[70px]", className)}>
       <BreadcrumbList>
+        {normalized.items.map((breadcrumbItem) => (
+          <BreadcrumbItem key={breadcrumbItem.href}>
+            <BreadcrumbLink href={breadcrumbItem.href}>{breadcrumbItem.label}</BreadcrumbLink>
+            <BreadcrumbSeparator />
+          </BreadcrumbItem>
+        ))}
         <BreadcrumbItem>
-          <BreadcrumbLink href={item.href}>{item.labelFrom}</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>{item.labelTo}</BreadcrumbPage>
+          <BreadcrumbPage>{normalized.currentLabel}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

@@ -21,3 +21,17 @@ export type BlogPost = {
   image: CmsImage;
   href: string;
 };
+
+export type BlogArticleDto = BlogPostDto & {
+  pageTitle?: string;
+  seoTitle?: string | null;
+  breadcrumbCurrentLabel?: string;
+  heroImage?: CmsImage;
+};
+
+export type BlogArticle = BlogPost & {
+  pageTitle: string;
+  seoTitle: string;
+  breadcrumbCurrentLabel: string;
+  heroImage: CmsImage;
+};

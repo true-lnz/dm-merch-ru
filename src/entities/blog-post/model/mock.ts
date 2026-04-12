@@ -1,12 +1,12 @@
-﻿import { mapBlogPostFromDto } from "./mappers";
-import type { BlogPost, BlogPostDto } from "./types";
+import { mapBlogArticleFromDto, mapBlogPostFromDto } from "./mappers";
+import type { BlogArticle, BlogArticleDto, BlogPost } from "./types";
 
-const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
+const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
   {
     id: "1",
     slug: "kak-merch-vliyaet-na-imidzh-i-uznavaemost-brenda",
     title: "Как мерч влияет на имидж и узнаваемость бренда",
-    excerpt: "",
+    excerpt: "Почему фирменный мерч усиливает образ компании и помогает запоминаться.",
     image: {
       url: "/blog/blog-brand-image.jpg",
       alt: "Модели в брендированной одежде",
@@ -18,7 +18,7 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     id: "2",
     slug: "ekspress-merch",
     title: "Экспресс-мерч",
-    excerpt: "Сроки, этапы и форматы быстрого запуска",
+    excerpt: "Сроки, этапы и форматы быстрого запуска.",
     image: {
       url: "/blog/blog-express-merch.jpg",
       alt: "Быстрое производство брендированной продукции",
@@ -30,7 +30,7 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     id: "3",
     slug: "skolko-stoit-merch",
     title: "Сколько стоит мерч",
-    excerpt: "Факторы цены и реальный расчет",
+    excerpt: "Факторы цены и реальный расчет для бизнеса.",
     image: {
       url: "/blog/blog-cost.jpg",
       alt: "Футболки и брендированные товары",
@@ -42,7 +42,7 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     id: "4",
     slug: "kak-vybrat-merch-pod-zadachu",
     title: "Как выбрать мерч под задачу",
-    excerpt: "Руководство для бизнеса",
+    excerpt: "Практическое руководство для бизнеса и event-команд.",
     image: {
       url: "/blog/blog-merch-guide.jpg",
       alt: "Корпоративные наборы и аксессуары",
@@ -54,14 +54,35 @@ const BLOG_POST_DTO_MOCK: BlogPostDto[] = [
     id: "5",
     slug: "korporativnyy-merch",
     title: "Корпоративный мерч",
-    excerpt: "Что это и зачем он бизнесу",
+    pageTitle: "Корпоративный мерч: что это и зачем он бизнесу",
+    excerpt: "Что это и зачем он нужен бизнесу, HR-команде и внутренним коммуникациям.",
     image: {
       url: "/blog/blog-corporate-merch.jpg",
       alt: "Команда в корпоративной одежде",
       width: 553,
       height: 250,
     },
+    heroImage: {
+      url: "/blog/article-corporate-merch-hero.jpg",
+      alt: "Корпоративный мерч с брендированными футболками",
+      width: 1740,
+      height: 400,
+    },
   },
 ];
 
-export const blogPostsMock: BlogPost[] = BLOG_POST_DTO_MOCK.map(mapBlogPostFromDto);
+export const blogArticlesMock: BlogArticle[] = BLOG_ARTICLE_DTO_MOCK.map(mapBlogArticleFromDto);
+
+export const blogPostsMock: BlogPost[] = BLOG_ARTICLE_DTO_MOCK.map(mapBlogPostFromDto);
+
+export function getBlogPosts(): BlogPost[] {
+  return blogPostsMock;
+}
+
+export function getBlogPostBySlug(slug: string): BlogArticle | undefined {
+  return blogArticlesMock.find((article) => article.slug === slug);
+}
+
+export function getBlogPostSlugs(): string[] {
+  return blogArticlesMock.map((article) => article.slug);
+}
