@@ -38,7 +38,7 @@ const HOME_SERVICES = [
 function ServiceRequestDialog() {
   return (
     <Dialog>
-      <DialogTrigger className="cursor-pointer text-left font-medium text-sm md:text-lg leading-[1.3] tracking-[-0.02em] text-[var(--accent)] transition-opacity hover:opacity-80">
+      <DialogTrigger className="cursor-pointer text-left font-medium text-base md:text-lg leading-[1.3] tracking-[-0.02em] text-[var(--accent)] transition-opacity hover:opacity-80">
         Обсудить задачу
       </DialogTrigger>
 
@@ -88,10 +88,10 @@ function ServiceCard({ title, description }: ServiceCardProps) {
         className="absolute right-5 top-5 size-7 md:right-[30px] md:top-[30px] md:size-8"
       />
 
-      <h3 className="font-heading text-3xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-4xl xl:text-5xl">
+      <h3 className="font-heading max-w-[80%] text-3xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-4xl xl:text-5xl">
         {title}
       </h3>
-      <p className="mt-3 max-w-[92%] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:mt-4 md:text-lg xl:text-xl">
+      <p className="mt-3 max-w-[90%] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:mt-4 md:text-lg xl:text-xl">
         {description}
       </p>
 
@@ -116,8 +116,8 @@ export function HomeServices() {
           ))}
         </div>
 
-        <div className="rounded-[24px] bg-white p-[10px] xl:self-stretch xl:p-0">
-          <div className="relative overflow-hidden rounded-[20px] bg-white aspect-square xl:h-full">
+        <div className="rounded-[24px] bg-white xl:self-stretch">
+          <div className="relative overflow-hidden rounded-[20px] bg-white aspect-square xl:aspect-auto xl:h-full">
             <Image
               src={SERVICES_IMAGE.src}
               alt={SERVICES_IMAGE.alt}
