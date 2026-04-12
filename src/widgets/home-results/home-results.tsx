@@ -1,6 +1,6 @@
 "use client";
 
-import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
+import { RequestDialog } from "@/features/request-dialog";
 import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
 import { useState } from "react";
@@ -103,11 +103,12 @@ export function HomeResults() {
             nextAriaLabel="Следующий слайд"
           />
           <RequestDialog>
-            <RequestDialogButton
-              className="order-2 md:order-1 lg:w-[239px]"
-              label="Обсудить задачу"
-              showCaption={false}
-            />
+            <button
+              type="button"
+              className="cursor-pointer order-2 inline-flex h-[47px] items-center justify-center rounded-[9px] bg-[var(--accent)] px-6 text-[16px] font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:order-1 lg:w-[239px]"
+            >
+              Оставить заявку
+            </button>
           </RequestDialog>
         </div>
       </div>

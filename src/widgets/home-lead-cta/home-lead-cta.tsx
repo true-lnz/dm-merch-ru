@@ -47,6 +47,7 @@ export function HomeLeadCta() {
             <RequestForm
               includeEmail={false}
               privacyCheckboxId="home-lead-cta-privacy"
+              onAccentSurface
               submitLabel="Получить примеры мерча"
               submitClassName="border-white bg-white text-[var(--accent)] hover:bg-[#f3f7ff]"
             />
