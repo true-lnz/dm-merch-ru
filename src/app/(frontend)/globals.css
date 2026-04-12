@@ -70,6 +70,12 @@
 
 }
 
+[data-surface="accent"] {
+  --text: white;
+  --field-text: rgba(255, 255, 255, 0.6);
+  --field-border: rgba(255, 255, 255, 0.4);
+}
+
 * {
   box-sizing: border-box;
 }

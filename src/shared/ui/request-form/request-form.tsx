@@ -7,18 +7,30 @@ import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 
 const DEFAULT_PRIVACY_CHECKBOX_ID = "request-form-privacy";
-const inputClassName =
-  "h-11 rounded-none border-0 border-b border-[var(--field-border)] bg-transparent px-0 py-2 text-sm text-[var(--text)] shadow-none placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] focus-visible:ring-0";
-const inputClassNameOnAccent =
-  "focus-visible:border-white";
-const textareaClassName =
-  "max-h-24 min-h-24 resize-none rounded-none border-0 border-b border-[var(--field-border)] bg-transparent px-0 py-2 text-sm text-[var(--text)] shadow-none placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] focus-visible:ring-0";
-const textareaClassNameOnAccent =
-  "focus-visible:border-white";
+
+const fieldBaseClassName =
+  "rounded-none border-0 border-b bg-transparent px-0 py-2 text-sm shadow-none focus-visible:ring-0";
+
+const fieldSurfaceClassName =
+  "border-[var(--field-border)] text-[var(--text)] placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] group-data-[surface=accent]/form:border-white/40 group-data-[surface=accent]/form:text-white group-data-[surface=accent]/form:placeholder:text-white/60 group-data-[surface=accent]/form:focus-visible:border-white";
+
+const inputClassName = cn(
+  fieldBaseClassName,
+  fieldSurfaceClassName,
+  "h-11",
+);
+
+const textareaClassName = cn(
+  fieldBaseClassName,
+  fieldSurfaceClassName,
+  "max-h-24 min-h-24 resize-none",
+);
+
 const checkboxClassName =
-  "mt-0.5 border-[var(--field-border)] bg-transparent text-white focus-visible:border-[var(--accent)] focus-visible:ring-0 data-checked:border-[var(--accent)] data-checked:bg-[var(--accent)]";
-const checkboxClassNameOnAccent =
-  "border-white/55 text-[var(--accent)] focus-visible:border-white data-checked:border-white data-checked:bg-white data-checked:text-[var(--accent)]";
+  "mt-0.5 border-[var(--field-border)] bg-transparent text-white focus-visible:border-[var(--accent)] focus-visible:ring-0 data-checked:border-[var(--accent)] data-checked:bg-[var(--accent)] group-data-[surface=accent]/form:border-white/55 group-data-[surface=accent]/form:focus-visible:border-white group-data-[surface=accent]/form:data-checked:border-white group-data-[surface=accent]/form:data-checked:bg-white group-data-[surface=accent]/form:data-checked:text-[var(--accent)]";
+
+const privacyTextClassName =
+  "mt-[3rem] flex items-center gap-3 text-xs text-[var(--field-text)] cursor-pointer group-data-[surface=accent]/form:text-white/70";
 
 type RequestFormProps = {
   includeEmail?: boolean;
@@ -38,14 +50,18 @@ export function RequestForm({
   onAccentSurface = false,
 }: RequestFormProps) {
   return (
-    <form className={cn("space-y-4", formClassName)} noValidate>
+    <form
+      data-surface={onAccentSurface ? "accent" : "default"}
+      className={cn("group/form space-y-4", formClassName)}
+      noValidate
+    >
       <label className="block">
         <span className="sr-only">Имя</span>
         <Input
           placeholder="Имя*"
           name="name"
           required
-          className={cn(inputClassName, onAccentSurface && inputClassNameOnAccent)}
+          className={inputClassName}
         />
       </label>
 
@@ -55,7 +71,7 @@ export function RequestForm({
           placeholder="Телефон*"
           name="phone"
           required
-          className={cn(inputClassName, onAccentSurface && inputClassNameOnAccent)}
+          className={inputClassName}
         />
       </label>
 
@@ -66,7 +82,7 @@ export function RequestForm({
             placeholder="Email"
             type="email"
             name="email"
-            className={cn(inputClassName, onAccentSurface && inputClassNameOnAccent)}
+            className={inputClassName}
           />
         </label>
       ) : null}
@@ -76,23 +92,28 @@ export function RequestForm({
         <Textarea
           placeholder="Сообщение"
           name="message"
-          className={cn(textareaClassName, onAccentSurface && textareaClassNameOnAccent)}
+          className={textareaClassName}
         />
       </label>
 
-      <div className="flex items-center gap-3 text-xs text-[var(--field-text)] mt-[3rem] cursor-pointer">
+      <div className={privacyTextClassName}>
         <Checkbox
           id={privacyCheckboxId}
           name="privacy"
           required
-          className={cn(checkboxClassName, onAccentSurface && checkboxClassNameOnAccent)}
+          className={checkboxClassName}
         />
         <label htmlFor={privacyCheckboxId} className="cursor-pointer">
-          Нажимая на&nbsp;кнопку &quot;Отправить&quot;, Вы&nbsp;соглашаетесь с&nbsp;Политикой конфиденциальности.
+          Нажимая на&nbsp;кнопку &quot;Отправить&quot;, Вы&nbsp;соглашаетесь
+          с&nbsp;Политикой конфиденциальности.
         </label>
       </div>
 
-      <Button type="submit" variant="blue" className={cn("w-full h-[47px] text-lg cursor-pointer", submitClassName)}>
+      <Button
+        type="submit"
+        variant="blue"
+        className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}
+      >
         {submitLabel}
       </Button>
     </form>
