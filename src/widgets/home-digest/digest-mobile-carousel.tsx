@@ -86,20 +86,15 @@ export function DigestMobileCarousel({ cards, className }: DigestMobileCarouselP
         <DigestCard item={activeCard} layout="mobile" isContentVisible={isContentVisible} />
       </div>
 
-      <div className="mt-5 flex justify-center gap-[18px]">
-        <SliderControl
-          direction="prev"
-          onClick={() => commitCardChange(activeIndex - 1)}
-          disabled={activeIndex === 0}
-          ariaLabel="Предыдущая карточка"
-        />
-        <SliderControl
-          direction="next"
-          onClick={() => commitCardChange(activeIndex + 1)}
-          disabled={activeIndex === cards.length - 1}
-          ariaLabel="Следующая карточка"
-        />
-      </div>
+      <SliderControl
+        className="mt-5"
+        onPrevClick={() => commitCardChange(activeIndex - 1)}
+        onNextClick={() => commitCardChange(activeIndex + 1)}
+        prevDisabled={activeIndex === 0}
+        nextDisabled={activeIndex === cards.length - 1}
+        prevAriaLabel="Предыдущая карточка"
+        nextAriaLabel="Следующая карточка"
+      />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import type { CSSProperties } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 const LEAD_CTA_IMAGE = {
-  src: "/contacts/img_contacts_cover.png",
+  src: "/home/img_lead_cta_cover2.png",
   alt: "Примеры корпоративного мерча",
 };
 
@@ -12,7 +12,7 @@ export function HomeLeadCta() {
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <div className="grid grid-cols-1 md:grid-cols-2 md:items-stretch">
-        <div className="rounded-[24px] bg-white p-4 md:p-5 xl:p-6">
+        <div className="rounded-[24px] bg-white">
           <div className="relative aspect-square overflow-hidden rounded-[20px] md:h-full md:min-h-[600px] md:aspect-auto">
             <Image
               src={LEAD_CTA_IMAGE.src}

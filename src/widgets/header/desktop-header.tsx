@@ -1,25 +1,25 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ChevronRightIcon } from "lucide-react";
 import { headerNavigation } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
+	NavigationMenu,
+	NavigationMenuContent,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
 import { SiteContacts } from "@/shared/ui/site-contacts";
+import { ChevronRightIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import {
-  HeaderIconLink,
-  catalogMenuLinkClassName,
-  catalogTriggerClassName,
-  getEmailHref,
-  getPhoneHref,
-  isActiveRoute,
-  navLinkClassName,
+	HeaderIconLink,
+	catalogMenuLinkClassName,
+	catalogTriggerClassName,
+	getEmailHref,
+	getPhoneHref,
+	isActiveRoute,
+	navLinkClassName,
 } from "./header.shared";
 
 function DesktopNavigation({ pathname }: { pathname: string | null }) {
@@ -93,13 +93,13 @@ function TabletHeaderActions() {
       <HeaderIconLink
         href={getPhoneHref()}
         ariaLabel="Позвонить"
-        iconSrc="/contact-pill-phone.png"
+        iconSrc="/icons/ic_contact_pill_phone.png"
         size={36}
       />
       <HeaderIconLink
         href={getEmailHref()}
         ariaLabel="Написать на email"
-        iconSrc="/contact-pill-mail.png"
+        iconSrc="/icons/ic_contact_pill_mail.png"
         size={36}
       />
     </div>

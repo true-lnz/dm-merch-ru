@@ -31,7 +31,7 @@ const RESULT_SLIDES = [
     result:
       "Команда «Магадана» выглядела собранно и узнаваемо на протяжении всего мероприятия, независимо от погоды. Мерч помог сохранить комфорт сотрудников, поддержать единый образ бренда и спокойно отработать фестиваль в любых условиях.",
     image: {
-      src: "/contacts/img_contacts_cover.png",
+      src: "/home/results_1.png",
       alt: "Команда ресторана в фирменном мерче",
     },
   },
@@ -46,7 +46,7 @@ const RESULT_SLIDES = [
     result:
       "250 пледов для Уфаойл стали частью имиджевой коммуникации с партнёрами. Подарок подчеркнул уровень компании, показал уважение к получателю и усилил ценность деловых отношений.",
     image: {
-      src: "/cases/ufaoil/blanket-gift.jpg",
+      src: "/home/results_2.png",
       alt: "Подарочный набор с пледом",
     },
   },
@@ -65,6 +65,26 @@ export function HomeResults() {
 						description={activeSlide.description}
 						descriptionPlacement="bottom"
 					/>
+					<div className="relative aspect-square overflow-hidden rounded-[24px] bg-white xl:hidden">
+						{RESULT_SLIDES.map((slide, index) => (
+							<div
+								key={`${slide.image.src}-mobile`}
+								className={cn(
+									"absolute inset-0 flex items-center justify-center transition-opacity duration-500",
+									index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
+								)}
+							>
+								<Image
+									src={slide.image.src}
+									alt={slide.image.alt}
+									sizes="100vw"
+									width={1200}
+									height={1200}
+									className="h-auto w-full object-contain"
+								/>
+							</div>
+						))}
+					</div>
 					<div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
 						<article>
 							<h3 className="font-heading text-3xl md:text-5xl leading-none uppercase text-[var(--heading)]">Было</h3>
@@ -87,20 +107,15 @@ export function HomeResults() {
 				</div>
 				
 				<div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:mt-8">
-					<div className="order-1 mx-auto flex items-center justify-center gap-[18px] md:order-2 md:mx-0">
-						<SliderControl
-							direction="prev"
-							onClick={() =>
-								setActiveIndex((activeIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)
-							}
-              ariaLabel="Предыдущий слайд"
-						/>
-						<SliderControl
-							direction="next"
-							onClick={() => setActiveIndex((activeIndex + 1) % RESULT_SLIDES.length)}
-              ariaLabel="Следующий слайд"
-						/>
-					</div>
+					<SliderControl
+						className="order-1 mx-auto md:order-2 md:mx-0"
+						onPrevClick={() =>
+							setActiveIndex((activeIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)
+						}
+						onNextClick={() => setActiveIndex((activeIndex + 1) % RESULT_SLIDES.length)}
+						prevAriaLabel="Предыдущий слайд"
+						nextAriaLabel="Следующий слайд"
+					/>
 					<RequestDialog
 						className="order-2 md:order-1 lg:w-[239px]"
 						label="Обсудить задачу"
@@ -110,21 +125,22 @@ export function HomeResults() {
 
       </div>
 
-				<div className="relative overflow-hidden rounded-[24px] bg-[var(--card-bg)]">
+				<div className="relative hidden overflow-hidden rounded-[24px] bg-white xl:block">
           {RESULT_SLIDES.map((slide, index) => (
             <div
               key={slide.image.src}
               className={cn(
-                "absolute inset-0 transition-opacity aspect-4/5 duration-500",
+                "absolute inset-0 flex transition-opacity duration-500",
                 index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
               <Image
                 src={slide.image.src}
                 alt={slide.image.alt}
-                fill
                 sizes="(max-width: 1279px) 100vw, 48vw"
-                className="object-cover"
+                width={1200}
+                height={1500}
+                className="h-auto w-full object-cover"
               />
             </div>
           ))}

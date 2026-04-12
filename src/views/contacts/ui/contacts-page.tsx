@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { RequestDialog } from "@/features/request-dialog";
 import { siteInfo } from "@/shared/config/site-info";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
+import Image from "next/image";
 import { YandexMapCard } from "./yandex-map-card";
 
 const contactLinks = [
@@ -92,7 +92,7 @@ function DesktopContactsHero() {
     <div className="relative hidden h-[720px] xl:block">
       <div className="absolute inset-y-0 right-[calc(var(--layout-side-padding)*-1)] w-[68%]">
         <Image
-          src="/contacts/im_contacts.png"
+          src="/contacts/img_contacts_cover.png"
           alt="Команда в фирменном мерче"
           fill
           priority
