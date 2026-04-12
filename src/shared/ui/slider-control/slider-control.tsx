@@ -29,7 +29,7 @@ export function SliderControl({
         aria-label={prevAriaLabel}
         className={cn(
           "inline-flex size-[58.8px] items-center justify-center rounded-[8px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
-          prevDisabled ? "opacity-45" : "hover:bg-[#e3e1db]",
+          prevDisabled ? "cursor-default opacity-45" : "cursor-pointer hover:bg-[#e3e1db]",
         )}
       >
         <ChevronLeftIcon className="size-[24px]" strokeWidth={1.5} />
@@ -42,7 +42,7 @@ export function SliderControl({
         aria-label={nextAriaLabel}
         className={cn(
           "inline-flex size-[58.8px] items-center justify-center rounded-[8px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
-          nextDisabled ? "opacity-45" : "hover:bg-[#e3e1db]",
+          nextDisabled ? "cursor-default opacity-45" : "cursor-pointer hover:bg-[#e3e1db]",
         )}
       >
         <ChevronRightIcon className="size-[24px]" strokeWidth={1.5} />

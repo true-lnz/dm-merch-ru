@@ -8,8 +8,6 @@ import { useState } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeResultSlide = {
-  title: string;
-  description: string;
   before: string;
   after: string;
   result: string;
@@ -19,11 +17,11 @@ type HomeResultSlide = {
   };
 };
 
+const RESULTS_TITLE = "Кейсы с результатом";
+const RESULTS_DESCRIPTION = "Как мерч решает задачи бизнеса — на реальных проектах";
+
 const RESULT_SLIDES = [
   {
-    title: "Кейсы с результатом",
-    description:
-      "Как мерч решает задачи бизнеса — на реальных проектах",
     before:
       "Для ресторана «Магадан» нужно было полностью экипировать команду для уличного фестиваля. Важно было учесть разные погодные условия, чтобы сотрудники выглядели единообразно и чувствовали себя комфортно в жару, ветер и дождь.",
     after:
@@ -36,9 +34,6 @@ const RESULT_SLIDES = [
     },
   },
   {
-    title: "Кейсы с результатом",
-    description:
-      "Как мерч решает задачи бизнеса — на реальных проектах",
     before:
       "Для компании Уфаойл нужно было подготовить 250 премиальных пледов для VIP-клиентов и партнёров. Важно было сделать авторский корпоративный подарок, который подчеркивает статус отношений и внимание к получателю.",
     after:
@@ -57,75 +52,82 @@ export function HomeResults() {
   const activeSlide = RESULT_SLIDES[activeIndex];
 
   return (
-    <section className="mb-[63px] md:mb-[72px] xl:mb-[90px] mt-[28.8px]">
+    <section className="mb-[63px] mt-[28.8px] md:mb-[72px] xl:mb-[90px]">
       <div className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-10">
-        <div className="space-y-6">
-					<PageSubheading
-						title={activeSlide.title}
-						description={activeSlide.description}
-						descriptionPlacement="bottom"
-					/>
-					<div className="relative aspect-square overflow-hidden rounded-[24px] bg-white xl:hidden">
-						{RESULT_SLIDES.map((slide, index) => (
-							<div
-								key={`${slide.image.src}-mobile`}
-								className={cn(
-									"absolute inset-0 flex transition-opacity duration-500",
-									index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
-								)}
-							>
-								<Image
-									src={slide.image.src}
-									alt={slide.image.alt}
-									sizes="100vw"
-									width={1200}
-									height={1200}
-									className="h-auto w-full object-cover"
-								/>
-							</div>
-						))}
-					</div>
-					<div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
-						<article>
-							<h3 className="font-heading text-3xl md:text-5xl leading-none uppercase text-[var(--heading)]">Было</h3>
-							<p className="mt-3 text-xs md:text-base leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
-								{activeSlide.before}
-							</p>
-						</article>
-						<article>
-							<h3 className="font-heading text-3xl md:text-5xl leading-none uppercase text-[var(--heading)]">Стало</h3>
-							<p className="mt-3 text-xs md:text-base leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
-								{activeSlide.after}
-							</p>
-						</article>
-						<article>
-            <h3 className="font-heading text-3xl md:text-5xl leading-none uppercase text-[var(--heading)]">Результат</h3>
-            <p className="mt-3 text-xs md:text-base leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
-              {activeSlide.result}
-            </p>
-          </article>
-				</div>
-				
-				<div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:mt-8">
-					<SliderControl
-						className="order-1 mx-auto md:order-2 md:mx-0"
-						onPrevClick={() =>
-							setActiveIndex((activeIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)
-						}
-						onNextClick={() => setActiveIndex((activeIndex + 1) % RESULT_SLIDES.length)}
-						prevAriaLabel="Предыдущий слайд"
-						nextAriaLabel="Следующий слайд"
-					/>
-					<RequestDialog
-						className="order-2 md:order-1 lg:w-[239px]"
-						label="Обсудить задачу"
-						showCaption={false}
-					/>
-				</div>
+        <div className="relative">
+          <PageSubheading
+            title={RESULTS_TITLE}
+            description={RESULTS_DESCRIPTION}
+            descriptionPlacement="bottom"
+          />
 
-      </div>
+          <div className="my-[36px] grid grid-cols-1 gap-[20px] xl:my-[55px] xl:grid-cols-2 xl:gap-[55px]">
+            <article>
+              <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">
+                Было
+              </h3>
+              <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">
+                {activeSlide.before}
+              </p>
+            </article>
+            <article>
+              <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">
+                Стало
+              </h3>
+              <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">
+                {activeSlide.after}
+              </p>
+            </article>
+            <article>
+              <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">
+                Результат
+              </h3>
+              <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">
+                {activeSlide.result}
+              </p>
+            </article>
+          </div>
 
-				<div className="relative hidden overflow-hidden rounded-[24px] bg-white xl:block">
+          <div className="relative aspect-square overflow-hidden rounded-[24px] bg-white xl:hidden">
+            {RESULT_SLIDES.map((slide, index) => (
+              <div
+                key={`${slide.image.src}-mobile`}
+                className={cn(
+                  "absolute inset-0 flex transition-opacity duration-500",
+                  index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
+                )}
+              >
+                <Image
+                  src={slide.image.src}
+                  alt={slide.image.alt}
+                  sizes="100vw"
+                  width={1200}
+                  height={1200}
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:mt-8">
+            <SliderControl
+              className="order-1 mx-auto md:order-2 md:mx-0"
+              onPrevClick={() =>
+                setActiveIndex((activeIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)
+              }
+              onNextClick={() => setActiveIndex((activeIndex + 1) % RESULT_SLIDES.length)}
+              prevAriaLabel="Предыдущий слайд"
+              nextAriaLabel="Следующий слайд"
+            />
+            <RequestDialog
+              className="order-2 md:order-1 lg:w-[239px]"
+              label="Обсудить задачу"
+              showCaption={false}
+            />
+          </div>
+        </div>
+
+        <div className="relative hidden overflow-hidden rounded-[24px] bg-white xl:block">
           {RESULT_SLIDES.map((slide, index) => (
             <div
               key={slide.image.src}

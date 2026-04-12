@@ -33,7 +33,7 @@ export function HomeDigest() {
       <DigestGrid
         cardsById={DIGEST_CARDS_BY_ID}
         layoutItems={DIGEST_GRID_LAYOUT.items}
-        className="mt-10 hidden pb-[45px] md:grid xl:mt-[49px] xl:pb-[100px]"
+        className="hidden md:grid"
       />
     </section>
   );
