@@ -16,5 +16,6 @@ export function mapBlogArticleFromDto(dto: BlogArticleDto): BlogArticle {
     seoTitle: dto.seoTitle ?? dto.pageTitle ?? dto.title,
     breadcrumbCurrentLabel: dto.breadcrumbCurrentLabel ?? "Статьи",
     heroImage: dto.heroImage ?? dto.image,
+    sections: dto.sections ?? [],
   };
 }

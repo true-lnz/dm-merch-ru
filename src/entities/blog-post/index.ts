@@ -1,6 +1,10 @@
 export type {
   BlogArticle,
   BlogArticleDto,
+  BlogArticleSection,
+  BlogArticleSectionDto,
+  BlogArticleSummarySection,
+  BlogArticleSummarySectionDto,
   BlogPost,
   BlogPostDto,
   CmsImage,

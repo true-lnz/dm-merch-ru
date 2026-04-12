@@ -22,16 +22,36 @@ export type BlogPost = {
   href: string;
 };
 
+export type BlogArticleSummarySectionDto = {
+  type: "summary";
+  title: string;
+  paragraphs: string[];
+  image: CmsImage;
+};
+
+export type BlogArticleSectionDto = BlogArticleSummarySectionDto;
+
 export type BlogArticleDto = BlogPostDto & {
   pageTitle?: string;
   seoTitle?: string | null;
   breadcrumbCurrentLabel?: string;
   heroImage?: CmsImage;
+  sections?: BlogArticleSectionDto[];
 };
+
+export type BlogArticleSummarySection = {
+  type: "summary";
+  title: string;
+  paragraphs: string[];
+  image: CmsImage;
+};
+
+export type BlogArticleSection = BlogArticleSummarySection;
 
 export type BlogArticle = BlogPost & {
   pageTitle: string;
   seoTitle: string;
   breadcrumbCurrentLabel: string;
   heroImage: CmsImage;
+  sections: BlogArticleSection[];
 };
