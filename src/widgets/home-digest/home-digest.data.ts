@@ -54,7 +54,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
       src: "/home/digest-partners.png",
       alt: "Подарок для партнеров",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 360px, 412px",
-      imageClassName: "object-contain object-center scale-[1.05]",
+      imageClassName: "object-cover object-center",
     },
   },
   {
@@ -66,7 +66,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
       src: "/home/digest-events.png",
       alt: "Мерч для мероприятий",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 360px, 413px",
-      imageClassName: "object-contain object-center scale-[1.05]",
+      imageClassName: "object-cover object-center",
     },
   },
   {
@@ -83,7 +83,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
       src: "/home/digest-team.png",
       alt: "Мерч для команды",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 480px, 413px",
-      imageClassName: "object-contain object-center scale-[1.08]",
+      imageClassName: "object-cover object-top",
     },
   },
   {
@@ -101,7 +101,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
       src: "/home/digest-souvenirs.png",
       alt: "Сувенирная продукция",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 480px, 413px",
-      imageClassName: "object-contain object-center scale-[1.07]",
+      imageClassName: "object-cover object-center",
     },
   },
   {
@@ -113,7 +113,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
       src: "/home/digest-uniform.png",
       alt: "Корпоративная униформа",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 360px, 413px",
-      imageClassName: "object-contain object-center scale-[1.05]",
+      imageClassName: "object-cover object-top",
     },
   },
   {
@@ -125,7 +125,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
       src: "/home/digest-workwear.png",
       alt: "Корпоративная спецодежда",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 360px, 412px",
-      imageClassName: "object-contain object-center scale-[1.05]",
+      imageClassName: "object-cover object-top",
     },
   },
 ];

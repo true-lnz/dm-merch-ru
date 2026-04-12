@@ -43,7 +43,7 @@ function DigestDefaultCard({
           alt={item.image.alt}
           fill
           sizes={item.image.sizes}
-          className={cn("object-contain object-center", item.image.imageClassName)}
+          className={cn("object-cover", item.image.imageClassName)}
         />
       </div>
 
@@ -100,7 +100,7 @@ function DigestWildCard({
           alt={item.image.alt}
           fill
           sizes={item.image.sizes}
-          className={cn("object-contain object-center", item.image.imageClassName)}
+          className={cn("object-cover", item.image.imageClassName)}
         />
       </div>
 
