@@ -21,7 +21,7 @@ export function FeatureCard({
   return (
     <article
       className={cn(
-        "relative overflow-hidden rounded-[20px] p-5 md:p-[27px]",
+        "relative overflow-hidden rounded-[18px] md:rounded-[22.5px] p-5 md:p-[27px]",
         accent ? "bg-[var(--accent)]" : "bg-[var(--card-bg)]",
         className,
       )}

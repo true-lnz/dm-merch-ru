@@ -28,7 +28,7 @@ export function SliderControl({
         disabled={prevDisabled}
         aria-label={prevAriaLabel}
         className={cn(
-          "inline-flex size-[55px] items-center justify-center rounded-[8px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
+          "inline-flex size-[55px] items-center justify-center rounded-[7px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
           prevDisabled ? "cursor-default opacity-45" : "cursor-pointer hover:bg-[#e3e1db]",
         )}
       >
@@ -41,7 +41,7 @@ export function SliderControl({
         disabled={nextDisabled}
         aria-label={nextAriaLabel}
         className={cn(
-          "inline-flex size-[55px] items-center justify-center rounded-[8px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
+          "inline-flex size-[55px] items-center justify-center rounded-[7px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
           nextDisabled ? "cursor-default opacity-45" : "cursor-pointer hover:bg-[#e3e1db]",
         )}
       >

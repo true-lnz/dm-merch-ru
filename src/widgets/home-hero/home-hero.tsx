@@ -1,9 +1,9 @@
-import Image from "next/image";
-import Link from "next/link";
 import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
-import {PageHeading} from "../../shared/ui/page-heading";
+import Image from "next/image";
+import Link from "next/link";
+import { PageHeading } from "../../shared/ui/page-heading";
 
 const HERO_IMAGE = {
   src: "/home/img_home_hero_cover.png",
@@ -38,7 +38,7 @@ export function HomeHero() {
         </div>
 
         <div className="relative z-10 mb-16 flex w-full justify-center xl:block xl:w-1/2 xl:max-w-[50%]">
-          <div className="flex w-full flex-col gap-8 px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between xl:rounded-[20px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
+          <div className="flex w-full flex-col gap-8 px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
             <div className="flex flex-col gap-5 xl:gap-[30px]">
               <PageHeading title="Мерч, который работает на бизнес" />
               <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
@@ -92,7 +92,7 @@ export function HomeHero() {
                 href="/cases"
                 className={cn(
                   buttonVariants({ variant: "white" }),
-                  "group hidden h-[60px] justify-between rounded-[10px] border-transparent bg-white px-5 text-[16px] font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white md:w-[284px] xl:flex xl:w-[283.6px] xl:rounded-[8px] xl:text-[19.46px] xl:tracking-[-0.04em]",
+                  "group hidden h-[60px] justify-between rounded-[10px] border-transparent bg-white px-5 text-[16px] font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white md:w-[284px] xl:flex xl:w-[283.6px] xl:text-[19.46px] xl:tracking-[-0.04em]",
                 )}
               >
                 <span className="self-start pt-2">К кейсам</span>

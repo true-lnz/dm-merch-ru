@@ -42,7 +42,7 @@ const WORK_STAGES = [
 export function HomeWorkStages() {
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-      <div className="relative overflow-hidden rounded-[24px] bg-[var(--accent)] px-5 py-6 text-white md:px-8 md:py-8 xl:px-[45px] xl:py-[44px]">
+      <div className="relative overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] px-5 py-6 text-white md:px-8 md:py-8 xl:px-[45px] xl:py-[44px]">
         <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between opacity-20">
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" />
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" />
@@ -65,7 +65,7 @@ export function HomeWorkStages() {
 
           <div className="mt-8 grid gap-4 xl:mt-[82px] xl:grid-cols-4">
             {WORK_STAGES.map((item) => (
-              <article key={item.index} className="rounded-[20px] bg-white px-5 py-5 text-[var(--heading)] md:px-6 md:py-6">
+              <article key={item.index} className="rounded-[18px] md:rounded-[22.5px] bg-white px-5 py-5 text-[var(--heading)] md:px-6 md:py-6">
                 <p className="font-heading text-[32px] leading-none uppercase text-[var(--accent)] md:text-[40px]">{item.index}</p>
                 <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">{item.title}</h3>
                 <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">{item.description}</p>

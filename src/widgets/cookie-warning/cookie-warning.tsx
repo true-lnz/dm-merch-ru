@@ -52,7 +52,7 @@ export function CookieWarning() {
         <button
           type="button"
           onClick={handleAccept}
-          className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center self-start rounded-[8px] bg-[#f5f4ef] px-5 text-base leading-normal font-medium tracking-[-0.04em] text-[#404040] transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:w-[106px] md:self-auto"
+          className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center self-start rounded-[7px] bg-[#f5f4ef] px-5 text-base leading-normal font-medium tracking-[-0.04em] text-[#404040] transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:w-[106px] md:self-auto"
         >
           {COOKIE_BUTTON_LABEL}
         </button>

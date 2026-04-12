@@ -1,6 +1,5 @@
 import { RequestForm } from "@/shared/ui/request-form";
 import Image from "next/image";
-import type { CSSProperties } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 const LEAD_CTA_IMAGE = {
@@ -13,7 +12,7 @@ export function HomeLeadCta() {
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
         <div className="rounded-[24px] bg-white">
-          <div className="relative aspect-square overflow-hidden rounded-[20px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
+          <div className="relative aspect-square overflow-hidden rounded-[18px] md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
             <Image
               src={LEAD_CTA_IMAGE.src}
               alt={LEAD_CTA_IMAGE.alt}
@@ -24,21 +23,10 @@ export function HomeLeadCta() {
           </div>
         </div>
         <div
-          className="rounded-[24px] bg-[var(--accent)] px-5 py-5 text-white md:px-8 md:py-8 xl:px-[37px] xl:py-[43px]"
-          style={
-            {
-              "--heading": "#ffffff",
-              "--text-muted": "rgba(255,255,255,0.82)",
-              "--text": "#ffffff",
-              "--field-text": "rgba(255,255,255,0.64)",
-              "--field-border": "rgba(255,255,255,0.3)",
-              "--accent": "#0252c5",
-              "--accent-hover": "#0144a3",
-            } as CSSProperties
-          }
-        >
+          className="rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] text-white p-[18px] md:p-[55px] xl:p-[72px]">
           <PageSubheading
             title="Отправим примеры мерча"
+						titleClassName="text-white"
             description="На основе наших работ для 500+ компаний в 2025 году"
             descriptionPlacement="bottom"
             descriptionClassName="text-white"

@@ -3,8 +3,8 @@
 import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
 import Image from "next/image";
-import { forwardRef } from "react";
 import type { ComponentPropsWithoutRef } from "react";
+import { forwardRef } from "react";
 import { DIGEST_CTA_LABEL, type HomeDigestCard, type HomeDigestDefaultCard, type HomeDigestWildCard } from "./home-digest.data";
 
 export type DigestCardLayout = "mobile" | "grid";
@@ -49,7 +49,7 @@ const DigestRequestButton = forwardRef<HTMLButtonElement, DigestRequestButtonPro
         ref={ref}
         type={type ?? "button"}
         className={cn(
-          "group flex h-[52px] w-full cursor-pointer items-center justify-center rounded-[8px] px-6 text-center text-[16px] font-semibold tracking-[-0.02em] transition-colors duration-200",
+          "group flex h-[52px] w-full cursor-pointer items-center justify-center rounded-[7px] px-6 text-center text-[16px] font-semibold tracking-[-0.02em] transition-colors duration-200",
           isLight
             ? "bg-[#f5f4ef] text-[var(--accent)] hover:bg-white"
             : "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]",
@@ -78,7 +78,7 @@ function DigestDefaultCard({
   return (
     <article
       className={cn(
-        "flex h-full flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]",
+        "flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]",
         isMobile ? "min-h-[420px]" : "",
       )}
     >
@@ -105,7 +105,7 @@ function DigestDefaultCard({
         <div className="pt-[22px] md:pt-6">
           <RequestDialog>
             <DigestRequestButton
-              className="h-[48px] rounded-[8px] text-lg transition-colors duration-200 md:h-[47px]"
+              className="h-[48px] rounded-[7px] text-lg transition-colors duration-200 md:h-[47px]"
               label={DIGEST_CTA_LABEL}
               variant="accent"
             />
@@ -193,7 +193,7 @@ function DigestWildCard({
           <RequestDialog>
             <DigestRequestButton
               className={cn(
-                "rounded-[8px] text-[16px] transition-colors duration-200 h-[47px] w-full",
+                "rounded-[7px] text-[16px] transition-colors duration-200 h-[47px] w-full",
               )}
               label={DIGEST_CTA_LABEL}
               variant="light"

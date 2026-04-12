@@ -92,7 +92,7 @@ export function RequestForm({
         </label>
       </div>
 
-      <Button type="submit" variant="blue" className={cn("w-full cursor-pointer", submitClassName)}>
+      <Button type="submit" variant="blue" className={cn("w-full h-[47px] text-lg cursor-pointer", submitClassName)}>
         {submitLabel}
       </Button>
     </form>

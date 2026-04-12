@@ -44,7 +44,7 @@ export function ArticleSummarySection({ section }: ArticleSummarySectionProps) {
   return (
     <section className="mb-[63px] md:mb-[72px] xl:mb-[90px]" aria-label={section.title}>
       <div className="grid gap-5 md:gap-6 xl:grid-cols-[minmax(0,1114px)_minmax(0,586px)] xl:gap-10">
-        <div className="relative order-2 overflow-hidden rounded-[20px] bg-[var(--accent)] px-5 py-5 text-white md:px-[30px] md:py-8 xl:order-1 xl:min-h-[418px] xl:rounded-[25px] xl:px-20 xl:py-[76px]">
+        <div className="relative order-2 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] px-5 py-5 text-white md:px-[30px] md:py-8 xl:order-1 xl:min-h-[418px] xl:rounded-[25px] xl:px-20 xl:py-[76px]">
           <SummaryDecoration />
 
           <div className="relative z-10 max-w-[962px]">
@@ -65,7 +65,7 @@ export function ArticleSummarySection({ section }: ArticleSummarySectionProps) {
           </div>
         </div>
 
-        <div className="relative order-1 aspect-[340/256] overflow-hidden rounded-[20px] bg-white md:aspect-[586/418] xl:order-2 xl:rounded-[25px]">
+        <div className="relative order-1 aspect-[340/256] overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white md:aspect-[586/418] xl:order-2">
           <Image
             src={section.image.url}
             alt={section.image.alt}

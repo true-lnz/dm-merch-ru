@@ -22,7 +22,7 @@ export function ArticleHero({ article }: ArticleHeroProps) {
         {article.pageTitle}
       </h1>
 
-      <div className="mt-8 overflow-hidden rounded-[20px] bg-white md:mt-10 xl:mt-[59px]">
+      <div className="mt-8 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white md:mt-10 xl:mt-[59px]">
         <div className="relative aspect-[1740/400] min-h-[220px] w-full md:min-h-[320px] xl:min-h-0">
           <Image
             src={article.heroImage.url}

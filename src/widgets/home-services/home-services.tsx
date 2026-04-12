@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/shared/lib/cn";
 import { RequestDialog } from "@/features/request-dialog";
+import { cn } from "@/shared/lib/cn";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import Image from "next/image";
 
@@ -53,7 +53,7 @@ type ServiceCardProps = {
 
 function ServiceCard({ title, description }: ServiceCardProps) {
   return (
-    <article className="relative flex min-h-[200px] flex-col rounded-[24px] bg-[var(--card-bg)] p-[18px] md:min-h-[245px] md:p-[27px]">
+    <article className="relative flex min-h-[200px] flex-col rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)] p-[18px] md:min-h-[245px] md:p-[27px]">
       <Image
         src="/icons/ic_feature.svg"
         alt=""
@@ -91,8 +91,8 @@ export function HomeServices() {
           ))}
         </div>
 
-        <div className="rounded-[24px] bg-white xl:self-stretch">
-          <div className="relative overflow-hidden rounded-[20px] bg-white aspect-square xl:aspect-auto xl:h-full">
+        <div className="rounded-[18px] md:rounded-[22.5px] bg-white xl:self-stretch">
+          <div className="relative overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white aspect-square xl:aspect-auto xl:h-full">
             <Image
               src={SERVICES_IMAGE.src}
               alt={SERVICES_IMAGE.alt}

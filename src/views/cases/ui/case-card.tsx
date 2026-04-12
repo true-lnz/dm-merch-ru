@@ -208,7 +208,7 @@ function ThumbnailButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "relative flex-1 cursor-pointer overflow-hidden rounded-[8px] border-2 border-[var(--card-bg)] bg-white transition-colors",
+        "relative flex-1 cursor-pointer overflow-hidden rounded-[7px] border-2 border-[var(--card-bg)] bg-white transition-colors",
         isActive && "border-[var(--accent)]"
       )}
       aria-pressed={isActive}

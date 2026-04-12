@@ -70,9 +70,9 @@ export function HomeReviews() {
       <PageSubheading title={TESTIMONIALS_TITLE} />
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)] xl:gap-[40px]">
-        <div className="rounded-[24px] bg-[var(--card-bg)] p-5 md:p-8">
+        <div className="rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)] p-5 md:p-8">
           <div className="flex items-center gap-4">
-            <div className="relative size-[70px] overflow-hidden rounded-[20px] bg-white">
+            <div className="relative size-[70px] overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white">
               <Image src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="70px" className="object-cover" />
             </div>
             <div>
@@ -90,7 +90,7 @@ export function HomeReviews() {
           </div>
         </div>
 
-        <div className="relative min-h-[320px] overflow-hidden rounded-[24px] bg-[var(--card-bg)] xl:min-h-[616px]">
+        <div className="relative min-h-[320px] overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)] xl:min-h-[616px]">
           {TESTIMONIALS.map((item, index) => (
             <div
               key={item.company}
