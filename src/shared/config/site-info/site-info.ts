@@ -22,6 +22,7 @@ export const siteInfo = {
       href: "#",
     },
   ] satisfies SocialLink[],
+  privacyHref: "/privacy",
   privacyLabel: "Политика конфиденциальности",
   copyright: `${new Date().getFullYear()} © Все права защищены`,
 };

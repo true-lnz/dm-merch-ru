@@ -1,6 +1,6 @@
+import { PageHeading } from "@/shared/ui/page-heading";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { PageHeading } from "@/shared/ui/page-heading";
 
 type PrivacyBlock =
   | { type: "paragraph"; text: string }
@@ -127,7 +127,7 @@ async function getPrivacyContent() {
   const filePath = path.join(
     process.cwd(),
     "public",
-    "Политика в отношении обработки персональных данных.md",
+    "policy.md",
   );
   const markdown = await fs.readFile(filePath, "utf8");
   return parsePrivacyMarkdown(markdown);
