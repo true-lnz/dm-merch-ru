@@ -57,7 +57,7 @@ export function HomeResults() {
 
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-      <div className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-x-10 xl:gap-y-0">
+      <div className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-x-[16px] xl:gap-y-0">
         <div className="order-1 xl:order-1">
           <PageSubheading
             title={RESULTS_TITLE}

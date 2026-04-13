@@ -1,8 +1,8 @@
-import { cn } from "@/shared/lib/cn";
-import { buttonVariants } from "@/shared/ui/button";
+﻿import { cn } from "@/shared/lib/cn";
+import { Button, buttonVariants } from "@/shared/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
 
 type ContentCardImage = {
   url: string;
@@ -17,8 +17,11 @@ export type ContentCardProps = {
   title: ReactNode;
   excerpt?: string | null;
   href?: string;
+  hrefTarget?: "_self" | "_blank";
+  hrefRel?: string;
+  ctaLabel?: string;
+  onCtaClick?: MouseEventHandler<HTMLButtonElement>;
   image: ContentCardImage;
-  renderCta?: boolean;
   imageDisplayMode?: "3/2" | "1/1" | "auto";
 };
 
@@ -26,13 +29,41 @@ export function ContentCard({
   title,
   excerpt,
   href,
+  hrefTarget = "_self",
+  hrefRel,
+  ctaLabel = "Перейти",
+  onCtaClick,
   image,
-  renderCta,
   imageDisplayMode = "3/2",
 }: ContentCardProps) {
   const hasExcerpt = excerpt?.trim();
-  const imageAspectClass =
-    imageDisplayMode === "1/1" ? "aspect-square" : "aspect-[3/2]";
+  const imageAspectClass = imageDisplayMode === "1/1" ? "aspect-square" : "aspect-[3/2]";
+
+  function renderCta() {
+    if (onCtaClick) {
+      return (
+        <Button type="button" variant="blue" onClick={onCtaClick} aria-label={ctaLabel}>
+          {ctaLabel}
+        </Button>
+      );
+    }
+
+    if (!href) {
+      return null;
+    }
+
+    return (
+      <Link
+        href={href}
+        target={hrefTarget}
+        rel={hrefTarget === "_blank" ? hrefRel ?? "noreferrer" : hrefRel}
+        aria-label={`Открыть: ${title}`}
+        className={buttonVariants({ variant: "blue" })}
+      >
+        {ctaLabel}
+      </Link>
+    );
+  }
 
   if (imageDisplayMode === "auto") {
     return (
@@ -51,19 +82,9 @@ export function ContentCard({
             <h3 className="font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
               {title}
             </h3>
-            {hasExcerpt ? <p className="text-sm text-[var(--text-muted)]">{hasExcerpt}</p> : null}
+            {hasExcerpt ? <p className="text-xs sm:text-sm md:text-base text-[var(--text-muted)]">{hasExcerpt}</p> : null}
           </div>
-          <div className="mt-auto pt-4 md:pt-5">
-            {renderCta ?? (href ? (
-              <Link
-                href={href}
-                aria-label={href ? `Открыть: ${title}` : "Открыть карточку"}
-                className={buttonVariants()}
-              >
-                Подробнее
-              </Link>
-            ) : null)}
-          </div>
+          <div className="mt-auto pt-4 md:pt-5 text-base md:text-lg">{renderCta()}</div>
         </div>
       </article>
     );
@@ -86,17 +107,7 @@ export function ContentCard({
         </h3>
         {hasExcerpt ? <p className="text-sm text-[var(--text-muted)]">{hasExcerpt}</p> : null}
       </div>
-      <div className="mt-auto p-4 pt-0 md:p-5 md:pt-0">
-        {renderCta ?? (href ? (
-          <Link
-            href={href}
-            aria-label={href ? `Открыть: ${title}` : "Открыть карточку"}
-            className={buttonVariants()}
-          >
-            Перейти
-          </Link>
-        ) : null)}
-      </div>
+      <div className="mt-auto p-4 pt-0 md:p-5 md:pt-0">{renderCta()}</div>
     </article>
   );
 }
