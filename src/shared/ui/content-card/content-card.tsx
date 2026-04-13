@@ -22,7 +22,7 @@ export type ContentCardProps = {
   ctaLabel?: string;
   onCtaClick?: MouseEventHandler<HTMLButtonElement>;
   image: ContentCardImage;
-  imageDisplayMode?: "3/2" | "1/1" | "auto";
+  imageContainerClassName?: string;
 };
 
 export function ContentCard({
@@ -34,10 +34,10 @@ export function ContentCard({
   ctaLabel = "Перейти",
   onCtaClick,
   image,
-  imageDisplayMode = "3/2",
+  imageContainerClassName,
 }: ContentCardProps) {
   const hasExcerpt = excerpt?.trim();
-  const imageAspectClass = imageDisplayMode === "1/1" ? "aspect-square" : "aspect-[3/2]";
+  const imageAspectClass = imageContainerClassName ?? "aspect-[3/2]";
 
   function renderCta() {
     if (onCtaClick) {
@@ -65,31 +65,6 @@ export function ContentCard({
     );
   }
 
-  if (imageDisplayMode === "auto") {
-    return (
-      <article className="flex h-full aspect-square flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]">
-        <div className="relative h-1/2 w-full overflow-hidden bg-[var(--surface)]">
-          <Image
-            src={image.url}
-            alt={image.alt}
-            fill
-            sizes={image.sizes ?? "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"}
-            className={cn("object-cover", image.className)}
-          />
-        </div>
-        <div className="flex h-1/2 flex-col p-5 md:p-7">
-          <div className="space-y-2">
-            <h3 className="font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
-              {title}
-            </h3>
-            {hasExcerpt ? <p className="text-xs sm:text-sm md:text-base text-[var(--text-muted)]">{hasExcerpt}</p> : null}
-          </div>
-          <div className="mt-auto pt-4 md:pt-5 text-base md:text-lg">{renderCta()}</div>
-        </div>
-      </article>
-    );
-  }
-
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]">
       <div className={cn("relative w-full overflow-hidden bg-[var(--surface)]", imageAspectClass)}>
@@ -98,16 +73,18 @@ export function ContentCard({
           alt={image.alt}
           fill
           sizes={image.sizes ?? "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"}
-          className={cn("object-cover", image.className)}
+          className={cn("object-cover object-top", image.className)}
         />
       </div>
-      <div className="space-y-2 p-5 md:p-7">
-        <h3 className="font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
-          {title}
-        </h3>
-        {hasExcerpt ? <p className="text-sm text-[var(--text-muted)]">{hasExcerpt}</p> : null}
-      </div>
-      <div className="mt-auto p-4 pt-0 md:p-5 md:pt-0">{renderCta()}</div>
+			<div className="flex flex-1 flex-col p-[18px] md:p-[27px]">
+				<div className="flex flex-1 flex-col justify-between gap-[9px] mb-[18px] md:mb-[22px]">
+					<h3 className="xl:whitespace-pre-line font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
+						{title}
+					</h3>
+					{hasExcerpt ? <p className="text-xs sm:text-sm md:text-base text-[var(--text-muted)]">{hasExcerpt}</p> : null}
+				</div>
+				<div className="mt-auto">{renderCta()}</div>
+			</div>
     </article>
   );
 }

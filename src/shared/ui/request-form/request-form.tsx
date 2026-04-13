@@ -53,6 +53,8 @@ export function RequestForm({
     <form
       data-surface={onAccentSurface ? "accent" : "default"}
       className={cn("group/form space-y-4", formClassName)}
+      action="/request-success"
+      target="_blank"
       noValidate
     >
       <label className="block">

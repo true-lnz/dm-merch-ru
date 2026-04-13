@@ -6,7 +6,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
     id: "1",
     slug: "kak-merch-vliyaet-na-imidzh-i-uznavaemost-brenda",
     title: "Как мерч влияет на имидж и узнаваемость бренда",
-    excerpt: "Почему фирменный мерч усиливает образ компании и помогает запоминаться.",
+    excerpt: "",
     image: {
       url: "/blog/blog-brand-image.jpg",
       alt: "Модели в брендированной одежде",

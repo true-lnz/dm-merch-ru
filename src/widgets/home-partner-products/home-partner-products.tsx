@@ -1,13 +1,13 @@
 ﻿"use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
 import { ContentCard } from "@/shared/ui/content-card";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import { SliderControl } from "@/shared/ui/slider-control";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 type HomeProductItem = {
   title: string;
@@ -25,68 +25,68 @@ const PARTNER_PRODUCTS_DESCRIPTION =
 
 const PARTNER_PRODUCTS = [
   {
-    title: "Футболки и поло",
-    description: "Для команды, мероприятий и повседневного использования.",
+    title: "Футболки \nи поло",
+    description: "Для команды, мероприятий и повседневного использования",
     imageUrl: "/home/partner-products/01-futbolki-i-polo.png",
     href: "https://gifts.ru/",
   },
   {
     title: "ТОЛСТОВКИ",
-    description: "Базовый элемент корпоративного мерча. Актуально вне сезона.",
+    description: "Базовый элемент корпоративного мерча. Актуально вне сезона",
     imageUrl: "/home/partner-products/02-tolstovki.png",
     href: "https://gifts.ru/",
   },
   {
     title: "РУБАШКИ",
-    description: "Фирменный стиль для деловых задач. Ваш профессиональный имидж.",
+    description: "Фирменный стиль для деловых задач. Ваш профессиональный имидж",
     imageUrl: "/home/partner-products/03-rubashki.png",
     href: "https://gifts.ru/",
   },
   {
     title: "безрукавки",
-    description: "Когда важно, чтобы бренд сопровождал команду не только в офисе.",
+    description: "Когда важно, чтобы бренд сопровождал команду не только в офисе",
     imageUrl: "/home/partner-products/04-bezrukavki.png",
     href: "https://gifts.ru/",
   },
   {
     title: "дождевики",
-    description: "Для команды, мероприятий и повседневного использования.",
+    description: "Для команды, мероприятий и повседневного использования",
     imageUrl: "/home/partner-products/05-dozhdeviki.png",
     href: "https://gifts.ru/",
   },
   {
     title: "бомберы",
-    description: "Базовый элемент корпоративного мерча. Актуально вне сезона.",
+    description: "Базовый элемент корпоративного мерча. Актуально вне сезона",
     imageUrl: "/home/partner-products/06-bombery.png",
     href: "https://gifts.ru/",
   },
   {
-    title: "ГОЛОВНЫЕ УБОРЫ",
-    description: "Легко носить. Легко масштабировать. Легко узнать бренд.",
+    title: "ГОЛОВНЫЕ\nУБОРЫ",
+    description: "Легко носить. Легко масштабировать. Легко узнать бренд",
     imageUrl: "/home/partner-products/07-golovnye-ubory.png",
     href: "https://gifts.ru/",
   },
   {
-    title: "СУМКИ И РЮКЗАКИ",
-    description: "Чем чаще используют — тем сильнее работает бренд.",
+    title: "СУМКИ \nИ РЮКЗАКИ",
+    description: "Чем чаще используют — тем сильнее работает бренд",
     imageUrl: "/home/partner-products/08-sumki-i-ryukzaki.png",
     href: "https://gifts.ru/",
   },
   {
     title: "ЭЛЕКТРОНИКА",
-    description: "Работает на узнаваемость за счёт постоянного использования.",
+    description: "Работает на узнаваемость за счёт постоянного использования",
     imageUrl: "/home/partner-products/09-elektronika.png",
     href: "https://gifts.ru/",
   },
   {
-    title: "Деловые аксессуары",
-    description: "Детали, которые формируют образ компании.",
+    title: "Деловые\nаксессуары",
+    description: "Детали, которые формируют образ компании",
     imageUrl: "/home/partner-products/10-delovye-aksessuary.png",
     href: "https://gifts.ru/",
   },
   {
     title: "СУВЕНИРНАЯ ПРОДУКЦИЯ",
-    description: "Подарок с идеей, который делает отношения теплее.",
+    description: "Подарок с идеей, который делает отношения теплее",
     imageUrl: "/home/partner-products/11-suvenirnaya-produkciya.png",
     href: "https://gifts.ru/",
   },
@@ -108,7 +108,7 @@ function ProductCard({ item }: { item: HomeProductItem }) {
       hrefRel="noreferrer"
       ctaLabel="Узнать подробнее"
       image={{ url: item.imageUrl, alt: item.title, width: 413, height: 400 }}
-      imageDisplayMode="1/1"
+      imageContainerClassName="aspect-square"
     />
   );
 }

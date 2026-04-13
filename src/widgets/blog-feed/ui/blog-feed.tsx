@@ -16,7 +16,7 @@ export function BlogFeed({ posts }: BlogFeedProps) {
             excerpt={post.excerpt}
             href={post.href}
             image={post.image}
-            imageDisplayMode="auto"
+            imageContainerClassName="aspect-18/9 object-top"
           />
         ))}
       </div>
