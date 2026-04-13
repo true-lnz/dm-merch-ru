@@ -2,6 +2,7 @@
 
 import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
+import { WidowFix } from "@/shared/ui/widow-fix";
 import { FaqSection } from "@/widgets/faq-section";
 import { useMemo, useState } from "react";
 import { PageHeading } from "../../../shared/ui/page-heading";
@@ -25,6 +26,7 @@ export function CasesPage() {
 
   return (
     <>
+      <WidowFix />
       <PageHeading
         title="Кейсы"
         breadcrumb={{

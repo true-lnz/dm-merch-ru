@@ -1,4 +1,5 @@
 import { RequestCta } from "@/features/request-cta";
+import { WidowFix } from "@/shared/ui/widow-fix";
 import { FaqSection } from "@/widgets/faq-section";
 import { HomeDigest } from "@/widgets/home-digest";
 import { HomeBenefits, HomeFeatures } from "@/widgets/home-feature-cards/home-feature-cards";
@@ -14,6 +15,7 @@ import { HomeWorkStages } from "@/widgets/home-work-stages";
 export function HomePage() {
   return (
     <>
+      <WidowFix />
       <HomeHero />
       <HomeDigest />
       <HomeResults />
