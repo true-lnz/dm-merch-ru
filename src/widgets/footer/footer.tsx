@@ -36,7 +36,12 @@ export function Footer() {
         <p className="order-2 mb-6 text-xs leading-normal md:mb-0 md:text-lg lg:order-1">
           {siteInfo.copyright}
         </p>
-        <Link href="/privacy" className="order-1 w-fit text-xs leading-normal transition-opacity hover:opacity-80 md:text-lg lg:order-2">
+        <Link
+          href={siteInfo.privacyHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="order-1 w-fit text-xs leading-normal transition-opacity hover:opacity-80 md:text-lg lg:order-2"
+        >
           {siteInfo.privacyLabel}
         </Link>
       </div>
