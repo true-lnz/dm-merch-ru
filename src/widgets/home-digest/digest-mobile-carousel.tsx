@@ -1,7 +1,7 @@
 "use client";
 
-import { SliderControl } from "@/shared/ui/slider-control";
 import { cn } from "@/shared/lib/cn";
+import { SliderControl } from "@/shared/ui/slider-control";
 import { useEffect, useRef, useState } from "react";
 import { DigestCard } from "./digest-card";
 import type { HomeDigestCard } from "./home-digest.data";
@@ -119,7 +119,7 @@ export function DigestMobileCarousel({ cards, className }: DigestMobileCarouselP
   }
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("relative flex flex-col", className)}>
       <div
         className="relative"
         style={carouselHeight > 0 ? { height: `${carouselHeight}px` } : undefined}
@@ -144,7 +144,7 @@ export function DigestMobileCarousel({ cards, className }: DigestMobileCarouselP
       </div>
 
       <SliderControl
-        className="mt-5"
+        className="mt-5 self-center"
         onPrevClick={() => commitCardChange(activeIndex - 1)}
         onNextClick={() => commitCardChange(activeIndex + 1)}
         prevDisabled={activeIndex === 0}

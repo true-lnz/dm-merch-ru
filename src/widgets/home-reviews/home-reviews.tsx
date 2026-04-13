@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/shared/lib/cn";
+import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
 import { useState } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
@@ -64,33 +65,15 @@ const TESTIMONIALS = [
 export function HomeReviews() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeItem = TESTIMONIALS[activeIndex];
+  const isFirstSlide = activeIndex === 0;
+  const isLastSlide = activeIndex === TESTIMONIALS.length - 1;
 
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <PageSubheading title={TESTIMONIALS_TITLE} />
 
-      <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)] xl:gap-[40px]">
-        <div className="rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)] p-5 md:p-8">
-          <div className="flex items-center gap-4">
-            <div className="relative size-[70px] overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white">
-              <Image src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="70px" className="object-cover" />
-            </div>
-            <div>
-              <p className="font-heading text-[28px] leading-none uppercase text-[var(--heading)] md:text-4xl">{activeItem.name}</p>
-              <p className="mt-1 text-[13px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[15px]">{activeItem.role}</p>
-            </div>
-          </div>
-
-          <h3 className="mt-5 font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{activeItem.company}</h3>
-
-          <div className="mt-5 space-y-4 text-xs sm:text-sm lg:text-lg leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
-            {activeItem.quote.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
-        </div>
-
-        <div className="relative min-h-[320px] overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)] xl:min-h-[616px]">
+      <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:gap-0">
+        <div className="relative min-h-[320px] overflow-hidden rounded-[18px] bg-[var(--card-bg)] md:rounded-[22.5px] lg:col-span-7 lg:min-h-[616px]">
           {TESTIMONIALS.map((item, index) => (
             <div
               key={item.company}
@@ -103,27 +86,42 @@ export function HomeReviews() {
                 src={item.image.src}
                 alt={item.image.alt}
                 fill
-                sizes="(max-width: 1279px) 100vw, 54vw"
+                sizes="(max-width: 1023px) 100vw, 58vw"
                 className="object-cover"
               />
             </div>
           ))}
         </div>
-      </div>
 
-      <div className="mt-6 flex justify-center gap-[18px]">
-        {TESTIMONIALS.map((item, index) => (
-          <button
-            key={item.company}
-            type="button"
-            onClick={() => setActiveIndex(index)}
-            className={cn(
-              "h-1.5 rounded-full bg-[var(--border)] transition-all",
-              index === activeIndex ? "w-10 bg-[var(--accent)]" : "w-3",
-            )}
-            aria-label={`Показать отзыв: ${item.company}`}
+        <div className="flex flex-col rounded-[18px] bg-[var(--accent)] p-5 text-white md:rounded-[22.5px] md:p-8 lg:col-span-5">
+          <div className="flex items-center gap-4">
+            <div className="relative size-[70px] overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white">
+              <Image src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="70px" className="object-cover" />
+            </div>
+            <div>
+              <p className="font-heading text-[28px] leading-none uppercase md:text-4xl">{activeItem.name}</p>
+              <p className="mt-1 text-[13px] leading-[1.35] tracking-[-0.03em] text-white/80 md:text-[15px]">{activeItem.role}</p>
+            </div>
+          </div>
+
+          <h3 className="mt-5 font-heading text-3xl leading-none uppercase md:text-4xl">{activeItem.company}</h3>
+
+          <div className="mt-5 space-y-4 text-xs leading-[1.35] tracking-[-0.03em] text-white/80 sm:text-sm lg:text-lg">
+            {activeItem.quote.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+
+          <SliderControl
+            className="mt-auto"
+            onPrevClick={() => setActiveIndex((currentIndex) => currentIndex - 1)}
+            onNextClick={() => setActiveIndex((currentIndex) => currentIndex + 1)}
+            prevDisabled={isFirstSlide}
+            nextDisabled={isLastSlide}
+            prevAriaLabel={`Предыдущий отзыв (${activeIndex + 1} из ${TESTIMONIALS.length})`}
+            nextAriaLabel={`Следующий отзыв (${activeIndex + 1} из ${TESTIMONIALS.length})`}
           />
-        ))}
+        </div>
       </div>
     </section>
   );

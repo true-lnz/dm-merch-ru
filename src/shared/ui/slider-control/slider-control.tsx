@@ -21,7 +21,7 @@ export function SliderControl({
   nextAriaLabel,
 }: SliderControlProps) {
   return (
-    <div className={cn("flex items-center justify-center gap-[18px]", className)}>
+    <div className={cn("flex items-center gap-[18px]", className)}>
       <button
         type="button"
         onClick={onPrevClick}

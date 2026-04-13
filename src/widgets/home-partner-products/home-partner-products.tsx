@@ -155,7 +155,7 @@ export function HomePartnerProducts() {
         descriptionClassName="max-w-[35.0625rem]"
       />
 
-      <div className="mt-8 md:hidden">
+      <div className="mt-8 md:hidden flex flex-col">
         <article className="flex h-full flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]">
           <div
             className={cn(
@@ -186,7 +186,7 @@ export function HomePartnerProducts() {
           </div>
         </article>
         <SliderControl
-          className="mt-5"
+          className="mt-5 self-center"
           onPrevClick={() => commitCardChange(activeIndex - 1)}
           onNextClick={() => commitCardChange(activeIndex + 1)}
           prevDisabled={activeIndex === 0}
