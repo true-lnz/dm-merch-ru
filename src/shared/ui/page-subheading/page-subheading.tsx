@@ -63,7 +63,7 @@ export function PageSubheading({
       <div
         className={cn(
           "max-w-[44rem] text-xs sm:text-lg xl:text-2xl leading-[1.35] tracking-[-0.03em] text-[#404040]",
-          descriptionPlacement === "side",
+          descriptionPlacement === "side" && "mb-[10px]",
           descriptionPlacement === "side" &&
             sideDescriptionLayout === "three-columns-middle" &&
             "xl:col-start-2 xl:justify-self-stretch",
