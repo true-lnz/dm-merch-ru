@@ -92,7 +92,7 @@ function DigestDefaultCard({
         />
       </div>
 
-      <div className="flex flex-1 flex-col px-5 pb-5 pt-[18px] md:px-[30px] md:pb-[30px] md:pt-[30px]">
+      <div className="flex flex-1 flex-col px-5 pb-5 p-[18px] md:p-[27px]">
         <div className={cn("flex-1", contentTransitionClass)}>
           <h3 className="font-heading text-3xl md:text-5xl leading-[0.94] tracking-[0.015em] text-[var(--heading)] uppercase">
             {item.title}
@@ -155,8 +155,8 @@ function DigestWildCard({
         className={cn(
           "min-w-0 overflow-hidden bg-[var(--accent)] text-white",
           isMobile
-            ? "flex flex-1 flex-col px-5 pb-5 pt-[18px]"
-            : "flex flex-[0_0_calc(50%+15px)] flex-col px-7 pb-7 pt-8 md:px-10 md:pb-[30px] md:pt-[34px] xl:px-[40px] xl:pt-[50px]",
+            ? "flex flex-1 flex-col p-[18px]"
+            : "flex flex-[0_0_calc(50%+15px)] flex-col py-[27px] px-[36px] pt-[36px]",
         )}
         style={{
           backgroundImage: `url("${item.backgroundImageSrc}")`,
@@ -168,7 +168,7 @@ function DigestWildCard({
         <div className={cn("flex flex-1 flex-col", isMobile ? contentTransitionClass : "")}>
           <h3
             className={cn(
-              "font-heading leading-[0.94] tracking-[0.015em] uppercase",
+              "font-heading whitespace-pre-line leading-[0.94] tracking-[0.015em] uppercase",
               isMobile ? "text-3xl" : "text-4xl md:text-5xl",
             )}
           >

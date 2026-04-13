@@ -5,6 +5,7 @@ type PageSubheadingProps = {
   title: ReactNode;
   description?: ReactNode;
   descriptionPlacement?: "side" | "bottom";
+  sideDescriptionLayout?: "two-columns" | "three-columns-middle";
   className?: string;
   containerClassName?: string;
   titleClassName?: string;
@@ -15,6 +16,7 @@ export function PageSubheading({
   title,
   description,
   descriptionPlacement = "bottom",
+  sideDescriptionLayout = "two-columns",
   className,
   containerClassName,
   titleClassName,
@@ -39,7 +41,12 @@ export function PageSubheading({
       className={cn(
         "flex gap-5",
         descriptionPlacement === "side"
-          ? "flex-col xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(280px,0.52fr)] xl:items-end xl:gap-10"
+          ? cn(
+              "flex-col xl:grid xl:items-end xl:gap-10",
+              sideDescriptionLayout === "three-columns-middle"
+                ? "xl:grid-cols-3"
+                : "xl:grid-cols-[minmax(0,1fr)_minmax(280px,0.52fr)]",
+            )
           : "flex-col",
         className,
         containerClassName,
@@ -57,6 +64,9 @@ export function PageSubheading({
         className={cn(
           "max-w-[44rem] text-xs sm:text-lg xl:text-2xl leading-[1.35] tracking-[-0.03em] text-[#404040]",
           descriptionPlacement === "side" && "xl:justify-self-end xl:pb-2",
+          descriptionPlacement === "side" &&
+            sideDescriptionLayout === "three-columns-middle" &&
+            "xl:col-start-2 xl:justify-self-stretch",
           descriptionClassName,
         )}
       >

@@ -19,6 +19,7 @@ export type ContentCardProps = {
   href?: string;
   image: ContentCardImage;
   renderCta?: boolean;
+  imageDisplayMode?: "3/2" | "1/1" | "auto";
 };
 
 export function ContentCard({
@@ -27,12 +28,50 @@ export function ContentCard({
   href,
   image,
   renderCta,
+  imageDisplayMode = "3/2",
 }: ContentCardProps) {
   const hasExcerpt = excerpt?.trim();
+  const imageAspectClass =
+    imageDisplayMode === "1/1" ? "aspect-square" : "aspect-[3/2]";
+
+  if (imageDisplayMode === "auto") {
+    return (
+      <article className="flex h-full aspect-square flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]">
+        <div className="relative h-1/2 w-full overflow-hidden bg-[var(--surface)]">
+          <Image
+            src={image.url}
+            alt={image.alt}
+            fill
+            sizes={image.sizes ?? "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"}
+            className={cn("object-cover", image.className)}
+          />
+        </div>
+        <div className="flex h-1/2 flex-col p-5 md:p-7">
+          <div className="space-y-2">
+            <h3 className="font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
+              {title}
+            </h3>
+            {hasExcerpt ? <p className="text-sm text-[var(--text-muted)]">{hasExcerpt}</p> : null}
+          </div>
+          <div className="mt-auto pt-4 md:pt-5">
+            {renderCta ?? (href ? (
+              <Link
+                href={href}
+                aria-label={href ? `Открыть: ${title}` : "Открыть карточку"}
+                className={buttonVariants()}
+              >
+                Подробнее
+              </Link>
+            ) : null)}
+          </div>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]">
-      <div className="relative aspect-[553/250] w-full overflow-hidden bg-[var(--surface)]">
+      <div className={cn("relative w-full overflow-hidden bg-[var(--surface)]", imageAspectClass)}>
         <Image
           src={image.url}
           alt={image.alt}

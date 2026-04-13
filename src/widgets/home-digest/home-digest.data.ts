@@ -81,7 +81,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
     backgroundImageSrc: "/home/img_card_cover_home_digest_v1.svg",
     image: {
       src: "/home/digest-team.png",
-      alt: "Мерч для команды",
+      alt: "Мерч\nдля команды",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 480px, 413px",
       imageClassName: "object-cover object-top",
     },
