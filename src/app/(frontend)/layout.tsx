@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import { Toaster } from "@/shared/ui/sonner";
 import { CookieWarning } from "@/widgets/cookie-warning";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
-import { Toaster } from "@/shared/ui/sonner";
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
+  viewport: "width=device-width, initial-scale=1",
   title: {
     default: "Держи Марку!",
     template: "%s — Держи Марку!",
