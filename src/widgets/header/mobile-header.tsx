@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { ChevronDownIcon, XIcon } from "lucide-react";
 import type { HeaderNavigationItem } from "@/shared/config/navigation";
@@ -189,7 +189,6 @@ export function MobileHeaderBar({ onOpenMenu }: { onOpenMenu: () => void }) {
           alt="Держи Марку"
           width={273}
           height={37}
-          priority
           className="h-auto w-[147px] md:w-[178px]"
         />
       </Link>

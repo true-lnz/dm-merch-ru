@@ -2,11 +2,15 @@ import { Toaster } from "@/shared/ui/sonner";
 import { CookieWarning } from "@/widgets/cookie-warning";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  viewport: "width=device-width, initial-scale=1",
   title: {
     default: "Держи Марку!",
     template: "%s — Держи Марку!",

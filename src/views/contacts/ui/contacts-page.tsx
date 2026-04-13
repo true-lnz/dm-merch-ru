@@ -15,13 +15,7 @@ const contactLinks = [
   },
 ] as const;
 
-function ContactLeadLink({
-  href,
-  label,
-}: {
-  href: string;
-  label: string;
-}) {
+function ContactLeadLink({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
@@ -35,9 +29,7 @@ function ContactLeadLink({
 function ContactsMapCard() {
   return (
     <div>
-      <p className="mb-4 text-sm md:text-lg xl:text-xl tracking-[-0.04em] text-[#404040] xl:mb-[29px]">
-        {siteInfo.address}
-      </p>
+      <p className="my-4 text-sm md:text-lg xl:text-xl tracking-[-0.04em] text-[#404040] xl:my-[18px]">{siteInfo.address}</p>
 
       <div className="relative aspect-square overflow-hidden rounded-[12px] border-[5px] border-[var(--accent)] bg-white md:h-[360px] md:aspect-auto xl:h-[225px] xl:w-[550px] xl:max-w-full rounded-[18px] md:rounded-[22.5px] xl:border-[6px]">
         <YandexMapCard />
@@ -58,7 +50,7 @@ function MobileContactsHero() {
   return (
     <div className="mb-[70px] xl:hidden">
       <div className="overflow-hidden rounded-[18px] md:rounded-[22.5px] md:mx-auto md:max-w-[760px]">
-        <div className="relative aspect-[340/256] overflow-hidden md:aspect-[16/11]">
+        <div className="relative aspect-[340/256] overflow-hidden  md:aspect-[16/11]">
           <Image
             src="/contacts/img_contacts_cover.png"
             alt="Команда в фирменном мерче"
@@ -100,6 +92,7 @@ function DesktopContactsHero() {
           alt="Команда в фирменном мерче"
           fill
           priority
+          sizes="68vw"
           className="object-cover object-right-top"
         />
       </div>
@@ -132,9 +125,9 @@ export function ContactsPage() {
       <PageBreadcrumb
         className="mb-8 md:mb-10 xl:mb-5"
         item={{
-            labelFrom: "Главная",
-            labelTo: "Контакты",
-            href: "/",
+          labelFrom: "Главная",
+          labelTo: "Контакты",
+          href: "/",
         }}
       />
 

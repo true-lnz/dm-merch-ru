@@ -1,4 +1,4 @@
-import { headerNavigation } from "@/shared/config/navigation";
+﻿import { headerNavigation } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
 import {
 	NavigationMenu,
@@ -116,7 +116,6 @@ export function DesktopHeader({ pathname }: { pathname: string | null }) {
             alt="Держи Марку"
             width={273}
             height={37}
-            priority
             className="h-auto w-[178px] lg:w-[204px] xl:w-[273px]"
           />
         </Link>

@@ -49,12 +49,23 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
           <div className="flex w-full flex-col px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
             <div className="flex flex-col gap-5 xl:gap-[30px]">
               <PageHeading title={heading} />
-              <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">Ваша заявка уже у нас в работе.</p>
-              <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">Поможем подобрать продукцию, которая будет полезна бизнесу, понравится сотрудникам и усилит бренд.</p>
+              <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
+                Ваша заявка уже у нас в работе.
+              </p>
+              <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
+                Поможем подобрать продукцию, которая будет полезна бизнесу, понравится сотрудникам и усилит бренд.
+              </p>
             </div>
 
-            <div className="relative aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden">
-              <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill priority sizes="(max-width: 767px) calc(100vw - 60px), 420px" className="object-cover object-center" />
+            <div className="relative aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] mt-4 xl:hidden">
+              <Image
+                src={HERO_IMAGE.src}
+                alt={HERO_IMAGE.alt}
+                fill
+                priority
+                sizes="(max-width: 767px) calc(100vw - 60px), 420px"
+                className="object-cover object-center"
+              />
             </div>
 
             <div className="mt-8 sm:mt-0 flex flex-col gap-[10px] md:flex-row">
@@ -64,7 +75,14 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
               >
                 <span className="self-start pt-2">На главную</span>
                 <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-[5px] bg-white transition-colors duration-200 group-hover:bg-[var(--accent)] xl:size-[39.52px] xl:rounded-[4px]">
-                  <Image src={SECONDARY_ARROW_ICON_SRC} alt="" width={17} height={17} aria-hidden="true" className="size-[17px] transition-[transform,filter] duration-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:brightness-0 group-hover:invert xl:size-[13.55px]" />
+                  <Image
+                    src={SECONDARY_ARROW_ICON_SRC}
+                    alt=""
+                    width={17}
+                    height={17}
+                    aria-hidden="true"
+                    className="size-[17px] transition-[transform,filter] duration-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:brightness-0 group-hover:invert xl:size-[13.55px]"
+                  />
                 </span>
               </Link>
               <Link
@@ -72,7 +90,10 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
                 aria-label="MAX"
                 target="_blank"
                 rel="noreferrer"
-                className={cn(buttonVariants({ variant: "white" }), "group hidden h-[60px] w-[60px] items-center justify-center rounded-[9px] border-transparent bg-white p-0 text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] xl:flex")}
+                className={cn(
+                  buttonVariants({ variant: "white" }),
+                  "group hidden h-[60px] w-[60px] items-center justify-center rounded-[9px] border-transparent bg-white p-0 text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] xl:flex",
+                )}
               >
                 <svg viewBox="0 0 40 40" className="size-[40px] xl:size-[48px]" aria-hidden="true" fill="none">
                   <path d={VK_ICON_PATH} className="fill-[var(--accent)] transition-colors duration-200 group-hover:fill-white" />
@@ -83,7 +104,10 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
                 aria-label="MAX"
                 target="_blank"
                 rel="noreferrer"
-                className={cn(buttonVariants({ variant: "white" }), "group hidden h-[60px] w-[60px] items-center justify-center rounded-[9px] border-transparent bg-white p-0 text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] xl:flex")}
+                className={cn(
+                  buttonVariants({ variant: "white" }),
+                  "group hidden h-[60px] w-[60px] items-center justify-center rounded-[9px] border-transparent bg-white p-0 text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] xl:flex",
+                )}
               >
                 <svg viewBox="0 0 40 40" className="size-[40px] xl:size-[48px]" aria-hidden="true" fill="none">
                   <path d={MAX_ICON_PATH} className="fill-[var(--accent)] transition-colors duration-200 group-hover:fill-white" />

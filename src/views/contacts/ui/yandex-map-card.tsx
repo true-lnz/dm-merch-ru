@@ -39,6 +39,7 @@ type YandexGeoObject = Record<string, unknown>;
 const OFFICE_COORDINATES: [number, number] = [54.756355, 56.023118];
 const DEFAULT_ZOOM = 16;
 const MARKER_COLOR = "#0252c5";
+const YANDEX_MAPS_API_KEY = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
 const REMOVED_CONTROLS = [
   "searchControl",
   "trafficControl",
@@ -111,10 +112,18 @@ export function YandexMapCard() {
     };
   }, [scriptLoaded]);
 
+  if (!YANDEX_MAPS_API_KEY) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-[#f6f6f6] px-4 text-center text-sm text-[#666]">
+        Не задан ключ Яндекс Карт. Добавьте NEXT_PUBLIC_YANDEX_MAPS_API_KEY в .env.
+      </div>
+    );
+  }
+
   return (
     <>
       <Script
-        src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"
+        src={`https://api-maps.yandex.ru/2.1/?apikey=${encodeURIComponent(YANDEX_MAPS_API_KEY)}&lang=ru_RU`}
         strategy="lazyOnload"
         onLoad={() => setScriptLoaded(true)}
       />

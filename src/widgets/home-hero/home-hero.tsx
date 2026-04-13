@@ -22,19 +22,9 @@ const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 export function HomeHero() {
   return (
     <section className="mb-[63px] md:mb-[72px] xl:mb-[90px] mt-[36px] relative w-full overflow-visible">
-      <div
-        className="flex min-h-0 w-full justify-start xl:h-[80vh] xl:justify-start 2xl:h-[90vh]"
-      >
+      <div className="flex min-h-0 w-full justify-start xl:h-[80vh] xl:justify-start 2xl:h-[90vh]">
         <div className="pointer-events-none absolute inset-y-0 hidden right-[calc(var(--layout-side-padding)*-1)] w-[65%] xl:block 2xl:w-[55%]">
-          <Image
-            src={HERO_IMAGE.src}
-            alt={HERO_IMAGE.alt}
-            fill
-            priority
-            unoptimized
-            sizes="42vw"
-            className="object-cover object-[130%_top]"
-          />
+          <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill unoptimized sizes="42vw" className="object-cover object-[130%_top]" />
         </div>
 
         <div className="relative z-10 mb-16 flex w-full justify-center xl:block xl:w-1/2 xl:max-w-[50%]">
@@ -46,12 +36,11 @@ export function HomeHero() {
               </p>
             </div>
 
-            <div className="relative aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden">
+            <div className="relative aspect-[340/314] w-full overflow-hidden mt-4 md:aspect-[16/12] xl:hidden">
               <Image
                 src={HERO_IMAGE.src}
                 alt={HERO_IMAGE.alt}
                 fill
-                priority
                 sizes="(max-width: 767px) calc(100vw - 60px), 420px"
                 className="object-cover object-center"
               />

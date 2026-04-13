@@ -12,24 +12,20 @@ export function HomeUrgentOrder() {
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
-        <div
-          className="order-2 xl:order-1 flex flex-col rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] p-[18px] md:p-[55px] xl:p-[72px] text-white"
-        >
-          <PageSubheading
-            title={"Экспресс-мерч\n– когда нужно вчера"}
-						className="mb-[15px] xl:mb-[25px] xl:mb-[25px] tracking-[-0.09] text-white"
-          />
-					<p className="mb-[15px] xl:mb-[18px] text-xs md:text-base xl:text-2xl">
-						3 склада, собственные мощности и опыт срочных проектов. Однажды сделали 50 футболок за 3 часа до начала событий и даже успели их забрендировать!
-					</p>
-					<p className="mb-[20px] xl:mb-[18px] text-xs md:text-base xl:text-2xl">
-						Экспресс-мерч за 5 рабочих дней — для нас стандарт, а не обещание
-					</p>
+        <div className="order-2 xl:order-1 flex flex-col rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] p-[18px] md:p-[55px] xl:p-[72px] text-white">
+          <PageSubheading title={"Экспресс-мерч\n– когда нужно вчера"} className="mb-[15px] xl:mb-[25px] xl:mb-[25px] tracking-[-0.09] text-white" />
+          <p className="mb-[15px] xl:mb-[18px] text-xs md:text-base xl:text-2xl">
+            3&nbsp;склада, собственные мощности и&nbsp;опыт срочных проектов. Однажды сделали 50&nbsp;футболок за&nbsp;3&nbsp;часа до&nbsp;начала
+            событий и&nbsp;даже успели их&nbsp;забрендировать!
+          </p>
+          <p className="mb-[20px] xl:mb-[18px] text-xs md:text-base xl:text-2xl">
+            Экспресс-мерч за&nbsp;5&nbsp;рабочих дней&nbsp;&mdash; для нас стандарт, а&nbsp;не&nbsp;обещание
+          </p>
           <div className="mt-auto">
             <RequestDialog>
-							<Button type="submit" variant="white" className="w-full h-[47px] text-base md:text-lg cursor-pointer">
-								Рассчитать срочный заказ
-							</Button>
+              <Button type="submit" variant="white" className="w-full h-[47px] text-base md:text-lg cursor-pointer">
+                Рассчитать срочный заказ
+              </Button>
             </RequestDialog>
           </div>
         </div>
