@@ -5,6 +5,7 @@ import { HomeBenefits } from "@/widgets/home-feature-cards";
 import { HomeFeatures } from "@/widgets/home-feature-cards/home-feature-cards";
 import { HomeHero } from "@/widgets/home-hero";
 import { HomeLeadCta } from "@/widgets/home-lead-cta";
+import { HomePartnerProducts } from "@/widgets/home-partner-products";
 import { HomeResults } from "@/widgets/home-results";
 import { HomeReviews } from "@/widgets/home-reviews";
 import { HomeServices } from "@/widgets/home-services";
@@ -20,7 +21,7 @@ export function HomePage() {
       <HomeServices />
       <HomeBenefits />
       <HomeLeadCta />
-      {/* <HomePartnerProducts /> */}
+      <HomePartnerProducts />
       <HomeUrgentOrder />
       <HomeReviews />
       <HomeWorkStages />

@@ -1,139 +1,202 @@
-"use client";
+﻿"use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
-import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
-import { PageSubheading } from "../../shared/ui/page-subheading";
+import { ContentCard } from "@/shared/ui/content-card";
+import { PageSubheading } from "@/shared/ui/page-subheading";
+import { SliderControl } from "@/shared/ui/slider-control";
 
 type HomeProductItem = {
   title: string;
   description: string;
-  image: {
-    src: string;
-    alt: string;
-  };
+  imageUrl: string;
   href: string;
 };
 
-const PARTNER_PRODUCTS_TITLE = "Более 500 товаров для брендирования";
+const MOBILE_FADE_DURATION_MS = 180;
+
+const PARTNER_PRODUCTS_TITLE = "Более 50 000 товаров\nдля брендирования";
 
 const PARTNER_PRODUCTS_DESCRIPTION =
-  "Базовые позиции и изделия под задачу: от одежды команды до аксессуаров и промо-продукции.";
+  "Комбинируем модели, ткани, фасоны и виды брендирования под конкретные задачи бизнеса";
 
 const PARTNER_PRODUCTS = [
   {
     title: "Футболки и поло",
-    description: "Для команды, мероприятий и ежедневного использования.",
-    image: {
-      src: "/cases/mvk/coffee-shirt.jpg",
-      alt: "Футболки и поло",
-    },
-    href: "/catalog",
+    description: "Для команды, мероприятий и повседневного использования.",
+    imageUrl: "/home/partner-products/01-futbolki-i-polo.png",
+    href: "https://gifts.ru/",
   },
   {
-    title: "Худи",
-    description: "Для командных наборов, формы и сезонного мерча.",
-    image: {
-      src: "/cases/ufaoil/hoodie-team.jpg",
-      alt: "Худи",
-    },
-    href: "/catalog",
+    title: "ТОЛСТОВКИ",
+    description: "Базовый элемент корпоративного мерча. Актуально вне сезона.",
+    imageUrl: "/home/partner-products/02-tolstovki.png",
+    href: "https://gifts.ru/",
   },
   {
-    title: "Кепки",
-    description: "Под мероприятия, outdoor-форматы и летние наборы.",
-    image: {
-      src: "/faq/img_faq_cover_desktop.jpg",
-      alt: "Кепки и аксессуары",
-    },
-    href: "/catalog",
+    title: "РУБАШКИ",
+    description: "Фирменный стиль для деловых задач. Ваш профессиональный имидж.",
+    imageUrl: "/home/partner-products/03-rubashki.png",
+    href: "https://gifts.ru/",
   },
   {
-    title: "Шопперы",
-    description: "Практичный носитель бренда для офиса, событий и подарков.",
-    image: {
-      src: "/cases/ufaoil/honey-pump.jpg",
-      alt: "Шопперы и аксессуары",
-    },
-    href: "/catalog",
+    title: "безрукавки",
+    description: "Когда важно, чтобы бренд сопровождал команду не только в офисе.",
+    imageUrl: "/home/partner-products/04-bezrukavki.png",
+    href: "https://gifts.ru/",
+  },
+  {
+    title: "дождевики",
+    description: "Для команды, мероприятий и повседневного использования.",
+    imageUrl: "/home/partner-products/05-dozhdeviki.png",
+    href: "https://gifts.ru/",
+  },
+  {
+    title: "бомберы",
+    description: "Базовый элемент корпоративного мерча. Актуально вне сезона.",
+    imageUrl: "/home/partner-products/06-bombery.png",
+    href: "https://gifts.ru/",
+  },
+  {
+    title: "ГОЛОВНЫЕ УБОРЫ",
+    description: "Легко носить. Легко масштабировать. Легко узнать бренд.",
+    imageUrl: "/home/partner-products/07-golovnye-ubory.png",
+    href: "https://gifts.ru/",
+  },
+  {
+    title: "СУМКИ И РЮКЗАКИ",
+    description: "Чем чаще используют — тем сильнее работает бренд.",
+    imageUrl: "/home/partner-products/08-sumki-i-ryukzaki.png",
+    href: "https://gifts.ru/",
+  },
+  {
+    title: "ЭЛЕКТРОНИКА",
+    description: "Работает на узнаваемость за счёт постоянного использования.",
+    imageUrl: "/home/partner-products/09-elektronika.png",
+    href: "https://gifts.ru/",
+  },
+  {
+    title: "Деловые аксессуары",
+    description: "Детали, которые формируют образ компании.",
+    imageUrl: "/home/partner-products/10-delovye-aksessuary.png",
+    href: "https://gifts.ru/",
+  },
+  {
+    title: "СУВЕНИРНАЯ ПРОДУКЦИЯ",
+    description: "Подарок с идеей, который делает отношения теплее.",
+    imageUrl: "/home/partner-products/11-suvenirnaya-produkciya.png",
+    href: "https://gifts.ru/",
+  },
+  {
+    title: "Пакеты",
+    description: "Когда важно вовлечение и чувство принадлежности",
+    imageUrl: "/home/partner-products/12-pakety.png",
+    href: "https://gifts.ru/",
   },
 ] satisfies HomeProductItem[];
 
 function ProductCard({ item }: { item: HomeProductItem }) {
   return (
-    <article className="overflow-hidden rounded-[20px] bg-[var(--card-bg)] p-5 md:p-[20px]">
-      <div className="relative aspect-square overflow-hidden rounded-[16px] bg-white">
-        <Image
-          src={item.image.src}
-          alt={item.image.alt}
-          fill
-          sizes="(max-width: 1279px) 100vw, 22vw"
-          className="object-cover"
-        />
-      </div>
-      <h3 className="mt-5 font-heading text-[30px] leading-[0.95] tracking-[0.015em] text-[var(--heading)] uppercase md:text-[32px]">
-        {item.title}
-      </h3>
-      <p className="mt-3 min-h-[2lh] text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-[17px]">
-        {item.description}
-      </p>
-      <Link href={item.href} className={cn(buttonVariants(), "mt-6 h-[49px] rounded-[10px]")}>
-        Узнать подробнее
-      </Link>
-    </article>
+    <ContentCard
+      title={item.title}
+      excerpt={item.description}
+      href={item.href}
+      hrefTarget="_blank"
+      hrefRel="noreferrer"
+      ctaLabel="Узнать подробнее"
+      image={{ url: item.imageUrl, alt: item.title, width: 413, height: 400 }}
+      imageDisplayMode="1/1"
+    />
   );
 }
 
 export function HomePartnerProducts() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobileContentVisible, setIsMobileContentVisible] = useState(true);
+  const transitionTimeoutRef = useRef<number | null>(null);
+  const activeItem = PARTNER_PRODUCTS[activeIndex] ?? PARTNER_PRODUCTS[0];
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current !== null) {
+        window.clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  function commitCardChange(nextIndex: number) {
+    if (!PARTNER_PRODUCTS[nextIndex] || nextIndex === activeIndex) {
+      return;
+    }
+
+    if (transitionTimeoutRef.current !== null) {
+      window.clearTimeout(transitionTimeoutRef.current);
+    }
+
+    setIsMobileContentVisible(false);
+
+    transitionTimeoutRef.current = window.setTimeout(() => {
+      setActiveIndex(nextIndex);
+      setIsMobileContentVisible(true);
+      transitionTimeoutRef.current = null;
+    }, MOBILE_FADE_DURATION_MS);
+  }
 
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <PageSubheading
         title={PARTNER_PRODUCTS_TITLE}
         description={PARTNER_PRODUCTS_DESCRIPTION}
-        descriptionPlacement="bottom"
-        descriptionClassName="max-w-[40rem]"
+        descriptionPlacement="side"
+        sideDescriptionLayout="two-columns"
+        descriptionClassName="max-w-[35.0625rem]"
       />
 
-      <div className="mt-8 xl:hidden">
-        <Carousel
-          opts={{ align: "start", loop: false }}
-          setApi={(api) => {
-            if (!api) {
-              return;
-            }
-
-            api.on("select", () => {
-              setActiveIndex(api.selectedScrollSnap());
-            });
-          }}
-        >
-          <CarouselContent className="-ml-0">
-            {PARTNER_PRODUCTS.map((item) => (
-              <CarouselItem key={item.title} className="pl-0">
-                <ProductCard item={item} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-        <div className="mt-5 flex justify-center gap-2">
-          {PARTNER_PRODUCTS.map((item, index) => (
-            <span
-              key={item.title}
-              className={cn(
-                "h-1.5 rounded-full bg-[var(--border)] transition-all",
-                index === activeIndex ? "w-10 bg-[var(--accent)]" : "w-3",
-              )}
-            />
-          ))}
-        </div>
+      <div className="mt-8 md:hidden">
+        <article className="flex h-full flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]">
+          <div
+            className={cn(
+              "transition-opacity duration-200",
+              isMobileContentVisible ? "opacity-100" : "opacity-0",
+            )}
+          >
+            <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
+              <Image
+                src={activeItem.imageUrl}
+                alt={activeItem.title}
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="space-y-2 p-5 md:p-7">
+              <h3 className="font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
+                {activeItem.title}
+              </h3>
+              <p className="text-sm text-[var(--text-muted)]">{activeItem.description}</p>
+            </div>
+          </div>
+          <div className="mt-auto p-4 pt-0 md:p-5 md:pt-0">
+            <Link href={activeItem.href} className={cn(buttonVariants(), "w-full")} target="_blank" rel="noreferrer">
+              Узнать подробнее
+            </Link>
+          </div>
+        </article>
+        <SliderControl
+          className="mt-5"
+          onPrevClick={() => commitCardChange(activeIndex - 1)}
+          onNextClick={() => commitCardChange(activeIndex + 1)}
+          prevDisabled={activeIndex === 0}
+          nextDisabled={activeIndex === PARTNER_PRODUCTS.length - 1}
+          prevAriaLabel={`Предыдущая карточка (${activeIndex + 1} из ${PARTNER_PRODUCTS.length})`}
+          nextAriaLabel={`Следующая карточка (${activeIndex + 1} из ${PARTNER_PRODUCTS.length})`}
+        />
       </div>
 
-      <div className="mt-10 hidden gap-7 xl:grid xl:grid-cols-4">
+      <div className="mt-10 hidden gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {PARTNER_PRODUCTS.map((item) => (
           <ProductCard key={item.title} item={item} />
         ))}
