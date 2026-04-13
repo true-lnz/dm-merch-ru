@@ -26,6 +26,7 @@ export function HomeDigest() {
         title={DIGEST_TITLE}
         description={DIGEST_DESCRIPTION}
         descriptionPlacement="side"
+				sideDescriptionLayout="two-columns"
       />
 
       <DigestMobileCarousel cards={MOBILE_DIGEST_CARDS} className="mt-8 pb-[30px] md:hidden" />

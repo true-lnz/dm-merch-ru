@@ -42,10 +42,10 @@ export function PageSubheading({
         "flex gap-5",
         descriptionPlacement === "side"
           ? cn(
-              "flex-col xl:grid xl:items-end xl:gap-10",
+              "flex-col xl:grid xl:items-end xl:gap-[27px]",
               sideDescriptionLayout === "three-columns-middle"
                 ? "xl:grid-cols-3"
-                : "xl:grid-cols-[minmax(0,1fr)_minmax(280px,0.52fr)]",
+                : "xl:grid-cols-2",
             )
           : "flex-col",
         className,
@@ -63,7 +63,7 @@ export function PageSubheading({
       <div
         className={cn(
           "max-w-[44rem] text-xs sm:text-lg xl:text-2xl leading-[1.35] tracking-[-0.03em] text-[#404040]",
-          descriptionPlacement === "side" && "xl:justify-self-end xl:pb-2",
+          descriptionPlacement === "side",
           descriptionPlacement === "side" &&
             sideDescriptionLayout === "three-columns-middle" &&
             "xl:col-start-2 xl:justify-self-stretch",
