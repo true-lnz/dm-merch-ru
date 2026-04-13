@@ -38,7 +38,7 @@ export function HomeHero() {
         </div>
 
         <div className="relative z-10 mb-16 flex w-full justify-center xl:block xl:w-1/2 xl:max-w-[50%]">
-          <div className="flex w-full flex-col gap-8 px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
+          <div className="flex w-full flex-col px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
             <div className="flex flex-col gap-5 xl:gap-[30px]">
               <PageHeading title="Мерч, который работает на бизнес" />
               <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
@@ -46,14 +46,14 @@ export function HomeHero() {
               </p>
             </div>
 
-            <div className="relative aspect-[340/314] mb-[calc(24px*-1)] sm:mb-[calc(20px*-1)]  w-full overflow-hidden md:aspect-[16/12] xl:hidden">
+            <div className="relative aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden">
               <Image
                 src={HERO_IMAGE.src}
                 alt={HERO_IMAGE.alt}
                 fill
                 priority
                 sizes="(max-width: 767px) calc(100vw - 60px), 420px"
-                className="object-contain object-center"
+                className="object-cover object-center"
               />
             </div>
 
@@ -62,7 +62,7 @@ export function HomeHero() {
                 <div
                   key={feature.text}
                   className={cn(
-                    "rounded-[10px] bg-[#e8e7e2] px-5 py-5 md:px-6 md:py-5",
+                    "rounded-[9px] bg-[#e8e7e2] px-5 py-5 md:px-6 md:py-5",
                     index < HERO_FEATURES.length - 1 && "xl:border-r xl:border-[rgba(64,64,64,0.12)] xl:pr-[24px]",
                     "xl:min-h-[120px] xl:rounded-none xl:bg-transparent xl:px-0 xl:py-0",
                   )}
@@ -84,7 +84,7 @@ export function HomeHero() {
               ))}
             </div>
 
-            <div className="flex flex-col gap-[10px] md:flex-row">
+            <div className="mt-8 sm:mt-0 flex flex-col gap-[10px] md:flex-row">
               <RequestDialog>
                 <RequestDialogButton className="w-full" />
               </RequestDialog>
@@ -92,7 +92,7 @@ export function HomeHero() {
                 href="/cases"
                 className={cn(
                   buttonVariants({ variant: "white" }),
-                  "group hidden h-[60px] justify-between rounded-[10px] border-transparent bg-white px-5 text-[16px] font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white md:w-[284px] xl:flex xl:w-[283.6px] xl:text-[19.46px] xl:tracking-[-0.04em]",
+                  "group hidden h-[60px] justify-between rounded-[9px] border-transparent bg-white px-5 text-[16px] font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white md:w-[284px] xl:flex xl:w-[283.6px] xl:text-[19.46px] xl:tracking-[-0.04em]",
                 )}
               >
                 <span className="self-start pt-2">К кейсам</span>

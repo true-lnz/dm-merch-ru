@@ -11,7 +11,7 @@ export function HomeLeadCta() {
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
-        <div className="rounded-[24px] bg-white">
+        <div className="rounded-[18px] md:rounded-[22.5px] bg-white">
           <div className="relative aspect-square overflow-hidden rounded-[18px] md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
             <Image
               src={LEAD_CTA_IMAGE.src}

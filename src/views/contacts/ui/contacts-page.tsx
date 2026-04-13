@@ -39,7 +39,7 @@ function ContactsMapCard() {
         {siteInfo.address}
       </p>
 
-      <div className="relative aspect-square overflow-hidden rounded-[12px] border-[5px] border-[var(--accent)] bg-white md:h-[360px] md:aspect-auto md:rounded-[16px] xl:h-[225px] xl:w-[550px] xl:max-w-full xl:rounded-[20px] xl:border-[6px]">
+      <div className="relative aspect-square overflow-hidden rounded-[12px] border-[5px] border-[var(--accent)] bg-white md:h-[360px] md:aspect-auto xl:h-[225px] xl:w-[550px] xl:max-w-full rounded-[18px] md:rounded-[22.5px] xl:border-[6px]">
         <YandexMapCard />
       </div>
     </div>
@@ -57,7 +57,7 @@ function DiscussionCta() {
 function MobileContactsHero() {
   return (
     <div className="mb-[70px] xl:hidden">
-      <div className="overflow-hidden rounded-[20px] md:mx-auto md:max-w-[760px]">
+      <div className="overflow-hidden rounded-[18px] md:rounded-[22.5px] md:mx-auto md:max-w-[760px]">
         <div className="relative aspect-[340/256] overflow-hidden md:aspect-[16/11]">
           <Image
             src="/contacts/img_contacts.png"
@@ -70,7 +70,7 @@ function MobileContactsHero() {
         </div>
       </div>
 
-      <div className="rounded-[20px] bg-[rgba(232,231,226,0.7)] p-5 backdrop-blur-[15px] md:p-7">
+      <div className="rounded-[18px] md:rounded-[22.5px] bg-[rgba(232,231,226,0.7)] p-5 backdrop-blur-[15px] md:p-7">
         <h1 className="sr-only">Контакты</h1>
 
         <div className="space-y-2 md:space-y-3">
@@ -104,7 +104,7 @@ function DesktopContactsHero() {
         />
       </div>
 
-      <div className="absolute inset-y-0 left-0 z-10 mb-[75px] flex w-fit max-w-[min(771px,calc(100%-140px))] flex-col justify-between rounded-[20px] bg-[rgba(232,231,226,0.5)] p-5 px-[50px] py-[43px] backdrop-blur-[15px]">
+      <div className="absolute inset-y-0 left-0 z-10 mb-[75px] flex w-fit max-w-[min(771px,calc(100%-140px))] flex-col justify-between rounded-[18px] md:rounded-[22.5px] bg-[rgba(232,231,226,0.5)] p-5 px-[50px] py-[43px] backdrop-blur-[15px]">
         <div>
           <h1 className="sr-only">Контакты</h1>
 

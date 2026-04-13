@@ -1,8 +1,7 @@
 import { RequestCta } from "@/features/request-cta";
 import { FaqSection } from "@/widgets/faq-section";
 import { HomeDigest } from "@/widgets/home-digest";
-import { HomeBenefits } from "@/widgets/home-feature-cards";
-import { HomeFeatures } from "@/widgets/home-feature-cards/home-feature-cards";
+import { HomeBenefits, HomeFeatures } from "@/widgets/home-feature-cards/home-feature-cards";
 import { HomeHero } from "@/widgets/home-hero";
 import { HomeLeadCta } from "@/widgets/home-lead-cta";
 import { HomePartnerProducts } from "@/widgets/home-partner-products";

@@ -46,7 +46,7 @@ export const RequestDialogButton = forwardRef<HTMLButtonElement, RequestDialogBu
         ref={ref}
         type={type ?? "button"}
         className={cn(
-          "group cursor-pointer flex h-[60px] w-full lg:w-auto items-center justify-between gap-4 rounded-[10px] bg-[var(--accent)] px-3 text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] xl:px-5",
+          "group cursor-pointer flex h-[60px] w-full lg:w-auto items-center justify-between gap-4 rounded-[9px] bg-[var(--accent)] px-3 text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] xl:px-5",
           className,
         )}
         {...props}
@@ -97,7 +97,7 @@ export function RequestDialog({
 
       <DialogContent
         showCloseButton={false}
-        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] sm:p-[72px] sm:h-auto md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[20px] xl:bg-[#ecebe6]"
+        className="block h-screen w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] sm:p-[72px] sm:h-auto md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[22.5px] xl:bg-[#ecebe6]"
       >
         <div className="mb-7 flex items-start justify-between gap-4 xl:mb-8">
           <DialogTitle className="font-heading text-4xl md:text-5xl xl:text-6xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">

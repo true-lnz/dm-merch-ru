@@ -131,7 +131,7 @@ function DigestWildCard({
   return (
     <article
       className={cn(
-        "relative overflow-hidden rounded-[20px]",
+        "relative overflow-hidden rounded-[18px] md:rounded-[22.5px]",
         isMobile ? "flex h-full min-h-[420px] flex-col" : "flex h-full",
       )}
     >

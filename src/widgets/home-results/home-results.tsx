@@ -57,7 +57,7 @@ export function HomeResults() {
 
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-      <div className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-x-[16px] xl:gap-y-0">
+      <div className="grid gap-6 xl:grid-cols-2 xl:gap-x-[16px] xl:gap-y-0">
         <div className="order-1 xl:order-1">
           <PageSubheading
             title={RESULTS_TITLE}
@@ -66,7 +66,7 @@ export function HomeResults() {
           />
         </div>
 
-        <div className="order-2 relative aspect-square xl:aspect-auto overflow-hidden rounded-[24px] bg-white xl:order-4 xl:col-start-2 xl:row-start-1 xl:row-span-3">
+        <div className="order-2 relative aspect-square xl:aspect-auto overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white xl:order-4 xl:col-start-2 xl:row-start-1 xl:row-span-3">
           <Image
             key={activeSlide.image.src}
             src={activeSlide.image.src}

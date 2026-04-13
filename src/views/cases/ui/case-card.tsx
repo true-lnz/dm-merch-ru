@@ -59,7 +59,7 @@ export function CaseCard({ item }: CaseCardProps) {
   };
 
   return (
-    <article className="lg:rounded-[20px] lg:bg-[var(--card-bg)] lg:p-[30px]">
+    <article className="rounded-[18px] md:rounded-[22.5px] lg:bg-[var(--card-bg)] lg:p-[30px]">
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,50.7%)] lg:items-start lg:gap-[30px]">
         <CaseTextBlock
           item={item}
@@ -71,7 +71,7 @@ export function CaseCard({ item }: CaseCardProps) {
 
         <div className="">
           <div
-            className="cursor-grab overflow-hidden rounded-[10px] bg-white active:cursor-grabbing mb-[14px]"
+            className="cursor-grab overflow-hidden rounded-[9px] bg-white active:cursor-grabbing mb-[14px]"
             ref={emblaRef}
           >
             <div className="flex">
@@ -134,7 +134,7 @@ function CaseTextBlock({
   onToggle: () => void;
 }) {
   return (
-    <div className="rounded-[20px] bg-[var(--card-bg)] px-5 pb-5 pt-5 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
+    <div className="rounded-[18px] bg-[var(--card-bg)] px-5 pb-5 pt-5 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
       <div className="space-y-4 lg:space-y-[11px]">
         <h2 className="font-heading text-3xl md:text-5xl leading-[0.95] uppercase text-[var(--heading)]">
           {item.company}

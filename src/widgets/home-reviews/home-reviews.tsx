@@ -34,30 +34,82 @@ const TESTIMONIALS = [
       "Гости фестиваля отдельно спрашивали, можно ли купить дождевики, и это был лучший индикатор, что мерч действительно получился сильным.",
     ],
     image: {
-      src: "/contacts/img_contacts_cover.png",
+      src: "/home/reviews/img_home_reviews_1.png",
       alt: "Команда ресторана в мерче",
     },
     avatar: {
-      src: "/cases/mvk/coffee-shirt.jpg",
-      alt: "Портрет клиента",
+      src: "/home/reviews/img_reviews_avatar_1.png",
+      alt: "Портрет Эльноры",
+    },
+  },
+  {
+    company: "Городское пространство «Арт-квадрат»",
+    name: "Айна Федорова",
+    role: "Арт-директор",
+    quote: [
+      'С компанией "Держи Марку!" Арт-КВАДРАТ сотрудничает уже 3 года.',
+      "Все наши сложные и креативные запросы решаются оперативно, партнёры всегда готовы предоставить интересные решения, отражающие специфику нашего бренда. И что немаловажно, всегда можно договориться по экономической стороне вопроса.",
+      "А когда соответствует качество и цена - что может быть лучше?)",
+    ],
+    image: {
+      src: "/home/reviews/img_home_reviews_2.png",
+      alt: "Отзыв клиента Арт-квадрат",
+    },
+    avatar: {
+      src: "/home/reviews/img_reviews_avatar_2.png",
+      alt: "Портрет Айны Федоровой",
+    },
+  },
+  {
+    company: "Уфанет",
+    name: "Лилия",
+    role: "Отдел рекламы",
+    quote: [
+      "Работаем с командой около полугода. За это время совместно реализовали несколько проектов: худи, футболки, бутылки и новогодние подарки.",
+      "Ценим, что ребята берут на себя весь процесс целиком — от идеи и проработки деталей до готового результата. В ходе работы всегда присутствует чёткая коммуникация, внимание к деталям и готовность оперативно включаться в задачу, если сроки ограничены.",
+      "Несмотря на то, что сотрудничаем мы недолго, за этот период команда уже показала себя как надежный подрядчик, с которым приятно работать и к которому хочется обращаться снова с новыми проектами.",
+    ],
+    image: {
+      src: "/home/reviews/img_home_reviews_3.png",
+      alt: "Отзыв клиента Уфанет",
+    },
+    avatar: {
+      src: "/home/reviews/img_reviews_avatar_3.png",
+      alt: "Портрет Лилии",
     },
   },
   {
     company: "Уфаойл",
-    name: "Мария",
-    role: "Руководитель маркетинга",
+    name: "Анна",
+    role: "Отдел маркетинга",
     quote: [
-      "Нужно было собрать подарочный набор для партнеров и сделать его не шаблонным, а по-настоящему полезным.",
-      "Команда помогла быстро собрать комплект, продумать упаковку и заранее показать образцы, поэтому запуск прошел спокойно.",
-      "Набор оказался сильным инструментом в переговорах: его запомнили и внутри компании, и у партнеров.",
+      "Работаем с компанией не первый проект - делали и юбилейные худи, и подарки для сотрудников, и продукцию для партнеров. Для нас было важно, чтобы мерч не выглядел шаблонно, а действительно отражал нашу компанию и ее историю.",
+      "Понравилось, что команда вникает в задачи, предлагает решения, а не просто принимает ТЗ. В итоге получили продукцию, которой реально пользуются, а не кладут на полку. Мерч стал частью корпоративной культуры, а не разовой акцией.",
     ],
     image: {
-      src: "/cases/ufaoil/blanket-gift.jpg",
-      alt: "Подарочный набор бренда",
+      src: "/home/reviews/img_home_reviews_4.png",
+      alt: "Отзыв клиента Уфаойл",
     },
     avatar: {
-      src: "/cases/ufaoil/honey-pump.jpg",
-      alt: "Портрет клиента",
+      src: "/home/reviews/img_reviews_avatar_4.png",
+      alt: "Портрет Анны",
+    },
+  },
+  {
+    company: "Тихий дом",
+    name: "Дмитрий",
+    role: "Бренд-менеджер",
+    quote: [
+      "Заказывали фирменный набор для наших клиентов и партнёров. Нам хотелось сделать не просто сувенир, а действительно приятный и аккуратный подарок, который будет хорошо выглядеть, вызывать правильное впечатление и которым захочется пользоваться.",
+      "С командой было легко и спокойно работать: помогли с выбором, подсказали по материалам и нанесению, внимательно отнеслись к деталям и всё сделали в срок. В итоге получился именно такой набор, как мы и хотели, — качественный, цельный и достойный. Такие вещи приятно дарить от имени компании, потому что они действительно отражают отношение к людям и к своему бренду.",
+    ],
+    image: {
+      src: "/home/reviews/img_home_reviews_1.png",
+      alt: "Отзыв клиента Тихий дом",
+    },
+    avatar: {
+      src: "/home/reviews/img_reviews_avatar_5.png",
+      alt: "Портрет Дмитрия",
     },
   },
 ] satisfies HomeReview[];
@@ -72,8 +124,8 @@ export function HomeReviews() {
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <PageSubheading title={TESTIMONIALS_TITLE} />
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:gap-0">
-        <div className="relative min-h-[320px] overflow-hidden rounded-[18px] bg-[var(--card-bg)] md:rounded-[22.5px] lg:col-span-7 lg:min-h-[616px]">
+      <div className="mt-8 grid lg:grid-cols-12">
+        <div className="relative min-h-[320px] overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] lg:col-span-7 lg:min-h-[616px]">
           {TESTIMONIALS.map((item, index) => (
             <div
               key={item.company}
@@ -82,34 +134,29 @@ export function HomeReviews() {
                 index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
-              <Image
-                src={item.image.src}
-                alt={item.image.alt}
-                fill
-                sizes="(max-width: 1023px) 100vw, 58vw"
-                className="object-cover"
-              />
+              <Image src={item.image.src} alt={item.image.alt} fill sizes="(max-width: 1023px) 100vw, 58vw" className="object-cover object-top" />
             </div>
           ))}
         </div>
 
-        <div className="flex flex-col rounded-[18px] bg-[var(--accent)] p-5 text-white md:rounded-[22.5px] md:p-8 lg:col-span-5">
-          <div className="flex items-center gap-4">
-            <div className="relative size-[70px] overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white">
-              <Image src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="70px" className="object-cover" />
+        <div className="flex flex-col gap-[18px] rounded-[18px] bg-[var(--accent)] bg-[url('/home/img_card_cover_home_reviews.svg')] bg-cover bg-center p-[18px] text-white md:gap-[36px] md:rounded-[22.5px] md:p-[27px] lg:col-span-5">
+          <div className="flex gap-[18px] md:gap-[22.5px]">
+            <div className="relative size-[63px] md:size-[125px] overflow-hidden rounded-[9px] bg-white">
+              <Image unoptimized src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="70px" className="object-cover" />
             </div>
             <div>
-              <p className="font-heading text-[28px] leading-none uppercase md:text-4xl">{activeItem.name}</p>
-              <p className="mt-1 text-[13px] leading-[1.35] tracking-[-0.03em] text-white/80 md:text-[15px]">{activeItem.role}</p>
+              <p className="font-heading text-3xl leading-none uppercase md:text-4xl xl:text-5xl">{activeItem.name}</p>
+              <p className="mt-[10px] text-[9px] leading-[1.35] tracking-[-0.03em] text-white/80 md:text-lg">{activeItem.role}</p>
             </div>
           </div>
 
-          <h3 className="mt-5 font-heading text-3xl leading-none uppercase md:text-4xl">{activeItem.company}</h3>
-
-          <div className="mt-5 space-y-4 text-xs leading-[1.35] tracking-[-0.03em] text-white/80 sm:text-sm lg:text-lg">
-            {activeItem.quote.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+          <div className="flex flex-col gap-[9px]">
+            <h3 className="font-heading text-3xl leading-none uppercase md:text-4xl">{activeItem.company}</h3>
+            <div className="space-y-4 text-xs leading-[1.35] tracking-[-0.03em] text-white/80 sm:text-sm md:text-lg">
+              {activeItem.quote.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
           </div>
 
           <SliderControl

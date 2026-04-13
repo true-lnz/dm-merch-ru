@@ -33,7 +33,7 @@ export function HomeUrgentOrder() {
             </RequestDialog>
           </div>
         </div>
-        <div className="rounded-[24px] bg-white order-1 xl:order-2">
+        <div className="rounded-[18px] md:rounded-[22.5px] bg-white order-1 xl:order-2">
           <div className="relative aspect-square overflow-hidden rounded-[18px] md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
             <Image
               src={URGENT_ORDER_IMAGE.src}

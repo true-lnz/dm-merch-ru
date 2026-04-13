@@ -28,19 +28,19 @@ export default function RequestSuccessPage() {
         </div>
 
         <div className="relative z-10 mb-16 flex w-full justify-center xl:block xl:w-1/2 xl:max-w-[50%]">
-          <div className="flex w-full flex-col gap-8 px-0 pb-0 pt-5 md:rounded-[22.5px] xl:h-full xl:max-w-none xl:justify-between xl:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
+          <div className="flex w-full flex-col px-0 pb-0 pt-5 md:rounded-[22.5px] xl:h-full xl:max-w-none xl:justify-between xl:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
             <div className="flex flex-col gap-5 xl:gap-[30px]">
               <PageHeading title="Спасибо за обращение." />
             </div>
 
-            <div className="relative mb-[calc(24px*-1)] aspect-[340/314] w-full overflow-hidden sm:mb-[calc(20px*-1)] md:aspect-[16/12] xl:hidden">
+            <div className="relative aspect-[340/314] w-full overflow-hidden sm:mb-[calc(20px*-1)] md:aspect-[16/12] xl:hidden">
               <Image
                 src={HERO_IMAGE.src}
                 alt={HERO_IMAGE.alt}
                 fill
                 priority
                 sizes="(max-width: 767px) calc(100vw - 60px), 420px"
-                className="object-contain object-center"
+                className="object-cover object-center"
               />
             </div>
           </div>

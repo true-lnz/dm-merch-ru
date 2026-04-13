@@ -156,7 +156,7 @@ export function HomePartnerProducts() {
       />
 
       <div className="mt-8 md:hidden flex flex-col">
-        <article className="flex h-full flex-col overflow-hidden rounded-[20px] bg-[var(--card-bg)]">
+        <article className="flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]">
           <div
             className={cn(
               "transition-opacity duration-200",

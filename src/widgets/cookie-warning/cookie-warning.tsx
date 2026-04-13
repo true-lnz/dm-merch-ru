@@ -44,7 +44,7 @@ export function CookieWarning() {
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 px-[var(--layout-side-padding)] md:bottom-[16px]">
-      <div className="pointer-events-auto ml-auto flex w-full max-w-[739px] flex-col gap-4 rounded-[10px] bg-[var(--accent)] shadow-[0_20px_45px_rgba(255,255,255,0.15)] px-4 py-4 md:min-h-[80px] md:flex-row md:items-center md:justify-between md:gap-6 md:px-[25px] md:py-5">
+      <div className="pointer-events-auto ml-auto flex w-full max-w-[739px] flex-col gap-4 rounded-[9px] bg-[var(--accent)] shadow-[0_20px_45px_rgba(255,255,255,0.15)] px-4 py-4 md:min-h-[80px] md:flex-row md:items-center md:justify-between md:gap-6 md:px-[25px] md:py-5">
         <p className="m-0 max-w-[540px] text-sm leading-[1.2] tracking-[-0.04em] text-white">
           {COOKIE_TEXT}
         </p>
