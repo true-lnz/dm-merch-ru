@@ -20,6 +20,7 @@ export type ContentCardProps = {
   hrefTarget?: "_self" | "_blank";
   hrefRel?: string;
   ctaLabel?: string;
+  ctaNode?: ReactNode;
   onCtaClick?: MouseEventHandler<HTMLButtonElement>;
   image: ContentCardImage;
   imageContainerClassName?: string;
@@ -32,6 +33,7 @@ export function ContentCard({
   hrefTarget = "_self",
   hrefRel,
   ctaLabel = "Перейти",
+  ctaNode,
   onCtaClick,
   image,
   imageContainerClassName,
@@ -40,6 +42,10 @@ export function ContentCard({
   const imageAspectClass = imageContainerClassName ?? "aspect-[3/2]";
 
   function renderCta() {
+    if (ctaNode) {
+      return ctaNode;
+    }
+
     if (onCtaClick) {
       return (
         <Button type="button" variant="blue" onClick={onCtaClick} aria-label={ctaLabel}>
