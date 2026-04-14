@@ -27,10 +27,10 @@ export function CaseCard({ item }: CaseCardProps) {
       { heading: "Решение", text: item.solution },
       { heading: "Результат", text: item.result },
     ],
-    [item.result, item.solution, item.task]
+    [item.result, item.solution, item.task],
   );
 
-  const mobileThumbs = item.gallery.length > 4 ? item.gallery.slice(0, 4) : item.gallery;
+  const previewThumbs = item.gallery.length > 4 ? item.gallery.slice(0, 4) : item.gallery;
   const imageRatio = toAspectRatio(item.desktopImageAspect);
   const toggleLabel = isExpanded ? "Скрыть" : "Читать больше";
 
@@ -70,10 +70,7 @@ export function CaseCard({ item }: CaseCardProps) {
         />
 
         <div className="">
-          <div
-            className="cursor-grab overflow-hidden rounded-[9px] bg-white active:cursor-grabbing mb-[14px]"
-            ref={emblaRef}
-          >
+          <div className="cursor-grab overflow-hidden rounded-[9px] bg-white active:cursor-grabbing mb-[14px]" ref={emblaRef}>
             <div className="flex">
               {item.gallery.map((image) => (
                 <div key={`${item.id}-${image.alt}`} className="min-w-0 shrink-0 grow-0 basis-full">
@@ -92,19 +89,20 @@ export function CaseCard({ item }: CaseCardProps) {
             </div>
           </div>
 
-          <div className="hidden gap-[9px] lg:flex">
-            {item.gallery.map((image, index) => (
+          <div className="hidden gap-[9px] lg:grid lg:grid-cols-6">
+            {previewThumbs.map((image, index) => (
               <ThumbnailButton
                 key={`${item.id}-thumb-${index}`}
                 image={image}
-                isActive={selectedIndex === index}
+                isActive={item.gallery.length > 4 && index === 3 ? selectedIndex >= index : selectedIndex === index}
                 onClick={() => selectImage(index)}
+                overlay={item.gallery.length > 4 && index === 3 ? `+${item.gallery.length - 3}` : null}
               />
             ))}
           </div>
 
           <div className="grid grid-cols-4 gap-[9px] lg:hidden">
-            {mobileThumbs.map((image, index) => (
+            {previewThumbs.map((image, index) => (
               <ThumbnailButton
                 key={`${item.id}-mobile-thumb-${index}`}
                 image={image}
@@ -136,9 +134,7 @@ function CaseTextBlock({
   return (
     <div className="rounded-[18px] bg-[var(--card-bg)] px-5 pb-5 pt-5 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
       <div className="space-y-4 lg:space-y-[11px]">
-        <h2 className="font-heading text-3xl md:text-5xl leading-[0.95] uppercase text-[var(--heading)]">
-          {item.company}
-        </h2>
+        <h2 className="font-heading text-3xl md:text-5xl leading-[0.95] uppercase text-[var(--heading)]">{item.company}</h2>
         <p className="text-xs md:text-sm xl:text-base leading-[1.3] text-[#404040]">{item.teaser}</p>
         <p className="text-xs md:text-sm xl:text-base leading-[1.3] text-[#404040]">{item.intro}</p>
       </div>
@@ -165,7 +161,7 @@ function CaseTextBlock({
       <div
         className={cn(
           "grid transition-[grid-template-rows,margin-top] duration-300 ease-out lg:hidden",
-          isExpanded ? "mt-4 grid-rows-[1fr]" : "grid-rows-[0fr]"
+          isExpanded ? "mt-4 grid-rows-[1fr]" : "grid-rows-[0fr]",
         )}
       >
         <div className="overflow-hidden">
@@ -184,9 +180,7 @@ function CaseTextBlock({
 function CaseSection({ heading, text }: { heading: string; text: string }) {
   return (
     <section>
-      <h3 className="font-heading text-lg md:text-3xl leading-none uppercase text-[#404040]">
-        {heading}
-      </h3>
+      <h3 className="font-heading text-lg md:text-3xl leading-none uppercase text-[#404040]">{heading}</h3>
       <p className="mt-[9px] text-xs md:text-base leading-[1.35] text-[#404040]">{text}</p>
     </section>
   );
@@ -208,8 +202,8 @@ function ThumbnailButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "relative flex-1 cursor-pointer overflow-hidden rounded-[7px] border-2 border-[var(--card-bg)] bg-white transition-colors",
-        isActive && "border-[var(--accent)]"
+        "relative w-full cursor-pointer overflow-hidden rounded-[7px] border-[3px] border-[var(--card-bg)] bg-white transition-[border-color,border-width]",
+        isActive && "border-[3px] border-[var(--accent)]",
       )}
       aria-pressed={isActive}
     >

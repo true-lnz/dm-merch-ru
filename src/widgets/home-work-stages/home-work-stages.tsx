@@ -73,17 +73,17 @@ export function HomeWorkStages() {
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" className="hidden xl:block" />
         </div>
         <div className="pointer-events-none absolute bottom-0 -left-200 z-20 rotate-45" aria-hidden="true">
-          <div style={{ transform: `translate3d(${tapeShiftX}px, 0, 0)` }}>
+          <div style={{ transform: `translate3d(${tapeShiftX * 1.2}px, 0, 0)` }}>
             <Image src="/img_tape.svg" alt="" width={2465} height={111} />
           </div>
         </div>
         <div className="pointer-events-none absolute top-20 -right-160 z-0 rotate-[25deg]" aria-hidden="true">
-          <div style={{ transform: `translate3d(${-tapeShiftX * 0.6}px, 0, 0)` }}>
+          <div style={{ transform: `translate3d(${-tapeShiftX * 1.2}px, 0, 0)` }}>
             <Image src="/img_tape.svg" alt="" width={2465} height={111} />
           </div>
         </div>
-        <div className="pointer-events-none absolute -top-10 -right-180 z-0 rotate-[65deg]" aria-hidden="true">
-          <div style={{ transform: `translate3d(${-tapeShiftX * 0.8}px, 0, 0)` }}>
+        <div className="pointer-events-none absolute top-10 -right-230 z-0 rotate-[65deg]" aria-hidden="true">
+          <div style={{ transform: `translate3d(${-tapeShiftX * 1.6}px, 0, 0)` }}>
             <Image src="/img_tape.svg" alt="" width={2465} height={111} />
           </div>
         </div>
@@ -102,8 +102,8 @@ export function HomeWorkStages() {
               <p className="font-heading text-[32px] leading-none uppercase text-white md:text-[40px]">01</p>
               <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">Заявка и бриф 1 день</h3>
               <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-white">
-                Перед запуском тиража вы видите и трогаете реальный продукт: ткань, посадку, нанесение, детали. Отправляем образцы в любой город РФ, чтобы
-                решение было осознанным, а не «по картинке».
+                Перед запуском тиража вы видите и трогаете реальный продукт: ткань, посадку, нанесение, детали. Отправляем образцы в любой город РФ,
+                чтобы решение было осознанным, а не «по картинке».
               </p>
             </article>
 
@@ -111,8 +111,8 @@ export function HomeWorkStages() {
               <p className="font-heading text-[32px] leading-none uppercase text-[var(--accent)] md:text-[40px]">02</p>
               <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">Дизайн-макет и согласование – 3-5 дней</h3>
               <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
-                Разрабатываем 3 дизайн-концепций под ваш запрос. Подбираем ткани, фасоны и способы нанесения. Вносим все  правки бесплатно и при необходимости
-                отправляем образцы, чтобы вы были уверены в результате до запуска в производство.
+                Разрабатываем 3 дизайн-концепций под ваш запрос. Подбираем ткани, фасоны и способы нанесения. Вносим все правки бесплатно и при
+                необходимости отправляем образцы, чтобы вы были уверены в результате до запуска в производство.
               </p>
             </article>
 
@@ -120,8 +120,8 @@ export function HomeWorkStages() {
               <p className="font-heading text-[32px] leading-none uppercase text-white md:text-[40px]">03</p>
               <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">Производство 10-14 дней</h3>
               <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-white">
-                После согласования концепций и утверждения позиций производство изделий мы запускаем заказ в работу. Контролируем каждый этап: раскрой, пошив,
-                нанесение, финальную сборку.
+                После согласования концепций и утверждения позиций производство изделий мы запускаем заказ в работу. Контролируем каждый этап:
+                раскрой, пошив, нанесение, финальную сборку.
               </p>
             </article>
 
@@ -129,8 +129,8 @@ export function HomeWorkStages() {
               <p className="font-heading text-[32px] leading-none uppercase text-[var(--accent)] md:text-[40px]">04</p>
               <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">доставка 2-4 дня</h3>
               <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
-                Перед отправкой проводим финальную проверку качества и упаковку. Доставляем мерч в согласованные сроки в любой город России. При необходимости
-                организуем частный трансфер для срочных проектов.
+                Перед отправкой проводим финальную проверку качества и упаковку. Доставляем мерч в согласованные сроки в любой город России. При
+                необходимости организуем частный трансфер для срочных проектов.
               </p>
             </article>
           </div>

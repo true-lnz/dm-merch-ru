@@ -6,11 +6,7 @@ import { WidowFix } from "@/shared/ui/widow-fix";
 import { FaqSection } from "@/widgets/faq-section";
 import { useMemo, useState } from "react";
 import { PageHeading } from "../../../shared/ui/page-heading";
-import {
-	casesPageItems,
-	caseThemes,
-	type CaseTheme,
-} from "../model/cases-data";
+import { casesPageItems, caseThemes, type CaseTheme } from "../model/cases-data";
 import { CaseCard } from "./case-card";
 
 export function CasesPage() {
@@ -30,9 +26,9 @@ export function CasesPage() {
       <PageHeading
         title="Кейсы"
         breadcrumb={{
-            labelFrom: "Главная",
-            labelTo: "Кейсы",
-            href: "/",
+          labelFrom: "Главная",
+          labelTo: "Кейсы",
+          href: "/",
         }}
       />
 
@@ -49,9 +45,7 @@ export function CasesPage() {
                   onClick={() => setActiveTheme(theme)}
                   className={cn(
                     "flex min-h-[60px] md:min-h-[90px] w-[75%] shrink-0 cursor-pointer snap-start flex-col items-start justify-start rounded-[18px] px-[18px] py-4 text-left font-heading text-lg md:text-3xl leading-[0.95] uppercase transition-colors xl:w-full",
-                    isActive
-                      ? "bg-[var(--accent)] text-white"
-                      : "bg-[var(--card-bg)] text-[#404040] hover:bg-[#e1e0db]",
+                    isActive ? "bg-[var(--accent)] text-white" : "bg-[var(--card-bg)] text-[#404040] hover:bg-[#e1e0db]",
                   )}
                 >
                   {theme}
@@ -61,7 +55,7 @@ export function CasesPage() {
           </div>
         </aside>
 
-        <div className="space-y-[22px]">
+        <div className="space-y-[40px] md:space-y-[22px]">
           {visibleCases.length > 0 ? (
             visibleCases.map((item) => <CaseCard key={item.id} item={item} />)
           ) : (
