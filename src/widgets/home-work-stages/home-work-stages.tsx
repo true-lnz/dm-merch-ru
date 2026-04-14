@@ -2,7 +2,11 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { WORK_STAGES } from "@/shared/config/work-stages";
+import { cn } from "@/shared/lib/cn";
+import { isLightWorkStageCard } from "@/shared/lib/work-stage-tone";
 import { PageSubheading } from "../../shared/ui/page-subheading";
+import { WorkStageCard } from "@/shared/ui/work-stage-card";
 
 export function HomeWorkStages() {
   const [tapeShiftX, setTapeShiftX] = useState(0);
@@ -98,41 +102,42 @@ export function HomeWorkStages() {
           />
 
           <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:mt-[82px] xl:grid-cols-3 xl:grid-rows-2 xl:gap-6">
-            <article className="rounded-[18px] md:rounded-[22.5px] bg-[rgba(248,246,240,0.2)] p-[18px] text-white md:p-[27px] xl:col-start-1 xl:row-start-1">
-              <p className="font-heading text-[32px] leading-none uppercase text-white md:text-[40px]">01</p>
-              <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">Заявка и бриф 1 день</h3>
-              <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-white">
-                Перед запуском тиража вы видите и трогаете реальный продукт: ткань, посадку, нанесение, детали. Отправляем образцы в любой город РФ,
-                чтобы решение было осознанным, а не «по картинке».
-              </p>
-            </article>
+            {WORK_STAGES.map((stage, index) => {
+              const isLightOnMobile = isLightWorkStageCard(index, 1);
+              const isLightOnDesktop = isLightWorkStageCard(index, 2);
+              const layoutClassName =
+                index === 0
+                  ? "xl:col-start-1 xl:row-start-1"
+                  : index === 1
+                    ? "xl:col-start-2 xl:row-start-1"
+                    : index === 2
+                      ? "xl:col-start-2 xl:row-start-2"
+                      : "xl:col-start-3 xl:row-start-2";
 
-            <article className="rounded-[18px] md:rounded-[22.5px] bg-[#F8F6F0] p-[18px] text-[var(--heading)] md:p-[27px] xl:col-start-2 xl:row-start-1">
-              <p className="font-heading text-[32px] leading-none uppercase text-[var(--accent)] md:text-[40px]">02</p>
-              <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">Дизайн-макет и согласование – 3-5 дней</h3>
-              <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
-                Разрабатываем 3 дизайн-концепций под ваш запрос. Подбираем ткани, фасоны и способы нанесения. Вносим все правки бесплатно и при
-                необходимости отправляем образцы, чтобы вы были уверены в результате до запуска в производство.
-              </p>
-            </article>
-
-            <article className="rounded-[18px] md:rounded-[22.5px] bg-[rgba(248,246,240,0.2)] p-[18px] text-white md:p-[27px] xl:col-start-2 xl:row-start-2">
-              <p className="font-heading text-[32px] leading-none uppercase text-white md:text-[40px]">03</p>
-              <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">Производство 10-14 дней</h3>
-              <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-white">
-                После согласования концепций и утверждения позиций производство изделий мы запускаем заказ в работу. Контролируем каждый этап:
-                раскрой, пошив, нанесение, финальную сборку.
-              </p>
-            </article>
-
-            <article className="rounded-[18px] md:rounded-[22.5px] bg-[#F8F6F0] p-[18px] text-[var(--heading)] md:p-[27px] xl:col-start-3 xl:row-start-2">
-              <p className="font-heading text-[32px] leading-none uppercase text-[var(--accent)] md:text-[40px]">04</p>
-              <h3 className="mt-5 font-heading text-[28px] leading-[0.95] uppercase md:text-[34px]">доставка 2-4 дня</h3>
-              <p className="mt-4 text-[15px] leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)]">
-                Перед отправкой проводим финальную проверку качества и упаковку. Доставляем мерч в согласованные сроки в любой город России. При
-                необходимости организуем частный трансфер для срочных проектов.
-              </p>
-            </article>
+              return (
+                <WorkStageCard
+                  key={stage.number}
+                  stage={stage}
+                  className={cn(
+                    "rounded-[18px] p-[18px] md:rounded-[22.5px] md:p-[27px]",
+                    layoutClassName,
+                    isLightOnMobile ? "bg-[#F8F6F0] text-[var(--heading)]" : "bg-[rgba(248,246,240,0.2)] text-white",
+                    isLightOnDesktop ? "md:bg-[#F8F6F0] md:text-[var(--heading)]" : "md:bg-[rgba(248,246,240,0.2)] md:text-white",
+                  )}
+                  numberClassName={cn(
+                    "text-[32px] md:text-[40px]",
+                    isLightOnMobile ? "text-[var(--accent)]" : "text-white",
+                    isLightOnDesktop ? "md:text-[var(--accent)]" : "md:text-white",
+                  )}
+                  titleClassName="mt-5 text-[28px] leading-[0.95] md:text-[34px]"
+                  descriptionClassName={cn(
+                    "mt-4 text-[15px] leading-[1.35] tracking-[-0.03em]",
+                    isLightOnMobile ? "text-[var(--text-muted)]" : "text-white",
+                    isLightOnDesktop ? "md:text-[var(--text-muted)]" : "md:text-white",
+                  )}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
