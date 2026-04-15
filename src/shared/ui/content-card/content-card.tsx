@@ -87,7 +87,7 @@ export function ContentCard({
 					<h3 className="xl:whitespace-pre-line font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
 						{title}
 					</h3>
-					{hasExcerpt ? <p className="text-xs sm:text-sm md:text-base text-[var(--text-muted)]">{hasExcerpt}</p> : null}
+					{hasExcerpt ? <p className="text-xs sm:text-sm md:text-base text-[var(--text-muted)] whitespace-pre-line">{excerpt}</p> : null}
 				</div>
 				<div className="mt-auto">{renderCta()}</div>
 			</div>

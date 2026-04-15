@@ -53,6 +53,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
                         <NavigationMenuLink
                           key={child.href}
                           render={<Link href={child.href} />}
+                          closeOnClick
                           className={catalogMenuLinkClassName}
                         >
                           <span>{child.label}</span>
@@ -68,6 +69,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
               ) : (
                 <NavigationMenuLink
                   render={<Link href={item.href} />}
+                  closeOnClick
                   data-active={isActive ? "" : undefined}
                   aria-current={isActive ? "page" : undefined}
                   className={cn(

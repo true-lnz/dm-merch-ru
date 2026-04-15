@@ -1,11 +1,6 @@
-﻿import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
+import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import { PageHeading } from "@/shared/ui/page-heading";
 import Image from "next/image";
-
-const HERO_IMAGE = {
-  src: "/catalog/covers/img_main_catalog_cover.png",
-  alt: "Команда в фирменном мерче",
-} as const;
 
 const HERO_FEATURES = [
   { text: "Цена ниже рынка на ~ 25% за счет собственного производства и прямой логистики с Турции" },
@@ -15,19 +10,27 @@ const HERO_FEATURES = [
 
 const FEATURE_ICON_SRC = "/icons/ic_feature.svg";
 
-export function CatalogHero() {
+type CatalogHeroProps = {
+  heroTitle: string;
+  heroImage: {
+    src: string;
+    alt: string;
+  };
+};
+
+export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
   return (
     <section className="mb-[63px] md:mb-[72px] xl:mb-[90px] relative w-full overflow-visible">
-      <div className="flex min-h-0 w-full justify-start mdLh- xl:h-[90vh] xl:justify-start 2xl:h-[80vh]">
+      <div className="flex min-h-0 w-full justify-start mdLh- xl:h-[90vh] xl:justify-start 2xl:h-[90дvh]">
         <div className="pointer-events-none absolute inset-y-0 hidden right-[calc(var(--layout-side-padding)*-1)] w-[65%] xl:block 2xl:w-[55%]">
-          <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill unoptimized sizes="42vw" className="object-cover object-[130%_top]" />
+          <Image src={heroImage.src} alt={heroImage.alt} fill unoptimized sizes="42vw" className="object-cover object-[130%_top]" />
         </div>
 
         <div className="relative z-10 mb-16 flex w-full justify-center xl:block xl:w-1/2 xl:max-w-[50%]">
           <div className="flex w-full flex-col pt-5 xl:h-full xl:max-w-none xl:justify-between">
             <div className="flex flex-col gap-5 xl:gap-[30px]">
               <PageHeading
-                title="КАТАЛОГ"
+                title={heroTitle}
                 breadcrumb={{
                   labelFrom: "Главная",
                   labelTo: "Каталог",
@@ -41,8 +44,8 @@ export function CatalogHero() {
 
             <div className="relative aspect-[340/314] w-full overflow-hidden mt-4 md:aspect-[16/12] xl:hidden">
               <Image
-                src={HERO_IMAGE.src}
-                alt={HERO_IMAGE.alt}
+                src={heroImage.src}
+                alt={heroImage.alt}
                 fill
                 sizes="(max-width: 767px) calc(100vw - 60px), 420px"
                 className="object-cover object-top"

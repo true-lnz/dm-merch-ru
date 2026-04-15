@@ -13,9 +13,9 @@ export const headerNavigation: HeaderNavigationItem[] = [
     label: "Каталог",
     children: [
       { href: "/catalog", label: "Весь каталог" },
-      { href: "/catalog?category=hoodies", label: "Толстовки" },
-      { href: "/catalog?category=tshirts", label: "Футболки" },
-      { href: "/catalog?category=outerwear", label: "Верхняя одежда" },
+      { href: "/catalog?category=tolstovki", label: "Толстовки" },
+      { href: "/catalog?category=futbolki", label: "Футболки" },
+      { href: "/catalog?category=verhnyaya-odezhda", label: "Верхняя одежда" },
       { href: "/catalog?category=trousers", label: "Брюки" },
       { href: "/catalog?category=headwear", label: "Головные уборы" },
       { href: "/catalog?category=bags", label: "Сумки и рюкзаки" },
