@@ -4,13 +4,14 @@ import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { FaqSection } from "@/widgets/faq-section";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { PageHeading } from "../../../shared/ui/page-heading";
 import { casesPageItems, caseThemes, type CaseTheme } from "../model/cases-data";
 import { CaseCard } from "./case-card";
 
 export function CasesPage() {
   const [activeTheme, setActiveTheme] = useState<CaseTheme>("Все кейсы");
+  const listStartRef = useRef<HTMLDivElement | null>(null);
 
   const visibleCases = useMemo(() => {
     if (activeTheme === "Все кейсы") {
@@ -19,6 +20,18 @@ export function CasesPage() {
 
     return casesPageItems.filter((item) => item.theme === activeTheme);
   }, [activeTheme]);
+
+  const handleThemeChange = useCallback(
+    (theme: CaseTheme) => {
+      if (theme === activeTheme) {
+        return;
+      }
+
+      setActiveTheme(theme);
+      listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    },
+    [activeTheme],
+  );
 
   return (
     <>
@@ -42,7 +55,7 @@ export function CasesPage() {
                 <button
                   key={theme}
                   type="button"
-                  onClick={() => setActiveTheme(theme)}
+                  onClick={() => handleThemeChange(theme)}
                   className={cn(
                     "flex min-h-[60px] md:min-h-[90px] w-[75%] shrink-0 cursor-pointer snap-start flex-col items-start justify-start rounded-[18px] px-[18px] py-4 text-left font-heading text-lg md:text-3xl leading-[0.95] uppercase transition-colors xl:w-full",
                     isActive ? "bg-[var(--accent)] text-white" : "bg-[var(--card-bg)] text-[#404040] hover:bg-[#e1e0db]",
@@ -55,7 +68,7 @@ export function CasesPage() {
           </div>
         </aside>
 
-        <div className="space-y-[40px] md:space-y-[22px]">
+        <div ref={listStartRef} className="space-y-[40px] md:space-y-[22px] scroll-mt-[88px] md:scroll-mt-[112px]">
           {visibleCases.length > 0 ? (
             visibleCases.map((item) => <CaseCard key={item.id} item={item} />)
           ) : (

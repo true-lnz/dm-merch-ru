@@ -13,7 +13,7 @@ export function CatalogWorkStages() {
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <div className="relative -mx-[var(--layout-side-padding)] overflow-hidden rounded-none bg-[var(--accent)] px-[26px] py-[28px] text-white sm:-mx-0 sm:rounded-[18px] md:rounded-[22.5px] md:px-[38px] md:py-[44px] xl:px-[80px] xl:py-[72px]">
         <Image
-          src="/catalog/img_card_catalog_cover.svg"
+          src="/catalog/img_card_cover_main.svg"
           alt=""
           aria-hidden="true"
           fill

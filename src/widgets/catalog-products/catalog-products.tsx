@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
@@ -17,17 +17,17 @@ type CatalogProductItem = {
 const MOBILE_FADE_DURATION_MS = 180;
 
 const CATALOG_PRODUCTS = [
-  { title: "Футболки и поло", price: "От 450 ₽", imageUrl: "/catalog/1_futbolki.png" },
-  { title: "толстовки", price: "От 870 ₽", imageUrl: "/catalog/2_tolstovki.png" },
-  { title: "верхняя одежда", price: "От 870 ₽", imageUrl: "/catalog/3_verhnya_odezhda.png" },
-  { title: "брюки", price: "От 900 ₽", imageUrl: "/catalog/4_bryki.png" },
-  { title: "спортивная одежда", price: "От 900 ₽", imageUrl: "/catalog/5_sport_wear.png" },
-  { title: "головные уборы", price: "От 450 ₽", imageUrl: "/catalog/6_hats.png" },
-  { title: "сумки и рюкзаки", price: "От 150 ₽", imageUrl: "/catalog/7_sumki.png" },
-  { title: "Сувенирная продукция", price: "От 300 ₽", imageUrl: "/catalog/8_souvenir.png" },
-  { title: "Авторская сувенирная продукция", price: "От 550 ₽", imageUrl: "/catalog/9_author_souvenir.png" },
-  { title: "Деловые аксессуары", price: "От 550 ₽", imageUrl: "/catalog/10_buz_accessories.png" },
-  { title: "Униформа", price: "От 750 ₽", imageUrl: "/catalog/11_uniform.png" },
+  { title: "Футболки и поло", price: "От 450 ₽", imageUrl: "/catalog/main-catalog/products/img_1_futbolki.png" },
+  { title: "толстовки", price: "От 870 ₽", imageUrl: "/catalog/main-catalog/products/img_2_tolstovki.png" },
+  { title: "верхняя одежда", price: "От 870 ₽", imageUrl: "/catalog/main-catalog/products/img_3_verhnya_odezhda.png" },
+  { title: "брюки", price: "От 900 ₽", imageUrl: "/catalog/main-catalog/products/img_4_bryki.png" },
+  { title: "спортивная одежда", price: "От 900 ₽", imageUrl: "/catalog/main-catalog/products/img_5_sport_wear.png" },
+  { title: "головные уборы", price: "От 450 ₽", imageUrl: "/catalog/main-catalog/products/img_6_hats.png" },
+  { title: "сумки и рюкзаки", price: "От 150 ₽", imageUrl: "/catalog/main-catalog/products/img_7_sumki.png" },
+  { title: "Сувенирная продукция", price: "От 300 ₽", imageUrl: "/catalog/main-catalog/products/img_8_souvenir.png" },
+  { title: "Авторская сувенирная продукция", price: "От 550 ₽", imageUrl: "/catalog/main-catalog/products/img_9_author_souvenir.png" },
+  { title: "Деловые аксессуары", price: "От 550 ₽", imageUrl: "/catalog/main-catalog/products/img_10_buz_accessories.png" },
+  { title: "Униформа", price: "От 750 ₽", imageUrl: "/catalog/main-catalog/products/img_11_uniform.png" },
 ] satisfies CatalogProductItem[];
 
 function CatalogCard({ item }: { item: CatalogProductItem }) {

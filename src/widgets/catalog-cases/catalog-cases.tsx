@@ -30,8 +30,8 @@ const CATALOG_CASES = [
     description: "Разработали и произвели худи и футболки с деликатным брендированием для сотрудников и корпоративного использования.",
     result: "Практичный мерч на каждый день, который поддерживает фирменный стиль компании и остаётся удобным в носке.",
     images: [
-      { src: "/catalog/cases/kolchuga-square.jpg", alt: "Кольчуга — кейс, фото 1" },
-      { src: "/catalog/cases/kolchuga-tall.jpg", alt: "Кольчуга — кейс, фото 2" },
+      { src: "/catalog/cases/img_kolchuga_square.jpg", alt: "Кольчуга — кейс, фото 1" },
+      { src: "/catalog/cases/img_kolchuga_tall.jpg", alt: "Кольчуга — кейс, фото 2" },
     ],
   },
   {
@@ -40,8 +40,8 @@ const CATALOG_CASES = [
     description: "Создали корпоративный набор с цельной визуальной концепцией, в котором каждая деталь работает на образ бренда.",
     result: "Эстетичный фирменный подарок для клиентов и партнёров, который приятно дарить и легко ассоциировать с брендом.",
     images: [
-      { src: "/catalog/cases/tihii-dom-square.jpg", alt: "Тихий дом — кейс, фото 1" },
-      { src: "/catalog/cases/tihii-dom-tall.jpg", alt: "Тихий дом — кейс, фото 2" },
+      { src: "/catalog/cases/img_tihii_dom_square.jpg", alt: "Тихий дом — кейс, фото 1" },
+      { src: "/catalog/cases/img_tihii_dom_tall.jpg", alt: "Тихий дом — кейс, фото 2" },
     ],
   },
 ] satisfies CatalogCaseItem[];
@@ -191,3 +191,4 @@ export function CatalogCases() {
     </section>
   );
 }
+

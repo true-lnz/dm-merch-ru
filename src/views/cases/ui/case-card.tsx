@@ -134,7 +134,7 @@ function CaseTextBlock({
   return (
     <div className="rounded-[18px] bg-[var(--card-bg)] px-5 pb-5 pt-5 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
       <div className="space-y-4 lg:space-y-[11px]">
-        <h2 className="font-heading text-3xl md:text-5xl leading-[0.95] uppercase text-[var(--heading)]">{item.company}</h2>
+        <h2 className="font-heading whitespace-pre-line text-3xl md:text-5xl leading-[0.95] uppercase text-[var(--heading)]">{item.company}</h2>
         <p className="text-xs md:text-sm xl:text-base leading-[1.3] text-[#404040]">{item.teaser}</p>
         <p className="text-xs md:text-sm xl:text-base leading-[1.3] text-[#404040]">{item.intro}</p>
       </div>

@@ -1,9 +1,9 @@
-import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
+﻿import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import { PageHeading } from "@/shared/ui/page-heading";
 import Image from "next/image";
 
 const HERO_IMAGE = {
-  src: "/catalog/img_catalog_hero_cover.png",
+  src: "/catalog/covers/img_main_catalog_cover.png",
   alt: "Команда в фирменном мерче",
 } as const;
 
@@ -61,7 +61,7 @@ export function CatalogHero() {
                       aria-hidden="true"
                       className="mt-[5px] size-[21px] shrink-0 xl:mb-[15px] xl:mt-0"
                     />
-                    <p className="text-sm md:text-base leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] xl:text-[#404040]">{feature.text}</p>
+                    <p className="text-xs md:text-sm font-medium leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] xl:text-[#404040]">{feature.text}</p>
                   </div>
                 </div>
               ))}
