@@ -139,16 +139,22 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
       {
         id: "magadan-estfest",
         company: "Магадан × ЕстьФест",
-        description: "Разработали коллекцию мерча\nдля сотрудников ресторана «Магадан»\nв рамках фестиваля",
+        description: "Разработали коллекцию мерча\nдля сотрудников ресторана «Магадан»\nв рамках фестиваля.",
         result: "Стильная униформа, которая усиливает бренд ресторана и формирует премиальный сервисный образ.",
-        images: CASE_PLACEHOLDER_IMAGES,
+        images: [
+          { src: "/catalog/cases/img_magadan_square.png", alt: "Магадан — кейс, фото 1" },
+          { src: "/catalog/cases/img_magadan_tall.png", alt: "Магадан — кейс, фото 2" },
+        ],
       },
       {
         id: "art-kvadrat",
         company: "АРТ-КВАДРАТ",
         description: "Разработали дизайн-концепт, который передает атмосферу городского пространства: события, развлечения, культурные активности.",
         result: "Мерч, который стал частью идентичности пространства и усилил эмоциональную связь с аудиторией.",
-        images: CASE_PLACEHOLDER_IMAGES,
+        images: [
+          { src: "/catalog/cases/img_art_kvadrat_square.png", alt: "АРТ-КВАДРАТ — кейс, фото 1" },
+          { src: "/catalog/cases/img_art_kvadrat_tall.png", alt: "АРТ-КВАДРАТ — кейс, фото 2" },
+        ],
       },
     ],
   },
@@ -227,14 +233,20 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         company: "DARK",
         description: "Разработали мерч-наборы: футболки, худи и светоотражающие элементы\nв фирменной стилистике бренда.",
         result: "Современный и функциональный мерч\nдля команды, усиливающий бренд работодателя.",
-        images: CASE_PLACEHOLDER_IMAGES,
+        images: [
+          { src: "/catalog/cases/img_dark_square.png", alt: "DARK — кейс, фото 1" },
+          { src: "/catalog/cases/img_dark_tall.png", alt: "DARK — кейс, фото 2" },
+        ],
       },
       {
         id: "ufanet",
         company: "Уфанет",
         description: "Создали коллекцию худи, полностью соответствующую фирменному стилю компании.",
         result: "Единый корпоративный стиль\nи визуальная узнаваемость бренда.",
-        images: CASE_PLACEHOLDER_IMAGES,
+        images: [
+          { src: "/catalog/cases/img_ufanet_square.png", alt: "Уфанет — кейс, фото 1" },
+          { src: "/catalog/cases/img_ufanet_tall.png", alt: "Уфанет — кейс, фото 2" },
+        ],
       },
     ],
   },
@@ -274,7 +286,10 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         description:
           "Произвели партию брендированных дождевиков для команды партнёра гастрономического фестиваля.\nВ дизайне учли фирменную айдентику LDGR и требования к практичности экипировки для уличных мероприятий.",
         result: "Функциональную экипировку\nдля команды и дополнительную визуальную экспозицию бренда\nна фестивале.",
-        images: CASE_PLACEHOLDER_IMAGES,
+        images: [
+          { src: "/catalog/cases/img_ldgr_square.png", alt: "LDGR — кейс, фото 1" },
+          { src: "/catalog/cases/img_ldgr_tall.png", alt: "LDGR — кейс, фото 2" },
+        ],
       },
       {
         id: "agromig",
@@ -282,7 +297,10 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         description:
           "Разработали и изготовили дождевики\nс фирменной символикой\nдля сотрудников компании, работающих на выездных мероприятиях\nи производственных площадках.",
         result: "Практичную форму, защищающую\nот непогоды и усиливающую узнаваемость бренда в поле.",
-        images: CASE_PLACEHOLDER_IMAGES,
+        images: [
+          { src: "/catalog/cases/img_agromig_square.png", alt: "Агромиг — кейс, фото 1" },
+          { src: "/catalog/cases/img_agromig_tall.png", alt: "Агромиг — кейс, фото 2" },
+        ],
       },
     ],
   },
