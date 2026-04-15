@@ -30,11 +30,6 @@ export type CatalogPageData = {
   casesVariant?: "default" | "stacked";
 };
 
-const CASE_PLACEHOLDER_IMAGES: [CatalogCaseImage, CatalogCaseImage] = [
-  { src: "/catalog/cases/img_dark_square.png", alt: "Кейс, фото 1" },
-  { src: "/catalog/cases/img_dark_tall.png", alt: "Кейс, фото 2" },
-];
-
 export const MAIN_CATALOG_DATA: CatalogPageData = {
   heroTitle: "КАТАЛОГ",
   heroImage: {
