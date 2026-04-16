@@ -16,7 +16,7 @@ const fieldSurfaceClassName =
 
 const inputClassName = cn(fieldBaseClassName, fieldSurfaceClassName, "h-11 pt-3");
 
-const textareaClassName = cn(fieldBaseClassName, fieldSurfaceClassName, "max-h-24 min-h-24 resize-none");
+const textareaClassName = cn(fieldBaseClassName, fieldSurfaceClassName, "max-h-[4rem] min-h-[4rem] overflow-y-auto resize-none");
 
 const checkboxClassName =
   "mt-0.5 border-[var(--field-border)] bg-transparent text-white focus-visible:border-[var(--accent)] focus-visible:ring-0 data-checked:border-[var(--accent)] data-checked:bg-[var(--accent)] group-data-[surface=accent]/form:border-white/55 group-data-[surface=accent]/form:focus-visible:border-white group-data-[surface=accent]/form:data-checked:border-white group-data-[surface=accent]/form:data-checked:bg-white group-data-[surface=accent]/form:data-checked:text-[var(--accent)]";
@@ -257,7 +257,7 @@ export function RequestForm({
             <label htmlFor={messageFieldId} className="mb-2 block text-sm text-[var(--field-text)] group-data-[surface=accent]/form:text-white/60">
               Сообщение
             </label>
-            <Textarea id={messageFieldId} floatingLabel={false} placeholder="" name="message" className={textareaClassName} />
+            <Textarea id={messageFieldId} floatingLabel={false} placeholder="" name="message" rows={3} className={textareaClassName} />
           </>
         )}
       </div>
