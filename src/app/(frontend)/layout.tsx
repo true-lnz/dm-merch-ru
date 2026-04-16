@@ -1,4 +1,5 @@
 import { Toaster } from "@/shared/ui/sonner";
+import { PageTransitionProvider } from "@/shared/ui/page-transition";
 import { CookieWarning } from "@/widgets/cookie-warning";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
@@ -46,12 +47,14 @@ export default function RootLayout({
   return (
     <html lang="ru" className="text-base">
       <body>
-        <div className="site-shell">
-          <Header />
-          <main className="site-main">{children}</main>
-          <Footer />
-          <CookieWarning />
-        </div>
+        <PageTransitionProvider>
+          <div className="site-shell">
+            <Header />
+            <main className="site-main">{children}</main>
+            <Footer />
+            <CookieWarning />
+          </div>
+        </PageTransitionProvider>
         <Toaster />
       </body>
     </html>

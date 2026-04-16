@@ -16,6 +16,7 @@ import { MobileHeaderBar, MobileMenu } from "./mobile-header";
 
 export function Header() {
   const pathname = usePathname();
+  const isPartnerCatalogPage = pathname === "/partner-catalog";
   const isScrolled = useScrolledHeader();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
@@ -55,7 +56,7 @@ export function Header() {
           )}
         />
 
-        <DesktopHeader pathname={pathname} wishlistCount={wishlistCount} />
+        <DesktopHeader pathname={pathname} wishlistCount={wishlistCount} showWishlist={isPartnerCatalogPage} />
 
         <MobileHeaderBar onOpenMenu={openMenu} />
       </header>
@@ -66,6 +67,7 @@ export function Header() {
         isCatalogOpen={isCatalogOpen}
         catalogItem={catalogItem}
         wishlistCount={wishlistCount}
+        showWishlist={isPartnerCatalogPage}
         mobilePrimaryLinks={mobilePrimaryLinks}
         onToggleCatalog={() => setIsCatalogOpen((open) => !open)}
         onCloseMenu={closeMenu}

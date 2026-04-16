@@ -11,7 +11,7 @@ import {
 import { SiteContacts } from "@/shared/ui/site-contacts";
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink } from "@/shared/ui/page-transition";
 import {
 	HeaderIconLink,
 	catalogMenuLinkClassName,
@@ -53,7 +53,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
                       {item.children.map((child) => (
                         <NavigationMenuLink
                           key={child.href}
-                          render={<Link href={child.href} />}
+                          render={<TransitionLink href={child.href} source="header" />}
                           closeOnClick
                           className={catalogMenuLinkClassName}
                         >
@@ -69,7 +69,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
                 </>
               ) : (
                 <NavigationMenuLink
-                  render={<Link href={item.href} />}
+                  render={<TransitionLink href={item.href} source="header" />}
                   closeOnClick
                   data-active={isActive ? "" : undefined}
                   aria-current={isActive ? "page" : undefined}
@@ -112,14 +112,16 @@ function TabletHeaderActions() {
 export function DesktopHeader({
   pathname,
   wishlistCount,
+  showWishlist,
 }: {
   pathname: string | null;
   wishlistCount: number;
+  showWishlist: boolean;
 }) {
   return (
     <div className="relative z-10 hidden min-h-[84px] items-center justify-between gap-5 py-3 lg:flex lg:min-h-[88px] xl:min-h-[93px]">
       <div className="flex min-w-0 items-center gap-8 xl:gap-[6.85rem]">
-        <Link href="/" className="inline-flex items-center" aria-label="На главную страницу">
+        <TransitionLink href="/" source="header" className="inline-flex items-center" aria-label="На главную страницу">
           <Image
             src="/logo-dm.svg"
             alt="Держи Марку"
@@ -127,14 +129,14 @@ export function DesktopHeader({
             height={37}
             className="h-auto w-[178px] lg:w-[204px] xl:w-[273px]"
           />
-        </Link>
+        </TransitionLink>
 
         <DesktopNavigation pathname={pathname} />
       </div>
 
       <TabletHeaderActions />
       <div className="hidden xl:flex items-center gap-2">
-        <WishlistDialog count={wishlistCount} variant="desktop" />
+        {showWishlist ? <WishlistDialog count={wishlistCount} variant="desktop" /> : null}
         <SiteContacts className="!flex" />
       </div>
     </div>

@@ -1,5 +1,5 @@
 ﻿import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink } from "@/shared/ui/page-transition";
 import { ChevronDownIcon, XIcon } from "lucide-react";
 import type { HeaderNavigationItem } from "@/shared/config/navigation";
 import { siteInfo } from "@/shared/config/site-info";
@@ -62,6 +62,7 @@ export function MobileMenu({
   isCatalogOpen,
   catalogItem,
   wishlistCount,
+  showWishlist,
   mobilePrimaryLinks,
   onToggleCatalog,
   onCloseMenu,
@@ -71,6 +72,7 @@ export function MobileMenu({
   isCatalogOpen: boolean;
   catalogItem?: HeaderNavigationItem;
   wishlistCount: number;
+  showWishlist: boolean;
   mobilePrimaryLinks: HeaderNavigationItem[];
   onToggleCatalog: () => void;
   onCloseMenu: () => void;
@@ -108,7 +110,7 @@ export function MobileMenu({
             </button>
           </div>
 
-          {wishlistCount > 0 ? (
+          {showWishlist && wishlistCount > 0 ? (
             <div className="mb-6">
               <WishlistDialog count={wishlistCount} variant="mobile" />
             </div>
@@ -148,9 +150,9 @@ export function MobileMenu({
                     <ul className="grid gap-[14px] overflow-hidden">
                       {catalogItem.children?.map((item) => (
                         <li key={item.href}>
-                          <Link href={item.href} className={mobileMenuLinkClassName} onClick={onCloseMenu}>
+                          <TransitionLink href={item.href} source="menu" className={mobileMenuLinkClassName} onClick={onCloseMenu}>
                             {item.label}
-                          </Link>
+                          </TransitionLink>
                         </li>
                       ))}
                     </ul>
@@ -163,13 +165,14 @@ export function MobileMenu({
 
                 return (
                   <li key={item.href}>
-                    <Link
+                    <TransitionLink
                       href={item.href}
+                      source="menu"
                       className={cn(mobilePrimaryLinkClassName, isActive && "text-[var(--accent)]")}
                       onClick={onCloseMenu}
                     >
                       {item.label}
-                    </Link>
+                    </TransitionLink>
                   </li>
                 );
               })}
@@ -197,7 +200,7 @@ export function MobileMenu({
 export function MobileHeaderBar({ onOpenMenu }: { onOpenMenu: () => void }) {
   return (
     <div className="relative z-10 flex min-h-[80px] items-center justify-between gap-5 py-3 lg:hidden">
-      <Link href="/" className="inline-flex items-center" aria-label="На главную страницу">
+      <TransitionLink href="/" source="header" className="inline-flex items-center" aria-label="На главную страницу">
         <Image
           src="/logo-dm.svg"
           alt="Держи Марку"
@@ -205,7 +208,7 @@ export function MobileHeaderBar({ onOpenMenu }: { onOpenMenu: () => void }) {
           height={37}
           className="h-auto w-[147px] md:w-[178px]"
         />
-      </Link>
+      </TransitionLink>
 
       <MobileHeaderActions onOpenMenu={onOpenMenu} />
     </div>

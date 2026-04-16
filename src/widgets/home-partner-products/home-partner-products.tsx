@@ -16,6 +16,10 @@ type HomeProductItem = {
   href: string;
 };
 
+type HomePartnerProductsProps = {
+  showIntro?: boolean;
+};
+
 const MOBILE_FADE_DURATION_MS = 180;
 
 const PARTNER_PRODUCTS_TITLE = "Более 50 000 товаров\nдля брендирования";
@@ -113,7 +117,7 @@ function ProductCard({ item }: { item: HomeProductItem }) {
   );
 }
 
-export function HomePartnerProducts() {
+export function HomePartnerProducts({ showIntro = true }: HomePartnerProductsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobileContentVisible, setIsMobileContentVisible] = useState(true);
   const transitionTimeoutRef = useRef<number | null>(null);
@@ -147,15 +151,17 @@ export function HomePartnerProducts() {
 
   return (
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-      <PageSubheading
-        title={PARTNER_PRODUCTS_TITLE}
-        description={PARTNER_PRODUCTS_DESCRIPTION}
-        descriptionPlacement="side"
-        sideDescriptionLayout="two-columns"
-        descriptionClassName="max-w-[35.0625rem]"
-      />
+      {showIntro ? (
+        <PageSubheading
+          title={PARTNER_PRODUCTS_TITLE}
+          description={PARTNER_PRODUCTS_DESCRIPTION}
+          descriptionPlacement="side"
+          sideDescriptionLayout="two-columns"
+          descriptionClassName="max-w-[35.0625rem]"
+        />
+      ) : null}
 
-      <div className="mt-8 md:hidden flex flex-col">
+      <div className={cn("md:hidden flex flex-col", showIntro ? "mt-8" : "mt-0")}>
         <article className="flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]">
           <div
             className={cn(
@@ -196,7 +202,7 @@ export function HomePartnerProducts() {
         />
       </div>
 
-      <div className="mt-10 hidden gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className={cn("hidden gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4", showIntro ? "mt-10" : "mt-0")}>
         {PARTNER_PRODUCTS.map((item) => (
           <ProductCard key={item.title} item={item} />
         ))}
