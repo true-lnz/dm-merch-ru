@@ -15,6 +15,7 @@ import {
   mobilePrimaryLinkClassName,
   scaleFigma,
 } from "./header.shared";
+import { WishlistDialog } from "./wishlist-dialog";
 
 function MobileHeaderActions({ onOpenMenu }: { onOpenMenu: () => void }) {
   const actionSize = scaleFigma(28);
@@ -60,6 +61,7 @@ export function MobileMenu({
   isOpen,
   isCatalogOpen,
   catalogItem,
+  wishlistCount,
   mobilePrimaryLinks,
   onToggleCatalog,
   onCloseMenu,
@@ -68,6 +70,7 @@ export function MobileMenu({
   isOpen: boolean;
   isCatalogOpen: boolean;
   catalogItem?: HeaderNavigationItem;
+  wishlistCount: number;
   mobilePrimaryLinks: HeaderNavigationItem[];
   onToggleCatalog: () => void;
   onCloseMenu: () => void;
@@ -104,6 +107,12 @@ export function MobileMenu({
               <XIcon className="size-[18px]" strokeWidth={2.5} />
             </button>
           </div>
+
+          {wishlistCount > 0 ? (
+            <div className="mb-6">
+              <WishlistDialog count={wishlistCount} variant="mobile" />
+            </div>
+          ) : null}
 
           <nav aria-label="Навигация мобильного меню" className="mt-1">
             <ul className="grid gap-4">

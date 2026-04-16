@@ -101,9 +101,12 @@ type RequestFormProps = {
   includeQuantity?: boolean;
   quantityRequired?: boolean;
   privacyCheckboxId?: string;
+  formId?: string;
   formClassName?: string;
   submitClassName?: string;
   submitLabel?: string;
+  showSubmitButton?: boolean;
+  messageAsInput?: boolean;
   onAccentSurface?: boolean;
 };
 
@@ -112,9 +115,12 @@ export function RequestForm({
   includeQuantity = false,
   quantityRequired = false,
   privacyCheckboxId = DEFAULT_PRIVACY_CHECKBOX_ID,
+  formId,
   formClassName,
   submitClassName,
   submitLabel = "Отправить заявку",
+  showSubmitButton = true,
+  messageAsInput = false,
   onAccentSurface = false,
 }: RequestFormProps) {
   const messageFieldId = useId();
@@ -206,6 +212,7 @@ export function RequestForm({
 
   return (
     <form
+      id={formId}
       data-surface={onAccentSurface ? "accent" : "default"}
       className={cn("group/form space-y-4", formClassName)}
       action="/request-success"
@@ -243,10 +250,16 @@ export function RequestForm({
       ) : null}
 
       <div className="block">
-        <label htmlFor={messageFieldId} className="mb-2 block text-sm text-[var(--field-text)] group-data-[surface=accent]/form:text-white/60">
-          Сообщение
-        </label>
-        <Textarea id={messageFieldId} floatingLabel={false} placeholder="" name="message" className={textareaClassName} />
+        {messageAsInput ? (
+          <Input id={messageFieldId} placeholder="Сообщение" name="message" className={inputClassName} />
+        ) : (
+          <>
+            <label htmlFor={messageFieldId} className="mb-2 block text-sm text-[var(--field-text)] group-data-[surface=accent]/form:text-white/60">
+              Сообщение
+            </label>
+            <Textarea id={messageFieldId} floatingLabel={false} placeholder="" name="message" className={textareaClassName} />
+          </>
+        )}
       </div>
 
       {includeQuantity ? (
@@ -271,9 +284,11 @@ export function RequestForm({
         </label>
       </div>
 
-      <Button type="submit" variant="blue" className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}>
-        {submitLabel}
-      </Button>
+      {showSubmitButton ? (
+        <Button type="submit" variant="blue" className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}>
+          {submitLabel}
+        </Button>
+      ) : null}
     </form>
   );
 }

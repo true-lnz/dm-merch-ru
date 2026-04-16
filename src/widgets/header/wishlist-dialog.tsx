@@ -1,0 +1,217 @@
+import { Button } from "@/shared/ui/button";
+import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
+import { RequestForm } from "@/shared/ui/request-form";
+import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
+import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
+import Image from "next/image";
+import { useMemo, useState } from "react";
+
+type WishlistDialogProps = {
+  count: number;
+  variant: "desktop" | "mobile";
+  className?: string;
+};
+
+type WishlistItem = {
+  id: string;
+  imageUrl: string;
+  title: string;
+  articleNumber: string;
+  unitPriceRub: number;
+  quantity: number;
+};
+
+const MOCK_WISHLIST_ITEMS: WishlistItem[] = [
+  {
+    id: "ws-1",
+    imageUrl: "/catalog/t-shirt-catalog/products/img_futbolka_standart_2.png",
+    title: "Футболка стандарт",
+    articleNumber: "DM-TS-180",
+    unitPriceRub: 390,
+    quantity: 120,
+  },
+  {
+    id: "ws-2",
+    imageUrl: "/catalog/sweatshirt-catalog/products/img_13.png",
+    title: "Худи оверсайз",
+    articleNumber: "DM-HD-320",
+    unitPriceRub: 1370,
+    quantity: 60,
+  },
+];
+
+const rubFormatter = new Intl.NumberFormat("ru-RU");
+
+function formatRub(value: number) {
+  return `${rubFormatter.format(value)} ₽`;
+}
+
+function WishlistProductCard({
+  item,
+  onIncrease,
+  onDecrease,
+  onChangeQuantity,
+  onRemove,
+}: {
+  item: WishlistItem;
+  onIncrease: (id: string) => void;
+  onDecrease: (id: string) => void;
+  onChangeQuantity: (id: string, quantity: number) => void;
+  onRemove: (id: string) => void;
+}) {
+  const lineTotalRub = item.unitPriceRub * item.quantity;
+
+  return (
+    <article className="relative grid grid-cols-[86px_1fr] gap-3 rounded-[12px] bg-white p-3 pr-11">
+      <button
+        type="button"
+        onClick={() => onRemove(item.id)}
+        aria-label={`Удалить ${item.title} из вишлиста`}
+        className="absolute right-3 top-3 inline-flex size-6 items-center justify-center rounded-full bg-[#e8e8e8] text-[#7a7a7a] transition-colors hover:bg-[#dcdcdc] hover:text-[#575757]"
+      >
+        <XIcon className="size-4" strokeWidth={2.4} />
+      </button>
+
+      <div className="overflow-hidden rounded-[9px] border border-[#d8d8d8]">
+        <Image src={item.imageUrl} alt={item.title} width={86} height={86} className="size-[86px] object-cover" />
+      </div>
+
+      <div className="flex min-w-0 flex-col pr-1">
+        <h3 className="truncate text-base font-semibold leading-[1.3] tracking-[-0.03em] text-[#2a2a2a]">{item.title}</h3>
+        <p className="mt-1 text-xs leading-[1.35] tracking-[-0.03em] text-[#7a7a7a]">Арт. {item.articleNumber}</p>
+        <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+          <div className="inline-flex items-center rounded-[8px] border border-[#d5d5d5] bg-[#fafafa]">
+            <button
+              type="button"
+              onClick={() => onDecrease(item.id)}
+              aria-label={`Уменьшить количество ${item.title}`}
+              className="inline-flex h-7 w-7 items-center justify-center text-[#656565] transition-colors hover:bg-[#efefef]"
+            >
+              <MinusIcon className="size-3.5" strokeWidth={2.2} />
+            </button>
+            <input
+              type="number"
+              min={1}
+              value={item.quantity}
+              onChange={(event) => onChangeQuantity(item.id, Number(event.target.value))}
+              className="h-7 w-14 border-x border-[#d5d5d5] bg-transparent px-1 text-center text-xs font-medium text-[#404040] outline-none"
+              aria-label={`Количество ${item.title}`}
+            />
+            <button
+              type="button"
+              onClick={() => onIncrease(item.id)}
+              aria-label={`Увеличить количество ${item.title}`}
+              className="inline-flex h-7 w-7 items-center justify-center text-[#656565] transition-colors hover:bg-[#efefef]"
+            >
+              <PlusIcon className="size-3.5" strokeWidth={2.2} />
+            </button>
+          </div>
+
+          <p className="text-base font-semibold leading-[1.3] tracking-[-0.03em] text-[#2a2a2a]">{formatRub(lineTotalRub)}</p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export function WishlistDialog({ count, variant, className }: WishlistDialogProps) {
+  const [items, setItems] = useState<WishlistItem[]>(MOCK_WISHLIST_ITEMS);
+
+  const totalRub = useMemo(() => items.reduce((sum, item) => sum + item.unitPriceRub * item.quantity, 0), [items]);
+
+  function updateQuantity(id: string, nextQuantity: number) {
+    const safeQuantity = Number.isFinite(nextQuantity) ? Math.max(1, Math.floor(nextQuantity)) : 1;
+
+    setItems((currentItems) => currentItems.map((item) => (item.id === id ? { ...item, quantity: safeQuantity } : item)));
+  }
+
+  function increaseQuantity(id: string) {
+    setItems((currentItems) => currentItems.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item)));
+  }
+
+  function decreaseQuantity(id: string) {
+    setItems((currentItems) => currentItems.map((item) => (item.id === id ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item)));
+  }
+
+  function removeItem(id: string) {
+    setItems((currentItems) => currentItems.filter((item) => item.id !== id));
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger render={<WishlistTrigger count={count} variant={variant} className={className} />} />
+      <DialogContent
+        showCloseButton={false}
+        className="block h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] bg-[url('/img_wishlist_card_cover.svg')] bg-cover bg-center bg-no-repeat p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:max-w-none lg:h-auto lg:max-h-[calc(100dvh-2rem)] lg:w-[min(1120px,calc(100vw-2rem))] lg:max-w-none lg:rounded-[18px] lg:p-8 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
+      >
+        <div className="flex items-start justify-between gap-4">
+          <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Вишлист</DialogTitle>
+          <DialogClose
+            className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center text-[#b3b3b3] transition-colors hover:text-[#2a2a2a] xl:mt-1 xl:size-10"
+            aria-label="Закрыть вишлист"
+          >
+            <XIcon className="size-5 xl:size-7" strokeWidth={2.5} />
+          </DialogClose>
+        </div>
+
+        {items.length === 0 ? (
+          <div className="mt-4 rounded-[14px] bg-white/90 p-5">
+            <p className="text-lg font-semibold leading-[1.3] tracking-[-0.03em] text-[#2a2a2a]">Подберем мерч под ваш бюджет и задачу</p>
+            <p className="mt-2 text-sm leading-[1.45] tracking-[-0.02em] text-[#5f5f5f]">
+              Добавьте товары в вишлист и мы подготовим персональное коммерческое предложение с лучшей ценой под ваш тираж.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-5 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-medium leading-[1.3] tracking-[-0.03em] text-[#5a5a5a]">Товары в вишлисте: {items.length}</p>
+              <button
+                type="button"
+                onClick={() => setItems([])}
+                className="text-sm leading-[1.3] tracking-[-0.03em] text-[#7a7a7a] underline underline-offset-2 transition-colors hover:text-[#4f4f4f]"
+              >
+                Очистить вишлист
+              </button>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-5 lg:items-start">
+              <section aria-label="Товары в вишлисте" className="space-y-3 lg:col-span-2">
+                <div className="grid gap-3">
+                  {items.map((item) => (
+                    <WishlistProductCard
+                      key={item.id}
+                      item={item}
+                      onIncrease={increaseQuantity}
+                      onDecrease={decreaseQuantity}
+                      onChangeQuantity={updateQuantity}
+                      onRemove={removeItem}
+                    />
+                  ))}
+                </div>
+                <div className="border-t border-[var(--border)] pt-3 flex justify-end text-base font-semibold leading-[1.3] tracking-[-0.03em] text-[#2a2a2a]">
+                  <span>Итого: {formatRub(totalRub)}</span>
+                </div>
+                <p className="text-xs leading-[1.4] tracking-[-0.02em] text-[#6f6f6f]">При больших тиражах цена рассчитывается индивидуально.</p>
+              </section>
+
+              <section aria-label="Контактные данные" className="rounded-[14px] bg-white p-4 sm:p-5 lg:col-span-3">
+                <RequestForm
+                  includeEmail
+                  formId="wishlist-request-form"
+                  privacyCheckboxId="wishlist-dialog-privacy"
+                  showSubmitButton={false}
+                  messageAsInput
+                  formClassName="flex h-full flex-col gap-3"
+                />
+              </section>
+            </div>
+
+            <Button type="submit" form="wishlist-request-form" variant="blue" className="mt-4 h-[47px] w-full cursor-pointer text-lg">
+              Запросить комерческое предложние
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

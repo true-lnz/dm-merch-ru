@@ -21,6 +21,7 @@ import {
 	isActiveRoute,
 	navLinkClassName,
 } from "./header.shared";
+import { WishlistDialog } from "./wishlist-dialog";
 
 function DesktopNavigation({ pathname }: { pathname: string | null }) {
   return (
@@ -108,7 +109,13 @@ function TabletHeaderActions() {
   );
 }
 
-export function DesktopHeader({ pathname }: { pathname: string | null }) {
+export function DesktopHeader({
+  pathname,
+  wishlistCount,
+}: {
+  pathname: string | null;
+  wishlistCount: number;
+}) {
   return (
     <div className="relative z-10 hidden min-h-[84px] items-center justify-between gap-5 py-3 lg:flex lg:min-h-[88px] xl:min-h-[93px]">
       <div className="flex min-w-0 items-center gap-8 xl:gap-[6.85rem]">
@@ -126,7 +133,10 @@ export function DesktopHeader({ pathname }: { pathname: string | null }) {
       </div>
 
       <TabletHeaderActions />
-      <SiteContacts className="hidden xl:flex" />
+      <div className="hidden xl:flex items-center gap-2">
+        <WishlistDialog count={wishlistCount} variant="desktop" />
+        <SiteContacts className="!flex" />
+      </div>
     </div>
   );
 }

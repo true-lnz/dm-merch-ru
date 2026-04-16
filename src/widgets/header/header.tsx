@@ -19,6 +19,7 @@ export function Header() {
   const isScrolled = useScrolledHeader();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+  const wishlistCount = 0;
 
   const catalogItem = headerNavigation.find((item) => item.children);
   const mobilePrimaryLinks = headerNavigation.filter((item) => !item.children);
@@ -54,7 +55,7 @@ export function Header() {
           )}
         />
 
-        <DesktopHeader pathname={pathname} />
+        <DesktopHeader pathname={pathname} wishlistCount={wishlistCount} />
 
         <MobileHeaderBar onOpenMenu={openMenu} />
       </header>
@@ -64,6 +65,7 @@ export function Header() {
         isOpen={isMenuOpen}
         isCatalogOpen={isCatalogOpen}
         catalogItem={catalogItem}
+        wishlistCount={wishlistCount}
         mobilePrimaryLinks={mobilePrimaryLinks}
         onToggleCatalog={() => setIsCatalogOpen((open) => !open)}
         onCloseMenu={closeMenu}
