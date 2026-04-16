@@ -42,7 +42,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
                     className={cn(
                       catalogTriggerClassName,
                       "px-3 text-base xl:text-lg xl:px-4",
-                      isActive && "!text-[var(--text-muted)]",
+                      isActive && "!text-[var(--accent)] hover:!text-[var(--accent-hover)]",
                     )}
                   >
                     {item.label}

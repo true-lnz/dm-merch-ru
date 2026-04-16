@@ -76,6 +76,8 @@ export function MobileMenu({
     return null;
   }
 
+  const isCatalogActive = catalogItem ? isActiveRoute(pathname, catalogItem.href) : false;
+
   return (
     <>
       <div
@@ -109,7 +111,10 @@ export function MobileMenu({
                 <li className="border-b border-[var(--border)] pb-4">
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between text-left text-sm font-medium leading-[1.35] tracking-[-0.03em] text-[#404040] transition-colors hover:text-[var(--accent)]"
+                    className={cn(
+                      "flex w-full items-center justify-between text-left text-sm font-medium leading-[1.35] tracking-[-0.03em] text-[#404040] transition-colors hover:text-[var(--accent)]",
+                      isCatalogActive && "text-[var(--accent)]",
+                    )}
                     onClick={onToggleCatalog}
                     aria-expanded={isCatalogOpen}
                     aria-controls="mobile-catalog-submenu"
