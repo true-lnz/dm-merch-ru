@@ -21,81 +21,94 @@ const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
 export function HomeHero() {
   return (
-    <section className="mb-[63px] md:mb-[72px] xl:mb-[90px] mt-[36px] relative w-full overflow-visible">
-      <div className="flex min-h-0 w-full justify-start xl:h-[80vh] xl:justify-start 2xl:h-[90vh]">
-        <div className="pointer-events-none absolute inset-y-0 hidden right-[calc(var(--layout-side-padding)*-1)] w-[65%] xl:block 2xl:w-[55%]">
-          <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill unoptimized sizes="42vw" className="object-cover object-[130%_top]" />
+    <section className="relative mt-[36px] mb-[63px] md:mb-[72px] xl:mb-[90px]">
+      <div className="relative w-full overflow-visible" style={{ minHeight: "clamp(620px, 85vh, 820px)" }}>
+        {/* Desktop image background */}
+        <div className="pointer-events-none absolute inset-y-0 left-[42%] right-[calc(var(--layout-side-padding)*-1)] hidden xl:block">
+          <Image
+            src={HERO_IMAGE.src}
+            alt={HERO_IMAGE.alt}
+            fill
+            quality={80}
+            sizes="(min-width: 1536px) 50vw, (min-width: 1280px) 56vw, 0px"
+            className="object-cover object-[68%_top]"
+          />
         </div>
 
-        <div className="relative z-10 mb-16 flex w-full justify-center xl:block xl:w-1/2 xl:max-w-[50%]">
-          <div className="flex w-full flex-col px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
-            <div className="flex flex-col gap-5 xl:gap-[30px]">
-              <PageHeading title="Мерч, который работает на бизнес" />
-              <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
-                Создаём корпоративный мерч и подарки, которые носят, помнят и связывают с брендом.
-              </p>
-            </div>
+        {/* Content layer */}
+        <div className="relative z-10 w-full xl:flex xl:min-h-[inherit] xl:items-stretch">
+          <div className="w-full xl:max-w-[800px] xl:mb-[75px]">
+            <div className="flex h-full flex-col gap-8 rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.72)] xl:px-10 xl:py-10 xl:backdrop-blur-[8px] 2xl:gap-10 2xl:px-12 2xl:py-12">
+              <div className="flex flex-col gap-5 xl:gap-6">
+                <PageHeading title="Мерч, который работает на бизнес" />
+                <p className="max-w-[340px] text-sm leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21px]">
+                  Создаём корпоративный мерч и подарки, которые носят, помнят и связывают с брендом.
+                </p>
+              </div>
 
-            <div className="relative aspect-[340/314] w-full overflow-hidden mt-4 md:aspect-[16/12] xl:hidden">
-              <Image
-                src={HERO_IMAGE.src}
-                alt={HERO_IMAGE.alt}
-                fill
-                sizes="(max-width: 767px) calc(100vw - 60px), 420px"
-                className="object-cover object-center"
-              />
-            </div>
+              {/* Mobile / tablet image */}
+              <div className="relative aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden -mb-8">
+                <Image
+                  src={HERO_IMAGE.src}
+                  alt={HERO_IMAGE.alt}
+                  fill
+                  sizes="(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 70vw, 0px"
+                  className="object-cover object-top"
+                />
+              </div>
 
-            <div className="grid gap-[10px] md:gap-4 xl:grid-cols-3 xl:gap-[24px]">
-              {HERO_FEATURES.map((feature, index) => (
-                <div
-                  key={feature.text}
+              <div className="grid gap-[10px] md:gap-4 lg:grid-cols-2 2xl:grid-cols-3 2xl:gap-6">
+                {HERO_FEATURES.map((feature, index) => (
+                  <div
+                    key={feature.text}
+                    className={cn(
+                      "rounded-[9px] bg-[#e8e7e2] px-5 py-5 md:px-6 md:py-5",
+                      "2xl:rounded-none 2xl:bg-transparent 2xl:px-0 2xl:py-0",
+                      index < HERO_FEATURES.length - 1 && "2xl:border-r 2xl:border-[rgba(64,64,64,0.12)] 2xl:pr-6",
+                    )}
+                  >
+                    <div className="flex items-start gap-5 2xl:block">
+                      <Image
+                        src={FEATURE_ICON_SRC}
+                        alt=""
+                        width={21}
+                        height={21}
+                        aria-hidden="true"
+                        className="mt-[5px] size-[21px] shrink-0 2xl:mb-[15px] 2xl:mt-0"
+                      />
+                      <p className="text-sm leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] md:text-base 2xl:font-light 2xl:text-[#404040]">
+                        {feature.text}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-auto flex flex-col gap-[10px] pt-2 md:flex-row">
+                <RequestDialog>
+                  <RequestDialogButton className="w-full md:w-auto" />
+                </RequestDialog>
+
+                <Link
+                  href="/cases"
                   className={cn(
-                    "rounded-[9px] bg-[#e8e7e2] px-5 py-5 md:px-6 md:py-5",
-                    index < HERO_FEATURES.length - 1 && "xl:border-r xl:border-[rgba(64,64,64,0.12)] xl:pr-[24px]",
-                    "xl:min-h-[120px] xl:rounded-none xl:bg-transparent xl:px-0 xl:py-0",
+                    buttonVariants({ variant: "white" }),
+                    "group hidden h-[60px] justify-between rounded-[9px] border-transparent bg-white px-5 text-[16px] font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white xl:flex xl:w-[260px]",
                   )}
                 >
-                  <div className="flex items-start gap-5 xl:block">
+                  <span className="self-start pt-2">К кейсам</span>
+                  <span className="inline-flex size-10 items-center justify-center rounded-[5px] bg-[var(--accent)] transition-colors duration-200 group-hover:bg-white">
                     <Image
-                      src={FEATURE_ICON_SRC}
+                      src={SECONDARY_ARROW_ICON_SRC}
                       alt=""
-                      width={21}
-                      height={21}
+                      width={17}
+                      height={17}
                       aria-hidden="true"
-                      className="mt-[5px] size-[21px] shrink-0 xl:mb-[15px] xl:mt-0"
+                      className="size-[17px] brightness-0 invert-100 transition-[transform,filter] duration-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:brightness-100 group-hover:invert-0"
                     />
-                    <p className="text-sm md:text-base leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] xl:font-light xl:text-[#404040]">
-                      {feature.text}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 sm:mt-0 flex flex-col gap-[10px] md:flex-row">
-              <RequestDialog>
-                <RequestDialogButton className="w-full" />
-              </RequestDialog>
-              <Link
-                href="/cases"
-                className={cn(
-                  buttonVariants({ variant: "white" }),
-                  "group hidden h-[60px] justify-between rounded-[9px] border-transparent bg-white px-5 text-[16px] font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white md:w-[284px] xl:flex xl:w-[283.6px] xl:text-[19.46px] xl:tracking-[-0.04em]",
-                )}
-              >
-                <span className="self-start pt-2">К кейсам</span>
-                <span className="inline-flex size-10 items-center justify-center rounded-[5px] bg-[var(--accent)] transition-colors duration-200 group-hover:bg-white xl:size-[39.52px] xl:rounded-[4px]">
-                  <Image
-                    src={SECONDARY_ARROW_ICON_SRC}
-                    alt=""
-                    width={17}
-                    height={17}
-                    aria-hidden="true"
-                    className="size-[17px] brightness-0 invert-100 transition-[transform,filter] duration-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:brightness-100 group-hover:invert-0 xl:size-[13.55px]"
-                  />
-                </span>
-              </Link>
+                  </span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -29,6 +29,7 @@ export function ArticleHero({ article }: ArticleHeroProps) {
             alt={article.heroImage.alt}
             fill
             priority
+            quality={80}
             sizes="(max-width: 767px) 100vw, (max-width: 1279px) calc(100vw - 60px), 1740px"
             className="object-cover"
           />
