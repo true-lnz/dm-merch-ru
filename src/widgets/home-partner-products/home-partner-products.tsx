@@ -2,19 +2,13 @@
 
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
-import { ContentCard } from "@/shared/ui/content-card";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
-type HomeProductItem = {
-  title: string;
-  description: string;
-  imageUrl: string;
-  href: string;
-};
+import { PartnerProductCard } from "./partner-product-card";
+import type { PartnerProductItem } from "./types";
 
 type HomePartnerProductsProps = {
   showIntro?: boolean;
@@ -100,22 +94,7 @@ const PARTNER_PRODUCTS = [
     imageUrl: "/home/partner-products/12-pakety.png",
     href: "https://gifts.ru/",
   },
-] satisfies HomeProductItem[];
-
-function ProductCard({ item }: { item: HomeProductItem }) {
-  return (
-    <ContentCard
-      title={item.title}
-      excerpt={item.description}
-      href={item.href}
-      hrefTarget="_blank"
-      hrefRel="noreferrer"
-      ctaLabel="Узнать подробнее"
-      image={{ url: item.imageUrl, alt: item.title, width: 413, height: 400 }}
-      imageContainerClassName="aspect-square"
-    />
-  );
-}
+] satisfies PartnerProductItem[];
 
 export function HomePartnerProducts({ showIntro = true }: HomePartnerProductsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -204,7 +183,7 @@ export function HomePartnerProducts({ showIntro = true }: HomePartnerProductsPro
 
       <div className={cn("hidden gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4", showIntro ? "mt-10" : "mt-0")}>
         {PARTNER_PRODUCTS.map((item) => (
-          <ProductCard key={item.title} item={item} />
+          <PartnerProductCard key={item.title} item={item} />
         ))}
       </div>
     </section>
