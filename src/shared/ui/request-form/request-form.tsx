@@ -5,32 +5,96 @@ import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
+import { type ChangeEvent, type ClipboardEvent, type FocusEvent, type KeyboardEvent, type MouseEvent, useId, useState } from "react";
 
 const DEFAULT_PRIVACY_CHECKBOX_ID = "request-form-privacy";
 
-const fieldBaseClassName =
-  "rounded-none border-0 border-b bg-transparent px-0 py-2 text-sm shadow-none focus-visible:ring-0";
+const fieldBaseClassName = "rounded-none border-0 border-b bg-transparent px-0 text-sm shadow-none focus-visible:ring-0";
 
 const fieldSurfaceClassName =
   "border-[var(--field-border)] text-[var(--text)] placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] group-data-[surface=accent]/form:border-white/40 group-data-[surface=accent]/form:text-white group-data-[surface=accent]/form:placeholder:text-white/60 group-data-[surface=accent]/form:focus-visible:border-white";
 
-const inputClassName = cn(
-  fieldBaseClassName,
-  fieldSurfaceClassName,
-  "h-11",
-);
+const inputClassName = cn(fieldBaseClassName, fieldSurfaceClassName, "h-11 pt-3");
 
-const textareaClassName = cn(
-  fieldBaseClassName,
-  fieldSurfaceClassName,
-  "max-h-24 min-h-24 resize-none",
-);
+const textareaClassName = cn(fieldBaseClassName, fieldSurfaceClassName, "max-h-24 min-h-24 resize-none");
 
 const checkboxClassName =
   "mt-0.5 border-[var(--field-border)] bg-transparent text-white focus-visible:border-[var(--accent)] focus-visible:ring-0 data-checked:border-[var(--accent)] data-checked:bg-[var(--accent)] group-data-[surface=accent]/form:border-white/55 group-data-[surface=accent]/form:focus-visible:border-white group-data-[surface=accent]/form:data-checked:border-white group-data-[surface=accent]/form:data-checked:bg-white group-data-[surface=accent]/form:data-checked:text-[var(--accent)]";
 
 const privacyTextClassName =
   "mt-[3rem] flex items-center gap-3 text-xs text-[var(--field-text)] cursor-pointer group-data-[surface=accent]/form:text-white/70";
+
+const PHONE_MASK_TEMPLATE = "+7 (___) ___-__-__";
+const PHONE_DIGIT_POSITIONS = [4, 5, 6, 9, 10, 11, 13, 14, 16, 17] as const;
+const PHONE_MAX_DIGITS = PHONE_DIGIT_POSITIONS.length;
+const PHONE_PATTERN = "^\\+7 \\(\\d{3}\\) \\d{3}-\\d{2}-\\d{2}$";
+
+function normalizePhoneDigits(value: string) {
+  const digitsOnly = value.replace(/\D/g, "");
+
+  if (digitsOnly.length === 0) {
+    return "";
+  }
+
+  if (digitsOnly.length >= 11 && (digitsOnly.startsWith("7") || digitsOnly.startsWith("8"))) {
+    return digitsOnly.slice(1, 1 + PHONE_MAX_DIGITS);
+  }
+
+  return digitsOnly.slice(0, PHONE_MAX_DIGITS);
+}
+
+function applyPhoneMask(digits: string) {
+  const normalizedDigits = normalizePhoneDigits(digits);
+  const maskedChars = PHONE_MASK_TEMPLATE.split("");
+
+  for (let index = 0; index < PHONE_DIGIT_POSITIONS.length; index += 1) {
+    const char = normalizedDigits[index];
+
+    if (!char) {
+      break;
+    }
+
+    maskedChars[PHONE_DIGIT_POSITIONS[index]] = char;
+  }
+
+  return maskedChars.join("");
+}
+
+function getPhoneCursorPosition(digitsCount: number) {
+  if (digitsCount <= 0) {
+    return PHONE_DIGIT_POSITIONS[0];
+  }
+
+  if (digitsCount >= PHONE_MAX_DIGITS) {
+    return PHONE_MASK_TEMPLATE.length;
+  }
+
+  return PHONE_DIGIT_POSITIONS[digitsCount];
+}
+
+function countDigitsBeforePosition(position: number) {
+  let count = 0;
+
+  for (const digitPosition of PHONE_DIGIT_POSITIONS) {
+    if (digitPosition < position) {
+      count += 1;
+    }
+  }
+
+  return count;
+}
+
+function countDigitsInRange(start: number, end: number) {
+  let count = 0;
+
+  for (const digitPosition of PHONE_DIGIT_POSITIONS) {
+    if (digitPosition >= start && digitPosition < end) {
+      count += 1;
+    }
+  }
+
+  return count;
+}
 
 type RequestFormProps = {
   includeEmail?: boolean;
@@ -53,6 +117,93 @@ export function RequestForm({
   submitLabel = "Отправить заявку",
   onAccentSurface = false,
 }: RequestFormProps) {
+  const messageFieldId = useId();
+  const [phoneDigits, setPhoneDigits] = useState("");
+  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
+  const maskedPhoneValue = isPhoneFocused || phoneDigits.length > 0 ? applyPhoneMask(phoneDigits) : "";
+
+  function setPhoneCaret(target: HTMLInputElement, digitsCount: number) {
+    const position = getPhoneCursorPosition(digitsCount);
+
+    requestAnimationFrame(() => {
+      target.setSelectionRange(position, position);
+    });
+  }
+
+  function handlePhoneChange(event: ChangeEvent<HTMLInputElement>) {
+    const nextDigits = normalizePhoneDigits(event.target.value);
+    setPhoneDigits(nextDigits);
+    setPhoneCaret(event.target, nextDigits.length);
+  }
+
+  function handlePhoneFocus(event: FocusEvent<HTMLInputElement>) {
+    setIsPhoneFocused(true);
+    setPhoneCaret(event.target, phoneDigits.length);
+  }
+
+  function handlePhoneBlur() {
+    setIsPhoneFocused(false);
+  }
+
+  function handlePhoneClick(event: MouseEvent<HTMLInputElement>) {
+    if (phoneDigits.length > 0) {
+      return;
+    }
+
+    setPhoneCaret(event.currentTarget, 0);
+  }
+
+  function handlePhonePaste(event: ClipboardEvent<HTMLInputElement>) {
+    event.preventDefault();
+
+    const pasted = event.clipboardData.getData("text");
+    const nextDigits = normalizePhoneDigits(pasted);
+
+    setPhoneDigits(nextDigits);
+    setPhoneCaret(event.currentTarget, nextDigits.length);
+  }
+
+  function handlePhoneKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key !== "Backspace" && event.key !== "Delete") {
+      return;
+    }
+
+    const selectionStart = event.currentTarget.selectionStart ?? 0;
+    const selectionEnd = event.currentTarget.selectionEnd ?? 0;
+    const hasSelection = selectionEnd > selectionStart;
+
+    if (hasSelection) {
+      event.preventDefault();
+
+      const digitStartIndex = countDigitsBeforePosition(selectionStart);
+      const selectedDigitsCount = countDigitsInRange(selectionStart, selectionEnd);
+      const nextDigits = `${phoneDigits.slice(0, digitStartIndex)}${phoneDigits.slice(digitStartIndex + selectedDigitsCount)}`;
+
+      setPhoneDigits(nextDigits);
+      setPhoneCaret(event.currentTarget, digitStartIndex);
+      return;
+    }
+
+    if (phoneDigits.length === 0) {
+      event.preventDefault();
+      setPhoneCaret(event.currentTarget, 0);
+      return;
+    }
+
+    event.preventDefault();
+    const digitIndexAtCaret = countDigitsBeforePosition(selectionStart);
+    const removeIndex = event.key === "Backspace" ? digitIndexAtCaret - 1 : digitIndexAtCaret;
+
+    if (removeIndex < 0 || removeIndex >= phoneDigits.length) {
+      setPhoneCaret(event.currentTarget, digitIndexAtCaret);
+      return;
+    }
+
+    const nextDigits = `${phoneDigits.slice(0, removeIndex)}${phoneDigits.slice(removeIndex + 1)}`;
+    setPhoneDigits(nextDigits);
+    setPhoneCaret(event.currentTarget, removeIndex);
+  }
+
   return (
     <form
       data-surface={onAccentSurface ? "accent" : "default"}
@@ -61,50 +212,45 @@ export function RequestForm({
       target="_blank"
       noValidate
     >
-      <label className="block">
-        <span className="sr-only">Имя</span>
-        <Input
-          placeholder="Имя*"
-          name="name"
-          required
-          className={inputClassName}
-        />
-      </label>
+      <div className="block">
+        <Input placeholder="Имя*" name="name" required className={inputClassName} />
+      </div>
 
-      <label className="block">
-        <span className="sr-only">Телефон</span>
+      <div className="block">
         <Input
           placeholder="Телефон*"
           name="phone"
+          type="tel"
+          autoComplete="tel"
+          inputMode="numeric"
           required
+          pattern={PHONE_PATTERN}
+          value={maskedPhoneValue}
+          onFocus={handlePhoneFocus}
+          onBlur={handlePhoneBlur}
+          onClick={handlePhoneClick}
+          onChange={handlePhoneChange}
+          onPaste={handlePhonePaste}
+          onKeyDown={handlePhoneKeyDown}
           className={inputClassName}
         />
-      </label>
+      </div>
 
       {includeEmail ? (
-        <label className="block">
-          <span className="sr-only">Email</span>
-          <Input
-            placeholder="Email"
-            type="email"
-            name="email"
-            className={inputClassName}
-          />
-        </label>
+        <div className="block">
+          <Input placeholder="Email" type="email" name="email" className={inputClassName} />
+        </div>
       ) : null}
 
-      <label className="block">
-        <span className="sr-only">Сообщение</span>
-        <Textarea
-          placeholder="Сообщение"
-          name="message"
-          className={textareaClassName}
-        />
-      </label>
+      <div className="block">
+        <label htmlFor={messageFieldId} className="mb-2 block text-sm text-[var(--field-text)] group-data-[surface=accent]/form:text-white/60">
+          Сообщение
+        </label>
+        <Textarea id={messageFieldId} floatingLabel={false} placeholder="" name="message" className={textareaClassName} />
+      </div>
 
       {includeQuantity ? (
-        <label className="block">
-          <span className="sr-only">Тираж</span>
+        <div className="block">
           <Input
             placeholder="Тираж*"
             type="number"
@@ -115,27 +261,17 @@ export function RequestForm({
             required={quantityRequired}
             className={inputClassName}
           />
-        </label>
+        </div>
       ) : null}
 
       <div className={privacyTextClassName}>
-        <Checkbox
-          id={privacyCheckboxId}
-          name="privacy"
-          required
-          className={checkboxClassName}
-        />
+        <Checkbox id={privacyCheckboxId} name="privacy" required className={checkboxClassName} />
         <label htmlFor={privacyCheckboxId} className="cursor-pointer">
-          Нажимая на&nbsp;кнопку &quot;Отправить&quot;, Вы&nbsp;соглашаетесь
-          с&nbsp;Политикой конфиденциальности.
+          Нажимая на&nbsp;кнопку &quot;Отправить&quot;, Вы&nbsp;соглашаетесь с&nbsp;Политикой конфиденциальности.
         </label>
       </div>
 
-      <Button
-        type="submit"
-        variant="blue"
-        className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}
-      >
+      <Button type="submit" variant="blue" className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}>
         {submitLabel}
       </Button>
     </form>
