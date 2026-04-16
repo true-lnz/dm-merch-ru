@@ -2,6 +2,7 @@
   title: string;
   description: string;
   imageUrl: string;
+  ctaHref?: string;
 };
 
 export type CatalogCaseImage = {
@@ -38,17 +39,17 @@ export const MAIN_CATALOG_DATA: CatalogPageData = {
   },
   showProductsSubheading: true,
   products: [
-    { title: "Футболки и поло", description: "От 450 ₽", imageUrl: "/catalog/main-catalog/products/img_1_futbolki.png" },
-    { title: "толстовки", description: "От 870 ₽", imageUrl: "/catalog/main-catalog/products/img_2_tolstovki.png" },
-    { title: "верхняя одежда", description: "От 870 ₽", imageUrl: "/catalog/main-catalog/products/img_3_verhnya_odezhda.png" },
-    { title: "брюки", description: "От 900 ₽", imageUrl: "/catalog/main-catalog/products/img_4_bryki.png" },
-    { title: "спортивная одежда", description: "От 900 ₽", imageUrl: "/catalog/main-catalog/products/img_5_sport_wear.png" },
-    { title: "головные уборы", description: "От 450 ₽", imageUrl: "/catalog/main-catalog/products/img_6_hats.png" },
-    { title: "сумки и рюкзаки", description: "От 150 ₽", imageUrl: "/catalog/main-catalog/products/img_7_sumki.png" },
-    { title: "Сувенирная продукция", description: "От 300 ₽", imageUrl: "/catalog/main-catalog/products/img_8_souvenir.png" },
-    { title: "Авторская сувенирная продукция", description: "От 550 ₽", imageUrl: "/catalog/main-catalog/products/img_9_author_souvenir.png" },
-    { title: "Деловые аксессуары", description: "От 550 ₽", imageUrl: "/catalog/main-catalog/products/img_10_buz_accessories.png" },
-    { title: "Униформа", description: "От 750 ₽", imageUrl: "/catalog/main-catalog/products/img_11_uniform.png" },
+    { title: "Футболки и поло", description: "От 450 ₽", imageUrl: "/catalog/main-catalog/products/img_1_futbolki.png", ctaHref: "/catalog?category=futbolki" },
+    { title: "толстовки", description: "От 870 ₽", imageUrl: "/catalog/main-catalog/products/img_2_tolstovki.png", ctaHref: "/catalog?category=tolstovki" },
+    { title: "верхняя одежда", description: "От 870 ₽", imageUrl: "/catalog/main-catalog/products/img_3_verhnya_odezhda.png", ctaHref: "/catalog?category=verhnyaya-odezhda" },
+    { title: "брюки", description: "От 900 ₽", imageUrl: "/catalog/main-catalog/products/img_4_bryki.png", ctaHref: "/catalog?category=trousers" },
+    { title: "спортивная одежда", description: "От 900 ₽", imageUrl: "/catalog/main-catalog/products/img_5_sport_wear.png", ctaHref: "/catalog?category=sportswear" },
+    { title: "головные уборы", description: "От 450 ₽", imageUrl: "/catalog/main-catalog/products/img_6_hats.png", ctaHref: "/catalog?category=headwear" },
+    { title: "сумки и рюкзаки", description: "От 150 ₽", imageUrl: "/catalog/main-catalog/products/img_7_sumki.png", ctaHref: "/catalog?category=bags" },
+    { title: "Сувенирная продукция", description: "От 300 ₽", imageUrl: "/catalog/main-catalog/products/img_8_souvenir.png", ctaHref: "/catalog?category=souvenirs" },
+    { title: "Авторская сувенирная продукция", description: "От 550 ₽", imageUrl: "/catalog/main-catalog/products/img_9_author_souvenir.png", ctaHref: "/catalog?category=custom-souvenirs" },
+    { title: "Деловые аксессуары", description: "От 550 ₽", imageUrl: "/catalog/main-catalog/products/img_10_buz_accessories.png", ctaHref: "/catalog?category=business-accessories" },
+    { title: "Униформа", description: "От 750 ₽", imageUrl: "/catalog/main-catalog/products/img_11_uniform.png", ctaHref: "/catalog?category=verhnyaya-odezhda" },
   ],
   casesTitle: "Примеры\nреализованных работ",
   cases: [

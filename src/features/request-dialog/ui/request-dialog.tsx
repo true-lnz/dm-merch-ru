@@ -20,6 +20,8 @@ type RequestDialogButtonProps = Omit<ComponentPropsWithoutRef<"button">, "childr
 type RequestDialogProps = {
   children: ReactElement;
   privacyCheckboxId?: string;
+  includeQuantity?: boolean;
+  quantityRequired?: boolean;
 };
 
 const DEFAULT_LABEL = "Обсудить задачу";
@@ -87,6 +89,8 @@ export const RequestDialogButton = forwardRef<HTMLButtonElement, RequestDialogBu
 export function RequestDialog({
   children,
   privacyCheckboxId,
+  includeQuantity = false,
+  quantityRequired = false,
 }: RequestDialogProps) {
   const generatedPrivacyCheckboxId = useId();
   const resolvedPrivacyCheckboxId = privacyCheckboxId ?? `request-dialog-privacy-${generatedPrivacyCheckboxId}`;
@@ -116,6 +120,8 @@ export function RequestDialog({
 
         <RequestForm
           includeEmail={false}
+          includeQuantity={includeQuantity}
+          quantityRequired={quantityRequired}
           privacyCheckboxId={resolvedPrivacyCheckboxId}
           formClassName="space-y-3 xl:space-y-4"
         />

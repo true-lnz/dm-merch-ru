@@ -6,6 +6,7 @@ import { buttonVariants } from "@/shared/ui/button";
 import { ContentCard } from "@/shared/ui/content-card";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import { SliderControl } from "@/shared/ui/slider-control";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const MOBILE_FADE_DURATION_MS = 180;
@@ -14,22 +15,29 @@ type CatalogProductItem = {
   title: string;
   description: string;
   imageUrl: string;
+  ctaHref?: string;
 };
 
 function CatalogCard({ item }: { item: CatalogProductItem }) {
+  const ctaNode = item.ctaHref ? (
+    <Link href={item.ctaHref} className={cn(buttonVariants(), "w-full")} aria-label={`Перейти в каталог: ${item.title}`}>
+      Перейти в каталог
+    </Link>
+  ) : (
+    <RequestDialog includeQuantity quantityRequired>
+      <button type="button" className={cn(buttonVariants(), "w-full")} aria-label={`Отправить заявку: ${item.title}`}>
+        Отправить заявку
+      </button>
+    </RequestDialog>
+  );
+
   return (
     <ContentCard
       title={item.title}
       excerpt={item.description}
       image={{ url: item.imageUrl, alt: item.title, width: 413, height: 291 }}
       imageContainerClassName="aspect-[413/291]"
-      ctaNode={
-        <RequestDialog>
-          <button type="button" className={cn(buttonVariants(), "w-full")} aria-label={`Отправить заявку: ${item.title}`}>
-            Отправить заявку
-          </button>
-        </RequestDialog>
-      }
+      ctaNode={ctaNode}
     />
   );
 }

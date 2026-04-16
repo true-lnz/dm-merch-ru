@@ -34,6 +34,8 @@ const privacyTextClassName =
 
 type RequestFormProps = {
   includeEmail?: boolean;
+  includeQuantity?: boolean;
+  quantityRequired?: boolean;
   privacyCheckboxId?: string;
   formClassName?: string;
   submitClassName?: string;
@@ -43,6 +45,8 @@ type RequestFormProps = {
 
 export function RequestForm({
   includeEmail = true,
+  includeQuantity = false,
+  quantityRequired = false,
   privacyCheckboxId = DEFAULT_PRIVACY_CHECKBOX_ID,
   formClassName,
   submitClassName,
@@ -97,6 +101,22 @@ export function RequestForm({
           className={textareaClassName}
         />
       </label>
+
+      {includeQuantity ? (
+        <label className="block">
+          <span className="sr-only">Тираж</span>
+          <Input
+            placeholder="Тираж*"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            step={1}
+            name="quantity"
+            required={quantityRequired}
+            className={inputClassName}
+          />
+        </label>
+      ) : null}
 
       <div className={privacyTextClassName}>
         <Checkbox
