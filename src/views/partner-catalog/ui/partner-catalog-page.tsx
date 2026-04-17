@@ -214,7 +214,7 @@ function ProductCardContent({
       <div className={cn("pt-[2px]", expandedTitle ? DESKTOP_CARD_TITLE_MIN_HEIGHT_CLASS : DESKTOP_CARD_TITLE_HEIGHT_CLASS)}>
         <h3
           className={cn(
-            "font-heading text-3xl leading-[1.2] tracking-[0.01em] text-[var(--heading)]",
+            "font-heading text-2xl leading-[1.2] tracking-[0.01em] text-[var(--heading)]",
             expandedTitle ? "block" : "overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]",
           )}
         >

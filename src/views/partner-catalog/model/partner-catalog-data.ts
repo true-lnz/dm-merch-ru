@@ -101,24 +101,20 @@ function getArticleSegments(article: string) {
   return article.split(".").filter(Boolean);
 }
 
+function getProductBaseArticle(article: string) {
+  return getArticleSegments(article)[0] ?? article;
+}
+
 function getProductGroupKey(product: RawProduct) {
-  const segments = getArticleSegments(product.article);
+  return `${product.sectionId}:${getProductBaseArticle(product.article)}`;
+}
 
-  if (product.sizeClothing && segments.length >= 3) {
-    return `${product.sectionId}:${segments.slice(0, -2).join(".")}`;
-  }
-
-  if (segments.length <= 1) {
-    return `${product.sectionId}:${product.article}`;
-  }
-
-  return `${product.sectionId}:${segments.slice(0, -1).join(".")}`;
+function getVariantGroupKey(product: RawProduct) {
+  return product.article;
 }
 
 function getVariantColorCode(product: RawProduct) {
-  const segments = getArticleSegments(product.article);
-
-  return segments.at(-1) ?? product.article;
+  return getVariantGroupKey(product);
 }
 
 function stripSizeFromTitle(title: string) {
@@ -160,17 +156,17 @@ export const getPartnerCatalogData = cache((): PartnerCatalogData => {
 
   for (const product of catalog.products) {
     const groupKey = getProductGroupKey(product);
-    const colorCode = getVariantColorCode(product);
+    const variantKey = getVariantColorCode(product);
     const existingGroup = productGroups.get(groupKey);
 
     if (!existingGroup) {
-      productGroups.set(groupKey, { sectionId: product.sectionId, variants: new Map([[colorCode, [product]]]) });
+      productGroups.set(groupKey, { sectionId: product.sectionId, variants: new Map([[variantKey, [product]]]) });
       continue;
     }
 
-    const existingColorGroup = existingGroup.variants.get(colorCode) ?? [];
-    existingColorGroup.push(product);
-    existingGroup.variants.set(colorCode, existingColorGroup);
+    const existingVariantGroup = existingGroup.variants.get(variantKey) ?? [];
+    existingVariantGroup.push(product);
+    existingGroup.variants.set(variantKey, existingVariantGroup);
   }
 
   const products = [...productGroups.entries()]
