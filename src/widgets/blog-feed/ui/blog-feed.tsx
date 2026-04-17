@@ -14,7 +14,7 @@ export function BlogFeed({ posts }: BlogFeedProps) {
             key={post.id}
             title={post.title}
             excerpt={post.excerpt}
-            href={post.href}
+            href="/blog/soon"
             image={post.image}
             imageContainerClassName="aspect-18/9 object-top"
           />
