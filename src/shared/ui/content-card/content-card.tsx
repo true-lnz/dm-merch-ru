@@ -62,7 +62,7 @@ export function ContentCard({
       <Link
         href={href}
         target={hrefTarget}
-        rel={hrefTarget === "_blank" ? hrefRel ?? "noreferrer" : hrefRel}
+        rel={hrefTarget === "_blank" ? (hrefRel ?? "noreferrer") : hrefRel}
         aria-label={`Открыть: ${title}`}
         className={buttonVariants({ variant: "blue" })}
       >
@@ -82,15 +82,15 @@ export function ContentCard({
           className={cn("object-cover object-top", image.className)}
         />
       </div>
-			<div className="flex flex-1 flex-col p-[18px] md:p-[27px]">
-				<div className="flex flex-1 flex-col justify-between gap-[9px] mb-[18px] md:mb-[22px]">
-					<h3 className="xl:whitespace-pre-line font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
-						{title}
-					</h3>
-					{hasExcerpt ? <p className="text-xs sm:text-sm md:text-base text-[var(--text-muted)] whitespace-pre-line">{excerpt}</p> : null}
-				</div>
-				<div className="mt-auto">{renderCta()}</div>
-			</div>
+      <div className="flex flex-1 flex-col p-[18px] md:p-[27px]">
+        <div className="flex flex-1 flex-col justify-between gap-[9px] mb-[18px] md:mb-[22px]">
+          <h3 className="xl:whitespace-pre-line font-heading text-3xl md:text-4xl xl:text-5xl leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
+            {title}
+          </h3>
+          {hasExcerpt ? <p className="text-xs sm:text-sm md:text-base text-[var(--text-muted)] whitespace-pre-line">{excerpt}</p> : null}
+        </div>
+        <div className="mt-auto">{renderCta()}</div>
+      </div>
     </article>
   );
 }
