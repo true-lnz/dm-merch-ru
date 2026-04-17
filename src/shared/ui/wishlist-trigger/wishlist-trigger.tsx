@@ -17,7 +17,7 @@ export function WishlistTrigger({ count, variant, onClick, className }: Wishlist
       onClick={onClick}
       aria-label={ariaLabel}
       className={cn(
-        "group inline-flex items-center rounded-[9px] border bg-white transition-colors",
+        "group inline-flex items-center rounded-[9px] border bg-white transition-colors cursor-pointer",
         isDesktop
           ? "h-[38px] gap-2 px-3 text-[#404040] hover:bg-[#f4f3ee]"
           : "h-[34px] w-[34px] justify-center bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]",

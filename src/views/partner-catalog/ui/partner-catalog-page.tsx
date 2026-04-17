@@ -4,26 +4,25 @@ import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
 import { useWishlist } from "@/shared/lib/wishlist";
 import { buttonVariants } from "@/shared/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible";
 import { PageHeading } from "@/shared/ui/page-heading";
 import { SliderControl } from "@/shared/ui/slider-control";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { toast } from "sonner";
+import type {
+  PartnerCatalogChildSection,
+  PartnerCatalogData,
+  PartnerCatalogProduct,
+  PartnerCatalogRootSection,
+  PartnerCatalogVariant,
+} from "../model/partner-catalog-data";
 
-type PartnerProductItem = {
-  title: string;
-  imageUrl: string;
-  href: string;
-  price: string;
-  discountPrice?: string;
-  article: string;
-  stock: number;
-  colorThumbnails: string[];
-};
-
+const ALL_FILTER_ID = "all";
 const MOBILE_FADE_DURATION_MS = 180;
+const PAGE_SIZE_OPTIONS = [50, 100, 200] as const;
 const DESKTOP_CARD_CONTENT_HEIGHT_CLASS = "md:h-[19rem]";
 const DESKTOP_CARD_CONTENT_MIN_HEIGHT_CLASS = "md:min-h-[19rem]";
 const DESKTOP_CARD_TITLE_HEIGHT_CLASS = "md:h-[4.5rem]";
@@ -44,11 +43,14 @@ const PRODUCT_CARD_LAYERS = [
   },
 ] as const;
 
-function parseRubPriceToNumber(value: string) {
-  const numeric = value.replace(/[^\d]/g, "");
-  const parsed = Number.parseInt(numeric, 10);
+const rubFormatter = new Intl.NumberFormat("ru-RU", {
+  style: "currency",
+  currency: "RUB",
+  maximumFractionDigits: 2,
+});
 
-  return Number.isFinite(parsed) ? parsed : 0;
+function formatRubPrice(value: number) {
+  return rubFormatter.format(value);
 }
 
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
@@ -73,179 +75,12 @@ function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => vo
   }, [enabled, onOutside, ref]);
 }
 
-const PARTNER_PRODUCTS: PartnerProductItem[] = [
-  {
-    title: "Футболки и поло с контрастной отделкой для командных и event-задач",
-    imageUrl: "/home/partner-products/01-futbolki-i-polo.png",
-    href: "https://gifts.ru/",
-    price: "2 490 ₽",
-    discountPrice: "1 790 ₽",
-    article: "TSH-1001",
-    stock: 128,
-    colorThumbnails: [
-      "/home/partner-products/01-futbolki-i-polo.png",
-      "/home/partner-products/02-tolstovki.png",
-      "/home/partner-products/03-rubashki.png",
-    ],
-  },
-  {
-    title: "Толстовки премиального качества с плотным футером и брендированной фурнитурой",
-    imageUrl: "/home/partner-products/02-tolstovki.png",
-    href: "https://gifts.ru/",
-    price: "3 990 ₽",
-    discountPrice: "2 990 ₽",
-    article: "HDY-2044",
-    stock: 94,
-    colorThumbnails: ["/home/partner-products/02-tolstovki.png", "/home/partner-products/06-bombery.png", "/home/partner-products/05-dozhdeviki.png"],
-  },
-  {
-    title: "Рубашки",
-    imageUrl: "/home/partner-products/03-rubashki.png",
-    href: "https://gifts.ru/",
-    price: "4 390 ₽",
-    discountPrice: "3 390 ₽",
-    article: "SHT-3108",
-    stock: 56,
-    colorThumbnails: [
-      "/home/partner-products/03-rubashki.png",
-      "/home/partner-products/10-delovye-aksessuary.png",
-      "/home/partner-products/11-suvenirnaya-produkciya.png",
-    ],
-  },
-  {
-    title: "Безрукавки",
-    imageUrl: "/home/partner-products/04-bezrukavki.png",
-    href: "https://gifts.ru/",
-    price: "3 690 ₽",
-    discountPrice: "2 790 ₽",
-    article: "VST-4022",
-    stock: 73,
-    colorThumbnails: [
-      "/home/partner-products/04-bezrukavki.png",
-      "/home/partner-products/06-bombery.png",
-      "/home/partner-products/07-golovnye-ubory.png",
-    ],
-  },
-  {
-    title: "Дождевики",
-    imageUrl: "/home/partner-products/05-dozhdeviki.png",
-    href: "https://gifts.ru/",
-    price: "2 890 ₽",
-    discountPrice: "1 990 ₽",
-    article: "RNC-5180",
-    stock: 211,
-    colorThumbnails: [
-      "/home/partner-products/05-dozhdeviki.png",
-      "/home/partner-products/04-bezrukavki.png",
-      "/home/partner-products/08-sumki-i-ryukzaki.png",
-    ],
-  },
-  {
-    title: "Бомберы",
-    imageUrl: "/home/partner-products/06-bombery.png",
-    href: "https://gifts.ru/",
-    price: "5 490 ₽",
-    discountPrice: "4 190 ₽",
-    article: "BMB-6120",
-    stock: 39,
-    colorThumbnails: [
-      "/home/partner-products/06-bombery.png",
-      "/home/partner-products/02-tolstovki.png",
-      "/home/partner-products/07-golovnye-ubory.png",
-    ],
-  },
-  {
-    title: "Головные уборы",
-    imageUrl: "/home/partner-products/07-golovnye-ubory.png",
-    href: "https://gifts.ru/",
-    price: "1 290 ₽",
-    discountPrice: "890 ₽",
-    article: "HAT-7070",
-    stock: 302,
-    colorThumbnails: [
-      "/home/partner-products/07-golovnye-ubory.png",
-      "/home/partner-products/01-futbolki-i-polo.png",
-      "/home/partner-products/12-pakety.png",
-    ],
-  },
-  {
-    title: "Сумки и рюкзаки",
-    imageUrl: "/home/partner-products/08-sumki-i-ryukzaki.png",
-    href: "https://gifts.ru/",
-    price: "3 290 ₽",
-    discountPrice: "2 490 ₽",
-    article: "BAG-8135",
-    stock: 117,
-    colorThumbnails: [
-      "/home/partner-products/08-sumki-i-ryukzaki.png",
-      "/home/partner-products/12-pakety.png",
-      "/home/partner-products/09-elektronika.png",
-    ],
-  },
-  {
-    title: "Электроника",
-    imageUrl: "/home/partner-products/09-elektronika.png",
-    href: "https://gifts.ru/",
-    price: "6 990 ₽",
-    discountPrice: "5 490 ₽",
-    article: "ELC-9210",
-    stock: 48,
-    colorThumbnails: [
-      "/home/partner-products/09-elektronika.png",
-      "/home/partner-products/10-delovye-aksessuary.png",
-      "/home/partner-products/11-suvenirnaya-produkciya.png",
-    ],
-  },
-  {
-    title: "Деловые аксессуары",
-    imageUrl: "/home/partner-products/10-delovye-aksessuary.png",
-    href: "https://gifts.ru/",
-    price: "2 190 ₽",
-    discountPrice: "1 590 ₽",
-    article: "BUS-1022",
-    stock: 166,
-    colorThumbnails: [
-      "/home/partner-products/10-delovye-aksessuary.png",
-      "/home/partner-products/11-suvenirnaya-produkciya.png",
-      "/home/partner-products/09-elektronika.png",
-    ],
-  },
-  {
-    title: "Сувенирная продукция для корпоративных подарков, welcome-pack и промо-наборов",
-    imageUrl: "/home/partner-products/11-suvenirnaya-produkciya.png",
-    href: "https://gifts.ru/",
-    price: "1 990 ₽",
-    discountPrice: "1 390 ₽",
-    article: "SUV-1170",
-    stock: 247,
-    colorThumbnails: [
-      "/home/partner-products/11-suvenirnaya-produkciya.png",
-      "/home/partner-products/10-delovye-aksessuary.png",
-      "/home/partner-products/12-pakety.png",
-    ],
-  },
-  {
-    title: "Пакеты",
-    imageUrl: "/home/partner-products/12-pakety.png",
-    href: "https://gifts.ru/",
-    price: "790 ₽",
-    discountPrice: "540 ₽",
-    article: "PKT-1211",
-    stock: 520,
-    colorThumbnails: [
-      "/home/partner-products/12-pakety.png",
-      "/home/partner-products/08-sumki-i-ryukzaki.png",
-      "/home/partner-products/11-suvenirnaya-produkciya.png",
-    ],
-  },
-];
-
-function WishlistActionButton({ item }: { item: PartnerProductItem }) {
+function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
   const { isInWishlist, addItem, removeItem } = useWishlist();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [quantity, setQuantity] = useState("50");
   const popoverRef = useRef<HTMLDivElement | null>(null);
-  const added = isInWishlist(item.article);
+  const added = isInWishlist(variant.article);
 
   useOutsideClick(popoverRef, () => setIsPopoverOpen(false), isPopoverOpen);
 
@@ -269,15 +104,14 @@ function WishlistActionButton({ item }: { item: PartnerProductItem }) {
 
   function handleConfirm() {
     const safeQuantity = Math.max(1, Number.parseInt(quantity.replace(/[^\d]/g, ""), 10) || 1);
-    const unitPriceRub = parseRubPriceToNumber(item.discountPrice ?? item.price);
 
     addItem(
       {
-        id: item.article,
-        articleNumber: item.article,
-        title: item.title,
-        imageUrl: item.imageUrl,
-        unitPriceRub,
+        id: variant.article,
+        articleNumber: variant.article,
+        title: variant.title,
+        imageUrl: variant.imageUrl,
+        unitPriceRub: variant.discountPriceRub ?? variant.priceRub,
       },
       safeQuantity,
     );
@@ -287,7 +121,7 @@ function WishlistActionButton({ item }: { item: PartnerProductItem }) {
 
   function handleMainClick() {
     if (added) {
-      removeItem(item.article);
+      removeItem(variant.article);
       toast.info("Убрано из вишлиста");
       return;
     }
@@ -332,11 +166,11 @@ function WishlistActionButton({ item }: { item: PartnerProductItem }) {
   );
 }
 
-function ProductCardImage({ item }: { item: PartnerProductItem }) {
+function ProductCardImage({ variant }: { variant: PartnerCatalogVariant }) {
   return (
-    <div className="relative aspect-square w-full cursor-pointer overflow-hidden bg-[var(--surface)]">
-      <Image src={item.imageUrl} alt={item.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
-      {item.discountPrice ? (
+    <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
+      <Image src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
+      {variant.discountPriceRub ? (
         <span className="font-heading absolute right-3 top-3 rounded-md bg-[#ff3333] px-[12px] pt-[2px] text-lg uppercase tracking-[0.04em] text-white">
           Скидка
         </span>
@@ -345,7 +179,21 @@ function ProductCardImage({ item }: { item: PartnerProductItem }) {
   );
 }
 
-function ProductCardContent({ item, expandedTitle = false, className }: { item: PartnerProductItem; expandedTitle?: boolean; className?: string }) {
+function ProductCardContent({
+  variants,
+  activeVariant,
+  activeVariantId,
+  expandedTitle = false,
+  className,
+  onVariantSelect,
+}: {
+  variants: PartnerCatalogVariant[];
+  activeVariant: PartnerCatalogVariant;
+  activeVariantId: string;
+  expandedTitle?: boolean;
+  className?: string;
+  onVariantSelect: (variantId: string) => void;
+}) {
   return (
     <div
       className={cn(
@@ -355,8 +203,12 @@ function ProductCardContent({ item, expandedTitle = false, className }: { item: 
       )}
     >
       <div className="flex items-baseline gap-2 font-sans">
-        {item.discountPrice ? <span className="text-lg font-semibold text-black">{item.discountPrice}</span> : null}
-        <span className={cn("text-base", item.discountPrice ? "text-[#8f8f8f] line-through" : "font-semibold text-black")}>{item.price}</span>
+        {activeVariant.discountPriceRub ? (
+          <span className="text-lg font-semibold text-black">{formatRubPrice(activeVariant.discountPriceRub)}</span>
+        ) : null}
+        <span className={cn("text-base", activeVariant.discountPriceRub ? "text-[#8f8f8f] line-through" : "font-semibold text-black")}>
+          {formatRubPrice(activeVariant.priceRub)}
+        </span>
       </div>
 
       <div className={cn("pt-[2px]", expandedTitle ? DESKTOP_CARD_TITLE_MIN_HEIGHT_CLASS : DESKTOP_CARD_TITLE_HEIGHT_CLASS)}>
@@ -366,45 +218,56 @@ function ProductCardContent({ item, expandedTitle = false, className }: { item: 
             expandedTitle ? "block" : "overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]",
           )}
         >
-          {item.title}
+          {activeVariant.title}
         </h3>
       </div>
 
       <div className="mt-auto flex flex-col gap-2">
         <div>
-          <p className="text-sm text-[var(--text-muted)]">Артикул: {item.article}</p>
-          <p className="text-sm text-[var(--text-muted)]">Наличие: {item.stock} шт.</p>
+          <p className="text-sm text-[var(--text-muted)]">Артикул: {activeVariant.article}</p>
+          <p className="text-sm text-[var(--text-muted)]">Наличие: {activeVariant.stock} шт.</p>
         </div>
-        <div className="flex items-center gap-2">
-          {item.colorThumbnails.map((thumb, index) => (
-            <div key={`${item.article}-thumb-${index}`} className="relative h-10 w-10 cursor-pointer overflow-hidden rounded-[6px] bg-white">
-              <Image src={thumb} alt={`${item.title} цвет ${index + 1}`} fill sizes="40px" className="object-cover" />
-            </div>
-          ))}
+        <div className="flex flex-wrap items-center gap-2">
+          {variants.map((variant) => {
+            const isActive = variant.id === activeVariantId;
+
+            return (
+              <button
+                key={variant.id}
+                type="button"
+                onClick={() => onVariantSelect(variant.id)}
+                className={cn(
+                  "relative h-10 w-10 cursor-pointer overflow-hidden rounded-[6px] bg-white transition-shadow",
+                  isActive ? "ring-2 ring-[var(--accent)] ring-offset-1 ring-offset-[var(--card-bg)]" : "hover:shadow-[0_0_0_1px_rgba(64,64,64,0.2)]",
+                )}
+                aria-label={`Выбрать вариант ${variant.colorLabel}`}
+                aria-pressed={isActive}
+              >
+                <Image src={variant.imageUrl} alt={variant.colorLabel} fill sizes="40px" className="object-cover" />
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      <WishlistActionButton item={item} />
+      <WishlistActionButton variant={activeVariant} />
     </div>
   );
 }
 
-function ProductCardBody({ item }: { item: PartnerProductItem }) {
-  return (
-    <>
-      <ProductCardImage item={item} />
-      <ProductCardContent item={item} />
-    </>
-  );
-}
-
 function ProductCardShell({
-  item,
+  variants,
+  activeVariant,
+  activeVariantId,
+  onVariantSelect,
   expandedTitle = false,
   shadow = false,
   ariaHidden = false,
 }: {
-  item: PartnerProductItem;
+  variants: PartnerCatalogVariant[];
+  activeVariant: PartnerCatalogVariant;
+  activeVariantId: string;
+  onVariantSelect: (variantId: string) => void;
   expandedTitle?: boolean;
   shadow?: boolean;
   ariaHidden?: boolean;
@@ -413,23 +276,43 @@ function ProductCardShell({
     <article
       aria-hidden={ariaHidden || undefined}
       className={cn(
-        "overflow-hidden rounded-[18px] bg-[var(--card-bg)] md:rounded-[22.5px]",
+        "overflow-hidden rounded-[18px] border border-transparent bg-[var(--card-bg)] transition-colors md:rounded-[22.5px] md:hover:border",
         shadow ? "shadow-[0_16px_40px_rgba(42,42,42,0.16)]" : null,
       )}
     >
-      <ProductCardImage item={item} />
-      <ProductCardContent item={item} expandedTitle={expandedTitle} />
+      <ProductCardImage variant={activeVariant} />
+      <ProductCardContent
+        variants={variants}
+        activeVariant={activeVariant}
+        activeVariantId={activeVariantId}
+        onVariantSelect={onVariantSelect}
+        expandedTitle={expandedTitle}
+      />
     </article>
   );
 }
 
-function PartnerProductCard({ item }: { item: PartnerProductItem }) {
+function PartnerProductCard({ item }: { item: PartnerCatalogProduct }) {
+  const [activeVariantId, setActiveVariantId] = useState(item.variants[0]?.id ?? "");
+
+  const activeVariant = item.variants.find((variant) => variant.id === activeVariantId) ?? item.variants[0];
+
+  if (!activeVariant) {
+    return null;
+  }
+
   return (
     <div className="group relative z-0 overflow-visible md:hover:z-20">
       {PRODUCT_CARD_LAYERS.map((layer) => (
         <div key={layer.key} className={layer.wrapperClassName}>
           <div className={layer.innerClassName}>
-            <ProductCardShell item={item} {...layer.shellProps} />
+            <ProductCardShell
+              variants={item.variants}
+              activeVariant={activeVariant}
+              activeVariantId={activeVariant.id}
+              onVariantSelect={setActiveVariantId}
+              {...layer.shellProps}
+            />
           </div>
         </div>
       ))}
@@ -437,11 +320,61 @@ function PartnerProductCard({ item }: { item: PartnerProductItem }) {
   );
 }
 
-export function PartnerCatalogPage() {
+function MobileCategorySummary({
+  rootCategory,
+  childCategory,
+}: {
+  rootCategory?: PartnerCatalogRootSection;
+  childCategory?: PartnerCatalogChildSection;
+}) {
+  if (!rootCategory && !childCategory) {
+    return (
+      <div className="mb-5 md:hidden">
+        <p className="font-heading text-2xl uppercase leading-[0.95] text-[var(--heading)]">Все товары</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-5 flex flex-col gap-1 md:hidden">
+      {rootCategory ? <p className="font-heading text-2xl uppercase leading-[0.95] text-[var(--heading)]">{rootCategory.name}</p> : null}
+      {childCategory ? <p className="text-sm text-[var(--text-muted)]">{childCategory.name}</p> : null}
+    </div>
+  );
+}
+
+export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
+  const [activeFilterId, setActiveFilterId] = useState(ALL_FILTER_ID);
+  const [expandedRootId, setExpandedRootId] = useState<string | null>(null);
+  const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(50);
+  const [loadedCount, setLoadedCount] = useState(50);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobileContentVisible, setIsMobileContentVisible] = useState(true);
   const transitionTimeoutRef = useRef<number | null>(null);
-  const activeItem = PARTNER_PRODUCTS[activeIndex] ?? PARTNER_PRODUCTS[0];
+  const listStartRef = useRef<HTMLDivElement | null>(null);
+
+  const activeRootCategory = useMemo(
+    () =>
+      activeFilterId === ALL_FILTER_ID
+        ? undefined
+        : data.categories.find((category) => category.children.some((childCategory) => childCategory.id === activeFilterId)),
+    [activeFilterId, data.categories],
+  );
+  const activeChildCategory = useMemo(
+    () => activeRootCategory?.children.find((childCategory) => childCategory.id === activeFilterId),
+    [activeFilterId, activeRootCategory],
+  );
+  const visibleProducts = useMemo(() => {
+    if (activeFilterId === ALL_FILTER_ID) {
+      return data.products;
+    }
+
+    return data.products.filter((product) => product.sectionId === activeFilterId);
+  }, [activeFilterId, data.products]);
+  const displayedProducts = useMemo(() => visibleProducts.slice(0, Math.min(loadedCount, visibleProducts.length)), [loadedCount, visibleProducts]);
+  const nextCursor = displayedProducts.length < visibleProducts.length ? displayedProducts.length : null;
+  const safeActiveIndex = activeIndex < displayedProducts.length ? activeIndex : 0;
+  const activeItem = displayedProducts[safeActiveIndex] ?? displayedProducts[0];
 
   useEffect(() => {
     return () => {
@@ -451,8 +384,49 @@ export function PartnerCatalogPage() {
     };
   }, []);
 
+  function handleFilterChange(nextFilterId: string) {
+    if (nextFilterId === activeFilterId) {
+      return;
+    }
+
+    if (transitionTimeoutRef.current !== null) {
+      window.clearTimeout(transitionTimeoutRef.current);
+      transitionTimeoutRef.current = null;
+    }
+
+    setActiveIndex(0);
+    setIsMobileContentVisible(true);
+    setLoadedCount(pageSize);
+    setActiveFilterId(nextFilterId);
+    listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function handleChildCategoryClick(rootCategoryId: string, childCategoryId: string) {
+    setExpandedRootId(rootCategoryId);
+    handleFilterChange(childCategoryId);
+  }
+
+  function handlePageSizeChange(nextPageSize: (typeof PAGE_SIZE_OPTIONS)[number]) {
+    if (nextPageSize === pageSize) {
+      return;
+    }
+
+    setPageSize(nextPageSize);
+    setLoadedCount(nextPageSize);
+    setActiveIndex(0);
+    setIsMobileContentVisible(true);
+  }
+
+  function handleLoadMore() {
+    if (nextCursor === null) {
+      return;
+    }
+
+    setLoadedCount((currentCount) => Math.min(currentCount + pageSize, visibleProducts.length));
+  }
+
   function commitCardChange(nextIndex: number) {
-    if (!PARTNER_PRODUCTS[nextIndex] || nextIndex === activeIndex) {
+    if (!displayedProducts[nextIndex] || nextIndex === safeActiveIndex) {
       return;
     }
 
@@ -481,28 +455,138 @@ export function PartnerCatalogPage() {
         }}
       />
 
-      <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-        <div className="flex flex-col md:hidden">
-          <article className="flex h-full flex-col overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px]">
-            <div className={cn("transition-opacity duration-200", isMobileContentVisible ? "opacity-100" : "opacity-0")}>
-              <ProductCardBody item={activeItem} />
+      <section className="mt-[28.8px] mb-[63px] md:mb-[72px] xl:mb-[90px]">
+        <div className="mb-5 md:mb-4 md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-center md:gap-8 xl:gap-[63px]">
+          <p className="text-base font-bold uppercase  tracking-[0.08em] text-[var(--heading)]">Список</p>
+
+          <div className="mt-3 flex flex-col gap-3 md:mt-0 md:flex-row md:items-center md:justify-between">
+            <p className="text-sm text-[var(--text-muted)]">
+              Показано {displayedProducts.length} из {visibleProducts.length}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm text-[var(--text-muted)]">Отображать по:</span>
+              {PAGE_SIZE_OPTIONS.map((option) => {
+                const isActive = option === pageSize;
+
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => handlePageSizeChange(option)}
+                    className={cn(
+                      "min-w-14 cursor-pointer rounded-full px-4 py-2 text-sm transition-colors",
+                      isActive ? "bg-[var(--accent)] text-white" : "bg-[var(--card-bg)] text-[var(--heading)] hover:bg-[#e1e0db]",
+                    )}
+                  >
+                    {option}
+                  </button>
+                );
+              })}
             </div>
-          </article>
-          <SliderControl
-            className="mt-5 self-center"
-            onPrevClick={() => commitCardChange(activeIndex - 1)}
-            onNextClick={() => commitCardChange(activeIndex + 1)}
-            prevDisabled={activeIndex === 0}
-            nextDisabled={activeIndex === PARTNER_PRODUCTS.length - 1}
-            prevAriaLabel={`Предыдущая карточка (${activeIndex + 1} из ${PARTNER_PRODUCTS.length})`}
-            nextAriaLabel={`Следующая карточка (${activeIndex + 1} из ${PARTNER_PRODUCTS.length})`}
-          />
+          </div>
         </div>
 
-        <div className="hidden overflow-visible items-start gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {PARTNER_PRODUCTS.map((item) => (
-            <PartnerProductCard key={item.article} item={item} />
-          ))}
+        <div className="md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-start md:gap-8 xl:gap-[63px]">
+          <aside className="hidden md:block">
+            <div className="rounded-[18px] bg-white p-4 md:rounded-[22.5px] md:p-5">
+              <button
+                type="button"
+                onClick={() => {
+                  setExpandedRootId(null);
+                  handleFilterChange(ALL_FILTER_ID);
+                }}
+                className={cn(
+                  "w-full cursor-pointer border-b border-black/10 py-3 text-left text-sm transition-colors",
+                  activeFilterId === ALL_FILTER_ID ? "font-semibold text-black" : "text-[#5f5f5f] hover:text-black",
+                )}
+              >
+                Все товары
+              </button>
+
+              <div className="pt-1">
+                {data.categories.map((category) => (
+                  <div key={category.id} className="border-b border-black/10 py-1">
+                    <Collapsible open={expandedRootId === category.id} onOpenChange={(open) => setExpandedRootId(open ? category.id : null)}>
+                      <CollapsibleTrigger className="py-2 text-sm font-medium text-[#404040]">{category.name}</CollapsibleTrigger>
+                      <CollapsibleContent className="pb-2">
+                        <div className="mt-1 space-y-1 pl-3">
+                          {category.children.map((childCategory) => {
+                            const isActive = activeFilterId === childCategory.id;
+
+                            return (
+                              <button
+                                key={childCategory.id}
+                                type="button"
+                                onClick={() => handleChildCategoryClick(category.id, childCategory.id)}
+                                className={cn(
+                                  "w-full cursor-pointer py-1.5 text-left text-sm leading-[1.3] transition-colors",
+                                  isActive ? "text-[var(--accent)]" : "text-[#6f6f6f] hover:text-black",
+                                )}
+                              >
+                                {childCategory.name}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          <div ref={listStartRef} className="scroll-mt-[88px] md:scroll-mt-[112px]">
+            <MobileCategorySummary rootCategory={activeRootCategory} childCategory={activeChildCategory} />
+
+            {visibleProducts.length > 0 ? (
+              <>
+                <div className="flex flex-col md:hidden">
+                  {activeItem ? (
+                    <>
+                      <article className="flex h-full flex-col overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px]">
+                        <div className={cn("transition-opacity duration-200", isMobileContentVisible ? "opacity-100" : "opacity-0")}>
+                          <PartnerProductCard item={activeItem} />
+                        </div>
+                      </article>
+                      <SliderControl
+                        className="mt-5 self-center"
+                        onPrevClick={() => commitCardChange(safeActiveIndex - 1)}
+                        onNextClick={() => commitCardChange(safeActiveIndex + 1)}
+                        prevDisabled={safeActiveIndex === 0}
+                        nextDisabled={safeActiveIndex === displayedProducts.length - 1}
+                        prevAriaLabel={`Предыдущая карточка (${safeActiveIndex + 1} из ${displayedProducts.length})`}
+                        nextAriaLabel={`Следующая карточка (${safeActiveIndex + 1} из ${displayedProducts.length})`}
+                      />
+                    </>
+                  ) : null}
+                </div>
+
+                <div className="hidden overflow-visible items-start gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {displayedProducts.map((item) => (
+                    <PartnerProductCard key={item.id} item={item} />
+                  ))}
+                </div>
+
+                {nextCursor !== null ? (
+                  <div className="mt-10 flex justify-center md:mt-12">
+                    <button
+                      type="button"
+                      onClick={handleLoadMore}
+                      className={cn(buttonVariants({ variant: "white" }), "min-w-44 text-[var(--accent)]")}
+                    >
+                      Загрузить еще
+                    </button>
+                  </div>
+                ) : null}
+              </>
+            ) : (
+              <div className="rounded-[18px] bg-[var(--card-bg)] p-4 text-sm leading-[1.4] text-[var(--text-muted)] md:p-6">
+                Для выбранной категории пока нет товаров.
+              </div>
+            )}
+          </div>
         </div>
       </section>
 

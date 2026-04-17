@@ -1,7 +1,17 @@
 import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  images: {
+    qualities: [75, 80, 85, 90, 95],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "catalog-export.cdn.portobello.ru",
+      },
+    ],
+  },
+};
 
 const payloadConfig = withPayload(nextConfig, {
   devBundleServerPackages: false,
@@ -11,11 +21,5 @@ const experimentalConfig = payloadConfig.experimental as (NextConfig["experiment
 if (experimentalConfig) {
   delete experimentalConfig.enableServerFastRefresh;
 }
-
-module.exports = {
-  images: {
-    qualities: [75, 80, 85, 90, 95],
-  },
-};
 
 export default payloadConfig;

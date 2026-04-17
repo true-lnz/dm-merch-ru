@@ -1,10 +1,11 @@
 ﻿import type { Metadata } from "next";
 import { PartnerCatalogPage } from "@/views/partner-catalog";
+import { getPartnerCatalogData } from "@/views/partner-catalog/model/partner-catalog-data";
 
 export const metadata: Metadata = {
   title: "Каталог партнерских товаров",
 };
 
 export default function Page() {
-  return <PartnerCatalogPage />;
+  return <PartnerCatalogPage data={getPartnerCatalogData()} />;
 }
