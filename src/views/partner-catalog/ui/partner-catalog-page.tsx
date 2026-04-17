@@ -32,6 +32,7 @@ const PRODUCT_CARD_LAYERS = [
   {
     key: "base",
     wrapperClassName: "",
+    innerClassName: "",
     shellProps: { expandedTitle: false, shadow: false, ariaHidden: false },
   },
   {

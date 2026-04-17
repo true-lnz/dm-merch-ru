@@ -5,6 +5,7 @@ import { CookieWarning } from "@/widgets/cookie-warning";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -48,16 +49,18 @@ export default function RootLayout({
   return (
     <html lang="ru" className="text-base">
       <body>
-        <PageTransitionProvider>
-          <WishlistProvider>
-            <div className="site-shell">
-              <Header />
-              <main className="site-main">{children}</main>
-              <Footer />
-              <CookieWarning />
-            </div>
-          </WishlistProvider>
-        </PageTransitionProvider>
+        <Suspense fallback={null}>
+          <PageTransitionProvider>
+            <WishlistProvider>
+              <div className="site-shell">
+                <Header />
+                <main className="site-main">{children}</main>
+                <Footer />
+                <CookieWarning />
+              </div>
+            </WishlistProvider>
+          </PageTransitionProvider>
+        </Suspense>
         <Toaster />
       </body>
     </html>
