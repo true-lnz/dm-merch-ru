@@ -1,44 +1,16 @@
 import { Button } from "@/shared/ui/button";
+import { useWishlist, type WishlistItem } from "@/shared/lib/wishlist";
 import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import { RequestForm } from "@/shared/ui/request-form";
 import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
 import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 type WishlistDialogProps = {
-  count: number;
   variant: "desktop" | "mobile";
   className?: string;
 };
-
-type WishlistItem = {
-  id: string;
-  imageUrl: string;
-  title: string;
-  articleNumber: string;
-  unitPriceRub: number;
-  quantity: number;
-};
-
-const MOCK_WISHLIST_ITEMS: WishlistItem[] = [
-  {
-    id: "ws-1",
-    imageUrl: "/catalog/t-shirt-catalog/products/img_futbolka_standart_2.png",
-    title: "Футболка стандарт",
-    articleNumber: "DM-TS-180",
-    unitPriceRub: 390,
-    quantity: 120,
-  },
-  {
-    id: "ws-2",
-    imageUrl: "/catalog/sweatshirt-catalog/products/img_13.png",
-    title: "Худи оверсайз",
-    articleNumber: "DM-HD-320",
-    unitPriceRub: 1370,
-    quantity: 60,
-  },
-];
 
 const rubFormatter = new Intl.NumberFormat("ru-RU");
 
@@ -114,28 +86,10 @@ function WishlistProductCard({
   );
 }
 
-export function WishlistDialog({ count, variant, className }: WishlistDialogProps) {
-  const [items, setItems] = useState<WishlistItem[]>(MOCK_WISHLIST_ITEMS);
+export function WishlistDialog({ variant, className }: WishlistDialogProps) {
+  const { items, count, updateQuantity, increaseQuantity, decreaseQuantity, removeItem, clear } = useWishlist();
 
   const totalRub = useMemo(() => items.reduce((sum, item) => sum + item.unitPriceRub * item.quantity, 0), [items]);
-
-  function updateQuantity(id: string, nextQuantity: number) {
-    const safeQuantity = Number.isFinite(nextQuantity) ? Math.max(1, Math.floor(nextQuantity)) : 1;
-
-    setItems((currentItems) => currentItems.map((item) => (item.id === id ? { ...item, quantity: safeQuantity } : item)));
-  }
-
-  function increaseQuantity(id: string) {
-    setItems((currentItems) => currentItems.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item)));
-  }
-
-  function decreaseQuantity(id: string) {
-    setItems((currentItems) => currentItems.map((item) => (item.id === id ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item)));
-  }
-
-  function removeItem(id: string) {
-    setItems((currentItems) => currentItems.filter((item) => item.id !== id));
-  }
 
   return (
     <Dialog>
@@ -167,7 +121,7 @@ export function WishlistDialog({ count, variant, className }: WishlistDialogProp
               <p className="text-sm font-medium leading-[1.3] tracking-[-0.03em] text-[#5a5a5a]">Товары в вишлисте: {items.length}</p>
               <button
                 type="button"
-                onClick={() => setItems([])}
+                onClick={clear}
                 className="text-sm leading-[1.3] tracking-[-0.03em] text-[#7a7a7a] underline underline-offset-2 transition-colors hover:text-[#4f4f4f]"
               >
                 Очистить вишлист
@@ -207,7 +161,7 @@ export function WishlistDialog({ count, variant, className }: WishlistDialogProp
             </div>
 
             <Button type="submit" form="wishlist-request-form" variant="blue" className="mt-4 h-[47px] w-full cursor-pointer text-lg">
-              Запросить комерческое предложние
+              Запросить коммерческое предложние
             </Button>
           </div>
         )}

@@ -1,3 +1,4 @@
+import { WishlistProvider } from "@/shared/lib/wishlist";
 import { Toaster } from "@/shared/ui/sonner";
 import { PageTransitionProvider } from "@/shared/ui/page-transition";
 import { CookieWarning } from "@/widgets/cookie-warning";
@@ -48,12 +49,14 @@ export default function RootLayout({
     <html lang="ru" className="text-base">
       <body>
         <PageTransitionProvider>
-          <div className="site-shell">
-            <Header />
-            <main className="site-main">{children}</main>
-            <Footer />
-            <CookieWarning />
-          </div>
+          <WishlistProvider>
+            <div className="site-shell">
+              <Header />
+              <main className="site-main">{children}</main>
+              <Footer />
+              <CookieWarning />
+            </div>
+          </WishlistProvider>
         </PageTransitionProvider>
         <Toaster />
       </body>

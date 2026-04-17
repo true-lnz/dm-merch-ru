@@ -18,8 +18,7 @@ const MOBILE_FADE_DURATION_MS = 180;
 
 const PARTNER_PRODUCTS_TITLE = "Более 50 000 товаров\nдля брендирования";
 
-const PARTNER_PRODUCTS_DESCRIPTION =
-  "Комбинируем модели, ткани, фасоны и виды брендирования под конкретные задачи бизнеса";
+const PARTNER_PRODUCTS_DESCRIPTION = "Комбинируем модели, ткани, фасоны и виды брендирования под конкретные задачи бизнеса";
 
 const PARTNER_PRODUCTS = [
   {
@@ -142,25 +141,12 @@ export function HomePartnerProducts({ showIntro = true }: HomePartnerProductsPro
 
       <div className={cn("md:hidden flex flex-col", showIntro ? "mt-8" : "mt-0")}>
         <article className="flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]">
-          <div
-            className={cn(
-              "transition-opacity duration-200",
-              isMobileContentVisible ? "opacity-100" : "opacity-0",
-            )}
-          >
+          <div className={cn("transition-opacity duration-200", isMobileContentVisible ? "opacity-100" : "opacity-0")}>
             <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
-              <Image
-                src={activeItem.imageUrl}
-                alt={activeItem.title}
-                fill
-                sizes="100vw"
-                className="object-cover"
-              />
+              <Image src={activeItem.imageUrl} alt={activeItem.title} fill sizes="100vw" className="object-cover" />
             </div>
             <div className="space-y-2 p-5 md:p-7">
-              <h3 className="font-heading text-[42px] leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
-                {activeItem.title}
-              </h3>
+              <h3 className="font-heading text-3xl xl:text-5xl leading-[0.95] tracking-[0.01em] text-[var(--heading)]">{activeItem.title}</h3>
               <p className="text-sm text-[var(--text-muted)]">{activeItem.description}</p>
             </div>
           </div>

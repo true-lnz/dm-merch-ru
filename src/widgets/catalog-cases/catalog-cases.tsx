@@ -136,10 +136,14 @@ function CatalogCasesCard({ item }: { item: CatalogCaseItem }) {
         <article className="hidden md:grid md:grid-cols-[1fr_1fr] md:items-start md:gap-7">
           <div className="space-y-5 text-[var(--heading)]">
             <h3 className="font-heading text-5xl leading-[0.95] tracking-[0.015em]">{item.company}</h3>
-            <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.description}</p>
+            <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">
+              {item.description}
+            </p>
             <div className="space-y-3">
               <p className="font-heading text-5xl leading-[0.95] tracking-[0.015em]">Что получил клиент:</p>
-              <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.result}</p>
+              <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">
+                {item.result}
+              </p>
             </div>
           </div>
 
@@ -159,10 +163,14 @@ function CatalogCasesCard({ item }: { item: CatalogCaseItem }) {
 
           <div className="mt-5 space-y-5 text-[var(--heading)] [grid-area:text]">
             <h3 className="font-heading text-5xl leading-[0.95] tracking-[0.015em]">{item.company}</h3>
-            <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.description}</p>
+            <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">
+              {item.description}
+            </p>
             <div className="space-y-3">
               <p className="font-heading text-5xl leading-[0.95] tracking-[0.015em]">Что получил клиент:</p>
-              <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.result}</p>
+              <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">
+                {item.result}
+              </p>
             </div>
           </div>
         </article>
@@ -179,7 +187,7 @@ function CatalogCasesStackedCard({ item }: { item: CatalogCaseItem }) {
   }
 
   return (
-    <article className="flex flex-col gap-5">
+    <article className="flex h-full flex-col gap-5">
       <div className="order-2 md:order-1 space-y-3 text-[var(--heading)]">
         <h3 className="font-heading text-3xl md:text-5xl leading-[0.95] tracking-[0.015em]">{item.company}</h3>
         <p className="text-sm md:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.description}</p>
@@ -189,7 +197,7 @@ function CatalogCasesStackedCard({ item }: { item: CatalogCaseItem }) {
         </div>
       </div>
 
-      <div className="order-1 md:order-2 relative aspect-[21/9] overflow-hidden rounded-[18px] bg-[var(--surface)]">
+      <div className="order-1 md:order-2 md:mt-auto relative aspect-[21/9] overflow-hidden rounded-[18px] bg-[var(--surface)]">
         <Image src={primaryImage.src} alt={primaryImage.alt} fill sizes="(max-width: 1279px) 100vw, 46vw" className="object-cover" />
       </div>
     </article>
@@ -213,11 +221,25 @@ export function CatalogCases({
     <section className="my-[63px] md:my-[72px] xl:my-[90px]">
       <PageSubheading title={title} />
 
-      <div className="mt-8 grid md:gap-6 xl:grid-cols-2 xl:gap-9">
+      <div
+        className={cn(
+          "mt-8 grid md:gap-6 xl:grid-cols-2 xl:gap-9",
+          variant !== "stacked" &&
+            "xl:relative xl:before:content-[''] xl:before:absolute xl:before:inset-y-0 xl:before:left-1/2 xl:before:-translate-x-1/2 xl:before:w-px xl:before:bg-border",
+          variant === "stacked" && "xl:gap-y-12",
+        )}
+      >
         {items.map((item, index) => (
           <div
             key={item.id}
-            className={cn("pt-6 first:pt-0", index > 0 && "border-t border-border", "md:mx-4 lg:mx-6 xl:mx-0 xl:border-t-0 xl:pt-0")}
+            className={cn(
+              "pt-6 mb-6 xl:mb-0 first:pt-0",
+              index > 0 && "border-t border-border",
+              "xl:border-t-0 xl:pt-0",
+              variant === "stacked" && index > 1 && "xl:border-t xl:border-border xl:pt-10",
+              "xl:[&:nth-child(odd)]:pr-9",
+              "xl:[&:nth-child(2n)]:pl-9",
+            )}
           >
             {variant === "stacked" ? <CatalogCasesStackedCard item={item} /> : <CatalogCasesCard item={item} />}
           </div>

@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { headerNavigation } from "@/shared/config/navigation";
+import { useWishlist } from "@/shared/lib/wishlist";
 import { cn } from "@/shared/lib/cn";
 import { DesktopHeader } from "./desktop-header";
 import {
@@ -20,7 +21,7 @@ export function Header() {
   const isScrolled = useScrolledHeader();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
-  const wishlistCount = 0;
+  const { count: wishlistCount } = useWishlist();
 
   const catalogItem = headerNavigation.find((item) => item.children);
   const mobilePrimaryLinks = headerNavigation.filter((item) => !item.children);
@@ -56,7 +57,7 @@ export function Header() {
           )}
         />
 
-        <DesktopHeader pathname={pathname} wishlistCount={wishlistCount} showWishlist={isPartnerCatalogPage} />
+        <DesktopHeader pathname={pathname} showWishlist={isPartnerCatalogPage} />
 
         <MobileHeaderBar onOpenMenu={openMenu} />
       </header>

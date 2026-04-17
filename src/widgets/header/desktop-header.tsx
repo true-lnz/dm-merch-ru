@@ -111,11 +111,9 @@ function TabletHeaderActions() {
 
 export function DesktopHeader({
   pathname,
-  wishlistCount,
   showWishlist,
 }: {
   pathname: string | null;
-  wishlistCount: number;
   showWishlist: boolean;
 }) {
   return (
@@ -136,7 +134,7 @@ export function DesktopHeader({
 
       <TabletHeaderActions />
       <div className="hidden xl:flex items-center gap-2">
-        {showWishlist ? <WishlistDialog count={wishlistCount} variant="desktop" /> : null}
+        {showWishlist ? <WishlistDialog variant="desktop" /> : null}
         <SiteContacts className="!flex" />
       </div>
     </div>

@@ -112,7 +112,7 @@ export function MobileMenu({
 
           {showWishlist && wishlistCount > 0 ? (
             <div className="mb-6">
-              <WishlistDialog count={wishlistCount} variant="mobile" />
+              <WishlistDialog variant="mobile" />
             </div>
           ) : null}
 
