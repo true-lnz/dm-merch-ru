@@ -22,7 +22,7 @@ type CatalogHeroProps = {
 
 export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
   return (
-    <section className="relative mb-[63px] w-full md:mb-[72px] xl:mb-[90px]">
+    <section className="relative mb-[43px] w-full md:mb-[52px] xl:mb-[70px]">
       <div className="relative" style={{ minHeight: "clamp(620px, 85vh, 860px)" }}>
         {/* desktop background image */}
         <div className="pointer-events-none absolute inset-y-0 left-[48%] right-0 hidden overflow-visible xl:block 2xl:left-[48%]">

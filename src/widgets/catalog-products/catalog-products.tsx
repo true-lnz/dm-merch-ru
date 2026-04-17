@@ -79,7 +79,7 @@ export function CatalogProducts({ items, showHeading = false }: { items: Catalog
   }
 
   return (
-    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
+    <section className="my-[43px] md:my-[52px] xl:my-[70px]">
       {showHeading ? <PageSubheading title="НАШИ ТОВАРЫ" /> : null}
 
       <div className={cn("md:hidden flex flex-col", showHeading ? "mt-8" : "mt-0")}>

@@ -45,7 +45,7 @@ export function CasesPage() {
         }}
       />
 
-      <section className="mb-[63px] md:mb-[72px] xl:mb-[90px] mt-[28.8px] grid gap-6 xl:grid-cols-[245.7px_minmax(0,1fr)] xl:gap-[63px]">
+      <section className="mb-[43px] md:mb-[52px] xl:mb-[70px] mt-[28.8px] grid gap-6 xl:grid-cols-[245.7px_minmax(0,1fr)] xl:gap-[63px]">
         <aside className="-mr-[var(--layout-side-padding)] overflow-hidden xl:sticky xl:top-28 xl:self-start lg:mr-0">
           <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden xl:grid xl:gap-[18px] xl:overflow-visible xl:pb-0">
             {caseThemes.map((theme) => {

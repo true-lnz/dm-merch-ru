@@ -6,7 +6,7 @@ import { PageSubheading } from "@/shared/ui/page-subheading";
 export function RequestCta() {
   return (
     <section
-      className="relative my-[63px] overflow-hidden md:my-[72px] xl:my-[90px]"
+      className="relative my-[43px] overflow-hidden md:my-[52px] xl:my-[70px]"
       aria-label="Форма заявки"
     >
       <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-[auto_1fr]">

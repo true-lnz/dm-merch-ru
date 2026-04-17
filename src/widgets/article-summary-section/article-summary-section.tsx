@@ -42,7 +42,7 @@ function SummaryDecoration() {
 
 export function ArticleSummarySection({ section }: ArticleSummarySectionProps) {
   return (
-    <section className="mb-[63px] md:mb-[72px] xl:mb-[90px]" aria-label={section.title}>
+    <section className="mb-[43px] md:mb-[52px] xl:mb-[70px]" aria-label={section.title}>
       <div className="grid gap-5 md:gap-6 xl:grid-cols-[minmax(0,1114px)_minmax(0,586px)] xl:gap-10">
         <div className="relative order-2 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] px-5 py-5 text-white md:px-[30px] md:py-8 xl:order-1 xl:min-h-[418px] xl:px-20 xl:py-[76px]">
           <SummaryDecoration />

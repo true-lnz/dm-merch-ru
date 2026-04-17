@@ -16,7 +16,7 @@ const MOBILE_DIGEST_CARDS = DIGEST_MOBILE_ORDER.map((cardId) => DIGEST_CARDS_BY_
 
 export function HomeDigest() {
   return (
-    <section className="mb-[63px] md:mb-[72px] xl:mb-[90px]">
+    <section className="mb-[43px] md:mb-[52px] xl:mb-[70px]">
       <PageSubheading title={DIGEST_TITLE} description={DIGEST_DESCRIPTION} descriptionPlacement="side" sideDescriptionLayout="two-columns" />
 
       <DigestMobileCarousel cards={MOBILE_DIGEST_CARDS} className="mt-[36px] md:hidden" />

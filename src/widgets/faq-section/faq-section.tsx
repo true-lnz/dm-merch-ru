@@ -67,7 +67,7 @@ const FAQ_ITEMS = [
 
 export function FaqSection() {
   return (
-    <section className="my-[63px] md:my-[72px] xl:my-[90px] grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start">
+    <section className="my-[43px] md:my-[52px] xl:my-[70px] grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start">
       <div>
         <PageSubheading title={FAQ_TITLE} />
 
