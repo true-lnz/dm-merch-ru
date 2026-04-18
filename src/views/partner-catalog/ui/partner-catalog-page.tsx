@@ -23,10 +23,6 @@ import type {
 const ALL_FILTER_ID = "all";
 const MOBILE_FADE_DURATION_MS = 180;
 const PAGE_SIZE_OPTIONS = [50, 100, 200] as const;
-const DESKTOP_CARD_CONTENT_HEIGHT_CLASS = "md:h-[19rem]";
-const DESKTOP_CARD_CONTENT_MIN_HEIGHT_CLASS = "md:min-h-[19rem]";
-const DESKTOP_CARD_TITLE_HEIGHT_CLASS = "md:h-[4.5rem]";
-const DESKTOP_CARD_TITLE_MIN_HEIGHT_CLASS = "md:min-h-[4.5rem]";
 
 const PRODUCT_CARD_LAYERS = [
   {
@@ -112,7 +108,7 @@ function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
         articleNumber: variant.article,
         title: variant.title,
         imageUrl: variant.imageUrl,
-        unitPriceRub: variant.discountPriceRub ?? variant.priceRub,
+        unitPriceRub: variant.priceRub,
       },
       safeQuantity,
     );
@@ -156,7 +152,7 @@ function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
               type="button"
               onClick={handleConfirm}
               aria-label="Подтвердить тираж"
-              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[7px] bg-[var(--accent)] text-white transition-colors hover:bg-[var(--accent-hover)]"
+              className="inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-[7px] bg-[var(--accent)] text-white transition-colors hover:bg-[var(--accent-hover)]"
             >
               <CheckIcon className="size-4" strokeWidth={2.8} />
             </button>
@@ -171,11 +167,112 @@ function ProductCardImage({ variant }: { variant: PartnerCatalogVariant }) {
   return (
     <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
       <Image src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
-      {variant.discountPriceRub ? (
-        <span className="font-heading absolute right-3 top-3 rounded-md bg-[#ff3333] px-[12px] pt-[2px] text-lg uppercase tracking-[0.04em] text-white">
-          Скидка
-        </span>
-      ) : null}
+    </div>
+  );
+}
+
+function VariantSelectorStrip({
+  variants,
+  activeVariantId,
+  onVariantSelect,
+}: {
+  variants: PartnerCatalogVariant[];
+  activeVariantId: string;
+  onVariantSelect: (variantId: string) => void;
+}) {
+  const stripRef = useRef<HTMLDivElement | null>(null);
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartScrollLeftRef = useRef(0);
+  const suppressClickRef = useRef(false);
+
+  function handleMouseDown(event: React.MouseEvent<HTMLDivElement>) {
+    if (event.button !== 0) {
+      return;
+    }
+
+    const strip = stripRef.current;
+
+    if (!strip) {
+      return;
+    }
+
+    isDraggingRef.current = true;
+    dragStartXRef.current = event.clientX;
+    dragStartScrollLeftRef.current = strip.scrollLeft;
+    suppressClickRef.current = false;
+  }
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    const strip = stripRef.current;
+
+    if (!strip || !isDraggingRef.current) {
+      return;
+    }
+
+    const deltaX = event.clientX - dragStartXRef.current;
+
+    if (Math.abs(deltaX) > 4) {
+      suppressClickRef.current = true;
+    }
+
+    strip.scrollLeft = dragStartScrollLeftRef.current - deltaX;
+  }
+
+  function handleMouseUp() {
+    isDraggingRef.current = false;
+  }
+
+  function handleMouseLeave() {
+    isDraggingRef.current = false;
+  }
+
+  function handleVariantClick(event: React.MouseEvent<HTMLButtonElement>, variantId: string) {
+    if (suppressClickRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+      suppressClickRef.current = false;
+      return;
+    }
+
+    onVariantSelect(variantId);
+  }
+
+  return (
+    <div
+      ref={stripRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+      className="flex snap-x snap-mandatory items-center gap-2 overflow-x-auto select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:cursor-grab md:active:cursor-grabbing"
+    >
+      {variants.map((variant) => {
+        const isActive = variant.id === activeVariantId;
+
+        return (
+          <button
+            key={variant.id}
+            type="button"
+            onClick={(event) => handleVariantClick(event, variant.id)}
+            className={cn(
+              "relative h-10 w-10 shrink-0 snap-start cursor-pointer overflow-hidden rounded-[6px] border-2 bg-white transition-colors",
+              isActive ? "border-[var(--accent)]" : "border-transparent hover:border-[rgba(64,64,64,0.2)]",
+            )}
+            aria-label={`Выбрать вариант ${variant.colorLabel}`}
+            aria-pressed={isActive}
+          >
+            <Image
+              src={variant.imageUrl}
+              alt={variant.colorLabel}
+              fill
+              sizes="40px"
+              draggable={false}
+              className="pointer-events-none select-none object-cover"
+            />
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -198,21 +295,15 @@ function ProductCardContent({
   return (
     <div
       className={cn(
-        "flex h-full flex-1 flex-col gap-2 bg-[var(--card-bg)] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]",
-        expandedTitle ? DESKTOP_CARD_CONTENT_MIN_HEIGHT_CLASS : DESKTOP_CARD_CONTENT_HEIGHT_CLASS,
+        "flex flex-1 flex-col gap-2 bg-[var(--card-bg)] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]",
         className,
       )}
     >
       <div className="flex items-baseline gap-2 font-sans">
-        {activeVariant.discountPriceRub ? (
-          <span className="text-lg font-semibold text-black">{formatRubPrice(activeVariant.discountPriceRub)}</span>
-        ) : null}
-        <span className={cn("text-base", activeVariant.discountPriceRub ? "text-[#8f8f8f] line-through" : "font-semibold text-black")}>
-          {formatRubPrice(activeVariant.priceRub)}
-        </span>
+        <span className="text-base font-semibold text-black">{formatRubPrice(activeVariant.priceRub)}</span>
       </div>
 
-      <div className={cn("pt-[2px]", expandedTitle ? DESKTOP_CARD_TITLE_MIN_HEIGHT_CLASS : DESKTOP_CARD_TITLE_HEIGHT_CLASS)}>
+      <div className="pt-[2px]">
         <h3
           className={cn(
             "font-heading text-2xl leading-[1.2] tracking-[0.01em] text-[var(--heading)]",
@@ -228,27 +319,7 @@ function ProductCardContent({
           <p className="text-sm text-[var(--text-muted)]">Артикул: {activeVariant.article}</p>
           <p className="text-sm text-[var(--text-muted)]">Наличие: {activeVariant.stock} шт.</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {variants.map((variant) => {
-            const isActive = variant.id === activeVariantId;
-
-            return (
-              <button
-                key={variant.id}
-                type="button"
-                onClick={() => onVariantSelect(variant.id)}
-                className={cn(
-                  "relative h-10 w-10 cursor-pointer overflow-hidden rounded-[6px] bg-white transition-shadow",
-                  isActive ? "ring-2 ring-[var(--accent)] ring-offset-1 ring-offset-[var(--card-bg)]" : "hover:shadow-[0_0_0_1px_rgba(64,64,64,0.2)]",
-                )}
-                aria-label={`Выбрать вариант ${variant.colorLabel}`}
-                aria-pressed={isActive}
-              >
-                <Image src={variant.imageUrl} alt={variant.colorLabel} fill sizes="40px" className="object-cover" />
-              </button>
-            );
-          })}
-        </div>
+        <VariantSelectorStrip variants={variants} activeVariantId={activeVariantId} onVariantSelect={onVariantSelect} />
       </div>
 
       <WishlistActionButton variant={activeVariant} />
@@ -277,7 +348,7 @@ function ProductCardShell({
     <article
       aria-hidden={ariaHidden || undefined}
       className={cn(
-        "overflow-hidden rounded-[18px] border border-transparent bg-[var(--card-bg)] transition-colors md:rounded-[22.5px] md:hover:border",
+        "flex h-full flex-col overflow-hidden rounded-[18px] border border-transparent bg-[var(--card-bg)] transition-colors md:rounded-[22.5px] md:hover:border",
         shadow ? "shadow-[0_16px_40px_rgba(42,42,42,0.16)]" : null,
       )}
     >
@@ -303,7 +374,7 @@ function PartnerProductCard({ item }: { item: PartnerCatalogProduct }) {
   }
 
   return (
-    <div className="group relative z-0 overflow-visible md:hover:z-20">
+    <div className="group relative z-0 h-full overflow-visible md:hover:z-20">
       {PRODUCT_CARD_LAYERS.map((layer) => (
         <div key={layer.key} className={layer.wrapperClassName}>
           <div className={layer.innerClassName}>
@@ -448,17 +519,17 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
     <>
       <WidowFix />
       <PageHeading
-        title="Каталог партнерских товаров"
+        title="Каталог продукции"
         breadcrumb={{
           labelFrom: "Главная",
-          labelTo: "Каталог партнерских товаров",
+          labelTo: "Каталог продукции",
           href: "/",
         }}
       />
 
       <section className="mt-[28.8px] mb-[43px] md:mb-[55px]">
         <div className="mb-5 md:mb-4 md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-center md:gap-8 xl:gap-[63px]">
-          <p className="text-base font-bold uppercase  tracking-[0.08em] text-[var(--heading)]">Список</p>
+          <p className="text-base font-bold uppercase  tracking-[0.08em] text-[var(--heading)]">Категория:</p>
 
           <div className="mt-3 flex flex-col gap-3 md:mt-0 md:flex-row md:items-center md:justify-between">
             <p className="text-sm text-[var(--text-muted)]">
@@ -564,7 +635,7 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
                   ) : null}
                 </div>
 
-                <div className="hidden overflow-visible items-start gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="hidden overflow-visible gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                   {displayedProducts.map((item) => (
                     <PartnerProductCard key={item.id} item={item} />
                   ))}

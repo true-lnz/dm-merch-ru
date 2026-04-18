@@ -71,12 +71,13 @@ export function PageTransitionProvider({ children }: PropsWithChildren) {
   }, [clearTimers]);
 
   const notifyRouteSettled = useCallback(() => {
+    clearTimers();
     setPendingRouteSettled(false);
     setProgress(100);
     setPhase("entering");
 
     schedule(isReducedMotion ? 60 : 240, finishTransition);
-  }, [finishTransition, isReducedMotion, schedule]);
+  }, [clearTimers, finishTransition, isReducedMotion, schedule]);
 
   const startNavigationTransition = useCallback(
     (source: TransitionSource) => {
@@ -93,13 +94,15 @@ export function PageTransitionProvider({ children }: PropsWithChildren) {
 
       if (isReducedMotion) {
         schedule(60, () => setProgress(60));
+        schedule(700, finishTransition);
         return;
       }
 
       schedule(180, () => setProgress((value) => Math.max(value, 50)));
       schedule(420, () => setProgress((value) => Math.max(value, 60)));
+      schedule(2000, finishTransition);
     },
-    [clearTimers, isReducedMotion, pendingRouteSettled, schedule],
+    [clearTimers, finishTransition, isReducedMotion, pendingRouteSettled, schedule],
   );
 
   useEffect(() => {

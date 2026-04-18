@@ -135,7 +135,12 @@ export function DesktopHeader({
       <TabletHeaderActions />
       <div className="hidden xl:flex items-center gap-2">
         {showWishlist ? <WishlistDialog variant="desktop" /> : null}
-        <SiteContacts className="!flex" />
+        <div className="2xl:hidden">
+          <SiteContacts className="!flex" showSocials={false} />
+        </div>
+        <div className="hidden 2xl:block">
+          <SiteContacts className="!flex" />
+        </div>
       </div>
     </div>
   );
