@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { memo, useEffect, useMemo, useRef, useState, type ComponentProps, type RefObject } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -20,6 +21,12 @@ import type {
   PartnerCatalogRootSection,
   PartnerCatalogVariant,
 } from "../model/partner-catalog-data";
+import {
+  getPartnerCatalogPathForFilter,
+  PARTNER_CATALOG_QUERY_CATEGORY_KEY,
+  PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY,
+  resolvePartnerCatalogSelection,
+} from "../model/partner-catalog-query";
 
 const ALL_FILTER_ID = "all";
 const MOBILE_PAGE_SIZE = 16;
@@ -510,8 +517,11 @@ function CategoryFilterList({
 }
 
 export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalogInitialData }) {
-  const [activeFilterId, setActiveFilterId] = useState(ALL_FILTER_ID);
-  const [expandedRootId, setExpandedRootId] = useState<string | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [activeFilterId, setActiveFilterId] = useState(initialData.initialFilterId);
+  const [expandedRootId, setExpandedRootId] = useState<string | null>(initialData.initialExpandedRootId);
   const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(50);
   const [products, setProducts] = useState(initialData.initialSlice.items);
   const [totalCount, setTotalCount] = useState(initialData.initialSlice.total);
@@ -520,6 +530,9 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const [isMobileCategoryDialogOpen, setIsMobileCategoryDialogOpen] = useState(false);
   const listStartRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
+  const activeFilterIdRef = useRef(initialData.initialFilterId);
+  const expandedRootIdRef = useRef<string | null>(initialData.initialExpandedRootId);
+  const searchParamsKey = searchParams.toString();
 
   const activeRootCategory = useMemo(
     () =>
@@ -559,8 +572,51 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     void loadCatalogSlice(activeFilterId, 0, targetPageSize, false);
   }, [activeFilterId, isDesktop, pageSize, products.length, totalCount]);
 
+  useEffect(() => {
+    activeFilterIdRef.current = activeFilterId;
+  }, [activeFilterId]);
+
+  useEffect(() => {
+    expandedRootIdRef.current = expandedRootId;
+  }, [expandedRootId]);
+
+  useEffect(() => {
+    const queryCategory = searchParams.get(PARTNER_CATALOG_QUERY_CATEGORY_KEY) ?? undefined;
+    const querySubcategory = searchParams.get(PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY) ?? undefined;
+    const currentPageSize = isDesktop ? pageSize : MOBILE_PAGE_SIZE;
+    const resolvedSelection = resolvePartnerCatalogSelection(
+      initialData.categories,
+      {
+        category: queryCategory,
+        subcategory: querySubcategory,
+      },
+      ALL_FILTER_ID,
+    );
+    const normalizedPath = getPartnerCatalogPathForFilter(initialData.categories, resolvedSelection.filterId, ALL_FILTER_ID, pathname);
+    const currentPath = `${pathname}${searchParams.size > 0 ? `?${searchParams.toString()}` : ""}`;
+
+    if (normalizedPath !== currentPath) {
+      router.replace(normalizedPath, { scroll: false });
+    }
+
+    if (resolvedSelection.expandedRootId !== expandedRootIdRef.current) {
+      setExpandedRootId(resolvedSelection.expandedRootId);
+    }
+
+    if (resolvedSelection.filterId === activeFilterIdRef.current) {
+      return;
+    }
+
+    setActiveFilterId(resolvedSelection.filterId);
+    void loadCatalogSlice(resolvedSelection.filterId, 0, currentPageSize, false);
+  }, [initialData.categories, isDesktop, pageSize, pathname, router, searchParams, searchParamsKey]);
+
   function getCurrentPageSize() {
     return isDesktop ? pageSize : MOBILE_PAGE_SIZE;
+  }
+
+  function syncFilterUrl(nextFilterId: string) {
+    router.replace(getPartnerCatalogPathForFilter(initialData.categories, nextFilterId, ALL_FILTER_ID, pathname), { scroll: false });
   }
 
   async function loadCatalogSlice(filterId: string, offset: number, limit: number, append: boolean) {
@@ -595,6 +651,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
     const nextPageSize = getCurrentPageSize();
     setActiveFilterId(nextFilterId);
+    syncFilterUrl(nextFilterId);
     void loadCatalogSlice(nextFilterId, 0, nextPageSize, false);
     listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -626,6 +683,12 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
   function handleAllProductsClick() {
     setExpandedRootId(null);
+
+    if (activeFilterId === ALL_FILTER_ID) {
+      syncFilterUrl(ALL_FILTER_ID);
+      return;
+    }
+
     handleFilterChange(ALL_FILTER_ID);
   }
 

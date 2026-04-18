@@ -3,6 +3,7 @@ import "server-only";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
+import { resolvePartnerCatalogSelection, type PartnerCatalogQueryParams } from "./partner-catalog-query";
 
 export const PARTNER_CATALOG_ALL_FILTER_ID = "all";
 
@@ -95,6 +96,9 @@ export type PartnerCatalogPageSlice = {
 
 export type PartnerCatalogInitialData = {
   categories: PartnerCatalogRootSection[];
+  initialFilterId: string;
+  initialExpandedRootId: string | null;
+  initialQuery: PartnerCatalogQueryParams;
   initialSlice: PartnerCatalogPageSlice;
 };
 
@@ -315,11 +319,18 @@ export const getPartnerCatalogProductsPage = cache(
   },
 );
 
-export const getPartnerCatalogInitialData = cache((limit: number): PartnerCatalogInitialData => {
+export const getPartnerCatalogInitialData = cache((limit: number, query: PartnerCatalogQueryParams = {}): PartnerCatalogInitialData => {
   const { categories } = getPartnerCatalogDataset();
+  const selection = resolvePartnerCatalogSelection(categories, query, PARTNER_CATALOG_ALL_FILTER_ID);
 
   return {
     categories,
-    initialSlice: getPartnerCatalogProductsPage(PARTNER_CATALOG_ALL_FILTER_ID, 0, limit),
+    initialFilterId: selection.filterId,
+    initialExpandedRootId: selection.expandedRootId,
+    initialQuery: {
+      category: selection.categorySlug,
+      subcategory: selection.subcategorySlug,
+    },
+    initialSlice: getPartnerCatalogProductsPage(selection.filterId, 0, limit),
   };
 });
