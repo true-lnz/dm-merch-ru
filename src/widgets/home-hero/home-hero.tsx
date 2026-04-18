@@ -80,7 +80,7 @@ export function HomeHero() {
               ))}
             </div>
 
-            <div className="mt-auto flex flex-col gap-[10px] pt-2 md:flex-row">
+            <div className="mt-auto flex flex-col gap-[10px] pt-2 md:flex-row xl:flex-wrap 2xl:flex-nowrap">
               <RequestDialog>
                 <RequestDialogButton className="w-full md:w-auto" />
               </RequestDialog>
@@ -89,7 +89,7 @@ export function HomeHero() {
                 href="/cases"
                 className={cn(
                   buttonVariants({ variant: "white" }),
-                  "group hidden h-[60px] justify-between rounded-[9px] border-transparent bg-white px-5 text-lg font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white xl:flex xl:w-[260px]",
+                  "group hidden h-[60px] min-w-0 justify-between rounded-[9px] border-transparent bg-white px-5 text-lg font-normal tracking-[-0.04em] text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] hover:text-white xl:flex xl:flex-1 2xl:w-[260px] 2xl:flex-none",
                 )}
               >
                 <span className="self-start pt-2">К кейсам</span>
@@ -111,7 +111,7 @@ export function HomeHero() {
         {/* Desktop image */}
         <div className="relative hidden min-w-0 xl:block">
           <div className="relative h-[77vh] 2xl:h-[85vh] w-full">
-            <img src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
+            <img loading="eager" src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
           </div>
         </div>
       </div>

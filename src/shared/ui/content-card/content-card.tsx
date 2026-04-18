@@ -78,6 +78,7 @@ export function ContentCard({
           src={image.url}
           alt={image.alt}
           fill
+          quality={80}
           sizes={image.sizes ?? "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"}
           className={cn("object-cover object-top", image.className)}
         />

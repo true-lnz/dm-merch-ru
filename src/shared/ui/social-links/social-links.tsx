@@ -3,7 +3,7 @@ import { cn } from "@/shared/lib/cn";
 
 type SocialLinksProps = {
   className?: string;
-  variant?: "default" | "white";
+  variant?: "default" | "white" | "footer";
   ariaLabel?: string;
   size?: "default" | "menu";
 };
@@ -14,9 +14,10 @@ export function SocialLinks({
   ariaLabel = "Социальные сети",
   size = "default",
 }: SocialLinksProps) {
-  const iconColor = variant === "white" ? "#0252C5" : "#FFFFFF";
+  const iconColor = variant === "white" || variant === "footer" ? "#0252C5" : "#FFFFFF";
   const itemSizeClassName = size === "menu" ? "size-9" : "size-[37px]";
   const itemRadiusClassName = size === "menu" ? "rounded-[9px]" : "rounded-[10px]";
+  const isFooterVariant = variant === "footer";
 
   return (
     <nav className={className} aria-label={ariaLabel}>
@@ -29,11 +30,13 @@ export function SocialLinks({
               target="_blank"
               rel="noreferrer"
               className={cn(
-                "inline-flex items-center justify-center transition-colors",
+                "inline-flex items-center justify-center transition-[opacity,background-color,color]",
                 itemSizeClassName,
                 itemRadiusClassName,
                 variant === "white"
                   ? "bg-white hover:bg-[#f3f3ff]"
+                  : isFooterVariant
+                    ? "bg-white/50 hover:bg-white focus-visible:bg-white"
                   : "bg-[var(--accent)] hover:bg-[var(--accent-hover)]",
               )}
             >

@@ -81,12 +81,12 @@ export function HomeWorkStages() {
             <Image src="/img_tape.svg" alt="" width={2465} height={111} />
           </div>
         </div>
-        <div className="pointer-events-none absolute top-20 -right-160 z-0 rotate-[25deg]" aria-hidden="true">
+        <div className="pointer-events-none absolute top-28 -right-190 z-0 rotate-[25deg]" aria-hidden="true">
           <div style={{ transform: `translate3d(${-tapeShiftX * 1.2}px, 0, 0)` }}>
             <Image src="/img_tape.svg" alt="" width={2465} height={111} />
           </div>
         </div>
-        <div className="pointer-events-none absolute top-10 -right-230 z-0 rotate-[65deg]" aria-hidden="true">
+        <div className="pointer-events-none absolute top-18 -right-230 z-0 rotate-[65deg]" aria-hidden="true">
           <div style={{ transform: `translate3d(${-tapeShiftX * 1.6}px, 0, 0)` }}>
             <Image src="/img_tape.svg" alt="" width={2465} height={111} />
           </div>
