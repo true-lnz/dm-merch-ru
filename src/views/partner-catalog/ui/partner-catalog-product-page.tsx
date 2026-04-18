@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, type ComponentProps, type RefObject } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckIcon } from "lucide-react";
@@ -10,8 +10,11 @@ import { cn } from "@/shared/lib/cn";
 import { useWishlist } from "@/shared/lib/wishlist";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import { buttonVariants } from "@/shared/ui/button";
+import { Skeleton } from "@/shared/ui/skeleton";
 import { SliderControl } from "@/shared/ui/slider-control";
 import type { PartnerCatalogProductDetail } from "../model/partner-catalog-data";
+
+const loadedDetailImageKeys = new Set<string>();
 
 const rubFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -21,6 +24,14 @@ const rubFormatter = new Intl.NumberFormat("ru-RU", {
 
 function formatRubPrice(value: number) {
   return rubFormatter.format(value);
+}
+
+function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
+  if (typeof src === "string") {
+    return src;
+  }
+
+  return "src" in src ? src.src : src.default.src;
 }
 
 type PartnerCatalogProductPageProps = {
@@ -48,6 +59,46 @@ function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => vo
       document.removeEventListener("mousedown", handleClick);
     };
   }, [enabled, onOutside, ref]);
+}
+
+function DetailImageWithSkeleton({
+  alt,
+  className,
+  skeletonClassName,
+  onLoad,
+  ...props
+}: ComponentProps<typeof Image> & { skeletonClassName?: string }) {
+  const imageCacheKey = getCatalogImageCacheKey(props.src);
+  const [isLoaded, setIsLoaded] = useState(() => loadedDetailImageKeys.has(imageCacheKey));
+
+  useEffect(() => {
+    setIsLoaded(loadedDetailImageKeys.has(imageCacheKey));
+  }, [imageCacheKey]);
+
+  return (
+    <>
+      {!isLoaded ? (
+        <div className={cn("absolute inset-0 overflow-hidden", skeletonClassName)}>
+          <Skeleton className="absolute inset-0 rounded-none bg-[#e7f0ff]" />
+          <div
+            aria-hidden="true"
+            className="absolute inset-y-0 -left-1/2 w-1/2 animate-pulse bg-gradient-to-r from-transparent via-[#ffffff] to-transparent"
+            style={{ transform: "skewX(-18deg)" }}
+          />
+        </div>
+      ) : null}
+      <Image
+        {...props}
+        alt={alt}
+        onLoad={(event) => {
+          loadedDetailImageKeys.add(imageCacheKey);
+          setIsLoaded(true);
+          onLoad?.(event);
+        }}
+        className={cn("transition-opacity duration-300", isLoaded ? "opacity-100" : "opacity-0", className)}
+      />
+    </>
+  );
 }
 
 export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalogProductPageProps) {
@@ -149,7 +200,13 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                               isActive ? "border-[var(--accent)]" : "border-[var(--card-bg)] hover:border-black/15",
                             )}
                           >
-                            <Image src={imageUrl} alt="" fill sizes="(max-width: 767px) 96px, (max-width: 1279px) 16vw, 180px" className="object-cover" />
+                            <DetailImageWithSkeleton
+                              src={imageUrl}
+                              alt=""
+                              fill
+                              sizes="(max-width: 767px) 96px, (max-width: 1279px) 16vw, 180px"
+                              className="object-cover"
+                            />
                           </button>
                         );
                       })}
@@ -173,7 +230,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                             isActive ? "pointer-events-auto scale-100 opacity-100" : "pointer-events-none scale-[1.02] opacity-0",
                           )}
                         >
-                          <Image
+                          <DetailImageWithSkeleton
                             src={imageUrl}
                             alt={detail.title}
                             fill
@@ -231,9 +288,9 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                         "flex min-w-[138px] items-center gap-3 rounded-[14px] border bg-white px-3 py-3 transition-colors",
                         isActive ? "border-[var(--accent)]" : "border-transparent hover:border-black/10",
                       )}
-                    >
-                      <span className="relative size-12 shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface)]">
-                        <Image src={variant.imageUrl} alt={variant.colorLabel} fill sizes="48px" className="object-cover" />
+                      >
+                        <span className="relative size-12 shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface)]">
+                        <DetailImageWithSkeleton src={variant.imageUrl} alt={variant.colorLabel} fill sizes="48px" className="object-cover" />
                       </span>
                       <span className="min-w-0">
                         <span className="block truncate text-sm font-medium text-[var(--heading)]">{variant.colorLabel}</span>

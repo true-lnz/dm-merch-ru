@@ -187,7 +187,7 @@ function CatalogImageWithSkeleton({
   alt,
   className,
   skeletonClassName,
-  onLoadingComplete,
+  onLoad,
   ...props
 }: ComponentProps<typeof Image> & { skeletonClassName?: string }) {
   const imageCacheKey = getCatalogImageCacheKey(props.src);
@@ -212,10 +212,10 @@ function CatalogImageWithSkeleton({
       <Image
         {...props}
         alt={alt}
-        onLoadingComplete={(result) => {
+        onLoad={(event) => {
           loadedCatalogImageKeys.add(imageCacheKey);
           setIsLoaded(true);
-          onLoadingComplete?.(result);
+          onLoad?.(event);
         }}
         className={cn("transition-opacity duration-300", isLoaded ? "opacity-100" : "opacity-0", className)}
       />
