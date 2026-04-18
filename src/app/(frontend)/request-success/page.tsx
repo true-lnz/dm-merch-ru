@@ -71,7 +71,7 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
             <div className="mt-8 sm:mt-0 flex flex-col gap-[10px] md:flex-row">
               <Link
                 href="/"
-                className="group flex h-[60px] w-full items-center justify-between rounded-[9px] bg-[var(--accent)] px-5 text-[16px] font-normal tracking-[-0.04em] text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] md:w-[284px] xl:w-[283.6px] xl:text-[19.46px]"
+                className="group flex h-[60px] w-full items-center justify-between rounded-[9px] bg-[var(--accent)] px-5 text-lg font-normal tracking-[-0.04em] text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] md:w-[284px] xl:w-[283.6px] xl:text-[19.46px]"
               >
                 <span className="self-start pt-2">На главную</span>
                 <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-[5px] bg-white transition-colors duration-200 group-hover:bg-[var(--accent)] xl:size-[39.52px] xl:rounded-[4px]">

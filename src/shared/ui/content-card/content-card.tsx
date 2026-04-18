@@ -83,11 +83,9 @@ export function ContentCard({
         />
       </div>
       <div className="flex flex-1 flex-col p-[18px] md:p-[27px]">
-        <div className="flex flex-1 flex-col justify-between gap-[9px] mb-[18px] md:mb-[22px]">
-          <h3 className="xl:whitespace-pre-line font-heading text-3xl md:text-4xl xl:text-5xl leading-[0.95] tracking-[0.01em] text-[var(--heading)]">
-            {title}
-          </h3>
-          {hasExcerpt ? <p className="text-xs sm:text-sm md:text-base text-[var(--text-muted)] whitespace-pre-line">{excerpt}</p> : null}
+        <div className="flex flex-1 flex-col justify-between gap-[9px] mb-[18px] md:mb-[18px]">
+          <h3 className="xl:whitespace-pre-line font-heading text-3xl md:text-4xl leading-[0.95] tracking-[0.01em] text-[var(--heading)]">{title}</h3>
+          {hasExcerpt ? <p className="text-xs md:text-sm text-[var(--text-muted)] whitespace-pre-line">{excerpt}</p> : null}
         </div>
         <div className="mt-auto">{renderCta()}</div>
       </div>

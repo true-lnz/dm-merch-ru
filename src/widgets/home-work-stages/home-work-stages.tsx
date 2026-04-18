@@ -101,7 +101,7 @@ export function HomeWorkStages() {
             titleClassName="text-white"
           />
 
-          <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:mt-[82px] xl:grid-cols-3 xl:grid-rows-2 xl:gap-6">
+          <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:mt-[36px] xl:grid-cols-3 xl:grid-rows-2 xl:gap-6">
             {WORK_STAGES.map((stage, index) => {
               const isLightOnMobile = isLightWorkStageCard(index, 1);
               const isLightOnDesktop = isLightWorkStageCard(index, 2);
@@ -129,7 +129,7 @@ export function HomeWorkStages() {
                     isLightOnMobile ? "text-[var(--accent)]" : "text-white",
                     isLightOnDesktop ? "md:text-[var(--accent)]" : "md:text-white",
                   )}
-                  titleClassName="mt-5 text-[28px] leading-[0.95] md:text-[34px]"
+                  titleClassName="mt-5 text-[28px] leading-[0.95] md:text-4xl"
                   descriptionClassName={cn(
                     "mt-4 text-[15px] leading-[1.35] tracking-[-0.03em]",
                     isLightOnMobile ? "text-[var(--text-muted)]" : "text-white",

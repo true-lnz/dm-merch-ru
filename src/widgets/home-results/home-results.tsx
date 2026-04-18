@@ -77,7 +77,7 @@ export function HomeResults() {
           {contentItems.map((item) => (
             <article key={item.title}>
               <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">{item.title}</h3>
-              <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">{item.text}</p>
+              <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-sm">{item.text}</p>
             </article>
           ))}
         </div>
@@ -93,7 +93,7 @@ export function HomeResults() {
           <RequestDialog>
             <button
               type="button"
-              className="cursor-pointer order-2 inline-flex h-[47px] items-center justify-center rounded-[9px] bg-[var(--accent)] px-6 text-[16px] font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:order-1 lg:w-[239px]"
+              className="cursor-pointer order-2 inline-flex h-[47px] items-center justify-center rounded-[9px] bg-[var(--accent)] px-6 text-lg font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:order-1 lg:w-[239px]"
             >
               Оставить заявку
             </button>

@@ -52,7 +52,7 @@ type ServiceCardProps = {
 
 function ServiceCard({ title, description }: ServiceCardProps) {
   return (
-    <article className="relative flex min-h-[200px] flex-col rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)] p-[18px] md:min-h-[245px] md:p-[27px]">
+    <article className="relative flex min-h-[150px] flex-col rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)] p-[18px] md:min-h-[245px] md:p-[27px]">
       <Image
         src="/icons/ic_feature.svg"
         alt=""
@@ -62,10 +62,8 @@ function ServiceCard({ title, description }: ServiceCardProps) {
         className="absolute right-5 top-5 size-7 md:right-[30px] md:top-[30px] md:size-8"
       />
 
-      <h3 className="font-heading max-w-[80%] text-3xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-4xl xl:text-5xl">
-        {title}
-      </h3>
-      <p className="mt-3 max-w-[90%] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:mt-4 md:text-lg xl:text-xl">
+      <h3 className="font-heading max-w-[80%] text-3xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-4xl">{title}</h3>
+      <p className="mt-3 max-w-[90%] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:mt-4 md:text-base xl:text-lg">
         {description}
       </p>
 

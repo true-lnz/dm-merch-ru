@@ -1,6 +1,6 @@
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
-import Link from "next/link";
 import { cn } from "@/shared/lib/cn";
+import Link from "next/link";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 type BreadcrumbLinkItem = {
   label: string;
@@ -20,11 +20,7 @@ type PageBreadcrumbProps = {
   className?: string;
 };
 
-function normalizeBreadcrumbs({
-  item,
-  items,
-  currentLabel,
-}: Pick<PageBreadcrumbProps, "item" | "items" | "currentLabel">) {
+function normalizeBreadcrumbs({ item, items, currentLabel }: Pick<PageBreadcrumbProps, "item" | "items" | "currentLabel">) {
   if (items?.length) {
     return {
       items,
@@ -45,72 +41,37 @@ function normalizeBreadcrumbs({
   };
 }
 
-export function Breadcrumb({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"nav">) {
+export function Breadcrumb({ className, ...props }: ComponentPropsWithoutRef<"nav">) {
   return (
     <nav
       aria-label="Хлебные крошки"
-      className={cn(
-        "flex flex-wrap items-center gap-2 text-xs leading-[1.3] tracking-[-0.02em] text-[var(--text-muted)] md:text-sm",
-        className,
-      )}
+      className={cn("flex flex-wrap items-center gap-2 text-xs leading-[1.3] tracking-[-0.02em] text-[var(--text-muted)] md:text-sm", className)}
       {...props}
     />
   );
 }
 
-export function BreadcrumbItem({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"span">) {
+export function BreadcrumbItem({ className, ...props }: ComponentPropsWithoutRef<"span">) {
   return <span className={cn("inline-flex items-center gap-2", className)} {...props} />;
 }
 
-export function BreadcrumbLink({
-  className,
-  href,
-  children,
-}: {
-  className?: string;
-  href: string;
-  children: ReactNode;
-}) {
+export function BreadcrumbLink({ className, href, children }: { className?: string; href: string; children: ReactNode }) {
   return (
-    <Link
-      href={href}
-      className={cn("transition-colors hover:text-[var(--text)]", className)}
-    >
+    <Link href={href} className={cn("transition-colors hover:text-[var(--text)]", className)}>
       {children}
     </Link>
   );
 }
 
-export function BreadcrumbList({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"ol">) {
-  return (
-    <ol
-      className={cn("flex flex-wrap items-center gap-2", className)}
-      {...props}
-    />
-  );
+export function BreadcrumbList({ className, ...props }: ComponentPropsWithoutRef<"ol">) {
+  return <ol className={cn("flex flex-wrap items-center gap-2", className)} {...props} />;
 }
 
-export function BreadcrumbPage({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"span">) {
+export function BreadcrumbPage({ className, ...props }: ComponentPropsWithoutRef<"span">) {
   return <span aria-current="page" className={className} {...props} />;
 }
 
-export function BreadcrumbSeparator({
-  className,
-  children = "/",
-  ...props
-}: ComponentPropsWithoutRef<"span">) {
+export function BreadcrumbSeparator({ className, children = "/", ...props }: ComponentPropsWithoutRef<"span">) {
   return (
     <span aria-hidden="true" className={className} {...props}>
       {children}
@@ -118,12 +79,7 @@ export function BreadcrumbSeparator({
   );
 }
 
-export function PageBreadcrumb({
-  item,
-  items,
-  currentLabel,
-  className,
-}: PageBreadcrumbProps) {
+export function PageBreadcrumb({ item, items, currentLabel, className }: PageBreadcrumbProps) {
   const normalized = normalizeBreadcrumbs({ item, items, currentLabel });
 
   if (!normalized.items.length || !normalized.currentLabel) {
@@ -131,7 +87,7 @@ export function PageBreadcrumb({
   }
 
   return (
-    <Breadcrumb className={cn("mb-4 mt-8 md:mb-4 md:mt-12 xl:mb-[36px] xl:mt-[70px]", className)}>
+    <Breadcrumb className={cn("mb-4 mt-8 md:mb-4 md:mt-12 xl:mb-4 xl:mt-[36px]", className)}>
       <BreadcrumbList>
         {normalized.items.map((breadcrumbItem) => (
           <BreadcrumbItem key={breadcrumbItem.href}>

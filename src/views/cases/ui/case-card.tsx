@@ -60,7 +60,7 @@ export function CaseCard({ item }: CaseCardProps) {
 
   return (
     <article className="rounded-[18px] md:rounded-[22.5px] lg:bg-[var(--card-bg)] lg:p-[30px]">
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,50.7%)] lg:items-start lg:gap-[30px]">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,50.7%)] lg:items-start lg:gap-[22.5px]">
         <CaseTextBlock
           item={item}
           sections={sections}
@@ -133,17 +133,17 @@ function CaseTextBlock({
 }) {
   return (
     <div className="rounded-[18px] bg-[var(--card-bg)] px-5 pb-5 pt-5 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
-      <div className="space-y-4 lg:space-y-[11px]">
+      <div className="space-y-3 lg:space-y-[9px]">
         <h2 className="font-heading whitespace-pre-line text-3xl md:text-5xl leading-[0.95] uppercase text-[var(--heading)]">{item.company}</h2>
-        <p className="text-xs md:text-sm xl:text-base leading-[1.3] text-[#404040]">{item.teaser}</p>
-        <p className="text-xs md:text-sm xl:text-base leading-[1.3] text-[#404040]">{item.intro}</p>
+        <p className="text-xs md:text-sm leading-[1.3] text-[#404040]">{item.teaser}</p>
+        <p className="text-xs md:text-sm leading-[1.3] text-[#404040]">{item.intro}</p>
       </div>
 
       <div className="mt-4 lg:hidden">
         <button
           type="button"
           onClick={onToggle}
-          className="text-sm md:text-base cursor-pointer border-b border-current pb-0.5 text-base font-semibold leading-none text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+          className="text-sm md:text-base cursor-pointer border-b border-current pb-0.5 font-semibold leading-none text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
         >
           {toggleLabel}
         </button>
@@ -181,7 +181,7 @@ function CaseSection({ heading, text }: { heading: string; text: string }) {
   return (
     <section>
       <h3 className="font-heading text-lg md:text-3xl leading-none uppercase text-[#404040]">{heading}</h3>
-      <p className="mt-[9px] text-xs md:text-base leading-[1.35] text-[#404040]">{text}</p>
+      <p className="mt-[6px] text-xs md:text-sm leading-[1.35] text-[#404040]">{text}</p>
     </section>
   );
 }

@@ -9,13 +9,7 @@ type FeatureCardProps = {
   className?: string;
 };
 
-export function FeatureCard({
-  title,
-  description,
-  backgroundImageUrl,
-  accent = false,
-  className,
-}: FeatureCardProps) {
+export function FeatureCard({ title, description, backgroundImageUrl, accent = false, className }: FeatureCardProps) {
   const hasBackground = backgroundImageUrl.trim().length > 0;
 
   return (
@@ -45,18 +39,13 @@ export function FeatureCard({
         />
         <h3
           className={cn(
-            "font-heading text-3xl whitespace-pre-line leading-[0.95] tracking-[0.015em] uppercase md:text-5xl w-[95%]",
+            "font-heading text-3xl whitespace-pre-line leading-[0.95] tracking-[0.015em] uppercase md:text-4xl w-[95%]",
             accent ? "text-white" : "text-[var(--heading)]",
           )}
         >
           {title}
         </h3>
-        <p
-          className={cn(
-            "text-[15px] leading-[1.35] tracking-[-0.03em] md:text-[18px]",
-            accent ? "text-white/80" : "text-[var(--text-muted)]",
-          )}
-        >
+        <p className={cn("text-[15px] leading-[1.35] tracking-[-0.03em] md:text-[18px]", accent ? "text-white/80" : "text-[var(--text-muted)]")}>
           {description}
         </p>
       </div>

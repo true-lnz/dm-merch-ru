@@ -19,7 +19,7 @@ function ContactLeadLink({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="block whitespace-nowrap font-heading text-4xl sm:text-5xl md:text-6xl leading-none tracking-[0.015em] text-[var(--heading)] transition-opacity hover:opacity-80"
+      className="block whitespace-nowrap font-heading text-4xl sm:text-6xl leading-none tracking-[0.015em] text-[var(--heading)] transition-opacity hover:opacity-80"
     >
       {label}
     </a>
@@ -31,7 +31,7 @@ function ContactsMapCard() {
     <div>
       <p className="my-4 text-sm md:text-lg xl:text-xl tracking-[-0.04em] text-[#404040] xl:my-[18px]">{siteInfo.address}</p>
 
-      <div className="relative aspect-square overflow-hidden rounded-[12px] border-[5px] border-[var(--accent)] bg-white md:h-[360px] md:aspect-auto xl:h-[225px] xl:w-[550px] xl:max-w-full rounded-[18px] md:rounded-[22.5px] xl:border-[6px]">
+      <div className="relative aspect-square overflow-hidden rounded-[12px] border-[5px] border-[var(--accent)] bg-white md:h-[360px] md:aspect-auto xl:h-[225px] xl:min-w-[450px] xl:w-full xl:max-w-full rounded-[18px] md:rounded-[22.5px] xl:border-[6px]">
         <YandexMapCard />
       </div>
     </div>
@@ -93,7 +93,7 @@ function DesktopContactsHero() {
           fill
           priority
           sizes="68vw"
-          className="object-cover object-right-top"
+          className="object-contain object-bottom"
         />
       </div>
 

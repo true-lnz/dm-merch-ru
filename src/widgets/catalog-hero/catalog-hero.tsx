@@ -9,6 +9,7 @@ const HERO_FEATURES = [
 ] as const;
 
 const FEATURE_ICON_SRC = "/icons/ic_feature.svg";
+const HERO_MIN_HEIGHT = "clamp(620px, 72vh, 860px)";
 
 type CatalogHeroProps = {
   heroTitle: string;
@@ -20,16 +21,11 @@ type CatalogHeroProps = {
 
 export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
   return (
-    <section className="relative mb-[43px] w-full md:mb-[55px]">
-      <div className="relative" style={{ minHeight: "clamp(620px, 85vh, 860px)" }}>
-        {/* desktop background image */}
-        <div className="pointer-events-none absolute inset-y-0 left-[48%] right-0 hidden overflow-visible xl:block 2xl:left-[48%]">
-          <img src={heroImage.src} alt={heroImage.alt} className="absolute bottom-0 left-0 h-full w-auto max-w-none" />
-        </div>
-
+    <section className="relative mb-[43px] md:mb-[55px]">
+      <div className="grid grid-cols-1 xl:grid-cols-2" style={{ minHeight: HERO_MIN_HEIGHT }}>
         {/* content */}
-        <div className="relative z-10 w-full xl:max-w-[760px] 2xl:max-w-[820px] xl:pb-[75px]">
-          <div className="flex flex-col gap-8 pt-5 xl:gap-10 xl:rounded-[22px]">
+        <div className="relative z-10 min-w-0 xl:pb-[75px]">
+          <div className="flex h-full flex-col gap-8 pt-5 xl:gap-10 xl:rounded-[22px]">
             <div className="flex flex-col gap-5 xl:gap-6">
               <PageHeading
                 title={heroTitle}
@@ -46,20 +42,20 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
             </div>
 
             {/* mobile / tablet image */}
-            <div className="relative aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden -mb-8">
+            <div className="relative -mb-8 aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden">
               <Image
                 src={heroImage.src}
                 alt={heroImage.alt}
                 fill
                 quality={80}
                 sizes="(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 70vw, 0px"
-                className="object-cover object-top"
+                className="object-contain object-top"
               />
             </div>
 
-            <div className="grid gap-[9px] md:gap-[18px] lg:grid-cols-2 2xl:grid-cols-3 2xl:gap-6">
+            <div className="grid gap-[9px] md:gap-[18px] lg:max-w-[600px] lg:grid-cols-2 2xl:max-w-none 2xl:grid-cols-3 2xl:gap-6">
               {HERO_FEATURES.map((feature) => (
-                <div key={feature.text} className="rounded-[9px] bg-[#e8e7e2] p-[18px] 2xl:min-h-[120px]">
+                <div key={feature.text} className="rounded-[9px] bg-[rgba(232,231,226,0.7)] backdrop-blur-[6px] p-[18px] 2xl:min-h-[120px]">
                   <div className="flex items-start gap-5 2xl:block">
                     <Image
                       src={FEATURE_ICON_SRC}
@@ -82,6 +78,13 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
                 <RequestDialogButton className="w-full md:w-auto" label="Обсудить задачу" />
               </RequestDialog>
             </div>
+          </div>
+        </div>
+
+        {/* desktop image */}
+        <div className="relative hidden min-w-0 xl:flex xl:items-end xl:justify-end">
+          <div className="relative h-full w-full">
+            <img src={heroImage.src} alt={heroImage.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
           </div>
         </div>
       </div>

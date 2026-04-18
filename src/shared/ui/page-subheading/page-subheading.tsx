@@ -26,7 +26,7 @@ export function PageSubheading({
     return (
       <h2
         className={cn(
-          "font-heading break-keep whitespace-pre-line text-4xl md:text-5xl xl:text-6xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)] md:text-[84.48px]",
+          "font-heading break-keep whitespace-pre-line text-4xl md:text-5xl xl:text-6xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)]",
           className,
           titleClassName,
         )}

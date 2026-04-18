@@ -35,18 +35,18 @@ export function CatalogWorkStages() {
                     key={stage.number}
                     stage={stage}
                     className={cn(
-                      "min-h-[210px] rounded-[18px] p-[18px] md:min-h-[320px] md:p-[27px]",
+                      "min-h-[180px] rounded-[18px] p-[18px] md:min-h-[200px] md:p-[27px]",
                       isLightOnMobile ? "bg-[#F5F4EF] text-[var(--heading)]" : "bg-[rgba(248,246,240,0.2)] text-white",
                       isLightOnDesktop ? "md:bg-[#F5F4EF] md:text-[var(--heading)]" : "md:bg-[rgba(248,246,240,0.2)] md:text-white",
                     )}
                     numberClassName={cn(
-                      "text-3xl md:text-5xl",
+                      "text-3xl md:text-4xl",
                       isLightOnMobile ? "text-[var(--accent)]" : "text-white",
                       isLightOnDesktop ? "md:text-[var(--accent)]" : "md:text-white",
                     )}
-                    titleClassName="whitespace-pre-line mt-4 text-3xl leading-[0.94] md:mt-5 xl:text-5xl"
+                    titleClassName="whitespace-pre-line mt-4 text-3xl leading-[0.94] md:mt-5 xl:text-4xl"
                     descriptionClassName={cn(
-                      "mt-4 text-xs leading-[1.3] tracking-[-0.04em] md:text-base",
+                      "mt-4 text-xs leading-[1.3] tracking-[-0.04em] md:text-sm",
                       isLightOnMobile ? "text-[#404040]" : "text-[rgba(255,255,255,0.92)]",
                       isLightOnDesktop ? "md:text-[#404040]" : "md:text-[rgba(255,255,255,0.92)]",
                     )}
@@ -56,7 +56,7 @@ export function CatalogWorkStages() {
             </div>
 
             <aside className="rounded-[18px] bg-[#F5F4EF] p-[18px] text-[var(--heading)] md:p-[27px]">
-              <h3 className="font-heading whitespace-pre-line text-3xl leading-[0.94] uppercase tracking-[0.015em] md:text-5xl">
+              <h3 className="font-heading whitespace-pre-line text-3xl leading-[0.94] uppercase tracking-[0.015em] md:text-4xl">
                 {"Опишите нам свою\nидею, а мы поможем\nеё реализовать"}
               </h3>
               <RequestForm formClassName="mt-6 md:mt-8" privacyCheckboxId="catalog-work-stages-privacy" submitClassName="h-[52px]" />

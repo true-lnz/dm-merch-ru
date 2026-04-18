@@ -14,11 +14,11 @@ export function HomeUrgentOrder() {
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
         <div className="order-2 xl:order-1 flex flex-col rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] p-[18px] md:p-[55px] xl:p-[72px] text-white">
           <PageSubheading title={"Экспресс-мерч\n– когда нужно вчера"} className="mb-[15px] xl:mb-[25px] xl:mb-[25px] tracking-[-0.09] text-white" />
-          <p className="mb-[15px] xl:mb-[18px] text-xs md:text-base xl:text-2xl">
+          <p className="mb-[15px] xl:mb-[18px] text-xs md:text-base xl:text-xl">
             3&nbsp;склада, собственные мощности и&nbsp;опыт срочных проектов. Однажды сделали 50&nbsp;футболок за&nbsp;3&nbsp;часа до&nbsp;начала
             событий и&nbsp;даже успели их&nbsp;забрендировать!
           </p>
-          <p className="mb-[20px] xl:mb-[18px] text-xs md:text-base xl:text-2xl">
+          <p className="mb-[20px] xl:mb-[18px] text-xs md:text-base xl:text-xl">
             Экспресс-мерч за&nbsp;5&nbsp;рабочих дней&nbsp;&mdash; для нас стандарт, а&nbsp;не&nbsp;обещание
           </p>
           <div className="mt-auto">

@@ -135,10 +135,10 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  --text-7xl: 6.3rem;
-  --text-6xl: 5.4rem; /* 96px */
-  --text-5xl: 2.7rem; /* 48px */
-  --text-4xl: 2.35rem; /* 40px было 2.25->2.35 */
+  --text-7xl: 5.4rem;
+  --text-6xl: 68px;
+  --text-5xl: 2.4rem;
+  --text-4xl: 2rem;
   --text-3xl: 1.8rem; /* 32px */
   --text-2xl: 1.35rem; /* 24px */
   --text-xl: 1.125rem; /* 20px */

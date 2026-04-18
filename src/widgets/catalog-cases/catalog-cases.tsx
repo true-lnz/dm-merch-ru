@@ -124,10 +124,10 @@ function CatalogCasesCard({ item }: { item: CatalogCaseItem }) {
 
         <div className="mt-5 space-y-4 text-[var(--heading)]">
           <h3 className="font-heading text-3xl leading-[0.95] tracking-[0.015em]">{item.company}</h3>
-          <p className="text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.description}</p>
+          <p className="text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)]">{item.description}</p>
           <div className="space-y-2">
             <p className="font-heading text-3xl leading-[0.95] tracking-[0.015em]">Что получил клиент:</p>
-            <p className="text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.result}</p>
+            <p className="text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)]">{item.result}</p>
           </div>
         </div>
       </article>
@@ -136,14 +136,10 @@ function CatalogCasesCard({ item }: { item: CatalogCaseItem }) {
         <article className="hidden md:grid md:grid-cols-[1fr_1fr] md:items-start md:gap-7">
           <div className="space-y-5 text-[var(--heading)]">
             <h3 className="font-heading text-5xl leading-[0.95] tracking-[0.015em]">{item.company}</h3>
-            <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">
-              {item.description}
-            </p>
+            <p className="text-xs sm:text-base xl:text-lg leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)]">{item.description}</p>
             <div className="space-y-3">
               <p className="font-heading text-5xl leading-[0.95] tracking-[0.015em]">Что получил клиент:</p>
-              <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">
-                {item.result}
-              </p>
+              <p className="text-xs sm:text-base xl:text-lg leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)]">{item.result}</p>
             </div>
           </div>
 
@@ -163,14 +159,10 @@ function CatalogCasesCard({ item }: { item: CatalogCaseItem }) {
 
           <div className="mt-5 space-y-5 text-[var(--heading)] [grid-area:text]">
             <h3 className="font-heading text-5xl leading-[0.95] tracking-[0.015em]">{item.company}</h3>
-            <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">
-              {item.description}
-            </p>
+            <p className="text-xs sm:text-base xl:text-lg leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)]">{item.description}</p>
             <div className="space-y-3">
               <p className="font-heading text-5xl leading-[0.95] tracking-[0.015em]">Что получил клиент:</p>
-              <p className="text-xs sm:text-base xl:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">
-                {item.result}
-              </p>
+              <p className="text-xs sm:text-base xl:text-lg leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)]">{item.result}</p>
             </div>
           </div>
         </article>
@@ -190,10 +182,10 @@ function CatalogCasesStackedCard({ item }: { item: CatalogCaseItem }) {
     <article className="flex h-full flex-col gap-5">
       <div className="order-2 md:order-1 space-y-3 text-[var(--heading)]">
         <h3 className="font-heading text-3xl md:text-5xl leading-[0.95] tracking-[0.015em]">{item.company}</h3>
-        <p className="text-sm md:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.description}</p>
+        <p className="text-sm md:text-lg leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.description}</p>
         <div className="space-y-2 md:space-y-3">
           <p className="font-heading text-3xl md:text-5xl leading-[0.95] tracking-[0.015em]">Что получил клиент:</p>
-          <p className="text-sm md:text-xl leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.result}</p>
+          <p className="text-sm md:text-lg leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] whitespace-pre-line">{item.result}</p>
         </div>
       </div>
 
