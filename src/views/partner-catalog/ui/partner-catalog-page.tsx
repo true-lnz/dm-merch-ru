@@ -5,23 +5,18 @@ import { cn } from "@/shared/lib/cn";
 import { useWishlist } from "@/shared/lib/wishlist";
 import { buttonVariants } from "@/shared/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible";
+import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { PageHeading } from "@/shared/ui/page-heading";
-import { SliderControl } from "@/shared/ui/slider-control";
+import { Skeleton } from "@/shared/ui/skeleton";
 import { WidowFix } from "@/shared/ui/widow-fix";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { toast } from "sonner";
-import type {
-  PartnerCatalogChildSection,
-  PartnerCatalogData,
-  PartnerCatalogProduct,
-  PartnerCatalogRootSection,
-  PartnerCatalogVariant,
-} from "../model/partner-catalog-data";
+import type { PartnerCatalogData, PartnerCatalogProduct, PartnerCatalogRootSection, PartnerCatalogVariant } from "../model/partner-catalog-data";
 
 const ALL_FILTER_ID = "all";
-const MOBILE_FADE_DURATION_MS = 180;
+const MOBILE_PAGE_SIZE = 16;
 const PAGE_SIZE_OPTIONS = [50, 100, 200] as const;
 
 const PRODUCT_CARD_LAYERS = [
@@ -166,8 +161,40 @@ function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
 function ProductCardImage({ variant }: { variant: PartnerCatalogVariant }) {
   return (
     <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
-      <Image src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
+      <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
     </div>
+  );
+}
+
+function CatalogImageWithSkeleton({
+  className,
+  skeletonClassName,
+  onLoadingComplete,
+  ...props
+}: React.ComponentProps<typeof Image> & { skeletonClassName?: string }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <>
+      {!isLoaded ? (
+        <div className={cn("absolute inset-0 overflow-hidden rounded-none", skeletonClassName)}>
+          <Skeleton className="absolute inset-0 rounded-none bg-[#e7f0ff]" />
+          <div
+            aria-hidden="true"
+            className="absolute inset-y-0 -left-1/2 w-1/2 animate-pulse bg-gradient-to-r from-transparent via-[#ffffff] to-transparent"
+            style={{ transform: "skewX(-18deg)" }}
+          />
+        </div>
+      ) : null}
+      <Image
+        {...props}
+        onLoadingComplete={(result) => {
+          setIsLoaded(true);
+          onLoadingComplete?.(result);
+        }}
+        className={cn("transition-opacity duration-300", isLoaded ? "opacity-100" : "opacity-0", className)}
+      />
+    </>
   );
 }
 
@@ -262,12 +289,13 @@ function VariantSelectorStrip({
             aria-label={`Выбрать вариант ${variant.colorLabel}`}
             aria-pressed={isActive}
           >
-            <Image
+            <CatalogImageWithSkeleton
               src={variant.imageUrl}
               alt={variant.colorLabel}
               fill
               sizes="40px"
               draggable={false}
+              skeletonClassName="rounded-[4px]"
               className="pointer-events-none select-none object-cover"
             />
           </button>
@@ -294,10 +322,7 @@ function ProductCardContent({
 }) {
   return (
     <div
-      className={cn(
-        "flex flex-1 flex-col gap-2 bg-[var(--card-bg)] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]",
-        className,
-      )}
+      className={cn("flex flex-1 flex-col gap-2 bg-[var(--card-bg)] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]", className)}
     >
       <div className="flex items-baseline gap-2 font-sans">
         <span className="text-base font-semibold text-black">{formatRubPrice(activeVariant.priceRub)}</span>
@@ -392,25 +417,64 @@ function PartnerProductCard({ item }: { item: PartnerCatalogProduct }) {
   );
 }
 
-function MobileCategorySummary({
-  rootCategory,
-  childCategory,
+function CategoryFilterList({
+  categories,
+  activeFilterId,
+  expandedRootId,
+  onExpandedRootChange,
+  onAllProductsClick,
+  onChildCategoryClick,
 }: {
-  rootCategory?: PartnerCatalogRootSection;
-  childCategory?: PartnerCatalogChildSection;
+  categories: PartnerCatalogRootSection[];
+  activeFilterId: string;
+  expandedRootId: string | null;
+  onExpandedRootChange: (rootId: string | null) => void;
+  onAllProductsClick: () => void;
+  onChildCategoryClick: (rootCategoryId: string, childCategoryId: string) => void;
 }) {
-  if (!rootCategory && !childCategory) {
-    return (
-      <div className="mb-5 md:hidden">
-        <p className="font-heading text-2xl uppercase leading-[0.95] text-[var(--heading)]">Все товары</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="mb-5 flex flex-col gap-1 md:hidden">
-      {rootCategory ? <p className="font-heading text-2xl uppercase leading-[0.95] text-[var(--heading)]">{rootCategory.name}</p> : null}
-      {childCategory ? <p className="text-sm text-[var(--text-muted)]">{childCategory.name}</p> : null}
+    <div className="rounded-[18px] bg-white p-4 md:rounded-[22.5px] md:p-5">
+      <button
+        type="button"
+        onClick={onAllProductsClick}
+        className={cn(
+          "w-full cursor-pointer border-b border-black/10 py-3 text-left text-sm transition-colors",
+          activeFilterId === ALL_FILTER_ID ? "font-semibold text-black" : "text-[#5f5f5f] hover:text-black",
+        )}
+      >
+        Все товары
+      </button>
+
+      <div className="pt-1">
+        {categories.map((category) => (
+          <div key={category.id} className="border-b border-black/10 py-1">
+            <Collapsible open={expandedRootId === category.id} onOpenChange={(open) => onExpandedRootChange(open ? category.id : null)}>
+              <CollapsibleTrigger className="py-2 text-sm font-medium text-[#404040]">{category.name}</CollapsibleTrigger>
+              <CollapsibleContent className="pb-2">
+                <div className="mt-1 space-y-1 pl-3">
+                  {category.children.map((childCategory) => {
+                    const isActive = activeFilterId === childCategory.id;
+
+                    return (
+                      <button
+                        key={childCategory.id}
+                        type="button"
+                        onClick={() => onChildCategoryClick(category.id, childCategory.id)}
+                        className={cn(
+                          "w-full cursor-pointer py-1.5 text-left text-sm leading-[1.3] transition-colors",
+                          isActive ? "text-[var(--accent)]" : "text-[#6f6f6f] hover:text-black",
+                        )}
+                      >
+                        {childCategory.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -419,10 +483,9 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
   const [activeFilterId, setActiveFilterId] = useState(ALL_FILTER_ID);
   const [expandedRootId, setExpandedRootId] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(50);
-  const [loadedCount, setLoadedCount] = useState(50);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isMobileContentVisible, setIsMobileContentVisible] = useState(true);
-  const transitionTimeoutRef = useRef<number | null>(null);
+  const [loadedCount, setLoadedCount] = useState(MOBILE_PAGE_SIZE);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [isMobileCategoryDialogOpen, setIsMobileCategoryDialogOpen] = useState(false);
   const listStartRef = useRef<HTMLDivElement | null>(null);
 
   const activeRootCategory = useMemo(
@@ -445,30 +508,39 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
   }, [activeFilterId, data.products]);
   const displayedProducts = useMemo(() => visibleProducts.slice(0, Math.min(loadedCount, visibleProducts.length)), [loadedCount, visibleProducts]);
   const nextCursor = displayedProducts.length < visibleProducts.length ? displayedProducts.length : null;
-  const safeActiveIndex = activeIndex < displayedProducts.length ? activeIndex : 0;
-  const activeItem = displayedProducts[safeActiveIndex] ?? displayedProducts[0];
+  const activeCategoryLabel = activeChildCategory?.name ?? "Все товары";
 
   useEffect(() => {
-    return () => {
-      if (transitionTimeoutRef.current !== null) {
-        window.clearTimeout(transitionTimeoutRef.current);
-      }
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const handleChange = (event: MediaQueryListEvent | MediaQueryList) => {
+      const nextIsDesktop = event.matches;
+
+      setIsDesktop(nextIsDesktop);
+      setLoadedCount(nextIsDesktop ? pageSize : MOBILE_PAGE_SIZE);
     };
-  }, []);
+
+    handleChange(mediaQuery);
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+    };
+  }, [pageSize]);
+
+  useEffect(() => {
+    setLoadedCount((currentCount) => Math.min(currentCount, visibleProducts.length));
+  }, [visibleProducts.length]);
+
+  function getCurrentPageSize() {
+    return isDesktop ? pageSize : MOBILE_PAGE_SIZE;
+  }
 
   function handleFilterChange(nextFilterId: string) {
     if (nextFilterId === activeFilterId) {
       return;
     }
 
-    if (transitionTimeoutRef.current !== null) {
-      window.clearTimeout(transitionTimeoutRef.current);
-      transitionTimeoutRef.current = null;
-    }
-
-    setActiveIndex(0);
-    setIsMobileContentVisible(true);
-    setLoadedCount(pageSize);
+    setLoadedCount(getCurrentPageSize());
     setActiveFilterId(nextFilterId);
     listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -485,8 +557,6 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
 
     setPageSize(nextPageSize);
     setLoadedCount(nextPageSize);
-    setActiveIndex(0);
-    setIsMobileContentVisible(true);
   }
 
   function handleLoadMore() {
@@ -494,25 +564,17 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
       return;
     }
 
-    setLoadedCount((currentCount) => Math.min(currentCount + pageSize, visibleProducts.length));
+    setLoadedCount((currentCount) => Math.min(currentCount + getCurrentPageSize(), visibleProducts.length));
   }
 
-  function commitCardChange(nextIndex: number) {
-    if (!displayedProducts[nextIndex] || nextIndex === safeActiveIndex) {
-      return;
-    }
+  function handleAllProductsClick() {
+    setExpandedRootId(null);
+    handleFilterChange(ALL_FILTER_ID);
+  }
 
-    if (transitionTimeoutRef.current !== null) {
-      window.clearTimeout(transitionTimeoutRef.current);
-    }
-
-    setIsMobileContentVisible(false);
-
-    transitionTimeoutRef.current = window.setTimeout(() => {
-      setActiveIndex(nextIndex);
-      setIsMobileContentVisible(true);
-      transitionTimeoutRef.current = null;
-    }, MOBILE_FADE_DURATION_MS);
+  function handleMobileChildCategoryClick(rootCategoryId: string, childCategoryId: string) {
+    handleChildCategoryClick(rootCategoryId, childCategoryId);
+    setIsMobileCategoryDialogOpen(false);
   }
 
   return (
@@ -529,14 +591,24 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
 
       <section className="mt-[28.8px] mb-[43px] md:mb-[55px]">
         <div className="mb-5 md:mb-4 md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-center md:gap-8 xl:gap-[63px]">
-          <p className="text-base font-bold uppercase  tracking-[0.08em] text-[var(--heading)]">Категория:</p>
+          <div className="flex items-center gap-3">
+            <p className="text-base font-bold uppercase tracking-[0.05em] text-[var(--heading)]">Категория:</p>
+            <button
+              type="button"
+              onClick={() => setIsMobileCategoryDialogOpen(true)}
+              className="inline-flex min-w-0 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm text-[var(--heading)] md:hidden"
+            >
+              <span className="truncate">{activeCategoryLabel}</span>
+              <ChevronDownIcon className="size-4 shrink-0" />
+            </button>
+          </div>
 
           <div className="mt-3 flex flex-col gap-3 md:mt-0 md:flex-row md:items-center md:justify-between">
             <p className="text-sm text-[var(--text-muted)]">
               Показано {displayedProducts.length} из {visibleProducts.length}
             </p>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="hidden flex-wrap items-center gap-2 md:flex">
               <span className="text-sm text-[var(--text-muted)]">Отображать по:</span>
               {PAGE_SIZE_OPTIONS.map((option) => {
                 const isActive = option === pageSize;
@@ -561,81 +633,20 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
 
         <div className="md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-start md:gap-8 xl:gap-[63px]">
           <aside className="hidden md:block">
-            <div className="rounded-[18px] bg-white p-4 md:rounded-[22.5px] md:p-5">
-              <button
-                type="button"
-                onClick={() => {
-                  setExpandedRootId(null);
-                  handleFilterChange(ALL_FILTER_ID);
-                }}
-                className={cn(
-                  "w-full cursor-pointer border-b border-black/10 py-3 text-left text-sm transition-colors",
-                  activeFilterId === ALL_FILTER_ID ? "font-semibold text-black" : "text-[#5f5f5f] hover:text-black",
-                )}
-              >
-                Все товары
-              </button>
-
-              <div className="pt-1">
-                {data.categories.map((category) => (
-                  <div key={category.id} className="border-b border-black/10 py-1">
-                    <Collapsible open={expandedRootId === category.id} onOpenChange={(open) => setExpandedRootId(open ? category.id : null)}>
-                      <CollapsibleTrigger className="py-2 text-sm font-medium text-[#404040]">{category.name}</CollapsibleTrigger>
-                      <CollapsibleContent className="pb-2">
-                        <div className="mt-1 space-y-1 pl-3">
-                          {category.children.map((childCategory) => {
-                            const isActive = activeFilterId === childCategory.id;
-
-                            return (
-                              <button
-                                key={childCategory.id}
-                                type="button"
-                                onClick={() => handleChildCategoryClick(category.id, childCategory.id)}
-                                className={cn(
-                                  "w-full cursor-pointer py-1.5 text-left text-sm leading-[1.3] transition-colors",
-                                  isActive ? "text-[var(--accent)]" : "text-[#6f6f6f] hover:text-black",
-                                )}
-                              >
-                                {childCategory.name}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <CategoryFilterList
+              categories={data.categories}
+              activeFilterId={activeFilterId}
+              expandedRootId={expandedRootId}
+              onExpandedRootChange={setExpandedRootId}
+              onAllProductsClick={handleAllProductsClick}
+              onChildCategoryClick={handleChildCategoryClick}
+            />
           </aside>
 
           <div ref={listStartRef} className="scroll-mt-[88px] md:scroll-mt-[112px]">
-            <MobileCategorySummary rootCategory={activeRootCategory} childCategory={activeChildCategory} />
-
             {visibleProducts.length > 0 ? (
               <>
-                <div className="flex flex-col md:hidden">
-                  {activeItem ? (
-                    <>
-                      <article className="flex h-full flex-col overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px]">
-                        <div className={cn("transition-opacity duration-200", isMobileContentVisible ? "opacity-100" : "opacity-0")}>
-                          <PartnerProductCard item={activeItem} />
-                        </div>
-                      </article>
-                      <SliderControl
-                        className="mt-5 self-center"
-                        onPrevClick={() => commitCardChange(safeActiveIndex - 1)}
-                        onNextClick={() => commitCardChange(safeActiveIndex + 1)}
-                        prevDisabled={safeActiveIndex === 0}
-                        nextDisabled={safeActiveIndex === displayedProducts.length - 1}
-                        prevAriaLabel={`Предыдущая карточка (${safeActiveIndex + 1} из ${displayedProducts.length})`}
-                        nextAriaLabel={`Следующая карточка (${safeActiveIndex + 1} из ${displayedProducts.length})`}
-                      />
-                    </>
-                  ) : null}
-                </div>
-
-                <div className="hidden overflow-visible gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+                <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4">
                   {displayedProducts.map((item) => (
                     <PartnerProductCard key={item.id} item={item} />
                   ))}
@@ -661,6 +672,34 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
           </div>
         </div>
       </section>
+
+      <Dialog open={isMobileCategoryDialogOpen} onOpenChange={setIsMobileCategoryDialogOpen}>
+        <DialogContent
+          showCloseButton={false}
+          className="block h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[var(--card-bg)] p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:p-[72px] sm:pt-[72px] sm:pb-[72px] sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-md sm:rounded-[22.5px] md:hidden"
+        >
+          <div className="mb-7 flex items-start justify-between gap-4">
+            <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Категории</DialogTitle>
+            <DialogClose
+              className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center text-[#b3b3b3] transition-colors hover:text-[#2a2a2a]"
+              aria-label="Закрыть выбор категорий"
+            >
+              <XIcon className="size-5" strokeWidth={2.5} />
+            </DialogClose>
+          </div>
+          <CategoryFilterList
+            categories={data.categories}
+            activeFilterId={activeFilterId}
+            expandedRootId={expandedRootId}
+            onExpandedRootChange={setExpandedRootId}
+            onAllProductsClick={() => {
+              handleAllProductsClick();
+              setIsMobileCategoryDialogOpen(false);
+            }}
+            onChildCategoryClick={handleMobileChildCategoryClick}
+          />
+        </DialogContent>
+      </Dialog>
 
       <RequestCta />
     </>
