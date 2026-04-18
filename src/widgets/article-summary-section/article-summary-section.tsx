@@ -12,37 +12,16 @@ function SummaryDecoration() {
       viewBox="0 0 960 540"
       className="pointer-events-none absolute -right-[118px] -top-[122px] h-[440px] w-[440px] text-[#4c86df] opacity-70 md:-right-[148px] md:-top-[152px] md:h-[560px] md:w-[560px] xl:-right-[238px] xl:-top-[208px] xl:h-[728px] xl:w-[728px]"
     >
-      <circle
-        cx="480"
-        cy="270"
-        r="188"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="42"
-      />
-      <circle
-        cx="480"
-        cy="270"
-        r="310"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="42"
-      />
-      <circle
-        cx="480"
-        cy="270"
-        r="432"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="42"
-      />
+      <circle cx="480" cy="270" r="188" fill="none" stroke="currentColor" strokeWidth="42" />
+      <circle cx="480" cy="270" r="310" fill="none" stroke="currentColor" strokeWidth="42" />
+      <circle cx="480" cy="270" r="432" fill="none" stroke="currentColor" strokeWidth="42" />
     </svg>
   );
 }
 
 export function ArticleSummarySection({ section }: ArticleSummarySectionProps) {
   return (
-    <section className="mb-[43px] md:mb-[52px] xl:mb-[70px]" aria-label={section.title}>
+    <section className="mb-[43px] md:mb-[55px]" aria-label={section.title}>
       <div className="grid gap-5 md:gap-6 xl:grid-cols-[minmax(0,1114px)_minmax(0,586px)] xl:gap-10">
         <div className="relative order-2 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] px-5 py-5 text-white md:px-[30px] md:py-8 xl:order-1 xl:min-h-[418px] xl:px-20 xl:py-[76px]">
           <SummaryDecoration />

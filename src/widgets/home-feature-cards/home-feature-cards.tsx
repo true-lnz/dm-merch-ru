@@ -25,28 +25,24 @@ const HOME_BENEFITS = {
     {
       title: "Дизайн\nпод производство",
       backgroundImageUrl: "/home/img_card_cover_home_benefits_v2.svg",
-      description:
-        "Дизайн, который работает на изделии, а не только в макете. Наши дизайнеры работают с одеждой, а не с абстрактной графикой.",
+      description: "Дизайн, который работает на изделии, а не только в макете. Наши дизайнеры работают с одеждой, а не с абстрактной графикой.",
     },
     {
       title: "Сроки фиксируем в договоре",
       backgroundImageUrl: "/home/img_card_cover_home_benefits_v3.svg",
-      description:
-        "Не «стараемся успеть», а берём ответственность за результат.",
+      description: "Не «стараемся успеть», а берём ответственность за результат.",
     },
   ] satisfies HomeFeatureCard[],
 } as const;
 
 const HOME_COMPETITIVE_ADVANTAGES = {
   title: "Наши преимущества перед конкурентами",
-  description:
-    "Цена ниже рынка на ~25%  за счет собственного производства",
+  description: "Цена ниже рынка на ~25%  за счет собственного производства",
   items: [
     {
       title: "Готовый мерч в среднем за 14 рабочих дней",
       backgroundImageUrl: "/home/img_card_cover_home_features_v1.svg",
-      description:
-        "Делаем быстрее рынка без потери качества. Сроки фиксируем и держим их по договору.",
+      description: "Делаем быстрее рынка без потери качества. Сроки фиксируем и держим их по договору.",
     },
     {
       title: "Образцы отправляем по всей России",
@@ -63,19 +59,10 @@ const HOME_COMPETITIVE_ADVANTAGES = {
   ] satisfies HomeFeatureCard[],
 } as const;
 
-function FeatureCardsSection({
-  title,
-  description,
-  items,
-}: FeatureCardsSectionProps) {
+function FeatureCardsSection({ title, description, items }: FeatureCardsSectionProps) {
   return (
-    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-      <PageSubheading
-        title={title}
-        description={description}
-        descriptionPlacement="bottom"
-        descriptionClassName="max-w-[43rem]"
-      />
+    <section className="my-[43px] md:my-[55px]">
+      <PageSubheading title={title} description={description} descriptionPlacement="bottom" descriptionClassName="max-w-[43rem]" />
       <div className="mt-8 grid auto-rows-fr grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-[36px]">
         {items.map((item, index) => (
           <FeatureCard

@@ -8,7 +8,7 @@ type ArticleHeroProps = {
 
 export function ArticleHero({ article }: ArticleHeroProps) {
   return (
-    <section className="mb-[43px] md:mb-[52px] xl:mb-[70px]">
+    <section className="mb-[43px] md:mb-[55px]">
       <PageBreadcrumb
         className="mb-4 mt-8 md:mb-5 md:mt-12 xl:mb-[42px] xl:mt-[39px]"
         items={[

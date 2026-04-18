@@ -21,7 +21,7 @@ const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
 export function HomeHero() {
   return (
-    <section className="relative mt-[36px] mb-[43px] md:mb-[52px] xl:mb-[70px]">
+    <section className="relative mt-[36px] mb-[43px] md:mb-[55px]">
       <div className="relative w-full overflow-visible" style={{ minHeight: "clamp(620px, 85vh, 820px)" }}>
         {/* Desktop image background */}
         <div className="pointer-events-none absolute inset-y-0 left-[42%] right-[calc(var(--layout-side-padding)*-1)] hidden xl:block">

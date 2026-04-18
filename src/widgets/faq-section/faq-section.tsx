@@ -1,11 +1,6 @@
 "use client";
 
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/shared/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
 import { AspectRatio } from "@/shared/ui/acpect-ratio";
 import Image from "next/image";
 import { PageSubheading } from "../../shared/ui/page-subheading";
@@ -30,55 +25,44 @@ const FAQ_TITLE = "Частые вопросы перед запуском пр
 const FAQ_ITEMS = [
   {
     question: "Какой срок изготовления?",
-    answer:
-      "В среднем производство занимает 10–14 рабочих дней после утверждения макетов и образцов. Срочные проекты просчитываем отдельно.",
+    answer: "В среднем производство занимает 10–14 рабочих дней после утверждения макетов и образцов. Срочные проекты просчитываем отдельно.",
   },
   {
     question: "Можно ли рассчитать стоимость без готового макета?",
-    answer:
-      "Да. Для предварительного расчета нам достаточно понять задачу, тираж, тип изделий и примерный уровень качества.",
+    answer: "Да. Для предварительного расчета нам достаточно понять задачу, тираж, тип изделий и примерный уровень качества.",
   },
   {
     question: "Шьёте ли вы спецодежду?",
-    answer:
-      "Да, работаем и с корпоративной униформой, и со спецодеждой под реальные условия эксплуатации.",
+    answer: "Да, работаем и с корпоративной униформой, и со спецодеждой под реальные условия эксплуатации.",
   },
   {
     question: "Какой минимальный заказ?",
-    answer:
-      "Минимальный тираж зависит от типа изделия и технологии нанесения. На старте мы сразу подскажем реалистичный порог входа.",
+    answer: "Минимальный тираж зависит от типа изделия и технологии нанесения. На старте мы сразу подскажем реалистичный порог входа.",
   },
   {
     question: "Что такое полное сопровождение проекта?",
-    answer:
-      "Мы берем на себя путь от брифа и концепции до контроля производства, упаковки и доставки готового тиража.",
+    answer: "Мы берем на себя путь от брифа и концепции до контроля производства, упаковки и доставки готового тиража.",
   },
   {
     question: "Что входит в сопровождение проекта?",
-    answer:
-      "Подбор изделий, дизайн, правки, согласование материалов и нанесений, контроль производства, логистика и финальная приемка.",
+    answer: "Подбор изделий, дизайн, правки, согласование материалов и нанесений, контроль производства, логистика и финальная приемка.",
   },
   {
     question: "Шьёте ли вы спортивную одежду?",
-    answer:
-      "Да, можем собрать спортивные изделия и форму под тренировочные, event- и командные сценарии.",
+    answer: "Да, можем собрать спортивные изделия и форму под тренировочные, event- и командные сценарии.",
   },
 ] satisfies FaqItem[];
 
 export function FaqSection() {
   return (
-    <section className="my-[43px] md:my-[52px] xl:my-[70px] grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start">
+    <section className="my-[43px] md:my-[55px] grid gap-12 lg:grid-cols-[minmax(0,1fr)_47.715%] lg:items-start">
       <div>
         <PageSubheading title={FAQ_TITLE} />
 
         <div className="mt-4 md:mt-5">
           <Accordion className="w-full">
             {FAQ_ITEMS.map((item) => (
-              <AccordionItem
-                key={item.question}
-                value={item.question}
-                className="border-b border-[rgba(42,42,42,0.12)]"
-              >
+              <AccordionItem key={item.question} value={item.question} className="border-b border-[rgba(42,42,42,0.12)]">
                 <AccordionTrigger className="py-3 md:py-5">
                   <span className="flex flex-1 items-center font-heading text-lg md:2xl xl:text-3xl leading-none uppercase text-[#404040]">
                     {item.question}
@@ -107,13 +91,7 @@ export function FaqSection() {
         </AspectRatio>
 
         <AspectRatio ratio={1} className="hidden w-full lg:block">
-          <Image
-            src={FAQ_DESKTOP_IMAGE.src}
-            alt={FAQ_DESKTOP_IMAGE.alt}
-            fill
-            sizes="43vw"
-            className="object-cover"
-          />
+          <Image src={FAQ_DESKTOP_IMAGE.src} alt={FAQ_DESKTOP_IMAGE.alt} fill sizes="43vw" className="object-cover" />
         </AspectRatio>
       </div>
     </section>

@@ -456,7 +456,7 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
         }}
       />
 
-      <section className="mt-[28.8px] mb-[43px] md:mb-[52px] xl:mb-[70px]">
+      <section className="mt-[28.8px] mb-[43px] md:mb-[55px]">
         <div className="mb-5 md:mb-4 md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-center md:gap-8 xl:gap-[63px]">
           <p className="text-base font-bold uppercase  tracking-[0.08em] text-[var(--heading)]">Список</p>
 

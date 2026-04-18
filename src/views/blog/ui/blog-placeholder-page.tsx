@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { RequestCta } from "@/features/request-cta";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import { buttonVariants } from "@/shared/ui/button";
+import Link from "next/link";
 
 export function BlogPlaceholderPage() {
   return (
@@ -14,17 +14,13 @@ export function BlogPlaceholderPage() {
           ]}
           currentLabel="Скоро будет"
         />
-        <h1 className="m-0 font-heading text-4xl md:text-6xl xl:text-7xl font-bold uppercase text-[var(--heading)]">
-          Скоро будет
-        </h1>
+        <h1 className="m-0 font-heading text-4xl md:text-6xl xl:text-7xl font-bold uppercase text-[var(--heading)]">Скоро будет</h1>
       </section>
 
-      <section className="my-[32px] md:my-[40px] xl:my-[56px]">
+      <section className="my-[43px] md:my-[55px]">
         <div className="max-w-[760px] rounded-[18px] bg-[var(--card-bg)] p-6 md:rounded-[22.5px] md:p-8 xl:p-10">
           <div className="space-y-5">
-            <h2 className="font-heading text-2xl uppercase leading-none text-[var(--heading)] md:text-4xl xl:text-5xl">
-              Материал ещё не готов
-            </h2>
+            <h2 className="font-heading text-2xl uppercase leading-none text-[var(--heading)] md:text-4xl xl:text-5xl">Материал ещё не готов</h2>
             <p className="max-w-[38rem] text-sm leading-[1.4] text-[var(--text)] md:text-lg xl:text-xl">
               Мы уже работаем над этой публикацией. Скоро здесь появится полноценная статья со всеми деталями.
             </p>

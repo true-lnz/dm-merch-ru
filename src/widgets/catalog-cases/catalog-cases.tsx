@@ -218,7 +218,7 @@ export function CatalogCases({
   }
 
   return (
-    <section className="my-[43px] md:my-[52px] xl:my-[70px]">
+    <section className="my-[43px] md:my-[55px]">
       <PageSubheading title={title} />
 
       <div

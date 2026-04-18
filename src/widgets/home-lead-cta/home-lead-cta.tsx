@@ -9,7 +9,7 @@ const LEAD_CTA_IMAGE = {
 
 export function HomeLeadCta() {
   return (
-    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
+    <section className="my-[43px] md:my-[55px]">
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
         <div className="rounded-[18px] md:rounded-[22.5px] bg-white">
           <div className="relative aspect-square overflow-hidden rounded-[18px] md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
@@ -17,9 +17,21 @@ export function HomeLeadCta() {
           </div>
         </div>
         <div className="rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] text-white p-[18px] md:p-[55px] xl:p-[72px]">
-          <PageSubheading title="Отправим примеры мерча" titleClassName="text-white" description="На&nbsp;основе наших работ для 500+ компаний в&nbsp;2025 году" descriptionPlacement="bottom" descriptionClassName="text-white" />
+          <PageSubheading
+            title="Отправим примеры мерча"
+            titleClassName="text-white"
+            description="На&nbsp;основе наших работ для 500+ компаний в&nbsp;2025 году"
+            descriptionPlacement="bottom"
+            descriptionClassName="text-white"
+          />
           <div className="mt-8">
-            <RequestForm includeEmail={false} privacyCheckboxId="home-lead-cta-privacy" onAccentSurface submitLabel="Получить примеры мерча" submitClassName="border-white bg-white text-[var(--accent)] hover:bg-[#f3f7ff]" />
+            <RequestForm
+              includeEmail={false}
+              privacyCheckboxId="home-lead-cta-privacy"
+              onAccentSurface
+              submitLabel="Получить примеры мерча"
+              submitClassName="border-white bg-white text-[var(--accent)] hover:bg-[#f3f7ff]"
+            />
           </div>
         </div>
       </div>

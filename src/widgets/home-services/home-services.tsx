@@ -13,8 +13,7 @@ const SERVICES_IMAGE = {
 const HOME_SERVICES = [
   {
     title: "Разработка дизайна",
-    description:
-      "Продумываем концепцию под задачу бизнеса: не только красиво, а креативно, уместно, стильно и понятно для аудитории.",
+    description: "Продумываем концепцию под задачу бизнеса: не только красиво, а креативно, уместно, стильно и понятно для аудитории.",
   },
   {
     title: "Разработка и пошив изделий под бренд",
@@ -79,10 +78,8 @@ function ServiceCard({ title, description }: ServiceCardProps) {
 
 export function HomeServices() {
   return (
-    <section className="my-[63px] md:my-[72px] xl:my-[90px]">
-      <PageSubheading
-        title="Услуги, которые закрывают ваши задачи"
-      />
+    <section className="my-[43px] md:my-[55px]">
+      <PageSubheading title="Услуги, которые закрывают ваши задачи" />
 
       <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2 xl:grid-rows-1 xl:gap-[36px]">
         <div className="grid gap-4 xl:gap-5">
@@ -93,13 +90,7 @@ export function HomeServices() {
 
         <div className="rounded-[18px] md:rounded-[22.5px] bg-white xl:self-stretch">
           <div className="relative overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white aspect-square xl:aspect-auto xl:h-full">
-            <Image
-              src={SERVICES_IMAGE.src}
-              alt={SERVICES_IMAGE.alt}
-              fill
-              sizes="(max-width: 1279px) 100vw, 52vw"
-              className={cn("object-cover")}
-            />
+            <Image src={SERVICES_IMAGE.src} alt={SERVICES_IMAGE.alt} fill sizes="(max-width: 1279px) 100vw, 52vw" className={cn("object-cover")} />
           </div>
         </div>
       </div>
