@@ -17,7 +17,7 @@ import { MobileHeaderBar, MobileMenu } from "./mobile-header";
 
 export function Header() {
   const pathname = usePathname();
-  const isPartnerCatalogPage = pathname === "/partner-catalog";
+  const isPartnerCatalogPage = pathname.startsWith("/partner-catalog");
   const isScrolled = useScrolledHeader();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);

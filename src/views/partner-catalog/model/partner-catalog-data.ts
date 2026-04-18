@@ -3,7 +3,12 @@ import "server-only";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
-import { resolvePartnerCatalogSelection, type PartnerCatalogQueryParams } from "./partner-catalog-query";
+import {
+  getPartnerCatalogProductPath,
+  getPartnerCatalogSectionContext,
+  resolvePartnerCatalogSelection,
+  type PartnerCatalogQueryParams,
+} from "./partner-catalog-query";
 
 export const PARTNER_CATALOG_ALL_FILTER_ID = "all";
 
@@ -13,19 +18,54 @@ type RawSection = {
   name: string;
 };
 
+type RawProductSize = {
+  width?: number | null;
+  length?: number | null;
+  height?: number | null;
+};
+
 type RawProduct = {
   id: string;
   sectionId: string;
   name: string;
   article: string;
-  sizeClothing?: string | null;
+  description?: string | null;
   images?: string[] | null;
+  brand?: string | null;
+  collection?: string | null;
+  format?: string | null;
+  material1?: string | null;
+  material2?: string | null;
+  material3?: string | null;
+  material4?: string | null;
+  size?: RawProductSize | null;
+  cover?: string | null;
+  numberOfPages?: number | null;
+  coating?: string | null;
+  pocket?: boolean | null;
+  blockSize?: string | null;
+  capacity?: number | null;
+  weight?: number | null;
+  quantityInPackage?: number | null;
+  boxWeight?: number | null;
+  boxVolume?: number | null;
+  layoutPdf?: string | null;
+  fileAboutBlock?: string | null;
+  dated?: string | null;
   color1?: string | null;
   color2?: string | null;
   color3?: string | null;
   color4?: string | null;
   color5?: string | null;
   color6?: string | null;
+  tuning?: string[] | null;
+  specials?: string[] | null;
+  volumeMl?: number | null;
+  parentId?: string | null;
+  sizeClothing?: string | null;
+  gender?: string | null;
+  mandatoryMarking?: boolean | null;
+  density?: string | null;
 };
 
 type RawCatalog = {
@@ -51,6 +91,32 @@ type RawStock = {
 
 type RawStocks = {
   stocks: RawStock[];
+};
+
+type PartnerCatalogDetailRouteContext = {
+  rootName: string;
+  rootSlug: string;
+  childName: string;
+  childSlug: string;
+};
+
+type PartnerCatalogVariantDetailSource = {
+  variant: PartnerCatalogVariant;
+  representative: RawProduct;
+  items: RawProduct[];
+};
+
+type PartnerCatalogProductDetailSource = {
+  id: string;
+  sectionId: string;
+  routeContext: PartnerCatalogDetailRouteContext;
+  variants: PartnerCatalogVariantDetailSource[];
+};
+
+type PartnerCatalogDataset = {
+  categories: PartnerCatalogRootSection[];
+  products: PartnerCatalogProduct[];
+  detailSourceByVariantId: Map<string, { product: PartnerCatalogProductDetailSource; variant: PartnerCatalogVariantDetailSource }>;
 };
 
 export type PartnerCatalogVariant = {
@@ -102,6 +168,41 @@ export type PartnerCatalogInitialData = {
   initialSlice: PartnerCatalogPageSlice;
 };
 
+export type PartnerCatalogProductAttribute = {
+  label: string;
+  value: string;
+};
+
+export type PartnerCatalogProductDetailVariant = PartnerCatalogVariant & {
+  href: string;
+};
+
+export type PartnerCatalogProductDetail = {
+  id: string;
+  productId: string;
+  sectionId: string;
+  title: string;
+  article: string;
+  descriptionHtml: string | null;
+  imageUrls: string[];
+  priceRub: number;
+  discountPriceRub: number | null;
+  stock: number;
+  colorLabel: string;
+  layoutPdf: string | null;
+  fileAboutBlock: string | null;
+  specials: string[];
+  tuning: string[];
+  attributes: PartnerCatalogProductAttribute[];
+  variants: PartnerCatalogProductDetailVariant[];
+  breadcrumb: {
+    rootName: string;
+    rootSlug: string;
+    childName: string;
+    childSlug: string;
+  };
+};
+
 type SectionCount = {
   direct: number;
   total: number;
@@ -149,11 +250,115 @@ function getPrimaryImage(product: RawProduct) {
   return product.images?.find(Boolean) ?? "/catalog/img_card_cover_main.svg";
 }
 
+function getAllImages(product: RawProduct) {
+  const imageUrls = product.images?.filter(Boolean) ?? [];
+
+  return imageUrls.length > 0 ? imageUrls : [getPrimaryImage(product)];
+}
+
 function compareArticles(left: string, right: string) {
   return left.localeCompare(right, "ru");
 }
 
-const getPartnerCatalogDataset = cache((): PartnerCatalogData => {
+function selectVariantRepresentative(items: RawProduct[], priceByProductId: Map<string, RawPrice>) {
+  return (
+    items.find((item) => !item.sizeClothing && priceByProductId.has(item.id)) ??
+    items.find((item) => !item.sizeClothing) ??
+    items.find((item) => priceByProductId.has(item.id)) ??
+    items[0]
+  );
+}
+
+function resolveVariantStock(items: RawProduct[], representative: RawProduct, stockByProductId: Map<string, number>) {
+  if (!representative.sizeClothing && stockByProductId.has(representative.id)) {
+    return stockByProductId.get(representative.id) ?? 0;
+  }
+
+  return items.reduce((sum, item) => sum + (stockByProductId.get(item.id) ?? 0), 0);
+}
+
+function formatMilliliters(value: number | null | undefined) {
+  return value && value > 0 ? `${value} мл` : null;
+}
+
+function formatKilograms(value: number | null | undefined) {
+  return value && value > 0 ? `${value.toLocaleString("ru-RU", { maximumFractionDigits: 3 })} кг` : null;
+}
+
+function formatCubicMeters(value: number | null | undefined) {
+  return value && value > 0 ? `${value.toLocaleString("ru-RU", { maximumFractionDigits: 3 })} м³` : null;
+}
+
+function formatDimensions(size: RawProductSize | null | undefined) {
+  const dimensions = [size?.width, size?.length, size?.height].filter((value): value is number => typeof value === "number" && value > 0);
+
+  return dimensions.length > 0 ? `${dimensions.join(" × ")} мм` : null;
+}
+
+function formatMaterials(product: RawProduct) {
+  const materials = [product.material1, product.material2, product.material3, product.material4].filter(
+    (value): value is string => Boolean(value?.trim()),
+  );
+
+  return materials.length > 0 ? materials.join(", ") : null;
+}
+
+function resolveProductSizeLabel(product: RawProduct) {
+  if (product.sizeClothing?.trim()) {
+    return product.sizeClothing.trim();
+  }
+
+  if (product.format?.trim()) {
+    return product.format.trim();
+  }
+
+  return formatDimensions(product.size);
+}
+
+function buildDetailAttributes(product: RawProduct) {
+  const attributes: PartnerCatalogProductAttribute[] = [];
+  const productSize = resolveProductSizeLabel(product);
+  const packagingDimensions = formatDimensions(product.size);
+
+  const orderedAttributes: Array<[string, string | null | undefined]> = [
+    ["Бренд", product.brand],
+    ["Коллекция", product.collection],
+    ["Размер изделия", productSize ?? "Не указан"],
+    ["Формат", product.format],
+    ["Материалы", formatMaterials(product)],
+    ["Габариты упаковки", packagingDimensions ?? "Не указаны"],
+    ["Объем", formatMilliliters(product.volumeMl)],
+    ["Вес изделия", formatKilograms(product.weight)],
+    ["Вес коробки", formatKilograms(product.boxWeight)],
+    ["Объем коробки", formatCubicMeters(product.boxVolume)],
+    ["В упаковке", product.quantityInPackage && product.quantityInPackage > 0 ? `${product.quantityInPackage} шт.` : null],
+    ["Датировка", product.dated],
+    ["Обложка", product.cover],
+    ["Размер блока", product.blockSize],
+    ["Страниц", product.numberOfPages && product.numberOfPages > 0 ? String(product.numberOfPages) : null],
+    ["Вместимость", product.capacity && product.capacity > 0 ? String(product.capacity) : null],
+    ["Покрытие", product.coating],
+    ["Плотность", product.density],
+    ["Пол", product.gender],
+    ["Карман", product.pocket ? "Есть" : null],
+    ["Обязательная маркировка", product.mandatoryMarking ? "Требуется" : null],
+  ];
+
+  for (const [label, value] of orderedAttributes) {
+    if (!value) {
+      continue;
+    }
+
+    attributes.push({
+      label,
+      value,
+    });
+  }
+
+  return attributes;
+}
+
+const getPartnerCatalogDataset = cache((): PartnerCatalogDataset => {
   const catalog = readJsonFile<RawCatalog>("catalog.json");
   const prices = readJsonFile<RawPrices>("prices.json");
   const stocks = readJsonFile<RawStocks>("stocks.json");
@@ -185,55 +390,6 @@ const getPartnerCatalogDataset = cache((): PartnerCatalogData => {
     existingGroup.variants.set(variantKey, existingVariantGroup);
   }
 
-  const products = [...productGroups.entries()]
-    .map(([id, group]) => {
-      const variants = [...group.variants.entries()]
-        .map(([colorCode, items]) => {
-          const representative =
-            items.find((item) => !item.sizeClothing && priceByProductId.has(item.id)) ??
-            items.find((item) => !item.sizeClothing) ??
-            items.find((item) => priceByProductId.has(item.id)) ??
-            items[0];
-
-          if (!representative) {
-            return null;
-          }
-
-          const priceSource = priceByProductId.get(representative.id) ?? items.map((item) => priceByProductId.get(item.id)).find(Boolean);
-
-          if (!priceSource) {
-            return null;
-          }
-
-          const stock =
-            !representative.sizeClothing && stockByProductId.has(representative.id)
-              ? stockByProductId.get(representative.id) ?? 0
-              : items.reduce((sum, item) => sum + (stockByProductId.get(item.id) ?? 0), 0);
-
-          return {
-            id: representative.id,
-            article: representative.article,
-            title: stripSizeFromTitle(representative.name),
-            imageUrl: getPrimaryImage(representative),
-            colorCode,
-            colorLabel: getVariantColorLabel(representative, colorCode),
-            priceRub: priceSource.price,
-            discountPriceRub: priceSource.discountPrice,
-            stock,
-          } satisfies PartnerCatalogVariant;
-        })
-        .filter((variant): variant is PartnerCatalogVariant => Boolean(variant))
-        .sort((left, right) => compareArticles(left.article, right.article));
-
-      return {
-        id,
-        sectionId: group.sectionId,
-        variants,
-      };
-    })
-    .filter((product) => product.variants.length > 0)
-    .sort((left, right) => compareArticles(left.variants[0]?.article ?? left.id, right.variants[0]?.article ?? right.id));
-
   const rootSections = sections.filter((section) => !section.parentId);
   const childSectionsByRootId = new Map<string, RawSection[]>();
 
@@ -246,6 +402,87 @@ const getPartnerCatalogDataset = cache((): PartnerCatalogData => {
     nextChildren.push(section);
     childSectionsByRootId.set(section.parentId, nextChildren);
   }
+
+  const productDetails: PartnerCatalogProductDetailSource[] = [];
+
+  for (const [id, group] of productGroups.entries()) {
+    const routeContext = getPartnerCatalogSectionContext(
+      rootSections
+        .map((rootSection) => ({
+          id: rootSection.id,
+          name: rootSection.name,
+          children: (childSectionsByRootId.get(rootSection.id) ?? []).map((childSection) => ({
+            id: childSection.id,
+            name: childSection.name,
+          })),
+        }))
+        .filter((rootSection) => rootSection.children.length > 0),
+      group.sectionId,
+    );
+
+    if (!routeContext) {
+      continue;
+    }
+
+    const variants = [...group.variants.entries()]
+      .map(([colorCode, items]) => {
+        const representative = selectVariantRepresentative(items, priceByProductId);
+
+        if (!representative) {
+          return null;
+        }
+
+        const priceSource = priceByProductId.get(representative.id) ?? items.map((item) => priceByProductId.get(item.id)).find(Boolean);
+
+        if (!priceSource) {
+          return null;
+        }
+
+        return {
+          representative,
+          items,
+          variant: {
+            id: representative.id,
+            article: representative.article,
+            title: stripSizeFromTitle(representative.name),
+            imageUrl: getPrimaryImage(representative),
+            colorCode,
+            colorLabel: getVariantColorLabel(representative, colorCode),
+            priceRub: priceSource.price,
+            discountPriceRub: priceSource.discountPrice,
+            stock: resolveVariantStock(items, representative, stockByProductId),
+          } satisfies PartnerCatalogVariant,
+        } satisfies PartnerCatalogVariantDetailSource;
+      })
+      .filter((variant): variant is PartnerCatalogVariantDetailSource => Boolean(variant))
+      .sort((left, right) => compareArticles(left.variant.article, right.variant.article));
+
+    if (variants.length === 0) {
+      continue;
+    }
+
+    productDetails.push({
+      id,
+      sectionId: group.sectionId,
+      routeContext: {
+        rootName: routeContext.rootName,
+        rootSlug: routeContext.rootSlug,
+        childName: routeContext.childName,
+        childSlug: routeContext.childSlug,
+      },
+      variants,
+    });
+  }
+
+  productDetails.sort((left, right) => compareArticles(left.variants[0]?.variant.article ?? left.id, right.variants[0]?.variant.article ?? right.id));
+
+  const products = productDetails.map(
+    (product): PartnerCatalogProduct => ({
+      id: product.id,
+      sectionId: product.sectionId,
+      variants: product.variants.map((variant) => variant.variant),
+    }),
+  );
 
   const sectionCounts = new Map<string, SectionCount>();
 
@@ -289,9 +526,18 @@ const getPartnerCatalogDataset = cache((): PartnerCatalogData => {
     .filter((rootSection) => rootSection.productCount > 0)
     .sort((left, right) => right.productCount - left.productCount || left.name.localeCompare(right.name, "ru"));
 
+  const detailSourceByVariantId = new Map<string, { product: PartnerCatalogProductDetailSource; variant: PartnerCatalogVariantDetailSource }>();
+
+  for (const product of productDetails) {
+    for (const variant of product.variants) {
+      detailSourceByVariantId.set(variant.variant.id, { product, variant });
+    }
+  }
+
   return {
     categories,
     products,
+    detailSourceByVariantId,
   };
 });
 
@@ -303,7 +549,14 @@ function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string
   return products.filter((product) => product.sectionId === filterId);
 }
 
-export const getPartnerCatalogData = cache((): PartnerCatalogData => getPartnerCatalogDataset());
+export const getPartnerCatalogData = cache((): PartnerCatalogData => {
+  const dataset = getPartnerCatalogDataset();
+
+  return {
+    categories: dataset.categories,
+    products: dataset.products,
+  };
+});
 
 export const getPartnerCatalogProductsPage = cache(
   (filterId: string, offset: number, limit: number): PartnerCatalogPageSlice => {
@@ -332,5 +585,50 @@ export const getPartnerCatalogInitialData = cache((limit: number, query: Partner
       subcategory: selection.subcategorySlug,
     },
     initialSlice: getPartnerCatalogProductsPage(selection.filterId, 0, limit),
+  };
+});
+
+export const getPartnerCatalogProductDetailByVariantId = cache((variantId: string): PartnerCatalogProductDetail | null => {
+  const { categories, detailSourceByVariantId } = getPartnerCatalogDataset();
+  const detailSource = detailSourceByVariantId.get(variantId);
+
+  if (!detailSource) {
+    return null;
+  }
+
+  const activeVariant = detailSource.variant;
+  const activeProduct = activeVariant.representative;
+
+  return {
+    id: detailSource.product.id,
+    productId: activeVariant.variant.id,
+    sectionId: detailSource.product.sectionId,
+    title: activeVariant.variant.title,
+    article: activeVariant.variant.article,
+    descriptionHtml: activeProduct.description?.trim() || null,
+    imageUrls: getAllImages(activeProduct),
+    priceRub: activeVariant.variant.priceRub,
+    discountPriceRub: activeVariant.variant.discountPriceRub,
+    stock: activeVariant.variant.stock,
+    colorLabel: activeVariant.variant.colorLabel,
+    layoutPdf: activeProduct.layoutPdf?.trim() || null,
+    fileAboutBlock: activeProduct.fileAboutBlock?.trim() || null,
+    specials: activeProduct.specials?.filter(Boolean) ?? [],
+    tuning: activeProduct.tuning?.filter(Boolean) ?? [],
+    attributes: buildDetailAttributes(activeProduct),
+    variants: detailSource.product.variants.map((variant) => ({
+      ...variant.variant,
+      href: getPartnerCatalogProductPath(
+        categories,
+        detailSource.product.sectionId,
+        variant.variant.id,
+      ),
+    })),
+    breadcrumb: {
+      rootName: detailSource.product.routeContext.rootName,
+      rootSlug: detailSource.product.routeContext.rootSlug,
+      childName: detailSource.product.routeContext.childName,
+      childSlug: detailSource.product.routeContext.childSlug,
+    },
   };
 });

@@ -3,6 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { memo, useEffect, useMemo, useRef, useState, type ComponentProps, type RefObject } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { toast } from "sonner";
 import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 import { RequestCta } from "@/features/request-cta";
@@ -22,6 +23,7 @@ import type {
   PartnerCatalogVariant,
 } from "../model/partner-catalog-data";
 import {
+  getPartnerCatalogProductPath,
   getPartnerCatalogPathForFilter,
   PARTNER_CATALOG_QUERY_CATEGORY_KEY,
   PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY,
@@ -45,7 +47,11 @@ function formatRubPrice(value: number) {
 }
 
 function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
-  return typeof src === "string" ? src : src.src;
+  if (typeof src === "string") {
+    return src;
+  }
+
+  return "src" in src ? src.src : src.default.src;
 }
 
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
@@ -152,7 +158,7 @@ function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
       </button>
 
       {isPopoverOpen ? (
-        <div className="absolute bottom-[calc(100%+8px)] left-0 z-40 w-full rounded-[10px] bg-white p-3 shadow-[0_10px_24px_rgba(42,42,42,0.12)]">
+        <div className="absolute bottom-[calc(100%+8px)] left-0 z-40 min-w-[220px] max-w-[260px] rounded-[10px] border border-black/10 bg-white p-3 shadow-[0_18px_40px_rgba(42,42,42,0.22)]">
           <label className="flex items-center gap-2 text-sm text-[var(--text)]">
             <span className="shrink-0">Тираж:</span>
             <input
@@ -217,11 +223,13 @@ function CatalogImageWithSkeleton({
   );
 }
 
-function ProductCardImage({ variant }: { variant: PartnerCatalogVariant }) {
+function ProductCardImage({ variant, href }: { variant: PartnerCatalogVariant; href: string }) {
   return (
-    <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
-      <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
-    </div>
+    <Link href={href} target="_blank" rel="noreferrer" aria-label={`Открыть товар ${variant.title}`} className="block">
+      <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
+        <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
+      </div>
+    </Link>
   );
 }
 
@@ -336,12 +344,14 @@ function ProductCardContent({
   variants,
   activeVariant,
   activeVariantId,
+  productHref,
   expandedTitle = false,
   onVariantSelect,
 }: {
   variants: PartnerCatalogVariant[];
   activeVariant: PartnerCatalogVariant;
   activeVariantId: string;
+  productHref: string;
   expandedTitle?: boolean;
   onVariantSelect: (variantId: string) => void;
 }) {
@@ -358,7 +368,9 @@ function ProductCardContent({
             expandedTitle ? "block" : "overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]",
           )}
         >
-          {activeVariant.title}
+          <Link href={productHref} target="_blank" rel="noreferrer" className="transition-colors hover:text-[var(--accent)]">
+            {activeVariant.title}
+          </Link>
         </h3>
       </div>
 
@@ -379,6 +391,7 @@ function ProductCardShell({
   variants,
   activeVariant,
   activeVariantId,
+  productHref,
   onVariantSelect,
   expandedTitle = false,
   shadow = false,
@@ -387,6 +400,7 @@ function ProductCardShell({
   variants: PartnerCatalogVariant[];
   activeVariant: PartnerCatalogVariant;
   activeVariantId: string;
+  productHref: string;
   onVariantSelect: (variantId: string) => void;
   expandedTitle?: boolean;
   shadow?: boolean;
@@ -400,11 +414,12 @@ function ProductCardShell({
         shadow ? "shadow-[0_16px_40px_rgba(42,42,42,0.16)]" : null,
       )}
     >
-      <ProductCardImage variant={activeVariant} />
+      <ProductCardImage variant={activeVariant} href={productHref} />
       <ProductCardContent
         variants={variants}
         activeVariant={activeVariant}
         activeVariantId={activeVariantId}
+        productHref={productHref}
         onVariantSelect={onVariantSelect}
         expandedTitle={expandedTitle}
       />
@@ -412,11 +427,21 @@ function ProductCardShell({
   );
 }
 
-const PartnerProductCard = memo(function PartnerProductCard({ item }: { item: PartnerCatalogProduct }) {
+const PartnerProductCard = memo(function PartnerProductCard({
+  item,
+  categories,
+}: {
+  item: PartnerCatalogProduct;
+  categories: PartnerCatalogRootSection[];
+}) {
   const [activeVariantId, setActiveVariantId] = useState(item.variants[0]?.id ?? "");
   const [isHovered, setIsHovered] = useState(false);
 
   const activeVariant = item.variants.find((variant) => variant.id === activeVariantId) ?? item.variants[0];
+  const productHref = useMemo(
+    () => (activeVariant ? getPartnerCatalogProductPath(categories, item.sectionId, activeVariant.id) : "/partner-catalog"),
+    [activeVariant, categories, item.sectionId],
+  );
 
   if (!activeVariant) {
     return null;
@@ -432,6 +457,7 @@ const PartnerProductCard = memo(function PartnerProductCard({ item }: { item: Pa
         variants={item.variants}
         activeVariant={activeVariant}
         activeVariantId={activeVariant.id}
+        productHref={productHref}
         onVariantSelect={setActiveVariantId}
       />
 
@@ -442,6 +468,7 @@ const PartnerProductCard = memo(function PartnerProductCard({ item }: { item: Pa
               variants={item.variants}
               activeVariant={activeVariant}
               activeVariantId={activeVariant.id}
+              productHref={productHref}
               onVariantSelect={setActiveVariantId}
               expandedTitle
               shadow
@@ -768,7 +795,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
               <>
                 <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4">
                   {products.map((item) => (
-                    <PartnerProductCard key={item.id} item={item} />
+                    <PartnerProductCard key={item.id} item={item} categories={initialData.categories} />
                   ))}
                 </div>
 

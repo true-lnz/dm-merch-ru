@@ -1,9 +1,11 @@
 export const PARTNER_CATALOG_QUERY_CATEGORY_KEY = "category";
 export const PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY = "subcategory";
+export const PARTNER_CATALOG_QUERY_PRODUCT_KEY = "product";
 
 export type PartnerCatalogQueryParams = {
   category?: string;
   subcategory?: string;
+  product?: string;
 };
 
 export type PartnerCatalogQueryChildSection = {
@@ -24,12 +26,21 @@ export type PartnerCatalogResolvedSelection = {
   subcategorySlug?: string;
 };
 
+export type PartnerCatalogResolvedSection = {
+  rootId: string;
+  rootName: string;
+  rootSlug: string;
+  childId: string;
+  childName: string;
+  childSlug: string;
+};
+
 type IndexedChildSection = PartnerCatalogQueryChildSection & {
   slug: string;
   rootId: string;
 };
 
-type IndexedRootSection = PartnerCatalogQueryRootSection & {
+type IndexedRootSection = Omit<PartnerCatalogQueryRootSection, "children"> & {
   slug: string;
   children: IndexedChildSection[];
 };
@@ -37,6 +48,7 @@ type IndexedRootSection = PartnerCatalogQueryRootSection & {
 type PartnerCatalogQueryIndex = {
   roots: IndexedRootSection[];
   rootById: Map<string, IndexedRootSection>;
+  childById: Map<string, IndexedChildSection>;
 };
 
 function transliterateToSlug(value: string) {
@@ -59,6 +71,7 @@ function makeStableSlug(name: string, id: string, usedSlugs: Set<string>) {
 export function buildPartnerCatalogQueryIndex(categories: PartnerCatalogQueryRootSection[]): PartnerCatalogQueryIndex {
   const usedRootSlugs = new Set<string>();
   const rootById = new Map<string, IndexedRootSection>();
+  const childById = new Map<string, IndexedChildSection>();
   const roots = categories.map((rootCategory) => {
     const usedChildSlugs = new Set<string>();
     const rootSlug = makeStableSlug(rootCategory.name, rootCategory.id, usedRootSlugs);
@@ -73,6 +86,10 @@ export function buildPartnerCatalogQueryIndex(categories: PartnerCatalogQueryRoo
       children,
     };
 
+    for (const childCategory of children) {
+      childById.set(childCategory.id, childCategory);
+    }
+
     rootById.set(indexedRoot.id, indexedRoot);
     return indexedRoot;
   });
@@ -80,6 +97,31 @@ export function buildPartnerCatalogQueryIndex(categories: PartnerCatalogQueryRoo
   return {
     roots,
     rootById,
+    childById,
+  };
+}
+
+export function getPartnerCatalogSectionContext(categories: PartnerCatalogQueryRootSection[], childSectionId: string): PartnerCatalogResolvedSection | null {
+  const index = buildPartnerCatalogQueryIndex(categories);
+  const childCategory = index.childById.get(childSectionId);
+
+  if (!childCategory) {
+    return null;
+  }
+
+  const rootCategory = index.rootById.get(childCategory.rootId);
+
+  if (!rootCategory) {
+    return null;
+  }
+
+  return {
+    rootId: rootCategory.id,
+    rootName: rootCategory.name,
+    rootSlug: rootCategory.slug,
+    childId: childCategory.id,
+    childName: childCategory.name,
+    childSlug: childCategory.slug,
   };
 }
 
@@ -162,4 +204,25 @@ export function getPartnerCatalogPathForFilter(
   const queryString = params.toString();
 
   return queryString ? `${pathname}?${queryString}` : pathname;
+}
+
+export function getPartnerCatalogProductPath(
+  categories: PartnerCatalogQueryRootSection[],
+  childSectionId: string,
+  productId: string,
+  pathnameBase = "/partner-catalog",
+) {
+  const sectionContext = getPartnerCatalogSectionContext(categories, childSectionId);
+
+  if (!sectionContext) {
+    return pathnameBase;
+  }
+
+  const params = new URLSearchParams({
+    [PARTNER_CATALOG_QUERY_CATEGORY_KEY]: sectionContext.rootSlug,
+    [PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY]: sectionContext.childSlug,
+    [PARTNER_CATALOG_QUERY_PRODUCT_KEY]: productId,
+  });
+
+  return `${pathnameBase}?${params.toString()}`;
 }
