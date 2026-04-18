@@ -4,6 +4,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
 
+export const PARTNER_CATALOG_ALL_FILTER_ID = "all";
+
 type RawSection = {
   id: string;
   parentId: string | null;
@@ -86,6 +88,16 @@ export type PartnerCatalogData = {
   products: PartnerCatalogProduct[];
 };
 
+export type PartnerCatalogPageSlice = {
+  items: PartnerCatalogProduct[];
+  total: number;
+};
+
+export type PartnerCatalogInitialData = {
+  categories: PartnerCatalogRootSection[];
+  initialSlice: PartnerCatalogPageSlice;
+};
+
 type SectionCount = {
   direct: number;
   total: number;
@@ -137,7 +149,7 @@ function compareArticles(left: string, right: string) {
   return left.localeCompare(right, "ru");
 }
 
-export const getPartnerCatalogData = cache((): PartnerCatalogData => {
+const getPartnerCatalogDataset = cache((): PartnerCatalogData => {
   const catalog = readJsonFile<RawCatalog>("catalog.json");
   const prices = readJsonFile<RawPrices>("prices.json");
   const stocks = readJsonFile<RawStocks>("stocks.json");
@@ -276,5 +288,38 @@ export const getPartnerCatalogData = cache((): PartnerCatalogData => {
   return {
     categories,
     products,
+  };
+});
+
+function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string) {
+  if (filterId === PARTNER_CATALOG_ALL_FILTER_ID) {
+    return products;
+  }
+
+  return products.filter((product) => product.sectionId === filterId);
+}
+
+export const getPartnerCatalogData = cache((): PartnerCatalogData => getPartnerCatalogDataset());
+
+export const getPartnerCatalogProductsPage = cache(
+  (filterId: string, offset: number, limit: number): PartnerCatalogPageSlice => {
+    const { products } = getPartnerCatalogDataset();
+    const filteredProducts = getFilteredProducts(products, filterId);
+    const safeOffset = Math.max(0, offset);
+    const safeLimit = Math.max(1, limit);
+
+    return {
+      items: filteredProducts.slice(safeOffset, safeOffset + safeLimit),
+      total: filteredProducts.length,
+    };
+  },
+);
+
+export const getPartnerCatalogInitialData = cache((limit: number): PartnerCatalogInitialData => {
+  const { categories } = getPartnerCatalogDataset();
+
+  return {
+    categories,
+    initialSlice: getPartnerCatalogProductsPage(PARTNER_CATALOG_ALL_FILTER_ID, 0, limit),
   };
 });

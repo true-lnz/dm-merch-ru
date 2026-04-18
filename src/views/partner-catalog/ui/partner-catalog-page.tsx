@@ -1,5 +1,9 @@
-﻿"use client";
+"use client";
 
+import { memo, useEffect, useMemo, useRef, useState, type ComponentProps, type RefObject } from "react";
+import Image from "next/image";
+import { toast } from "sonner";
+import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
 import { useWishlist } from "@/shared/lib/wishlist";
@@ -9,31 +13,19 @@ import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dia
 import { PageHeading } from "@/shared/ui/page-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { WidowFix } from "@/shared/ui/widow-fix";
-import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
-import { toast } from "sonner";
-import type { PartnerCatalogData, PartnerCatalogProduct, PartnerCatalogRootSection, PartnerCatalogVariant } from "../model/partner-catalog-data";
+import type {
+  PartnerCatalogInitialData,
+  PartnerCatalogPageSlice,
+  PartnerCatalogProduct,
+  PartnerCatalogRootSection,
+  PartnerCatalogVariant,
+} from "../model/partner-catalog-data";
 
 const ALL_FILTER_ID = "all";
 const MOBILE_PAGE_SIZE = 16;
 const PAGE_SIZE_OPTIONS = [50, 100, 200] as const;
-
-const PRODUCT_CARD_LAYERS = [
-  {
-    key: "base",
-    wrapperClassName: "",
-    innerClassName: "",
-    shellProps: { expandedTitle: false, shadow: false, ariaHidden: false },
-  },
-  {
-    key: "overlay",
-    wrapperClassName:
-      "pointer-events-none absolute inset-x-0 top-0 z-20 hidden opacity-0 transition-opacity duration-200 md:block md:group-hover:opacity-100",
-    innerClassName: "pointer-events-auto",
-    shellProps: { expandedTitle: true, shadow: true, ariaHidden: true },
-  },
-] as const;
+const CATALOG_API_ROUTE = "/api/partner-catalog";
+const loadedCatalogImageKeys = new Set<string>();
 
 const rubFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -43,6 +35,10 @@ const rubFormatter = new Intl.NumberFormat("ru-RU", {
 
 function formatRubPrice(value: number) {
   return rubFormatter.format(value);
+}
+
+function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
+  return typeof src === "string" ? src : src.src;
 }
 
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
@@ -65,6 +61,22 @@ function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => vo
       document.removeEventListener("mousedown", handleClick);
     };
   }, [enabled, onOutside, ref]);
+}
+
+async function fetchCatalogPageSlice(filterId: string, offset: number, limit: number) {
+  const params = new URLSearchParams({
+    filterId,
+    offset: String(offset),
+    limit: String(limit),
+  });
+
+  const response = await fetch(`${CATALOG_API_ROUTE}?${params.toString()}`, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error("Failed to load partner catalog page slice");
+  }
+
+  return (await response.json()) as PartnerCatalogPageSlice;
 }
 
 function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
@@ -158,21 +170,19 @@ function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
   );
 }
 
-function ProductCardImage({ variant }: { variant: PartnerCatalogVariant }) {
-  return (
-    <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
-      <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
-    </div>
-  );
-}
-
 function CatalogImageWithSkeleton({
+  alt,
   className,
   skeletonClassName,
   onLoadingComplete,
   ...props
-}: React.ComponentProps<typeof Image> & { skeletonClassName?: string }) {
-  const [isLoaded, setIsLoaded] = useState(false);
+}: ComponentProps<typeof Image> & { skeletonClassName?: string }) {
+  const imageCacheKey = getCatalogImageCacheKey(props.src);
+  const [isLoaded, setIsLoaded] = useState(() => loadedCatalogImageKeys.has(imageCacheKey));
+
+  useEffect(() => {
+    setIsLoaded(loadedCatalogImageKeys.has(imageCacheKey));
+  }, [imageCacheKey]);
 
   return (
     <>
@@ -188,13 +198,23 @@ function CatalogImageWithSkeleton({
       ) : null}
       <Image
         {...props}
+        alt={alt}
         onLoadingComplete={(result) => {
+          loadedCatalogImageKeys.add(imageCacheKey);
           setIsLoaded(true);
           onLoadingComplete?.(result);
         }}
         className={cn("transition-opacity duration-300", isLoaded ? "opacity-100" : "opacity-0", className)}
       />
     </>
+  );
+}
+
+function ProductCardImage({ variant }: { variant: PartnerCatalogVariant }) {
+  return (
+    <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
+      <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
+    </div>
   );
 }
 
@@ -310,20 +330,16 @@ function ProductCardContent({
   activeVariant,
   activeVariantId,
   expandedTitle = false,
-  className,
   onVariantSelect,
 }: {
   variants: PartnerCatalogVariant[];
   activeVariant: PartnerCatalogVariant;
   activeVariantId: string;
   expandedTitle?: boolean;
-  className?: string;
   onVariantSelect: (variantId: string) => void;
 }) {
   return (
-    <div
-      className={cn("flex flex-1 flex-col gap-2 bg-[var(--card-bg)] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]", className)}
-    >
+    <div className="flex flex-1 flex-col gap-2 bg-[var(--card-bg)] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]">
       <div className="flex items-baseline gap-2 font-sans">
         <span className="text-base font-semibold text-black">{formatRubPrice(activeVariant.priceRub)}</span>
       </div>
@@ -389,8 +405,9 @@ function ProductCardShell({
   );
 }
 
-function PartnerProductCard({ item }: { item: PartnerCatalogProduct }) {
+const PartnerProductCard = memo(function PartnerProductCard({ item }: { item: PartnerCatalogProduct }) {
   const [activeVariantId, setActiveVariantId] = useState(item.variants[0]?.id ?? "");
+  const [isHovered, setIsHovered] = useState(false);
 
   const activeVariant = item.variants.find((variant) => variant.id === activeVariantId) ?? item.variants[0];
 
@@ -399,23 +416,36 @@ function PartnerProductCard({ item }: { item: PartnerCatalogProduct }) {
   }
 
   return (
-    <div className="group relative z-0 h-full overflow-visible md:hover:z-20">
-      {PRODUCT_CARD_LAYERS.map((layer) => (
-        <div key={layer.key} className={layer.wrapperClassName}>
-          <div className={layer.innerClassName}>
+    <div
+      className="group relative z-0 h-full overflow-visible md:hover:z-20"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <ProductCardShell
+        variants={item.variants}
+        activeVariant={activeVariant}
+        activeVariantId={activeVariant.id}
+        onVariantSelect={setActiveVariantId}
+      />
+
+      {isHovered ? (
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md:block">
+          <div className="pointer-events-auto">
             <ProductCardShell
               variants={item.variants}
               activeVariant={activeVariant}
               activeVariantId={activeVariant.id}
               onVariantSelect={setActiveVariantId}
-              {...layer.shellProps}
+              expandedTitle
+              shadow
+              ariaHidden
             />
           </div>
         </div>
-      ))}
+      ) : null}
     </div>
   );
-}
+});
 
 function CategoryFilterList({
   categories,
@@ -479,44 +509,36 @@ function CategoryFilterList({
   );
 }
 
-export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
+export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalogInitialData }) {
   const [activeFilterId, setActiveFilterId] = useState(ALL_FILTER_ID);
   const [expandedRootId, setExpandedRootId] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(50);
-  const [loadedCount, setLoadedCount] = useState(MOBILE_PAGE_SIZE);
+  const [products, setProducts] = useState(initialData.initialSlice.items);
+  const [totalCount, setTotalCount] = useState(initialData.initialSlice.total);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isFetchingProducts, setIsFetchingProducts] = useState(false);
   const [isMobileCategoryDialogOpen, setIsMobileCategoryDialogOpen] = useState(false);
   const listStartRef = useRef<HTMLDivElement | null>(null);
+  const requestIdRef = useRef(0);
 
   const activeRootCategory = useMemo(
     () =>
       activeFilterId === ALL_FILTER_ID
         ? undefined
-        : data.categories.find((category) => category.children.some((childCategory) => childCategory.id === activeFilterId)),
-    [activeFilterId, data.categories],
+        : initialData.categories.find((category) => category.children.some((childCategory) => childCategory.id === activeFilterId)),
+    [activeFilterId, initialData.categories],
   );
   const activeChildCategory = useMemo(
     () => activeRootCategory?.children.find((childCategory) => childCategory.id === activeFilterId),
     [activeFilterId, activeRootCategory],
   );
-  const visibleProducts = useMemo(() => {
-    if (activeFilterId === ALL_FILTER_ID) {
-      return data.products;
-    }
-
-    return data.products.filter((product) => product.sectionId === activeFilterId);
-  }, [activeFilterId, data.products]);
-  const displayedProducts = useMemo(() => visibleProducts.slice(0, Math.min(loadedCount, visibleProducts.length)), [loadedCount, visibleProducts]);
-  const nextCursor = displayedProducts.length < visibleProducts.length ? displayedProducts.length : null;
+  const nextCursor = products.length < totalCount ? products.length : null;
   const activeCategoryLabel = activeChildCategory?.name ?? "Все товары";
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
     const handleChange = (event: MediaQueryListEvent | MediaQueryList) => {
-      const nextIsDesktop = event.matches;
-
-      setIsDesktop(nextIsDesktop);
-      setLoadedCount(nextIsDesktop ? pageSize : MOBILE_PAGE_SIZE);
+      setIsDesktop(event.matches);
     };
 
     handleChange(mediaQuery);
@@ -525,23 +547,55 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
     };
-  }, [pageSize]);
+  }, []);
 
   useEffect(() => {
-    setLoadedCount((currentCount) => Math.min(currentCount, visibleProducts.length));
-  }, [visibleProducts.length]);
+    const targetPageSize = isDesktop ? pageSize : MOBILE_PAGE_SIZE;
+
+    if (products.length >= Math.min(targetPageSize, totalCount)) {
+      return;
+    }
+
+    void loadCatalogSlice(activeFilterId, 0, targetPageSize, false);
+  }, [activeFilterId, isDesktop, pageSize, products.length, totalCount]);
 
   function getCurrentPageSize() {
     return isDesktop ? pageSize : MOBILE_PAGE_SIZE;
   }
 
+  async function loadCatalogSlice(filterId: string, offset: number, limit: number, append: boolean) {
+    const nextRequestId = requestIdRef.current + 1;
+    requestIdRef.current = nextRequestId;
+    setIsFetchingProducts(true);
+
+    try {
+      const nextSlice = await fetchCatalogPageSlice(filterId, offset, limit);
+
+      if (requestIdRef.current !== nextRequestId) {
+        return;
+      }
+
+      setTotalCount(nextSlice.total);
+      setProducts((currentProducts) => (append ? [...currentProducts, ...nextSlice.items] : nextSlice.items));
+    } catch {
+      if (requestIdRef.current === nextRequestId) {
+        toast.error("Не удалось загрузить каталог");
+      }
+    } finally {
+      if (requestIdRef.current === nextRequestId) {
+        setIsFetchingProducts(false);
+      }
+    }
+  }
+
   function handleFilterChange(nextFilterId: string) {
-    if (nextFilterId === activeFilterId) {
+    if (nextFilterId === activeFilterId || isFetchingProducts) {
       return;
     }
 
-    setLoadedCount(getCurrentPageSize());
+    const nextPageSize = getCurrentPageSize();
     setActiveFilterId(nextFilterId);
+    void loadCatalogSlice(nextFilterId, 0, nextPageSize, false);
     listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -551,20 +605,23 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
   }
 
   function handlePageSizeChange(nextPageSize: (typeof PAGE_SIZE_OPTIONS)[number]) {
-    if (nextPageSize === pageSize) {
+    if (nextPageSize === pageSize || isFetchingProducts) {
       return;
     }
 
     setPageSize(nextPageSize);
-    setLoadedCount(nextPageSize);
+
+    if (isDesktop) {
+      void loadCatalogSlice(activeFilterId, 0, nextPageSize, false);
+    }
   }
 
   function handleLoadMore() {
-    if (nextCursor === null) {
+    if (nextCursor === null || isFetchingProducts) {
       return;
     }
 
-    setLoadedCount((currentCount) => Math.min(currentCount + getCurrentPageSize(), visibleProducts.length));
+    void loadCatalogSlice(activeFilterId, products.length, getCurrentPageSize(), true);
   }
 
   function handleAllProductsClick() {
@@ -605,7 +662,7 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
 
           <div className="mt-3 flex flex-col gap-3 md:mt-0 md:flex-row md:items-center md:justify-between">
             <p className="text-sm text-[var(--text-muted)]">
-              Показано {displayedProducts.length} из {visibleProducts.length}
+              Показано {products.length} из {totalCount}
             </p>
 
             <div className="hidden flex-wrap items-center gap-2 md:flex">
@@ -634,7 +691,7 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
         <div className="md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-start md:gap-8 xl:gap-[63px]">
           <aside className="hidden md:block">
             <CategoryFilterList
-              categories={data.categories}
+              categories={initialData.categories}
               activeFilterId={activeFilterId}
               expandedRootId={expandedRootId}
               onExpandedRootChange={setExpandedRootId}
@@ -644,10 +701,10 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
           </aside>
 
           <div ref={listStartRef} className="scroll-mt-[88px] md:scroll-mt-[112px]">
-            {visibleProducts.length > 0 ? (
+            {products.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4">
-                  {displayedProducts.map((item) => (
+                  {products.map((item) => (
                     <PartnerProductCard key={item.id} item={item} />
                   ))}
                 </div>
@@ -657,16 +714,17 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
                     <button
                       type="button"
                       onClick={handleLoadMore}
+                      disabled={isFetchingProducts}
                       className={cn(buttonVariants({ variant: "white" }), "min-w-44 text-[var(--accent)]")}
                     >
-                      Загрузить еще
+                      {isFetchingProducts ? "Загрузка..." : "Загрузить еще"}
                     </button>
                   </div>
                 ) : null}
               </>
             ) : (
               <div className="rounded-[18px] bg-[var(--card-bg)] p-4 text-sm leading-[1.4] text-[var(--text-muted)] md:p-6">
-                Для выбранной категории пока нет товаров.
+                {isFetchingProducts ? "Загрузка товаров..." : "Для выбранной категории пока нет товаров."}
               </div>
             )}
           </div>
@@ -679,7 +737,9 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
           className="block h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[var(--card-bg)] p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:p-[72px] sm:pt-[72px] sm:pb-[72px] sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-md sm:rounded-[22.5px] md:hidden"
         >
           <div className="mb-7 flex items-start justify-between gap-4">
-            <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Категории</DialogTitle>
+            <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">
+              Категории
+            </DialogTitle>
             <DialogClose
               className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center text-[#b3b3b3] transition-colors hover:text-[#2a2a2a]"
               aria-label="Закрыть выбор категорий"
@@ -688,7 +748,7 @@ export function PartnerCatalogPage({ data }: { data: PartnerCatalogData }) {
             </DialogClose>
           </div>
           <CategoryFilterList
-            categories={data.categories}
+            categories={initialData.categories}
             activeFilterId={activeFilterId}
             expandedRootId={expandedRootId}
             onExpandedRootChange={setExpandedRootId}
