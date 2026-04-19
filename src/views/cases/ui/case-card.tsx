@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
-import { AspectRatio } from "@/shared/ui/acpect-ratio";
 import type { CaseItem } from "../model/cases-data";
 
 type CaseCardProps = {
@@ -60,7 +59,7 @@ export function CaseCard({ item }: CaseCardProps) {
 
   return (
     <article className="rounded-[18px] md:rounded-[22.5px] lg:bg-[var(--card-bg)] lg:p-[30px]">
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,50.7%)] lg:items-start lg:gap-[22.5px]">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,50.7%)] lg:items-stretch lg:gap-[22.5px] 2xl:items-start">
         <CaseTextBlock
           item={item}
           sections={sections}
@@ -69,12 +68,15 @@ export function CaseCard({ item }: CaseCardProps) {
           onToggle={() => setIsExpanded((value) => !value)}
         />
 
-        <div className="">
-          <div className="cursor-grab overflow-hidden rounded-[9px] bg-white active:cursor-grabbing mb-[14px]" ref={emblaRef}>
-            <div className="flex">
+        <div className="lg:flex lg:h-full lg:flex-col">
+          <div className="mb-[14px] cursor-grab overflow-hidden rounded-[9px] bg-white active:cursor-grabbing lg:flex-1" ref={emblaRef}>
+            <div className="flex h-full">
               {item.gallery.map((image) => (
                 <div key={`${item.id}-${image.alt}`} className="min-w-0 shrink-0 grow-0 basis-full">
-                  <AspectRatio ratio={imageRatio} className="w-full overflow-hidden bg-white">
+                  <div
+                    className="relative w-full overflow-hidden bg-white lg:h-full 2xl:h-auto 2xl:aspect-(--case-image-ratio)"
+                    style={{ "--case-image-ratio": imageRatio } as React.CSSProperties}
+                  >
                     <Image
                       src={image.src}
                       alt={image.alt}
@@ -83,7 +85,7 @@ export function CaseCard({ item }: CaseCardProps) {
                       className="object-cover"
                       style={{ objectPosition: image.objectPosition ?? "center" }}
                     />
-                  </AspectRatio>
+                  </div>
                 </div>
               ))}
             </div>
