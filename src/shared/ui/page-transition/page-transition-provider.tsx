@@ -7,6 +7,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -184,13 +185,27 @@ export function PageTransitionProvider({ children }: PropsWithChildren) {
     };
   }, [clearTimers]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const syncScrollbarOffset = () => {
+      const scrollbarOffset = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+      document.documentElement.style.setProperty("--page-transition-scrollbar-offset", `${scrollbarOffset}px`);
+    };
+
+    if (isScrollLocked) {
+      syncScrollbarOffset();
+      window.addEventListener("resize", syncScrollbarOffset);
+    } else {
+      document.documentElement.style.setProperty("--page-transition-scrollbar-offset", "0px");
+    }
+
     document.documentElement.classList.toggle("page-transition-scroll-lock", isScrollLocked);
     document.body.classList.toggle("page-transition-scroll-lock", isScrollLocked);
 
     return () => {
+      window.removeEventListener("resize", syncScrollbarOffset);
       document.documentElement.classList.remove("page-transition-scroll-lock");
       document.body.classList.remove("page-transition-scroll-lock");
+      document.documentElement.style.setProperty("--page-transition-scrollbar-offset", "0px");
     };
   }, [isScrollLocked]);
 

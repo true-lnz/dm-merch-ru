@@ -90,6 +90,7 @@
 }
 
 :root {
+  --page-transition-scrollbar-offset: 0px;
   --bg: #f5f4ef;
   --surface: #ffffff;
   --surface-header: #ecebe6;
@@ -165,11 +166,21 @@ body {
   font-size: 16px;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html.page-transition-scroll-lock,
 body.page-transition-scroll-lock {
   overflow: hidden;
   overscroll-behavior: none;
   touch-action: none;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  body.page-transition-scroll-lock {
+    padding-right: var(--page-transition-scrollbar-offset);
+  }
 }
 
 body {
