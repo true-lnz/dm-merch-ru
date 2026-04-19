@@ -9,7 +9,7 @@ const footerDescription = "Создаём корпоративный мерч и
 
 export function Footer() {
   return (
-    <footer className="relative mt-auto overflow-hidden bg-[var(--accent)] px-[var(--layout-side-padding)] pt-12 pb-24 text-white md:pt-16 md:pb-32 xl:pt-[69px] xl:pb-[135px]">
+    <footer className="relative mt-auto overflow-hidden bg-[var(--accent)] px-[var(--layout-side-padding)] pt-10 pb-5 text-white md:pt-14 md:pb-7 xl:pt-[67px] xl:pb-[28.8px]">
       <div className="relative z-10">
         <div className="grid gap-10 md:gap-12 xl:grid-cols-[minmax(0,1fr)_190px_292px] xl:items-start xl:gap-12">
           <div className="max-w-[480px] flex flex-col gap-[36px] md:gap-[48px]">
@@ -39,7 +39,7 @@ export function Footer() {
           </address>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 pt-6 text-white/50 md:mt-14 md:pt-8 xl:mt-[66px] xl:min-h-[114px] xl:flex-row xl:items-start xl:justify-between xl:pt-[26px]">
+        <div className="mt-12 flex flex-col gap-4 text-white/50 md:mt-14 xl:mt-[66px] xl:flex-row xl:items-start xl:justify-between">
           <p className="text-sm leading-normal md:text-base xl:text-xl xl:tracking-[-0.02em]">{siteInfo.copyright}</p>
           <Link
             href={siteInfo.privacyHref}
@@ -50,10 +50,6 @@ export function Footer() {
             {siteInfo.privacyLabel}
           </Link>
         </div>
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 overflow-hidden" aria-hidden="true">
-        <Image src="/img_footer_cover.png" alt="" width={1920} height={220} className="relative w-full" />
       </div>
     </footer>
   );

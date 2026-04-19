@@ -51,6 +51,7 @@ export function PageTransitionProvider({ children }: PropsWithChildren) {
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [pendingRouteSettled, setPendingRouteSettled] = useState(false);
+  const isScrollLocked = isVisible || phase !== "idle";
 
   const clearTimers = useCallback(() => {
     timersRef.current.forEach((timerId) => window.clearTimeout(timerId));
@@ -182,6 +183,16 @@ export function PageTransitionProvider({ children }: PropsWithChildren) {
       clearTimers();
     };
   }, [clearTimers]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("page-transition-scroll-lock", isScrollLocked);
+    document.body.classList.toggle("page-transition-scroll-lock", isScrollLocked);
+
+    return () => {
+      document.documentElement.classList.remove("page-transition-scroll-lock");
+      document.body.classList.remove("page-transition-scroll-lock");
+    };
+  }, [isScrollLocked]);
 
   const value = useMemo(
     () => ({

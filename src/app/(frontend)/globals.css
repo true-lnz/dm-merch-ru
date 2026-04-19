@@ -165,6 +165,13 @@ body {
   font-size: 16px;
 }
 
+html.page-transition-scroll-lock,
+body.page-transition-scroll-lock {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 body {
   min-height: 100vh;
   background: var(--bg);
