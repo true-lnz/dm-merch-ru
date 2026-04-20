@@ -310,7 +310,14 @@ img.feature-icon-rotate-hover:hover {
   transform: translateZ(0) scale(1);
   transform-origin: center;
   backface-visibility: hidden;
-  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 1950ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card-hover-lift {
+  backface-visibility: hidden;
+  /* box-shadow: 0 18px 40px rgba(42, 42, 42, 0); */
+  border: 1px solid transparent;
+  transition: box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (hover: hover) {
@@ -318,6 +325,13 @@ img.feature-icon-rotate-hover:hover {
   .image-hover-scale:focus-visible {
     transform: translateZ(0) scale(1.05);
     will-change: transform;
+  }
+
+  .card-hover-lift:hover,
+  .card-hover-lift:focus-visible {
+    /* box-shadow: 0 24px 48px rgba(42, 42, 42, 0.14); */
+    border: 1px solid var(--popover);
+    will-change: box-shadow;
   }
 }
 
@@ -340,9 +354,18 @@ img.feature-icon-rotate-hover:hover {
     transition-duration: 80ms;
   }
 
+  .card-hover-lift {
+    transition-duration: 80ms;
+  }
+
   .image-hover-scale:hover,
   .image-hover-scale:focus-visible {
     transform: translateZ(0) scale(1);
+  }
+
+  .card-hover-lift:hover,
+  .card-hover-lift:focus-visible {
+    box-shadow: 0 18px 40px rgba(42, 42, 42, 0);
   }
 }
 

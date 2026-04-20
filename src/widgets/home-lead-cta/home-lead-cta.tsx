@@ -13,10 +13,16 @@ export function HomeLeadCta() {
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
         <div className="rounded-[18px] md:rounded-[22.5px] bg-white">
           <div className="relative aspect-square overflow-hidden rounded-[18px] md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
-            <Image src={LEAD_CTA_IMAGE.src} alt={LEAD_CTA_IMAGE.alt} fill sizes="(max-width: 1279px) 100vw, 46vw" className="object-cover" />
+            <Image
+              src={LEAD_CTA_IMAGE.src}
+              alt={LEAD_CTA_IMAGE.alt}
+              fill
+              sizes="(max-width: 1279px) 100vw, 46vw"
+              className="object-cover object-top image-hover-scale"
+            />
           </div>
         </div>
-        <div className="rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] text-white p-[18px] md:p-[55px] xl:p-[72px]">
+        <div className="rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] text-white p-[18px] md:p-[54px]">
           <PageSubheading
             title="Отправим примеры мерча"
             titleClassName="text-white"

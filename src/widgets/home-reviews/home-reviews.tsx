@@ -134,7 +134,13 @@ export function HomeReviews() {
                 index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
-              <Image src={item.image.src} alt={item.image.alt} fill sizes="(max-width: 1023px) 100vw, 58vw" className="object-cover object-top" />
+              <Image
+                src={item.image.src}
+                alt={item.image.alt}
+                fill
+                sizes="(max-width: 1023px) 100vw, 58vw"
+                className="object-cover object-top image-hover-scale"
+              />
             </div>
           ))}
         </div>

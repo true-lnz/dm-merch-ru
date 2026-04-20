@@ -59,7 +59,13 @@ function DigestDefaultCard({ item, layout, isContentVisible }: { item: HomeDiges
       className={cn("flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]", isMobile ? "min-h-[420px]" : "")}
     >
       <div className={cn("relative aspect-3/2 overflow-hidden bg-white", contentTransitionClass)}>
-        <Image src={item.image.src} alt={item.image.alt} fill sizes={item.image.sizes} className={cn("object-cover", item.image.imageClassName)} />
+        <Image
+          src={item.image.src}
+          alt={item.image.alt}
+          fill
+          sizes={item.image.sizes}
+          className={cn("object-cover image-hover-scale", item.image.imageClassName)}
+        />
       </div>
 
       <div className="flex flex-1 flex-col px-5 pb-5 p-[18px] md:p-[27px]">
@@ -93,7 +99,13 @@ function DigestWildCard({ item, layout, isContentVisible }: { item: HomeDigestWi
       className={cn("relative overflow-hidden rounded-[18px] md:rounded-[22.5px]", isMobile ? "flex h-full min-h-[420px] flex-col" : "flex h-full")}
     >
       <div className={cn("relative overflow-hidden bg-white", isMobile ? "aspect-3/2" : "w-[calc(50%-15px)] shrink-0", contentTransitionClass)}>
-        <Image src={item.image.src} alt={item.image.alt} fill sizes={item.image.sizes} className={cn("object-cover", item.image.imageClassName)} />
+        <Image
+          src={item.image.src}
+          alt={item.image.alt}
+          fill
+          sizes={item.image.sizes}
+          className={cn("object-cover image-hover-scale", item.image.imageClassName)}
+        />
       </div>
 
       <div
@@ -119,13 +131,13 @@ function DigestWildCard({ item, layout, isContentVisible }: { item: HomeDigestWi
           </h3>
           <p
             className={cn(
-              "leading-[1.3] tracking-[-0.04em] text-white/80",
-              isMobile ? "mt-[10px] max-w-[19rem] text-[14px] text-white/82" : "mt-4 text-sm md:text-base",
+              "leading-[1.3] tracking-[-0.04em] text-white/80 text-sm md:text-base",
+              isMobile ? "mt-[10px] max-w-[19rem] text-white/82" : "mt-4",
             )}
           >
             {isMobile ? item.mobileDescription : item.description}
           </p>
-          {!isMobile ? <p className="mt-3 text-base leading-[1.3] tracking-[-0.04em] text-white/80 md:text-lg">{item.details}</p> : null}
+          {!isMobile ? <p className="mt-3 text-base leading-[1.3] tracking-[-0.04em] text-white/80">{item.details}</p> : null}
         </div>
 
         <div className={cn(isMobile ? "pt-[22px]" : "mt-auto pt-6")}>

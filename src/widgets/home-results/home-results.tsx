@@ -1,6 +1,7 @@
 "use client";
 
 import { RequestDialog } from "@/features/request-dialog";
+import { cn } from "@/shared/lib/cn";
 import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
 import { useState } from "react";
@@ -63,11 +64,8 @@ export function HomeResults() {
 
           <div className="order-3 my-[36px] grid auto-rows-fr grid-cols-1 gap-[20px] xl:mt-[55px] xl:mb-0 xl:flex-1 xl:grid-cols-2 xl:gap-x-[20px] xl:gap-y-[20px]">
             {contentItems.map((item, index) => (
-              <article
-                key={item.title}
-                className={["flex h-full flex-col", index === contentItems.length - 1 ? "xl:col-span-2" : ""].join(" ")}
-              >
-                <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">{item.title}</h3>
+              <article key={item.title} className={["flex h-full flex-col", index === contentItems.length - 1 ? "xl:col-span-2" : ""].join(" ")}>
+                <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{item.title}</h3>
                 <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-sm">{item.text}</p>
               </article>
             ))}
@@ -93,14 +91,23 @@ export function HomeResults() {
         </div>
 
         <div className="order-2 relative aspect-square overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
-          <Image
-            key={activeSlide.image.src}
-            src={activeSlide.image.src}
-            alt={activeSlide.image.alt}
-            fill
-            sizes="(max-width: 1279px) 100vw, 48vw"
-            className="object-cover"
-          />
+          {RESULT_SLIDES.map((slide, index) => (
+            <div
+              key={slide.image.src}
+              className={cn(
+                "absolute inset-0 transition-opacity duration-500",
+                index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
+              )}
+            >
+              <Image
+                src={slide.image.src}
+                alt={slide.image.alt}
+                fill
+                sizes="(max-width: 1279px) 100vw, 48vw"
+                className="object-cover image-hover-scale"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>
