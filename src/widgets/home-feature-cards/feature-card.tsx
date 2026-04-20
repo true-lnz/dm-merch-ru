@@ -28,14 +28,14 @@ export function FeatureCard({ title, description, backgroundImageUrl, accent = f
         />
       ) : null}
 
-      <div className="relative z-10 flex flex-col gap-[22px]">
+      <div className="relative z-10 flex flex-col gap-4">
         <Image
           src="/icons/ic_feature.svg"
           alt=""
           width={36}
           height={36}
           aria-hidden="true"
-          className={cn("size-[36px]", accent && "brightness-0 invert")}
+          className={cn("feature-icon-rotate-hover size-[36px]", accent && "brightness-0 invert")}
         />
         <h3
           className={cn(
@@ -45,7 +45,7 @@ export function FeatureCard({ title, description, backgroundImageUrl, accent = f
         >
           {title}
         </h3>
-        <p className={cn("text-[15px] leading-[1.35] tracking-[-0.03em] md:text-[18px]", accent ? "text-white/80" : "text-[var(--text-muted)]")}>
+        <p className={cn("text-sm leading-[1.3] tracking-[-0.03em] md:text-base xl:text-lg", accent ? "text-white/80" : "text-[var(--text-muted)]")}>
           {description}
         </p>
       </div>

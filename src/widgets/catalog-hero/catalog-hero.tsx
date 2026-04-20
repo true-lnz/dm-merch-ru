@@ -63,7 +63,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
                       width={21}
                       height={21}
                       aria-hidden="true"
-                      className="mt-[5px] size-[21px] shrink-0 2xl:mb-[15px] 2xl:mt-0"
+                      className="feature-icon-rotate-hover mt-[5px] size-[21px] shrink-0 2xl:mb-[15px] 2xl:mt-0"
                     />
                     <p className="text-xs font-medium leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] md:text-sm 2xl:text-[#404040]">
                       {feature.text}

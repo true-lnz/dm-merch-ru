@@ -28,7 +28,7 @@ const HOME_BENEFITS = {
       description: "Дизайн, который работает на изделии, а не только в макете. Наши дизайнеры работают с одеждой, а не с абстрактной графикой.",
     },
     {
-      title: "Сроки фиксируем в договоре",
+      title: "Сроки фиксируем\nв договоре",
       backgroundImageUrl: "/home/img_card_cover_home_benefits_v3.svg",
       description: "Не «стараемся успеть», а берём ответственность за результат.",
     },
@@ -63,7 +63,7 @@ function FeatureCardsSection({ title, description, items }: FeatureCardsSectionP
   return (
     <section className="my-[43px] md:my-[55px]">
       <PageSubheading title={title} description={description} descriptionPlacement="bottom" descriptionClassName="max-w-[43rem]" />
-      <div className="mt-8 grid auto-rows-fr grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-[36px]">
+      <div className="mt-8 grid auto-rows-fr grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-5">
         {items.map((item, index) => (
           <FeatureCard
             key={item.title}

@@ -57,12 +57,42 @@ export function HomeResults() {
 
   return (
     <section className="my-[43px] md:my-[55px]">
-      <div className="grid gap-6 xl:grid-cols-2 xl:gap-x-[16px] xl:gap-y-0">
-        <div className="order-1 xl:order-1">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:items-stretch xl:gap-x-[16px]">
+        <div className="order-1 flex flex-col xl:min-h-[600px]">
           <PageSubheading title={RESULTS_TITLE} description={RESULTS_DESCRIPTION} descriptionPlacement="bottom" />
+
+          <div className="order-3 my-[36px] grid auto-rows-fr grid-cols-1 gap-[20px] xl:mt-[55px] xl:mb-0 xl:flex-1 xl:grid-cols-2 xl:gap-x-[20px] xl:gap-y-[20px]">
+            {contentItems.map((item, index) => (
+              <article
+                key={item.title}
+                className={["flex h-full flex-col", index === contentItems.length - 1 ? "xl:col-span-2" : ""].join(" ")}
+              >
+                <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">{item.title}</h3>
+                <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-sm">{item.text}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="order-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:mt-[40px]">
+            <SliderControl
+              className="order-1 mx-auto md:order-2 md:mx-0"
+              onPrevClick={() => setActiveIndex((currentIndex) => (currentIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)}
+              onNextClick={() => setActiveIndex((currentIndex) => (currentIndex + 1) % RESULT_SLIDES.length)}
+              prevAriaLabel="Предыдущий слайд"
+              nextAriaLabel="Следующий слайд"
+            />
+            <RequestDialog>
+              <button
+                type="button"
+                className="cursor-pointer order-2 inline-flex h-[47px] items-center justify-center rounded-[9px] bg-[var(--accent)] px-6 text-lg font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:order-1 lg:w-[239px]"
+              >
+                Оставить заявку
+              </button>
+            </RequestDialog>
+          </div>
         </div>
 
-        <div className="order-2 relative aspect-square xl:aspect-auto overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white xl:order-4 xl:col-start-2 xl:row-start-1 xl:row-span-3">
+        <div className="order-2 relative aspect-square overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
           <Image
             key={activeSlide.image.src}
             src={activeSlide.image.src}
@@ -71,33 +101,6 @@ export function HomeResults() {
             sizes="(max-width: 1279px) 100vw, 48vw"
             className="object-cover"
           />
-        </div>
-
-        <div className="order-3 my-[36px] grid grid-cols-1 gap-[20px] xl:order-2 xl:my-[55px] xl:grid-cols-2 xl:gap-x-[55px] xl:gap-y-[40px]">
-          {contentItems.map((item) => (
-            <article key={item.title}>
-              <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-5xl">{item.title}</h3>
-              <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-sm">{item.text}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="order-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:order-3">
-          <SliderControl
-            className="order-1 mx-auto md:order-2 md:mx-0"
-            onPrevClick={() => setActiveIndex((currentIndex) => (currentIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)}
-            onNextClick={() => setActiveIndex((currentIndex) => (currentIndex + 1) % RESULT_SLIDES.length)}
-            prevAriaLabel="Предыдущий слайд"
-            nextAriaLabel="Следующий слайд"
-          />
-          <RequestDialog>
-            <button
-              type="button"
-              className="cursor-pointer order-2 inline-flex h-[47px] items-center justify-center rounded-[9px] bg-[var(--accent)] px-6 text-lg font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:order-1 lg:w-[239px]"
-            >
-              Оставить заявку
-            </button>
-          </RequestDialog>
         </div>
       </div>
     </section>
