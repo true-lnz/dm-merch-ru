@@ -22,7 +22,7 @@ export function FeatureCard({ title, description, backgroundImageUrl, accent = f
     >
       {hasBackground ? (
         <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-right-bottom bg-no-repeat"
+          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url("${backgroundImageUrl}")` }}
           aria-hidden="true"
         />

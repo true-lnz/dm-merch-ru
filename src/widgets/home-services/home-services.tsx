@@ -86,7 +86,13 @@ export function HomeServices() {
 
         <div className="rounded-[18px] md:rounded-[22.5px] bg-white xl:self-stretch">
           <div className="relative overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white aspect-square xl:aspect-auto xl:h-full">
-            <Image src={SERVICES_IMAGE.src} alt={SERVICES_IMAGE.alt} fill sizes="(max-width: 1279px) 100vw, 52vw" className={cn("object-cover")} />
+            <Image
+              src={SERVICES_IMAGE.src}
+              alt={SERVICES_IMAGE.alt}
+              fill
+              sizes="(max-width: 1279px) 100vw, 52vw"
+              className={cn("object-cover image-hover-scale")}
+            />
           </div>
         </div>
       </div>
