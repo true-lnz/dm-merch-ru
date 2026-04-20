@@ -9,7 +9,7 @@ const LEAD_CTA_IMAGE = {
 
 export function HomeLeadCta() {
   return (
-    <section className="my-[43px] md:my-[55px]">
+    <section className="my-[45px]">
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
         <div className="rounded-[18px] md:rounded-[22.5px] bg-white">
           <div className="relative aspect-square overflow-hidden rounded-[18px] md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">

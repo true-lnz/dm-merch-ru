@@ -121,7 +121,7 @@ export function HomeReviews() {
   const isLastSlide = activeIndex === TESTIMONIALS.length - 1;
 
   return (
-    <section className="my-[43px] md:my-[55px]">
+    <section className="my-[45px]">
       <PageSubheading title={TESTIMONIALS_TITLE} />
 
       <div className="mt-8 grid lg:grid-cols-12">

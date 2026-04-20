@@ -74,7 +74,7 @@ function ServiceCard({ title, description }: ServiceCardProps) {
 
 export function HomeServices() {
   return (
-    <section className="my-[43px] md:my-[55px]">
+    <section className="my-[45px]">
       <PageSubheading title="Услуги, которые закрывают ваши задачи" />
 
       <div className="mt-8 grid grid-cols-1 gap-4 xl:grid-cols-[8.075fr_3.925fr] xl:grid-rows-1 xl:gap-5">

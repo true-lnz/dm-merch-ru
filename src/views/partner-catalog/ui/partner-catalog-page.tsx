@@ -1,11 +1,5 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { memo, useEffect, useMemo, useRef, useState, type ComponentProps, type RefObject } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { toast } from "sonner";
-import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
 import { useWishlist } from "@/shared/lib/wishlist";
@@ -15,6 +9,12 @@ import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dia
 import { PageHeading } from "@/shared/ui/page-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { WidowFix } from "@/shared/ui/widow-fix";
+import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { memo, useEffect, useMemo, useRef, useState, type ComponentProps, type RefObject } from "react";
+import { toast } from "sonner";
 import type {
   PartnerCatalogInitialData,
   PartnerCatalogPageSlice,
@@ -23,8 +23,8 @@ import type {
   PartnerCatalogVariant,
 } from "../model/partner-catalog-data";
 import {
-  getPartnerCatalogProductPath,
   getPartnerCatalogPathForFilter,
+  getPartnerCatalogProductPath,
   PARTNER_CATALOG_QUERY_CATEGORY_KEY,
   PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY,
   resolvePartnerCatalogSelection,
@@ -736,7 +736,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
         }}
       />
 
-      <section className="mt-[28.8px] mb-[43px] md:mb-[55px]">
+      <section className="mt-[28.8px] mb-[45px]">
         <div className="mb-5 md:mb-4 md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-center md:gap-8 xl:gap-[63px]">
           <div className="flex items-center gap-3">
             <p className="text-base font-bold uppercase tracking-[0.05em] text-[var(--heading)]">Категория:</p>
@@ -827,9 +827,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
           className="block h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[var(--card-bg)] p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:p-[72px] sm:pt-[72px] sm:pb-[72px] sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-md sm:rounded-[22.5px] md:hidden"
         >
           <div className="mb-7 flex items-start justify-between gap-4">
-            <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">
-              Категории
-            </DialogTitle>
+            <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Категории</DialogTitle>
             <DialogClose
               className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center text-[#b3b3b3] transition-colors hover:text-[#2a2a2a]"
               aria-label="Закрыть выбор категорий"

@@ -128,7 +128,7 @@ export function HomePartnerProducts({ showIntro = true }: HomePartnerProductsPro
   }
 
   return (
-    <section className="my-[43px] md:my-[55px]">
+    <section className="my-[45px]">
       {showIntro ? (
         <PageSubheading
           title={PARTNER_PRODUCTS_TITLE}

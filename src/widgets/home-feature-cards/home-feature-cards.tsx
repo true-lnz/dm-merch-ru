@@ -61,7 +61,7 @@ const HOME_COMPETITIVE_ADVANTAGES = {
 
 function FeatureCardsSection({ title, description, items }: FeatureCardsSectionProps) {
   return (
-    <section className="my-[43px] md:my-[55px]">
+    <section className="my-[45px]">
       <PageSubheading title={title} description={description} descriptionPlacement="bottom" descriptionClassName="max-w-[43rem]" />
       <div className="mt-8 grid auto-rows-fr grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-5">
         {items.map((item, index) => (

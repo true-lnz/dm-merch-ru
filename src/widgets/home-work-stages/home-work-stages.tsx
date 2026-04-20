@@ -64,7 +64,7 @@ export function HomeWorkStages() {
   }, []);
 
   return (
-    <section className="my-[43px] md:my-[55px]">
+    <section className="my-[45px]">
       <div className="relative -mx-[var(--layout-side-padding)] sm:-mx-0  overflow-hidden rounded-none sm:rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] p-[27px] md:p-[54px] text-white">
         <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between opacity-20">
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" />

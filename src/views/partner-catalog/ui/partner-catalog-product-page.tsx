@@ -373,7 +373,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
   }
   return (
     <>
-      <section className="mb-[43px] md:mb-[55px]">
+      <section className="mb-[45px]">
         <PageBreadcrumb
           className="mb-4 mt-8 md:mb-5 md:mt-12 xl:mb-[42px] xl:mt-[39px]"
           items={[
@@ -592,7 +592,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
         </div>
       </section>
 
-      <section className="mb-[43px] rounded-[18px] bg-white p-5 md:mb-[55px] md:rounded-[22.5px] md:p-8">
+      <section className="mb-[45px] rounded-[18px] bg-white p-5 md:rounded-[22.5px] md:p-8">
         <h2 className="mb-5 font-heading text-2xl leading-[0.95] tracking-[0.01em] text-[var(--heading)] uppercase md:text-4xl">
           Подробное описание
         </h2>
