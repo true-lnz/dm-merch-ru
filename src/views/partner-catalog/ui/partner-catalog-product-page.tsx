@@ -63,7 +63,7 @@ type DescriptionContentBlock = {
 };
 
 const descriptionContentClassName =
-  "partner-catalog-description [&_.tui-table-wrapper]:max-w-full [&_.tui-table-wrapper]:overflow-x-auto [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-[12px] [&_img]:object-contain [&_li]:mb-1 [&_p]:mb-1 [&_table]:max-w-full [&_table]:table-auto [&_td]:whitespace-normal [&_td]:break-words [&_ul]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:list-outside text-sm text-[var(--text)] md:text-base";
+  "partner-catalog-description min-w-0 max-w-full overflow-x-hidden break-words [&_.tui-table-wrapper]:block [&_.tui-table-wrapper]:min-w-0 [&_.tui-table-wrapper]:max-w-full [&_.tui-table-wrapper]:overflow-x-auto [&_.tui-table-wrapper]:overscroll-x-contain [&_div]:max-w-full [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-[12px] [&_img]:object-contain [&_li]:mb-1 [&_p]:mb-1 [&_table]:w-max [&_table]:min-w-full [&_table]:max-w-none [&_table]:table-auto [&_td]:max-w-[12rem] [&_td]:whitespace-normal [&_td]:break-words [&_th]:max-w-[12rem] [&_th]:whitespace-normal [&_th]:break-words [&_ul]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:list-outside text-sm text-[var(--text)] md:text-base";
 
 function stripHtmlTags(value: string) {
   return value
@@ -384,13 +384,13 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
           currentLabel={detail.breadcrumb.childName}
         />
 
-        <div className="grid gap-8 xl:grid-cols-[minmax(0,0.98fr)_minmax(0,0.88fr)] xl:gap-[62px]">
-          <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-6 md:items-stretch">
+        <div className="grid min-w-0 gap-8 xl:grid-cols-[minmax(0,0.98fr)_minmax(0,0.88fr)] xl:gap-[62px]">
+          <div className="min-w-0 space-y-4">
+            <div className="grid min-w-0 gap-4 md:grid-cols-6 md:items-stretch">
               {hasMultipleImages ? (
-                <div className="order-2 md:order-1 md:col-span-1">
+                <div className="order-2 min-w-0 md:order-1 md:col-span-1">
                   <div className="relative md:h-[min(78vh,720px)]">
-                    <div className="flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:h-[min(78vh,720px)] md:flex-col md:gap-3 md:overflow-y-auto md:overflow-x-hidden">
+                    <div className="flex max-w-full min-w-0 gap-3 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:h-[min(78vh,720px)] md:flex-col md:gap-3 md:overflow-y-auto md:overflow-x-hidden">
                       {detail.imageUrls.map((imageUrl, index) => {
                         const isActive = index === activeImageIndex;
 
