@@ -17,14 +17,14 @@ export function Footer() {
               <Image src="/logo-dm-white.svg" alt={siteInfo.brandName} width={300} height={40} priority className="h-auto w-full" />
             </Link>
 
-            <p className="max-w-[480px] text-base leading-[1.3] tracking-[-0.03em] text-white/50 md:text-lg xl:text-xl">{footerDescription}</p>
+            <p className="max-w-[480px] text-[15px] leading-[1.3] tracking-[-0.03em] text-white/50">{footerDescription}</p>
 
             <SocialLinks variant="footer" />
           </div>
 
           <div className="min-w-0 xl:pt-[2px]">
-            <h2 className="text-sm font-medium uppercase leading-[1.0835] text-[#e4e4e4] md:text-lg xl:text-xl">Навигация</h2>
-            <nav aria-label="Навигация в футере" className="mt-5 grid gap-2 text-sm leading-normal text-white md:text-base xl:mt-[18px] xl:text-sm">
+            <h2 className="text-sm font-medium uppercase leading-[1.0835] text-[#e4e4e4] md:text-base">Навигация</h2>
+            <nav aria-label="Навигация в футере" className="mt-5 grid gap-2 text-sm leading-normal text-white md:text-base xl:mt-[18px]">
               {footerNavigation.map((item) => (
                 <Link key={item.href} href={item.href} className="w-fit transition-opacity hover:opacity-70">
                   {item.label}
@@ -34,18 +34,18 @@ export function Footer() {
           </div>
 
           <address className="min-w-0 not-italic xl:pt-[2px]">
-            <h2 className="text-sm font-medium uppercase leading-[1.0835] text-[#e4e4e4] md:text-lg xl:text-xl">Адрес</h2>
-            <p className="mt-5 max-w-[292px] text-sm leading-normal text-white md:text-base xl:mt-[18px] xl:text-sm">{siteInfo.address}</p>
+            <h2 className="text-sm font-medium uppercase leading-[1.0835] text-[#e4e4e4] md:text-base">Адрес</h2>
+            <p className="mt-5 max-w-[292px] text-sm leading-normal text-white md:text-base xl:mt-[18px]">{siteInfo.address}</p>
           </address>
         </div>
 
         <div className="mt-12 flex flex-col gap-4 text-white/50 md:mt-14 xl:mt-[66px] xl:flex-row xl:items-start xl:justify-between">
-          <p className="text-sm leading-normal md:text-base xl:text-xl xl:tracking-[-0.02em]">{siteInfo.copyright}</p>
+          <p className="text-sm leading-normal md:text-base xl:tracking-[-0.02em]">{siteInfo.copyright}</p>
           <Link
             href={siteInfo.privacyHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-fit text-sm leading-normal transition-opacity hover:opacity-80 md:text-base xl:pt-[2px] xl:text-xl"
+            className="w-fit text-sm leading-normal transition-opacity hover:opacity-80 md:text-base pt-[2px]"
           >
             {siteInfo.privacyLabel}
           </Link>

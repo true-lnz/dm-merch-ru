@@ -9,7 +9,7 @@ import { type ChangeEvent, type ClipboardEvent, type FocusEvent, type KeyboardEv
 
 const DEFAULT_PRIVACY_CHECKBOX_ID = "request-form-privacy";
 
-const fieldBaseClassName = "rounded-none border-0 border-b bg-transparent px-0 text-sm shadow-none focus-visible:ring-0";
+const fieldBaseClassName = "rounded-none border-0 border-b bg-transparent px-0 text-sm md:text-base shadow-none focus-visible:ring-0";
 
 const fieldSurfaceClassName =
   "border-[var(--field-border)] text-[var(--text)] placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] group-data-[surface=accent]/form:border-white/40 group-data-[surface=accent]/form:text-white group-data-[surface=accent]/form:placeholder:text-white/60 group-data-[surface=accent]/form:focus-visible:border-white";
@@ -22,7 +22,7 @@ const checkboxClassName =
   "mt-0.5 border-[var(--field-border)] bg-transparent text-white focus-visible:border-[var(--accent)] focus-visible:ring-0 data-checked:border-[var(--accent)] data-checked:bg-[var(--accent)] group-data-[surface=accent]/form:border-white/55 group-data-[surface=accent]/form:focus-visible:border-white group-data-[surface=accent]/form:data-checked:border-white group-data-[surface=accent]/form:data-checked:bg-white group-data-[surface=accent]/form:data-checked:text-[var(--accent)]";
 
 const privacyTextClassName =
-  "mt-[3rem] flex items-center gap-3 text-xs text-[var(--field-text)] cursor-pointer group-data-[surface=accent]/form:text-white/70";
+  "mt-[3rem] flex items-center gap-3 text-sm md:text-base text-[var(--field-text)] cursor-pointer group-data-[surface=accent]/form:text-white/70";
 
 const PHONE_MASK_TEMPLATE = "+7 (___) ___-__-__";
 const PHONE_DIGIT_POSITIONS = [4, 5, 6, 9, 10, 11, 13, 14, 16, 17] as const;
@@ -254,7 +254,10 @@ export function RequestForm({
           <Input id={messageFieldId} placeholder="Сообщение" name="message" className={inputClassName} />
         ) : (
           <>
-            <label htmlFor={messageFieldId} className="mb-2 block text-sm text-[var(--field-text)] group-data-[surface=accent]/form:text-white/60">
+            <label
+              htmlFor={messageFieldId}
+              className="mb-2 block text-sm md:text-base text-[var(--field-text)] group-data-[surface=accent]/form:text-white/60"
+            >
               Сообщение
             </label>
             <Textarea id={messageFieldId} floatingLabel={false} placeholder="" name="message" rows={3} className={textareaClassName} />
