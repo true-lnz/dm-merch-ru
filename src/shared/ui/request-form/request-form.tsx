@@ -5,6 +5,7 @@ import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
+import Link from "next/link";
 import { type ChangeEvent, type ClipboardEvent, type FocusEvent, type KeyboardEvent, type MouseEvent, useId, useState } from "react";
 
 const DEFAULT_PRIVACY_CHECKBOX_ID = "request-form-privacy";
@@ -282,9 +283,15 @@ export function RequestForm({
 
       <div className={privacyTextClassName}>
         <Checkbox id={privacyCheckboxId} name="privacy" required className={checkboxClassName} />
-        <label htmlFor={privacyCheckboxId} className="cursor-pointer">
-          Нажимая на&nbsp;кнопку &quot;Отправить&quot;, Вы&nbsp;соглашаетесь с&nbsp;Политикой конфиденциальности.
-        </label>
+        <div className="cursor-pointer">
+          <label htmlFor={privacyCheckboxId}>
+            Нажимая на&nbsp;кнопку &quot;Отправить&quot;, Вы&nbsp;соглашаетесь с&nbsp;
+          </label>
+          <Link href="/privacy" target="_blank" rel="noreferrer" className="border-b border-dotted border-current leading-none">
+            Политикой конфиденциальности
+          </Link>
+          .
+        </div>
       </div>
 
       {showSubmitButton ? (

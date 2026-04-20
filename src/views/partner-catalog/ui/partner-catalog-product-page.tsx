@@ -55,6 +55,197 @@ type PartnerCatalogProductPageProps = {
   listingHref: string;
 };
 
+type DescriptionContentBlock = {
+  id: string;
+  html: string;
+  kind: "html" | "summary";
+  summaryListHtml?: string;
+};
+
+const descriptionContentClassName =
+  "partner-catalog-description [&_.tui-table-wrapper]:max-w-full [&_.tui-table-wrapper]:overflow-x-auto [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-[12px] [&_img]:object-contain [&_li]:mb-1 [&_p]:mb-1 [&_table]:max-w-full [&_table]:table-auto [&_td]:whitespace-normal [&_td]:break-words [&_ul]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:list-outside text-sm text-[var(--text)] md:text-base";
+
+function stripHtmlTags(value: string) {
+  return value
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function shouldSkipDescriptionBlock(value: string) {
+  const normalizedText = stripHtmlTags(value).replace(/:+$/, "").trim().toLocaleLowerCase("ru-RU");
+
+  return normalizedText === "размеры товара" || normalizedText === "шкала температуры" || normalizedText === "шкала времени";
+}
+
+function extractTopLevelDescriptionBlocks(descriptionHtml: string) {
+  const blocks: string[] = [];
+  const source = descriptionHtml.trim();
+  let cursor = 0;
+
+  while (cursor < source.length) {
+    const nextTagIndex = source.indexOf("<", cursor);
+
+    if (nextTagIndex === -1) {
+      break;
+    }
+
+    if (nextTagIndex > cursor) {
+      cursor = nextTagIndex;
+    }
+
+    const openTagMatch = source.slice(cursor).match(/^<([a-z0-9]+)(\s[^>]*)?>/i);
+
+    if (!openTagMatch) {
+      cursor += 1;
+      continue;
+    }
+
+    const tagName = openTagMatch[1]?.toLowerCase();
+
+    if (!tagName) {
+      cursor += 1;
+      continue;
+    }
+
+    if (tagName === "br") {
+      cursor += openTagMatch[0].length;
+      continue;
+    }
+
+    const closingTag = `</${tagName}>`;
+    let depth = 0;
+    let searchIndex = cursor;
+    let blockEndIndex = -1;
+
+    while (searchIndex < source.length) {
+      const nextOpenIndex = source.toLowerCase().indexOf(`<${tagName}`, searchIndex);
+      const nextCloseIndex = source.toLowerCase().indexOf(closingTag, searchIndex);
+
+      if (nextCloseIndex === -1) {
+        break;
+      }
+
+      if (nextOpenIndex !== -1 && nextOpenIndex < nextCloseIndex) {
+        depth += 1;
+        searchIndex = nextOpenIndex + tagName.length + 1;
+        continue;
+      }
+
+      depth -= 1;
+      searchIndex = nextCloseIndex + closingTag.length;
+
+      if (depth === 0) {
+        blockEndIndex = searchIndex;
+        break;
+      }
+    }
+
+    if (blockEndIndex === -1) {
+      break;
+    }
+
+    const blockHtml = source.slice(cursor, blockEndIndex).trim();
+
+    if ((stripHtmlTags(blockHtml) || tagName === "ul" || tagName === "ol") && !shouldSkipDescriptionBlock(blockHtml)) {
+      blocks.push(blockHtml);
+    }
+
+    cursor = blockEndIndex;
+  }
+
+  return blocks;
+}
+
+function normalizeDescriptionSectionHtml(nodes: string[]) {
+  return nodes
+    .map((node) => node.trim())
+    .filter(Boolean)
+    .join("");
+}
+
+function normalizeSummaryHtml(value: string) {
+  return value
+    .trim()
+    .replace(/^<p[^>]*>/i, "")
+    .replace(/<\/p>$/i, "")
+    .trim();
+}
+
+function buildDescriptionContentBlocks(descriptionHtml: string): DescriptionContentBlock[] {
+  const topLevelElements = extractTopLevelDescriptionBlocks(descriptionHtml);
+
+  if (topLevelElements.length === 0) {
+    return [];
+  }
+
+  const contentBlocks: DescriptionContentBlock[] = [];
+  let pendingHtmlNodes: string[] = [];
+
+  function flushPendingHtmlNodes() {
+    const html = normalizeDescriptionSectionHtml(pendingHtmlNodes);
+
+    if (html) {
+      contentBlocks.push({
+        id: `html-${contentBlocks.length}`,
+        kind: "html",
+        html,
+      });
+    }
+
+    pendingHtmlNodes = [];
+  }
+
+  for (let index = 0; index < topLevelElements.length; index += 1) {
+    const currentElement = topLevelElements[index];
+    const currentTagName = (currentElement.match(/^<([a-z0-9]+)/i)?.[1] ?? "").toUpperCase();
+    const nextElement = topLevelElements[index + 1];
+    const nextTagName = (nextElement?.match(/^<([a-z0-9]+)/i)?.[1] ?? "").toUpperCase();
+
+    if (currentTagName === "P" && (nextTagName === "UL" || nextTagName === "OL")) {
+      flushPendingHtmlNodes();
+      contentBlocks.push({
+        id: `summary-${contentBlocks.length}`,
+        kind: "summary",
+        html: currentElement,
+        summaryListHtml: nextElement,
+      });
+      index += 1;
+      continue;
+    }
+
+    pendingHtmlNodes.push(currentElement);
+  }
+
+  flushPendingHtmlNodes();
+
+  return contentBlocks;
+}
+
+function SummaryDescription({ descriptionHtml }: { descriptionHtml: string }) {
+  const contentBlocks = buildDescriptionContentBlocks(descriptionHtml);
+
+  return (
+    <div className="space-y-4">
+      {contentBlocks.map((block) =>
+        block.kind === "summary" && block.summaryListHtml ? (
+          <details key={block.id}>
+            <summary className="group cursor-pointer bg-black/3 px-3 py-2 md:w-1/2 md:rounded-[8px]">
+              <span
+                className="relative inline text-sm leading-[1.55] text-[var(--text)] after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:content-[''] after:border-b after:border-dotted after:border-current after:opacity-0 after:origin-left after:scale-x-95 after:transition-all after:duration-200 group-hover:after:opacity-100 group-hover:after:scale-x-100 md:text-base"
+                dangerouslySetInnerHTML={{ __html: normalizeSummaryHtml(block.html) }}
+              />
+            </summary>
+            <div className={cn(descriptionContentClassName, "pt-3 [&_p]:mb-0")} dangerouslySetInnerHTML={{ __html: block.summaryListHtml }} />
+          </details>
+        ) : (
+          <div key={block.id} className={descriptionContentClassName} dangerouslySetInnerHTML={{ __html: block.html }} />
+        ),
+      )}
+    </div>
+  );
+}
+
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
   useEffect(() => {
     if (!enabled) {
@@ -180,7 +371,6 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
     toast.success("Товар добавлен в вишлист");
     setIsWishlistPopoverOpen(false);
   }
-
   return (
     <>
       <section className="mb-[43px] md:mb-[55px]">
@@ -233,7 +423,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
 
               <div className={cn("order-1", hasMultipleImages ? "md:order-2 md:col-span-5" : "md:col-span-6")}>
                 <div className="relative overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px]">
-                  <div className="relative aspect-square w-full min-h-[320px] md:h-[min(78vh,720px)] md:aspect-auto md:min-h-0">
+                  <div className="relative aspect-square">
                     {detail.imageUrls.map((imageUrl, index) => {
                       const isActive = index === activeImageIndex;
 
@@ -276,7 +466,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
           <div className="space-y-7">
             <div className="space-y-4">
               <div className="space-y-3">
-                <h1 className="m-0 font-heading text-4xl leading-[0.96] tracking-[0.01em] text-[var(--heading)] uppercase md:text-6xl">
+                <h1 className="m-0 font-heading text-3xl leading-[0.96] tracking-[0.01em] text-[var(--heading)] uppercase md:text-6xl">
                   {detail.title}
                 </h1>
               </div>
@@ -309,7 +499,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                       </span>
                       <span className="min-w-0">
                         <span className="block truncate text-sm md:text-base font-medium text-[var(--heading)]">{formattedColorLabel}</span>
-                        <span className="block truncate text-xs text-[var(--text-muted)]">Арт. {variant.article}</span>
+                        <span className="block truncate text-xs text-[var(--text-muted)]">арт. {variant.article}</span>
                       </span>
                     </Link>
                   );
@@ -403,12 +593,11 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
       </section>
 
       <section className="mb-[43px] rounded-[18px] bg-white p-5 md:mb-[55px] md:rounded-[22.5px] md:p-8">
-        <h2 className="mb-5 font-heading text-2xl leading-[0.98] tracking-[0.01em] text-[var(--heading)] uppercase md:text-4xl">Описание</h2>
+        <h2 className="mb-5 font-heading text-2xl leading-[0.95] tracking-[0.01em] text-[var(--heading)] uppercase md:text-4xl">
+          Подробное описание
+        </h2>
         {detail.descriptionHtml ? (
-          <div
-            className="partner-catalog-description [&_li]:mb-2 [&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:list-outside text-sm leading-[1.55] text-[var(--text)] md:text-base"
-            dangerouslySetInnerHTML={{ __html: detail.descriptionHtml }}
-          />
+          <SummaryDescription descriptionHtml={detail.descriptionHtml} />
         ) : (
           <p className="text-sm leading-[1.55] text-[var(--text-muted)] md:text-base">Описание для этого товара пока не добавлено.</p>
         )}
