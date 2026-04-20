@@ -284,7 +284,7 @@ export function RequestForm({
       <div className={privacyTextClassName}>
         <Checkbox id={privacyCheckboxId} name="privacy" required className={checkboxClassName} />
         <div className="cursor-pointer">
-          <label htmlFor={privacyCheckboxId}>
+          <label htmlFor={privacyCheckboxId} className="tracking-[-0.03em]">
             Нажимая на&nbsp;кнопку &quot;Отправить&quot;, Вы&nbsp;соглашаетесь с&nbsp;
           </label>
           <Link href="/privacy" target="_blank" rel="noreferrer" className="border-b border-dotted border-current leading-none">

@@ -65,7 +65,7 @@ export function HomeWorkStages() {
 
   return (
     <section className="my-[43px] md:my-[55px]">
-      <div className="relative -mx-[var(--layout-side-padding)] sm:-mx-0  overflow-hidden rounded-none sm:rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] p-[27px] md:p-[50px] xl:p-[72px] text-white">
+      <div className="relative -mx-[var(--layout-side-padding)] sm:-mx-0  overflow-hidden rounded-none sm:rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] p-[27px] md:p-[54px] text-white">
         <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between opacity-20">
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" />
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" />
@@ -76,7 +76,7 @@ export function HomeWorkStages() {
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" />
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" className="hidden xl:block" />
         </div>
-        <div className="pointer-events-none absolute bottom-0 -left-200 z-20 rotate-45" aria-hidden="true">
+        <div className="pointer-events-none absolute bottom-0 -left-245 z-20 rotate-45" aria-hidden="true">
           <div style={{ transform: `translate3d(${tapeShiftX * 1.2}px, 0, 0)` }}>
             <Image src="/img_tape.svg" alt="" width={2465} height={111} />
           </div>
@@ -125,13 +125,13 @@ export function HomeWorkStages() {
                     isLightOnDesktop ? "md:bg-[#F8F6F0] md:text-[var(--heading)]" : "md:bg-[rgba(248,246,240,0.2)] md:text-white",
                   )}
                   numberClassName={cn(
-                    "text-[32px] md:text-[40px]",
+                    "text-3xl md:text-4xl",
                     isLightOnMobile ? "text-[var(--accent)]" : "text-white",
                     isLightOnDesktop ? "md:text-[var(--accent)]" : "md:text-white",
                   )}
-                  titleClassName="mt-5 text-[28px] leading-[0.95] md:text-4xl"
+                  titleClassName="mt-2 text-3xl leading-[0.95] md:text-4xl"
                   descriptionClassName={cn(
-                    "mt-4 text-[15px] leading-[1.35] tracking-[-0.03em]",
+                    "mt-4 text-lg leading-[1.35] tracking-[-0.03em]",
                     isLightOnMobile ? "text-[var(--text-muted)]" : "text-white",
                     isLightOnDesktop ? "md:text-[var(--text-muted)]" : "md:text-white",
                   )}

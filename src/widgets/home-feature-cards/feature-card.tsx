@@ -45,7 +45,7 @@ export function FeatureCard({ title, description, backgroundImageUrl, accent = f
         >
           {title}
         </h3>
-        <p className={cn("text-sm leading-[1.3] tracking-[-0.03em] md:text-base xl:text-lg", accent ? "text-white/80" : "text-[var(--text-muted)]")}>
+        <p className={cn("text-sm leading-[1.3] tracking-[-0.03em] md:text-base", accent ? "text-white/80" : "text-[var(--text-muted)]")}>
           {description}
         </p>
       </div>

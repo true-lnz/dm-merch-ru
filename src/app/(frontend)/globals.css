@@ -144,7 +144,7 @@
   --text-2xl: 1.35rem; /* 24px */
   --text-xl: 1.125rem; /* 20px */
   --text-lg: 1.0125rem; /* 18px */
-  --text-base: 0.9rem; /* 16px */
+  --text-base: 15px; /* 16px */
   --text-sm: 0.7875rem; /* 14px */
   --text-xs: 0.675rem; /* 12px */
 }

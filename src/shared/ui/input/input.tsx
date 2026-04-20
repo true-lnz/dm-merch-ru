@@ -47,7 +47,7 @@ function Input({ className, type, floatingLabel = true, label, floatingLabelClas
       <label
         htmlFor={resolvedId}
         className={cn(
-          "pointer-events-none absolute left-0 top-1/2 z-10 -translate-y-1/2 px-0 text-sm text-[var(--field-text)] transition-all duration-150 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-xs peer-not-placeholder-shown:top-1 peer-not-placeholder-shown:translate-y-0 peer-not-placeholder-shown:text-xs group-data-[surface=accent]/form:text-white/60",
+          "pointer-events-none tracking-[-0.03em] absolute left-0 top-1/2 z-10 -translate-y-1/2 px-0 text-sm text-[var(--field-text)] transition-all duration-150 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-xs peer-not-placeholder-shown:top-1 peer-not-placeholder-shown:translate-y-0 peer-not-placeholder-shown:text-xs group-data-[surface=accent]/form:text-white/60",
           floatingLabelClassName,
         )}
       >

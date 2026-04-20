@@ -24,5 +24,5 @@ export const siteInfo = {
   ] satisfies SocialLink[],
   privacyHref: "/privacy",
   privacyLabel: "Политика конфиденциальности",
-  copyright: `${new Date().getFullYear()} © Все права защищены`,
+  copyright: `© «Держи Марку!», ${new Date().getFullYear()}`,
 };

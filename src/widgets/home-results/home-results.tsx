@@ -66,7 +66,7 @@ export function HomeResults() {
             {contentItems.map((item, index) => (
               <article key={item.title} className={["flex h-full flex-col", index === contentItems.length - 1 ? "xl:col-span-2" : ""].join(" ")}>
                 <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{item.title}</h3>
-                <p className="mt-[15px] text-xs leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-sm">{item.text}</p>
+                <p className="mt-[15px] text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">{item.text}</p>
               </article>
             ))}
           </div>

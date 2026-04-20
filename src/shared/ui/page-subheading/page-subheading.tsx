@@ -39,7 +39,7 @@ export function PageSubheading({
   return (
     <div
       className={cn(
-        "flex gap-5",
+        "flex gap-2",
         descriptionPlacement === "side"
           ? cn("flex-col xl:grid xl:items-end xl:gap-[27px]", sideDescriptionLayout === "three-columns-middle" ? "xl:grid-cols-3" : "xl:grid-cols-2")
           : "flex-col",

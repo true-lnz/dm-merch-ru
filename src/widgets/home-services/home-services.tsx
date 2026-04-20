@@ -63,7 +63,7 @@ function ServiceCard({ title, description }: ServiceCardProps) {
       />
 
       <h3 className="font-heading max-w-[80%] text-3xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-4xl">{title}</h3>
-      <p className="max-w-[90%] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:text-base xl:text-lg">{description}</p>
+      <p className="max-w-[90%] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">{description}</p>
 
       <div className="mt-auto">
         <ServiceRequestDialog />

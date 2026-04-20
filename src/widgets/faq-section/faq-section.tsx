@@ -69,7 +69,7 @@ export function FaqSection() {
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pr-12">
-                  <p className="max-w-[680px] whitespace-pre-line pb-4 text-xs md:text-sm leading-[1.35] text-[var(--text-muted)] md:pb-5">
+                  <p className="max-w-[680px] whitespace-pre-line pb-4 text-sm md:text-base leading-[1.35] text-[var(--text-muted)] md:pb-5">
                     {item.answer}
                   </p>
                 </AccordionContent>
@@ -91,7 +91,7 @@ export function FaqSection() {
         </AspectRatio>
 
         <AspectRatio ratio={1} className="hidden w-full lg:block">
-          <Image src={FAQ_DESKTOP_IMAGE.src} alt={FAQ_DESKTOP_IMAGE.alt} fill sizes="43vw" className="object-cover" />
+          <Image src={FAQ_DESKTOP_IMAGE.src} alt={FAQ_DESKTOP_IMAGE.alt} fill sizes="43vw" className="object-cover image-hover-scale" />
         </AspectRatio>
       </div>
     </section>

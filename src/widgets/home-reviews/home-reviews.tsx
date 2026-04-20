@@ -152,13 +152,13 @@ export function HomeReviews() {
             </div>
             <div>
               <p className="font-heading text-3xl leading-none uppercase md:text-4xl xl:text-5xl">{activeItem.name}</p>
-              <p className="mt-[10px] text-[9px] leading-[1.35] tracking-[-0.03em] text-white/80 md:text-lg">{activeItem.role}</p>
+              <p className="mt-[10px] text-[9px] leading-[1.35] tracking-[-0.03em] text-white/80 md:text-base xl:text-lg">{activeItem.role}</p>
             </div>
           </div>
 
           <div className="flex flex-col gap-[9px]">
             <h3 className="font-heading text-3xl leading-none uppercase md:text-4xl">{activeItem.company}</h3>
-            <div className="space-y-4 text-xs leading-[1.35] tracking-[-0.03em] text-white/80 sm:text-sm md:text-lg">
+            <div className="space-y-4 text-sm leading-[1.35] tracking-[-0.03em] text-white/80 md:text-base xl:text-lg">
               {activeItem.quote.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
