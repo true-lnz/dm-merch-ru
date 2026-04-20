@@ -148,7 +148,7 @@ function CatalogCasesCard({ item }: { item: CatalogCaseItem }) {
           </div>
         </article>
       ) : (
-        <article className={cn("hidden md:grid md:grid-cols-[1fr_1fr] md:gap-x-7", "md:[grid-template-areas:'square_tall''text_tall']")}>
+        <article className={cn("h-full hidden md:grid md:grid-cols-[1fr_1fr] md:gap-x-7", "md:[grid-template-areas:'square_tall''text_tall']")}>
           <div className="relative aspect-square overflow-hidden rounded-[18px] bg-[var(--surface)] [grid-area:square]">
             <Image src={primaryImage.src} alt={primaryImage.alt} fill sizes="(max-width: 1279px) 46vw, 22vw" className="object-cover" />
           </div>

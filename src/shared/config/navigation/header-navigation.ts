@@ -23,6 +23,7 @@ export const headerNavigation: HeaderNavigationItem[] = [
       { href: "/catalog?category=custom-souvenirs", label: "Авторская сувенирная продукция" },
       { href: "/catalog?category=business-accessories", label: "Деловые аксессуары" },
       { href: "/catalog?category=sportswear", label: "Спортивная одежда" },
+      { href: "/partner-catalog", label: "Каталог продукции" },
     ],
   },
   { href: "/cases", label: "Кейсы" },

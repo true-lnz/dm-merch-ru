@@ -332,7 +332,6 @@ function buildDetailAttributes(product: RawProduct) {
     ["Вес коробки", formatKilograms(product.boxWeight)],
     ["Объем коробки", formatCubicMeters(product.boxVolume)],
     ["В упаковке", product.quantityInPackage && product.quantityInPackage > 0 ? `${product.quantityInPackage} шт.` : null],
-    ["Датировка", product.dated],
     ["Обложка", product.cover],
     ["Размер блока", product.blockSize],
     ["Страниц", product.numberOfPages && product.numberOfPages > 0 ? String(product.numberOfPages) : null],

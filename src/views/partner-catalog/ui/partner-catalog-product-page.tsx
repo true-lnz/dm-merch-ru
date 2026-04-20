@@ -1,10 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState, type ComponentProps, type RefObject } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { CheckIcon } from "lucide-react";
-import { toast } from "sonner";
 import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
 import { useWishlist } from "@/shared/lib/wishlist";
@@ -12,6 +7,11 @@ import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import { buttonVariants } from "@/shared/ui/button";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { SliderControl } from "@/shared/ui/slider-control";
+import { CheckIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useRef, useState, type ComponentProps, type RefObject } from "react";
+import { toast } from "sonner";
 import type { PartnerCatalogProductDetail } from "../model/partner-catalog-data";
 
 const loadedDetailImageKeys = new Set<string>();
@@ -24,6 +24,22 @@ const rubFormatter = new Intl.NumberFormat("ru-RU", {
 
 function formatRubPrice(value: number) {
   return rubFormatter.format(value);
+}
+
+function formatColorLabel(value: string) {
+  return value
+    .split(",")
+    .map((part) => {
+      const normalizedPart = part.trim().toLocaleLowerCase("ru-RU");
+
+      if (!normalizedPart) {
+        return "";
+      }
+
+      return normalizedPart.charAt(0).toLocaleUpperCase("ru-RU") + normalizedPart.slice(1);
+    })
+    .filter(Boolean)
+    .join(", ");
 }
 
 function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
@@ -260,16 +276,14 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
           <div className="space-y-7">
             <div className="space-y-4">
               <div className="space-y-3">
-                <h1 className="m-0 font-heading text-4xl leading-[0.96] tracking-[0.01em] text-[var(--heading)] uppercase md:text-6xl xl:text-[72px]">
+                <h1 className="m-0 font-heading text-4xl leading-[0.96] tracking-[0.01em] text-[var(--heading)] uppercase md:text-6xl">
                   {detail.title}
                 </h1>
               </div>
 
               <div className="grid gap-3 text-sm leading-[1.35] text-[var(--text-muted)] md:text-base">
                 <p>Артикул: {detail.article}</p>
-                <p className="text-2xl font-semibold leading-none text-[var(--heading)] md:text-[2rem]">
-                  {formatRubPrice(detail.priceRub)}
-                </p>
+                <p className="text-2xl font-semibold leading-none text-[var(--heading)] md:text-[2rem]">{formatRubPrice(detail.priceRub)}</p>
               </div>
             </div>
 
@@ -278,6 +292,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
               <div className="flex flex-wrap gap-3">
                 {detail.variants.map((variant) => {
                   const isActive = variant.id === detail.productId;
+                  const formattedColorLabel = formatColorLabel(variant.colorLabel);
 
                   return (
                     <Link
@@ -288,13 +303,13 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                         "flex min-w-[138px] items-center gap-3 rounded-[14px] border bg-white px-3 py-3 transition-colors",
                         isActive ? "border-[var(--accent)]" : "border-transparent hover:border-black/10",
                       )}
-                      >
-                        <span className="relative size-12 shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface)]">
-                        <DetailImageWithSkeleton src={variant.imageUrl} alt={variant.colorLabel} fill sizes="48px" className="object-cover" />
+                    >
+                      <span className="relative size-12 shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface)]">
+                        <DetailImageWithSkeleton src={variant.imageUrl} alt={formattedColorLabel} fill sizes="48px" className="object-cover" />
                       </span>
                       <span className="min-w-0">
-                        <span className="block truncate text-sm font-medium text-[var(--heading)]">{variant.colorLabel}</span>
-                        <span className="block truncate text-xs text-[var(--text-muted)]">{variant.article}</span>
+                        <span className="block truncate text-sm md:text-base font-medium text-[var(--heading)]">{formattedColorLabel}</span>
+                        <span className="block truncate text-xs text-[var(--text-muted)]">Арт. {variant.article}</span>
                       </span>
                     </Link>
                   );
@@ -388,9 +403,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
       </section>
 
       <section className="mb-[43px] rounded-[18px] bg-white p-5 md:mb-[55px] md:rounded-[22.5px] md:p-8">
-        <h2 className="mb-5 font-heading text-2xl leading-[0.98] tracking-[0.01em] text-[var(--heading)] uppercase md:text-4xl">
-          Описание
-        </h2>
+        <h2 className="mb-5 font-heading text-2xl leading-[0.98] tracking-[0.01em] text-[var(--heading)] uppercase md:text-4xl">Описание</h2>
         {detail.descriptionHtml ? (
           <div
             className="partner-catalog-description [&_li]:mb-2 [&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:list-outside text-sm leading-[1.55] text-[var(--text)] md:text-base"
