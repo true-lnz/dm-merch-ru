@@ -1,3 +1,4 @@
+import { resolve4 } from "node:dns/promises";
 import nodemailer from "nodemailer";
 import { buildRequestEmail } from "./email-templates";
 import type { RequestPayload } from "./types";
@@ -20,24 +21,38 @@ function getMailConfig() {
   return {
     host: process.env.SMTP_HOST!,
     port,
-    secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === "true" : port === 465,
+    secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === "true" : false,
     user: process.env.SMTP_USER!,
     pass: process.env.SMTP_PASS!,
     requestToEmail: process.env.REQUEST_TO_EMAIL!,
   };
 }
 
+async function resolveSmtpHost(host: string) {
+  try {
+    const ipv4Addresses = await resolve4(host);
+    return ipv4Addresses[0] || host;
+  } catch {
+    return host;
+  }
+}
+
 export async function sendRequestEmail(payload: RequestPayload) {
   const config = getMailConfig();
   const { subject, html } = buildRequestEmail(payload);
+  const resolvedHost = await resolveSmtpHost(config.host);
 
   const transporter = nodemailer.createTransport({
-    host: config.host,
+    host: resolvedHost,
     port: config.port,
     secure: config.secure,
+    requireTLS: !config.secure,
     connectionTimeout: 10000,
     greetingTimeout: 10000,
     socketTimeout: 10000,
+    tls: {
+      servername: config.host,
+    },
     auth: {
       user: config.user,
       pass: config.pass,
