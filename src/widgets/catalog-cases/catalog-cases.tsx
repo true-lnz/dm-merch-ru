@@ -1,5 +1,6 @@
 "use client";
 
+import { observeElementResize } from "@/shared/lib/browser-compat";
 import { cn } from "@/shared/lib/cn";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import { SliderControl } from "@/shared/ui/slider-control";
@@ -205,6 +206,35 @@ export function CatalogCases({
   items: CatalogCaseItem[] | unknown;
   variant?: CatalogCasesVariant;
 }) {
+  const [mobileCardHeight, setMobileCardHeight] = useState(0);
+  const measureCardRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  useEffect(() => {
+    if (!Array.isArray(items) || items.length === 0 || typeof window === "undefined") {
+      return;
+    }
+
+    const measureHeights = () => {
+      const nextHeight = measureCardRefs.current.reduce((maxHeight, cardNode) => {
+        if (!cardNode) {
+          return maxHeight;
+        }
+
+        return Math.max(maxHeight, cardNode.getBoundingClientRect().height);
+      }, 0);
+
+      setMobileCardHeight((currentHeight) => (currentHeight === nextHeight ? currentHeight : nextHeight));
+    };
+
+    const frameId = window.requestAnimationFrame(measureHeights);
+    const cleanupResizeObserver = observeElementResize(measureCardRefs.current, measureHeights);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      cleanupResizeObserver();
+    };
+  }, [items]);
+
   if (!Array.isArray(items) || items.length === 0) {
     return null;
   }
@@ -225,6 +255,7 @@ export function CatalogCases({
           <div
             key={item.id}
             className={cn(
+              "relative",
               "pt-6 mb-6 xl:mb-0 first:pt-0",
               index > 0 && "border-t border-border",
               "xl:border-t-0 xl:pt-0",
@@ -233,7 +264,21 @@ export function CatalogCases({
               "xl:[&:nth-child(2n)]:pl-9",
             )}
           >
-            {variant === "stacked" ? <CatalogCasesStackedCard item={item} /> : <CatalogCasesCard item={item} />}
+            <div className="md:hidden" style={mobileCardHeight > 0 ? { height: `${mobileCardHeight}px` } : undefined}>
+              {variant === "stacked" ? <CatalogCasesStackedCard item={item} /> : <CatalogCasesCard item={item} />}
+            </div>
+            <div className="hidden md:block">
+              {variant === "stacked" ? <CatalogCasesStackedCard item={item} /> : <CatalogCasesCard item={item} />}
+            </div>
+            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 invisible md:hidden">
+              <div
+                ref={(node) => {
+                  measureCardRefs.current[index] = node;
+                }}
+              >
+                {variant === "stacked" ? <CatalogCasesStackedCard item={item} /> : <CatalogCasesCard item={item} />}
+              </div>
+            </div>
           </div>
         ))}
       </div>

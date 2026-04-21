@@ -5,11 +5,32 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
-import type { CaseItem } from "../model/cases-data";
+import type { CaseGalleryImage, CaseImageFit, CaseItem } from "../model/cases-data";
 
 type CaseCardProps = {
   item: CaseItem;
 };
+
+const CASE_IMAGE_FIT_STYLES: Record<CaseImageFit, string> = {
+  cover: "object-cover",
+  contain: "object-contain",
+};
+
+function clampImagePosition(value: number | undefined) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return 50;
+  }
+
+  return Math.min(100, Math.max(0, value));
+}
+
+function resolveCaseImagePosition(image: CaseGalleryImage) {
+  return `${clampImagePosition(image.x)}% ${clampImagePosition(image.y)}%`;
+}
+
+function resolveCaseImageFit(fit?: CaseImageFit) {
+  return fit ? CASE_IMAGE_FIT_STYLES[fit] : CASE_IMAGE_FIT_STYLES.cover;
+}
 
 export function CaseCard({ item }: CaseCardProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -29,7 +50,8 @@ export function CaseCard({ item }: CaseCardProps) {
     [item.result, item.solution, item.task],
   );
 
-  const previewThumbs = item.gallery.length > 4 ? item.gallery.slice(0, 4) : item.gallery;
+  const desktopPreviewThumbs = item.gallery.length > 5 ? item.gallery.slice(0, 5) : item.gallery;
+  const mobilePreviewThumbs = item.gallery.length > 4 ? item.gallery.slice(0, 4) : item.gallery;
   const toggleLabel = isExpanded ? "Скрыть" : "Читать больше";
 
   useEffect(() => {
@@ -68,18 +90,22 @@ export function CaseCard({ item }: CaseCardProps) {
         />
 
         <div className="lg:flex h-full lg:flex-col">
-          <div className="mb-[14px] cursor-grab overflow-hidden rounded-[9px] bg-white active:cursor-grabbing lg:flex-1" ref={emblaRef}>
+          <div
+            ref={emblaRef}
+            className="mb-[14px] cursor-grab overflow-hidden rounded-[18px] bg-white active:cursor-grabbing lg:flex-1 lg:rounded-[9px]"
+            style={{ aspectRatio: item.desktopImageAspect }}
+          >
             <div className="flex h-full">
               {item.gallery.map((image) => (
-                <div key={`${item.id}-${image.alt}`} className="min-w-0 shrink-0 grow-0 basis-full">
-                  <div className="relative w-full overflow-hidden bg-white lg:h-full">
+                <div key={`${item.id}-${image.alt}`} className="min-w-0 shrink-0 grow-0 basis-full h-full">
+                  <div className="relative h-full w-full overflow-hidden bg-white">
                     <Image
                       src={image.src}
                       alt={image.alt}
                       fill
                       sizes="(max-width: 1023px) calc(100vw - var(--layout-side-padding) * 2), (max-width: 1440px) 42vw, 680px"
-                      className="object-cover"
-                      style={{ objectPosition: image.objectPosition ?? "center" }}
+                      className={resolveCaseImageFit(image.fit)}
+                      style={{ objectPosition: resolveCaseImagePosition(image) }}
                     />
                   </div>
                 </div>
@@ -88,19 +114,19 @@ export function CaseCard({ item }: CaseCardProps) {
           </div>
 
           <div className="hidden gap-[9px] lg:grid lg:grid-cols-5">
-            {previewThumbs.map((image, index) => (
+            {desktopPreviewThumbs.map((image, index) => (
               <ThumbnailButton
                 key={`${item.id}-thumb-${index}`}
                 image={image}
-                isActive={item.gallery.length > 4 && index === 3 ? selectedIndex >= index : selectedIndex === index}
+                isActive={item.gallery.length > 5 && index === 4 ? selectedIndex >= index : selectedIndex === index}
                 onClick={() => selectImage(index)}
-                overlay={item.gallery.length > 4 && index === 3 ? `+${item.gallery.length - 3}` : null}
+                overlay={item.gallery.length > 5 && index === 4 ? `+${item.gallery.length - 4}` : null}
               />
             ))}
           </div>
 
           <div className="grid grid-cols-4 gap-[9px] lg:hidden">
-            {previewThumbs.map((image, index) => (
+            {mobilePreviewThumbs.map((image, index) => (
               <ThumbnailButton
                 key={`${item.id}-mobile-thumb-${index}`}
                 image={image}
@@ -178,7 +204,7 @@ function CaseTextBlock({
 function CaseSection({ heading, text }: { heading: string; text: string }) {
   return (
     <section>
-      <h3 className="font-heading text-lg md:text-3xl leading-none uppercase text-[#404040]">{heading}</h3>
+      <h3 className="font-heading text-2xl md:text-3xl leading-none uppercase text-[#404040]">{heading}</h3>
       <p className="mt-[6px] text-sm md:text-base leading-[1.35] text-[#404040]">{text}</p>
     </section>
   );
@@ -190,7 +216,7 @@ function ThumbnailButton({
   onClick,
   overlay,
 }: {
-  image: CaseItem["gallery"][number];
+  image: CaseGalleryImage;
   isActive: boolean;
   onClick: () => void;
   overlay?: string | null;
@@ -211,8 +237,8 @@ function ThumbnailButton({
           alt={image.alt}
           fill
           sizes="90px"
-          className="object-cover"
-          style={{ objectPosition: image.objectPosition ?? "center" }}
+          className={resolveCaseImageFit(image.fit)}
+          style={{ objectPosition: resolveCaseImagePosition(image) }}
         />
       </div>
       {overlay ? (

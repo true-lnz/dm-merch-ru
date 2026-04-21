@@ -1,9 +1,13 @@
+export type CaseImageFit = "cover" | "contain";
+
 export type CaseGalleryImage = {
   src: string;
   alt: string;
   width: number;
   height: number;
-  objectPosition?: string;
+  fit?: CaseImageFit;
+  x?: number;
+  y?: number;
 };
 
 export type CaseTheme = "Все кейсы" | "Общепит и рестораны" | "Магазины" | "Производство" | "IT сферы" | "Общественные проекты";
@@ -40,7 +44,7 @@ export const casesPageItems: CaseItem[] = [
     gallery: [
       { src: "/cases/ufaoil/ufaoil-hoodie-1.jpg", alt: "Уфаойл — Худи к 25-летию компании (100 шт)", width: 1024, height: 768 },
       { src: "/cases/ufaoil/ufaoil-hoodie-2.jpg", alt: "Уфаойл — фото 2", width: 1156, height: 869 },
-      { src: "/cases/ufaoil/ufaoil-hoodie-3.jpg", alt: "Уфаойл — фото 3", width: 1166, height: 870 },
+      { src: "/cases/ufaoil/ufaoil-hoodie-3.png", alt: "Уфаойл — фото 3", width: 1166, height: 870 },
     ],
   },
   {
@@ -57,10 +61,10 @@ export const casesPageItems: CaseItem[] = [
     theme: "Общепит и рестораны",
     desktopImageAspect: "680/513",
     gallery: [
-      { src: "/cases/mvk/mvk-capsule-1.jpg", alt: "Мама варит кофе — Капсульная коллекция мерча (150 шт)", width: 2040, height: 1539 },
-      { src: "/cases/mvk/mvk-capsule-2.jpg", alt: "Мама варит кофе — фото 2", width: 853, height: 1280 },
+      { src: "/cases/mvk/mvk-capsule-1.png", alt: "Мама варит кофе — Капсульная коллекция мерча (150 шт)", width: 2040, height: 1539 },
+      { src: "/cases/mvk/mvk-capsule-2.jpg", alt: "Мама варит кофе — фото 2", width: 853, height: 1280, y: 0 },
       { src: "/cases/mvk/mvk-capsule-3.jpg", alt: "Мама варит кофе — фото 3", width: 853, height: 1280 },
-      { src: "/cases/mvk/mvk-capsule-4.jpg", alt: "Мама варит кофе — фото 4", width: 853, height: 1280 },
+      { src: "/cases/mvk/mvk-capsule-4.jpg", alt: "Мама варит кофе — фото 4", width: 853, height: 1280, y: 0 },
       { src: "/cases/mvk/mvk-capsule-5.jpg", alt: "Мама варит кофе — фото 5", width: 853, height: 1280 },
     ],
   },
@@ -79,8 +83,8 @@ export const casesPageItems: CaseItem[] = [
     desktopImageAspect: "680/518",
     gallery: [
       { src: "/cases/art-kv/art-kvadrat-1.png", alt: "Арт-квадрат — Коллекция к 7-летию пространства (50 шт)", width: 2040, height: 1554 },
-      { src: "/cases/art-kv/art-kvadrat-2.jpg", alt: "Арт-квадрат — фото 2", width: 853, height: 1280 },
-      { src: "/cases/art-kv/art-kvadrat-3.jpg", alt: "Арт-квадрат — фото 3", width: 853, height: 1280 },
+      { src: "/cases/art-kv/art-kvadrat-2.jpg", alt: "Арт-квадрат — фото 2", width: 853, height: 1280, y: 0 },
+      { src: "/cases/art-kv/art-kvadrat-3.jpg", alt: "Арт-квадрат — фото 3", width: 853, height: 1280, y: 0, fit: "contain" },
     ],
   },
   {
@@ -98,15 +102,15 @@ export const casesPageItems: CaseItem[] = [
     desktopImageAspect: "680/518",
     gallery: [
       { src: "/cases/ldgr/ldgr-estfest-1.png", alt: "ЕстьФест × LDGR — Мерч для гастрофестиваля (200 шт)", width: 2040, height: 1554 },
-      { src: "/cases/ldgr/ldgr-estfest-2.jpg", alt: "ЕстьФест × LDGR — фото 2", width: 853, height: 1280 },
-      { src: "/cases/ldgr/ldgr-estfest-3.jpg", alt: "ЕстьФест × LDGR — фото 3", width: 853, height: 1280 },
+      { src: "/cases/ldgr/ldgr-estfest-2.jpg", alt: "ЕстьФест × LDGR — фото 2", width: 853, height: 1280, y: 0 },
+      { src: "/cases/ldgr/ldgr-estfest-3.jpg", alt: "ЕстьФест × LDGR — фото 3", width: 853, height: 1280, y: 0 },
       { src: "/cases/ldgr/ldgr-estfest-4.jpg", alt: "ЕстьФест × LDGR — фото 4", width: 1280, height: 854 },
     ],
   },
   {
     id: "a-market-merch",
     company: "A:market",
-    teaser: "Мерч для сети Apple-магазинов (2 года сотрудничества)",
+    teaser: "Мерч для сети Apple-магазинов",
     intro:
       "Сеть A-market, состоящая из 10 магазинов техники Apple по России, обратилась за регулярными поставками фирменного мерча для сотрудников и розничных точек.",
     task: "Обеспечить стабильные поставки мерча с единым стандартом качества и дизайна для всей сети магазинов.",
@@ -119,13 +123,15 @@ export const casesPageItems: CaseItem[] = [
     gallery: [
       {
         src: "/cases/a-market/a-market-merch-1.png",
-        alt: "A:market — Мерч для сети Apple-магазинов (2 года сотрудничества)",
+        alt: "A:market — Мерч для сети Apple-магазинов",
         width: 2040,
         height: 1425,
+        y: 0,
+        fit: "contain",
       },
-      { src: "/cases/a-market/a-market-merch-2.jpg", alt: "A:market — фото 2", width: 853, height: 1280 },
+      { src: "/cases/a-market/a-market-merch-2.jpg", alt: "A:market — фото 2", width: 853, height: 1280, y: 0, fit: "contain" },
       { src: "/cases/a-market/a-market-merch-3.jpg", alt: "A:market — фото 3", width: 853, height: 1280 },
-      { src: "/cases/a-market/a-market-merch-4.jpg", alt: "A:market — фото 4", width: 853, height: 1280 },
+      { src: "/cases/a-market/a-market-merch-4.jpg", alt: "A:market — фото 4", width: 853, height: 1280, y: 0, fit: "contain" },
       { src: "/cases/a-market/a-market-merch-5.jpg", alt: "A:market — фото 5", width: 853, height: 1280 },
     ],
   },
@@ -143,11 +149,31 @@ export const casesPageItems: CaseItem[] = [
     theme: "Общепит и рестораны",
     desktopImageAspect: "680/485",
     gallery: [
-      { src: "/cases/magadan/magadan-estfest-1.png", alt: "ЕстьФест × ресторан «Магадан» — Капсульная коллекция (30 шт)", width: 2040, height: 1455 },
-      { src: "/cases/magadan/magadan-estfest-2.jpg", alt: "ЕстьФест × ресторан «Магадан» — фото 2", width: 853, height: 1280 },
-      { src: "/cases/magadan/magadan-estfest-3.jpg", alt: "ЕстьФест × ресторан «Магадан» — фото 3", width: 853, height: 1280 },
+      {
+        src: "/cases/magadan/magadan-estfest-1.png",
+        alt: "ЕстьФест × ресторан «Магадан» — Капсульная коллекция (30 шт)",
+        width: 2040,
+        height: 1455,
+        y: 0,
+      },
+      {
+        src: "/cases/magadan/magadan-estfest-2.jpg",
+        alt: "ЕстьФест × ресторан «Магадан» — фото 2",
+        width: 853,
+        height: 1280,
+        y: 0,
+        fit: "contain",
+      },
+      {
+        src: "/cases/magadan/magadan-estfest-3.jpg",
+        alt: "ЕстьФест × ресторан «Магадан» — фото 3",
+        width: 853,
+        height: 1280,
+        y: 0,
+        fit: "contain",
+      },
       { src: "/cases/magadan/magadan-estfest-4.jpg", alt: "ЕстьФест × ресторан «Магадан» — фото 4", width: 1280, height: 853 },
-      { src: "/cases/magadan/magadan-estfest-5.jpg", alt: "ЕстьФест × ресторан «Магадан» — фото 5", width: 1280, height: 853 },
+      { src: "/cases/magadan/magadan-estfest-5.jpg", alt: "ЕстьФест × ресторан «Магадан» — фото 5", width: 1280, height: 853, y: 0 },
     ],
   },
   {
@@ -169,10 +195,25 @@ export const casesPageItems: CaseItem[] = [
         alt: "Движение первых — Наградная продукция для конкурсов (1500 шт)",
         width: 2040,
         height: 1338,
+        y: 0,
       },
       { src: "/cases/perviye/dvizhenie-pervyh-2.jpg", alt: "Движение первых — фото 2", width: 1280, height: 853 },
-      { src: "/cases/perviye/dvizhenie-pervyh-3.jpg", alt: "Движение первых — фото 3", width: 853, height: 1280 },
-      { src: "/cases/perviye/dvizhenie-pervyh-4.jpg", alt: "Движение первых — фото 4", width: 853, height: 1280 },
+      {
+        src: "/cases/perviye/dvizhenie-pervyh-3.jpg",
+        alt: "Движение первых — фото 3",
+        width: 853,
+        height: 1280,
+        y: 0,
+        fit: "contain",
+      },
+      {
+        src: "/cases/perviye/dvizhenie-pervyh-4.jpg",
+        alt: "Движение первых — фото 4",
+        width: 853,
+        height: 1280,
+        y: 0,
+        fit: "contain",
+      },
     ],
   },
   {
@@ -189,7 +230,12 @@ export const casesPageItems: CaseItem[] = [
     theme: "Производство",
     desktopImageAspect: "680/464",
     gallery: [
-      { src: "/cases/damate-2025/damate-2025-1.png", alt: "Дамате – новый год 2025 — Подарки детям сотрудников (7000 шт)", width: 2040, height: 1392 },
+      {
+        src: "/cases/damate-2025/damate-2025-1.png",
+        alt: "Дамате – новый год 2025 — Подарки детям сотрудников (7000 шт)",
+        width: 2040,
+        height: 1392,
+      },
       { src: "/cases/damate-2025/damate-2025-2.jpg", alt: "Дамате – новый год 2025 — фото 2", width: 853, height: 1280 },
       { src: "/cases/damate-2025/damate-2025-3.jpg", alt: "Дамате – новый год 2025 — фото 3", width: 853, height: 1280 },
       { src: "/cases/damate-2025/damate-2025-4.jpg", alt: "Дамате – новый год 2025 — фото 4", width: 853, height: 1280 },
@@ -227,11 +273,16 @@ export const casesPageItems: CaseItem[] = [
     theme: "IT сферы",
     desktopImageAspect: "680/464",
     gallery: [
-      { src: "/cases/ufanet/ufanet-hoodie-1.png", alt: "Уфанет — Коллекция худи в фирменных цветах (30 шт)", width: 2040, height: 1392 },
-      { src: "/cases/ufanet/ufanet-hoodie-2.jpg", alt: "Уфанет — фото 2", width: 853, height: 1280 },
+      {
+        src: "/cases/ufanet/ufanet-hoodie-1.png",
+        alt: "Уфанет — Коллекция худи в фирменных цветах (30 шт)",
+        width: 2040,
+        height: 1392,
+      },
+      { src: "/cases/ufanet/ufanet-hoodie-2.jpg", alt: "Уфанет — фото 2", width: 853, height: 1280, y: 0, fit: "contain" },
       { src: "/cases/ufanet/ufanet-hoodie-3.jpg", alt: "Уфанет — фото 3", width: 1280, height: 853 },
       { src: "/cases/ufanet/ufanet-hoodie-4.jpg", alt: "Уфанет — фото 4", width: 1280, height: 853 },
-      { src: "/cases/ufanet/ufanet-hoodie-5.jpg", alt: "Уфанет — фото 5", width: 1280, height: 853 },
+      { src: "/cases/ufanet/ufanet-hoodie-5.jpg", alt: "Уфанет — фото 5", width: 1280, height: 853, y: 0 },
     ],
   },
   {
@@ -248,8 +299,13 @@ export const casesPageItems: CaseItem[] = [
     theme: "IT сферы",
     desktopImageAspect: "680/506",
     gallery: [
-      { src: "/cases/dark/dark-gift-set-1.png", alt: "DARK — Подарочные наборы для сотрудников", width: 2040, height: 1518 },
-      { src: "/cases/dark/dark-gift-set-2.jpg", alt: "DARK — фото 2", width: 853, height: 1280 },
+      {
+        src: "/cases/dark/dark-gift-set-1.png",
+        alt: "DARK — Подарочные наборы для сотрудников",
+        width: 2040,
+        height: 1518,
+      },
+      { src: "/cases/dark/dark-gift-set-2.jpg", alt: "DARK — фото 2", width: 853, height: 1280, y: 50 },
       { src: "/cases/dark/dark-gift-set-3.jpg", alt: "DARK — фото 3", width: 853, height: 1280 },
       { src: "/cases/dark/dark-gift-set-4.jpg", alt: "DARK — фото 4", width: 1280, height: 853 },
       { src: "/cases/dark/dark-gift-set-5.jpg", alt: "DARK — фото 5", width: 853, height: 1280 },
@@ -302,7 +358,6 @@ export const casesPageItems: CaseItem[] = [
         height: 1698,
       },
       { src: "/cases/ufaoil-neftekachka/ufaoil-neftekachka-2.jpg", alt: "УФАОЙЛ – НЕФТЕКАЧКА С СОТОВЫМ МЁДОМ — фото 2", width: 1280, height: 853 },
-      { src: "/cases/ufaoil-neftekachka/ufaoil-neftekachka-3.jpg", alt: "УФАОЙЛ – НЕФТЕКАЧКА С СОТОВЫМ МЁДОМ — фото 3", width: 853, height: 1280 },
     ],
   },
   {
@@ -320,7 +375,7 @@ export const casesPageItems: CaseItem[] = [
     desktopImageAspect: "680/473",
     gallery: [
       { src: "/cases/ufaoil-pledy/ufaoil-pledy-1.jpg", alt: "Уфаойл — Корпоративные пледы для VIP-клиентов (250 шт)", width: 2040, height: 1419 },
-      { src: "/cases/ufaoil-pledy/ufaoil-pledy-2.jpg", alt: "Уфаойл — фото 2", width: 853, height: 1280 },
+      { src: "/cases/ufaoil-pledy/ufaoil-pledy-2.jpg", alt: "Уфаойл — фото 2", width: 853, height: 1280, fit: "contain" },
       { src: "/cases/ufaoil-pledy/ufaoil-pledy-3.jpg", alt: "Уфаойл — фото 3", width: 853, height: 1280 },
     ],
   },

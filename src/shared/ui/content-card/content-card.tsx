@@ -15,6 +15,7 @@ type ContentCardImage = {
 
 export type ContentCardProps = {
   title: ReactNode;
+  titleClassName?: string;
   excerpt?: string | null;
   href?: string;
   hrefTarget?: "_self" | "_blank";
@@ -28,6 +29,7 @@ export type ContentCardProps = {
 
 export function ContentCard({
   title,
+  titleClassName,
   excerpt,
   href,
   hrefTarget = "_self",
@@ -85,7 +87,14 @@ export function ContentCard({
       </div>
       <div className="flex flex-1 flex-col p-[18px] md:p-[27px]">
         <div className="flex flex-1 flex-col justify-between gap-[9px] mb-[18px] md:mb-[18px]">
-          <h3 className="xl:whitespace-pre-line font-heading text-3xl md:text-4xl leading-[0.95] tracking-[0.01em] text-[var(--heading)]">{title}</h3>
+          <h3
+            className={cn(
+              "xl:whitespace-pre-line font-heading text-3xl md:text-4xl leading-[0.95] tracking-[0.01em] text-[var(--heading)]",
+              titleClassName,
+            )}
+          >
+            {title}
+          </h3>
           {hasExcerpt ? (
             <p className="text-sm md:text-base text-[var(--text-muted)] tracking-[-0.03em] leading-[1.35] whitespace-pre-line">{excerpt}</p>
           ) : null}
