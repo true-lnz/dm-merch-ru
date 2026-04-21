@@ -1,4 +1,5 @@
 import { WishlistProvider } from "@/shared/lib/wishlist";
+import { ClientRuntimeMonitor } from "@/shared/ui/client-runtime-monitor";
 import { Toaster } from "@/shared/ui/sonner";
 import { PageTransitionProvider } from "@/shared/ui/page-transition";
 import { CookieWarning } from "@/widgets/cookie-warning";
@@ -49,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className="text-base">
       <body>
+        <ClientRuntimeMonitor />
         <Suspense fallback={null}>
           <PageTransitionProvider>
             <WishlistProvider>

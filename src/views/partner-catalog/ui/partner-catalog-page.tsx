@@ -2,6 +2,7 @@
 
 import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
+import { subscribeToMediaQuery } from "@/shared/lib/browser-compat";
 import { useWishlist } from "@/shared/lib/wishlist";
 import { buttonVariants } from "@/shared/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible";
@@ -582,10 +583,10 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     };
 
     handleChange(mediaQuery);
-    mediaQuery.addEventListener("change", handleChange);
+    const unsubscribe = subscribeToMediaQuery(mediaQuery, handleChange);
 
     return () => {
-      mediaQuery.removeEventListener("change", handleChange);
+      unsubscribe();
     };
   }, []);
 
@@ -824,7 +825,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       <Dialog open={isMobileCategoryDialogOpen} onOpenChange={setIsMobileCategoryDialogOpen}>
         <DialogContent
           showCloseButton={false}
-          className="block h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[var(--card-bg)] p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:p-[72px] sm:pt-[72px] sm:pb-[72px] sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-md sm:rounded-[22.5px] md:hidden"
+          className="block h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[var(--card-bg)] p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:p-[72px] sm:pt-[72px] sm:pb-[72px] sm:h-auto sm:max-h-[calc(100vh-2rem)] sm:max-h-[calc(100dvh-2rem)] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-md sm:rounded-[22.5px] md:hidden"
         >
           <div className="mb-7 flex items-start justify-between gap-4">
             <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Категории</DialogTitle>

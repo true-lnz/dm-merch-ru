@@ -2,6 +2,7 @@
 
 import { WORK_STAGES } from "@/shared/config/work-stages";
 import { cn } from "@/shared/lib/cn";
+import { subscribeToMediaQuery } from "@/shared/lib/browser-compat";
 import { isLightWorkStageCard } from "@/shared/lib/work-stage-tone";
 import { WorkStageCard } from "@/shared/ui/work-stage-card";
 import Image from "next/image";
@@ -53,13 +54,13 @@ export function HomeWorkStages() {
 
     lastScrollYRef.current = window.scrollY;
     window.addEventListener("scroll", handleScroll, { passive: true });
-    desktopMedia.addEventListener("change", handleMediaChange);
-    reducedMotionMedia.addEventListener("change", handleMediaChange);
+    const unsubscribeDesktopMedia = subscribeToMediaQuery(desktopMedia, handleMediaChange);
+    const unsubscribeReducedMotionMedia = subscribeToMediaQuery(reducedMotionMedia, handleMediaChange);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      desktopMedia.removeEventListener("change", handleMediaChange);
-      reducedMotionMedia.removeEventListener("change", handleMediaChange);
+      unsubscribeDesktopMedia();
+      unsubscribeReducedMotionMedia();
     };
   }, []);
 

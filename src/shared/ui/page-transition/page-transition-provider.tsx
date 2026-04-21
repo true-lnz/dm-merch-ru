@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
+import { subscribeToMediaQuery } from "@/shared/lib/browser-compat";
 import {
   createContext,
   type PropsWithChildren,
@@ -20,7 +21,11 @@ type PageTransitionContextValue = {
   startNavigationTransition: (source: TransitionSource) => void;
 };
 
-const PageTransitionContext = createContext<PageTransitionContextValue | null>(null);
+const defaultPageTransitionContext: PageTransitionContextValue = {
+  startNavigationTransition: () => undefined,
+};
+
+const PageTransitionContext = createContext<PageTransitionContextValue>(defaultPageTransitionContext);
 
 function useReducedMotion() {
   const [isReduced, setIsReduced] = useState(false);
@@ -30,10 +35,10 @@ function useReducedMotion() {
     const update = () => setIsReduced(media.matches);
 
     update();
-    media.addEventListener("change", update);
+    const unsubscribe = subscribeToMediaQuery(media, update);
 
     return () => {
-      media.removeEventListener("change", update);
+      unsubscribe();
     };
   }, []);
 
@@ -236,13 +241,7 @@ export function PageTransitionProvider({ children }: PropsWithChildren) {
 }
 
 export function usePageTransition() {
-  const context = useContext(PageTransitionContext);
-
-  if (!context) {
-    throw new Error("usePageTransition must be used within PageTransitionProvider");
-  }
-
-  return context;
+  return useContext(PageTransitionContext);
 }
 
 export type { TransitionSource };

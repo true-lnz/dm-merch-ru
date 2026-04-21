@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/shared/lib/cn";
+import { observeElementResize } from "@/shared/lib/browser-compat";
 import { SliderControl } from "@/shared/ui/slider-control";
 import { useEffect, useRef, useState } from "react";
 import { DigestCard } from "./digest-card";
@@ -51,20 +52,11 @@ export function DigestMobileCarousel({ cards, className }: DigestMobileCarouselP
     };
 
     const frameId = window.requestAnimationFrame(measureHeights);
-    const resizeObserver = new ResizeObserver(measureHeights);
-
-    measureCardRefs.current.forEach((cardNode) => {
-      if (cardNode) {
-        resizeObserver.observe(cardNode);
-      }
-    });
-
-    window.addEventListener("resize", measureHeights);
+    const cleanupResizeObserver = observeElementResize(measureCardRefs.current, measureHeights);
 
     return () => {
       window.cancelAnimationFrame(frameId);
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", measureHeights);
+      cleanupResizeObserver();
     };
   }, [cards]);
 

@@ -96,7 +96,7 @@ export function WishlistDialog({ variant, className }: WishlistDialogProps) {
       <DialogTrigger render={<WishlistTrigger count={count} variant={variant} className={className} />} />
       <DialogContent
         showCloseButton={false}
-        className="block h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] bg-[url('/img_wishlist_card_cover.svg')] bg-cover bg-center bg-no-repeat p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:max-w-none lg:h-auto lg:max-h-[calc(100dvh-2rem)] lg:w-[min(1120px,calc(100vw-2rem))] lg:max-w-none lg:rounded-[18px] lg:p-8 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
+        className="block h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] bg-[url('/img_wishlist_card_cover.svg')] bg-cover bg-center bg-no-repeat p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:max-w-none lg:h-auto lg:max-h-[calc(100vh-2rem)] lg:max-h-[calc(100dvh-2rem)] lg:w-[min(1120px,calc(100vw-2rem))] lg:max-w-none lg:rounded-[18px] lg:p-8 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
       >
         <div className="flex items-start justify-between gap-4">
           <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Вишлист</DialogTitle>

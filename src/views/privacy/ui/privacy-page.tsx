@@ -12,7 +12,7 @@ type PrivacySection = {
 };
 
 function normalizeMarkdownText(value: string) {
-  return value.replaceAll("\\.", ".").replaceAll("\\-", "-").trim();
+  return value.replace(/\\\./g, ".").replace(/\\-/g, "-").trim();
 }
 
 function parseTableRow(line: string): string[] {

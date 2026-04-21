@@ -6,7 +6,7 @@ import { RequestForm } from "@/shared/ui/request-form";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
 import type { ComponentPropsWithoutRef, ReactElement, ReactNode } from "react";
-import { forwardRef, useEffect, useId, useState } from "react";
+import { forwardRef, useId } from "react";
 
 type RequestDialogButtonProps = Omit<ComponentPropsWithoutRef<"button">, "children"> & {
   label?: ReactNode;
@@ -101,7 +101,7 @@ export function RequestDialog({
 
       <DialogContent
         showCloseButton={false}
-        className="block h-[100dvh] max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:p-[72px] sm:pt-[72px] sm:pb-[72px] sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[22.5px] xl:bg-[#ecebe6]"
+        className="block h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:p-[72px] sm:pt-[72px] sm:pb-[72px] sm:h-auto sm:max-h-[calc(100vh-2rem)] sm:max-h-[calc(100dvh-2rem)] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 md:grid md:w-[50vw] md:max-w-[50vw] sm:rounded-[22.5px] xl:bg-[#ecebe6]"
       >
         <div className="mb-7 flex items-start justify-between gap-4 xl:mb-8">
           <DialogTitle className="font-heading text-4xl md:text-5xl xl:text-6xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">
