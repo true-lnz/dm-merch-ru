@@ -156,6 +156,7 @@ export function WishlistDialog({ variant, className }: WishlistDialogProps) {
                     id: item.id,
                     title: item.title,
                     articleNumber: item.articleNumber,
+                    productUrl: item.productUrl,
                     quantity: item.quantity,
                     unitPriceRub: item.unitPriceRub,
                   }))}

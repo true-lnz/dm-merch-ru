@@ -364,6 +364,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
         articleNumber: detail.article,
         title: detail.title,
         imageUrl: detail.imageUrls[0] ?? "",
+        productUrl: detail.variants.find((variant) => variant.id === detail.productId)?.href,
         unitPriceRub: detail.priceRub,
       },
       safeQuantity,

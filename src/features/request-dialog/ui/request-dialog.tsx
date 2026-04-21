@@ -23,8 +23,6 @@ type RequestDialogProps = {
   source: RequestSource;
   context?: string;
   privacyCheckboxId?: string;
-  includeQuantity?: boolean;
-  quantityRequired?: boolean;
 };
 
 const DEFAULT_LABEL = "Обсудить задачу";
@@ -94,8 +92,6 @@ export function RequestDialog({
   source,
   context,
   privacyCheckboxId,
-  includeQuantity = false,
-  quantityRequired = false,
 }: RequestDialogProps) {
   const generatedPrivacyCheckboxId = useId();
   const resolvedPrivacyCheckboxId = privacyCheckboxId ?? `request-dialog-privacy-${generatedPrivacyCheckboxId}`;
@@ -127,8 +123,6 @@ export function RequestDialog({
           source={source}
           context={context}
           includeEmail={false}
-          includeQuantity={includeQuantity}
-          quantityRequired={quantityRequired}
           privacyCheckboxId={resolvedPrivacyCheckboxId}
           formClassName="space-y-3 xl:space-y-4"
         />

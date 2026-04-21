@@ -3,6 +3,7 @@ export type WishlistItem = {
   imageUrl: string;
   title: string;
   articleNumber: string;
+  productUrl?: string;
   unitPriceRub: number;
   quantity: number;
 };

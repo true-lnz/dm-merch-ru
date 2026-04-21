@@ -24,7 +24,7 @@ function CatalogCard({ item }: { item: CatalogProductItem }) {
       Перейти в каталог
     </Link>
   ) : (
-    <RequestDialog source="catalog-product-card" context={item.title} includeQuantity quantityRequired>
+    <RequestDialog source="catalog-product-card" context={item.title}>
       <button type="button" className={cn(buttonVariants(), "w-full")} aria-label={`Отправить заявку: ${item.title}`}>
         Отправить заявку
       </button>

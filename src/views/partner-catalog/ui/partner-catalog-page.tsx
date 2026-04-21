@@ -93,7 +93,7 @@ async function fetchCatalogPageSlice(filterId: string, offset: number, limit: nu
   return (await response.json()) as PartnerCatalogPageSlice;
 }
 
-function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
+function WishlistActionButton({ variant, productHref }: { variant: PartnerCatalogVariant; productHref: string }) {
   const { isInWishlist, addItem, removeItem } = useWishlist();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [quantity, setQuantity] = useState("50");
@@ -129,6 +129,7 @@ function WishlistActionButton({ variant }: { variant: PartnerCatalogVariant }) {
         articleNumber: variant.article,
         title: variant.title,
         imageUrl: variant.imageUrl,
+        productUrl: productHref,
         unitPriceRub: variant.priceRub,
       },
       safeQuantity,
@@ -383,7 +384,7 @@ function ProductCardContent({
         <VariantSelectorStrip variants={variants} activeVariantId={activeVariantId} onVariantSelect={onVariantSelect} />
       </div>
 
-      <WishlistActionButton variant={activeVariant} />
+      <WishlistActionButton variant={activeVariant} productHref={productHref} />
     </div>
   );
 }

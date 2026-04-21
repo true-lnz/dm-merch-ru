@@ -17,6 +17,7 @@ export type WishlistRequestItem = {
   id: string;
   title: string;
   articleNumber: string;
+  productUrl?: string;
   quantity: number;
   unitPriceRub: number;
 };
