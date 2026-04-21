@@ -7,8 +7,6 @@ export function PartnerProductCard({ item }: { item: PartnerProductItem }) {
       title={item.title}
       excerpt={item.description}
       href={item.href}
-      hrefTarget="_blank"
-      hrefRel="noreferrer"
       ctaLabel="Узнать подробнее"
       image={{ url: item.imageUrl, alt: item.title, width: 413, height: 400 }}
       imageContainerClassName="aspect-square"

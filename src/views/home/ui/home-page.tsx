@@ -23,6 +23,7 @@ export function HomePage() {
       <HomeBenefits />
       <HomeLeadCta />
       <HomePartnerProducts />
+      {/* <HomeCatalogPromo /> */}
       <HomeUrgentOrder />
       <HomeReviews />
       <HomeWorkStages />

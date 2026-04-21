@@ -25,73 +25,73 @@ const PARTNER_PRODUCTS = [
     title: "Футболки \nи поло",
     description: "Для команды, мероприятий и повседневного использования",
     imageUrl: "/home/partner-products/01-futbolki-i-polo.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=futbolki",
   },
   {
     title: "ТОЛСТОВКИ",
     description: "Базовый элемент корпоративного мерча. Актуально вне сезона",
     imageUrl: "/home/partner-products/02-tolstovki.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=tolstovki",
   },
   {
     title: "РУБАШКИ",
     description: "Фирменный стиль для деловых задач. Ваш профессиональный имидж",
     imageUrl: "/home/partner-products/03-rubashki.png",
-    href: "https://gifts.ru/",
+    href: "/partner-catalog",
   },
   {
     title: "безрукавки",
     description: "Когда важно, чтобы бренд сопровождал команду не только в офисе",
     imageUrl: "/home/partner-products/04-bezrukavki.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=verhnyaya-odezhda",
   },
   {
     title: "дождевики",
     description: "Для команды, мероприятий и повседневного использования",
     imageUrl: "/home/partner-products/05-dozhdeviki.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=verhnyaya-odezhda",
   },
   {
     title: "бомберы",
     description: "Базовый элемент корпоративного мерча. Актуально вне сезона",
     imageUrl: "/home/partner-products/06-bombery.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=verhnyaya-odezhda",
   },
   {
     title: "ГОЛОВНЫЕ\nУБОРЫ",
     description: "Легко носить. Легко масштабировать. Легко узнать бренд",
     imageUrl: "/home/partner-products/07-golovnye-ubory.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=headwear",
   },
   {
     title: "СУМКИ \nИ РЮКЗАКИ",
     description: "Чем чаще используют — тем сильнее работает бренд",
     imageUrl: "/home/partner-products/08-sumki-i-ryukzaki.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=bags",
   },
   {
     title: "ЭЛЕКТРОНИКА",
     description: "Работает на узнаваемость за счёт постоянного использования",
     imageUrl: "/home/partner-products/09-elektronika.png",
-    href: "https://gifts.ru/",
+    href: "/partner-catalog",
   },
   {
     title: "Деловые\nаксессуары",
     description: "Детали, которые формируют образ компании",
     imageUrl: "/home/partner-products/10-delovye-aksessuary.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=business-accessories",
   },
   {
     title: "СУВЕНИРНАЯ ПРОДУКЦИЯ",
     description: "Подарок с идеей, который делает отношения теплее",
     imageUrl: "/home/partner-products/11-suvenirnaya-produkciya.png",
-    href: "https://gifts.ru/",
+    href: "/catalog?category=souvenirs",
   },
   {
     title: "Пакеты",
     description: "Когда важно вовлечение и чувство принадлежности",
     imageUrl: "/home/partner-products/12-pakety.png",
-    href: "https://gifts.ru/",
+    href: "/partner-catalog",
   },
 ] satisfies PartnerProductItem[];
 
@@ -151,7 +151,7 @@ export function HomePartnerProducts({ showIntro = true }: HomePartnerProductsPro
             </div>
           </div>
           <div className="mt-auto p-4 pt-0 md:p-5 md:pt-0">
-            <Link href={activeItem.href} className={cn(buttonVariants(), "w-full")} target="_blank" rel="noreferrer">
+            <Link href={activeItem.href} className={cn(buttonVariants(), "w-full")}>
               Узнать подробнее
             </Link>
           </div>
