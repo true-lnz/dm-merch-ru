@@ -10,7 +10,7 @@ const CATALOG_STAGES_TITLE = "от разработки\nдизайна до о�
 
 export function CatalogWorkStages() {
   return (
-    <section className="my-[45px]">
+    <section className="my-[35px] md:my-[45px]">
       <div className="relative -mx-[var(--layout-side-padding)] overflow-hidden rounded-none bg-[var(--accent)] p-[18px] text-white sm:-mx-0 sm:rounded-[18px] md:rounded-[22.5px] md:p-[54px]">
         <Image
           src="/catalog/img_card_cover_main.svg"

@@ -33,7 +33,7 @@ const PROMO_COLLAGE = [
 
 export function HomeCatalogPromo() {
   return (
-    <section className="my-[45px]">
+    <section className="my-[35px] md:my-[45px]">
       <Link
         href="/partner-catalog"
         className="group relative block overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] text-white"

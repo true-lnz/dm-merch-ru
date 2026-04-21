@@ -1,8 +1,8 @@
 "use client";
 
 import { RequestCta } from "@/features/request-cta";
-import { cn } from "@/shared/lib/cn";
 import { subscribeToMediaQuery } from "@/shared/lib/browser-compat";
+import { cn } from "@/shared/lib/cn";
 import { useWishlist } from "@/shared/lib/wishlist";
 import { buttonVariants } from "@/shared/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible";
@@ -738,7 +738,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
         }}
       />
 
-      <section className="mt-[28.8px] mb-[45px]">
+      <section className="mt-[28.8px] mb-[35px] md:mb-[45px]">
         <div className="mb-5 md:mb-4 md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-center md:gap-8 xl:gap-[63px]">
           <div className="flex items-center gap-3">
             <p className="text-base font-bold uppercase tracking-[0.05em] text-[var(--heading)]">Категория:</p>

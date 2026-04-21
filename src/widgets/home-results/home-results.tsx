@@ -57,7 +57,7 @@ export function HomeResults() {
   ];
 
   return (
-    <section className="my-[45px]">
+    <section className="my-[35px] md:my-[45px]">
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:items-stretch xl:gap-x-[16px]">
         <div className="order-1 flex flex-col xl:min-h-[600px]">
           <PageSubheading title={RESULTS_TITLE} description={RESULTS_DESCRIPTION} descriptionPlacement="bottom" />

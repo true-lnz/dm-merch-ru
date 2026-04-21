@@ -28,7 +28,7 @@ function CatalogCardSkeleton() {
 
 export default function Loading() {
   return (
-    <section className="mt-8 mb-[45px] md:mt-12">
+    <section className="mt-8 mb-[35px] md:mb-[45px] md:mt-12">
       <div className="mb-6 space-y-4">
         <Skeleton className="h-4 w-56 bg-[#ddd9cf]" />
         <Skeleton className="h-12 w-[320px] max-w-full bg-[#e4e0d6] md:h-16 md:w-[520px]" />

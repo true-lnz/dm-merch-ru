@@ -1,8 +1,8 @@
 ﻿"use client";
 
 import { WORK_STAGES } from "@/shared/config/work-stages";
-import { cn } from "@/shared/lib/cn";
 import { subscribeToMediaQuery } from "@/shared/lib/browser-compat";
+import { cn } from "@/shared/lib/cn";
 import { isLightWorkStageCard } from "@/shared/lib/work-stage-tone";
 import { WorkStageCard } from "@/shared/ui/work-stage-card";
 import Image from "next/image";
@@ -65,7 +65,7 @@ export function HomeWorkStages() {
   }, []);
 
   return (
-    <section className="my-[45px]">
+    <section className="my-[35px] md:my-[45px]">
       <div className="relative -mx-[var(--layout-side-padding)] sm:-mx-0  overflow-hidden rounded-none sm:rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] p-[27px] md:p-[54px] text-white">
         <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between opacity-20">
           <Image src="/logo-dm-minimized.svg" alt="" width={220} height={40} aria-hidden="true" />

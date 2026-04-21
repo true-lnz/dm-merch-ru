@@ -21,7 +21,7 @@ type CatalogHeroProps = {
 
 export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
   return (
-    <section className="relative mb-[45px]">
+    <section className="relative mb-[35px] md:mb-[45px]">
       <div className="grid grid-cols-1 xl:grid-cols-2" style={{ minHeight: HERO_MIN_HEIGHT }}>
         {/* content */}
         <div className="relative z-10 min-w-0">

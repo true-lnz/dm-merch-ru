@@ -1,8 +1,8 @@
 "use client";
 
+import { cn } from "@/shared/lib/cn";
 import { buildRequestEmail } from "@/shared/lib/request-mail/email-templates";
 import type { RequestPayload } from "@/shared/lib/request-mail/types";
-import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
 import { PageHeading } from "@/shared/ui/page-heading";
 import { useMemo, useState } from "react";
@@ -79,7 +79,7 @@ export function EmailPreviewClient() {
   const emailPreview = useMemo(() => buildRequestEmail(activePayload), [activePayload]);
 
   return (
-    <section className="mt-[36px] mb-[45px] space-y-8">
+    <section className="mt-[36px] mb-[35px] md:mb-[45px] space-y-8">
       <PageHeading title={"Preview\nemail шаблонов"} breadcrumb={{ labelFrom: "Главная", labelTo: "Email Preview", href: "/" }} />
 
       <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)] xl:items-start">
@@ -171,11 +171,7 @@ export function EmailPreviewClient() {
               </div>
               <div className="rounded-[18px] bg-[#edf2f7] p-3 md:p-5">
                 <div className={cn("mx-auto overflow-hidden rounded-[20px] shadow-[0_18px_50px_rgba(15,23,42,0.12)]", activeMode.frameClassName)}>
-                  <iframe
-                    title="Email preview"
-                    srcDoc={emailPreview.html}
-                    className="block h-[820px] w-full border-0 bg-white"
-                  />
+                  <iframe title="Email preview" srcDoc={emailPreview.html} className="block h-[820px] w-full border-0 bg-white" />
                 </div>
               </div>
             </div>

@@ -10,7 +10,7 @@ const URGENT_ORDER_IMAGE = {
 
 export function HomeUrgentOrder() {
   return (
-    <section className="my-[45px]">
+    <section className="my-[35px] md:my-[45px]">
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
         <div className="order-2 xl:order-1 flex flex-col rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] p-[18px] md:p-[54px] text-white">
           <PageSubheading title={"Экспресс-мерч\n– когда нужно вчера"} className="mb-[15px] xl:mb-[25px] xl:mb-[25px] tracking-[-0.09] text-white" />

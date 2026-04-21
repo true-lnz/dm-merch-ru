@@ -23,7 +23,7 @@ const HERO_HEIGHT = "clamp(620px, 72vh, 820px)";
 
 export function HomeHero() {
   return (
-    <section className="relative mt-[36px] mb-[45px]">
+    <section className="relative mt-[35px] mb-[35px] md:mb-[45px]">
       <div
         className="
           grid grid-cols-1

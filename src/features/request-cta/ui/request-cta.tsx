@@ -5,7 +5,7 @@ import { RequestForm } from "@/shared/ui/request-form";
 
 export function RequestCta() {
   return (
-    <section className="relative mt-[45px]" aria-label="Форма заявки">
+    <section className="relative mt-[35px] md:mt-[45px]" aria-label="Форма заявки">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-[auto_1fr]">
         <div className="contents lg:relative lg:row-span-2 lg:flex lg:flex-col lg:justify-between">
           <img
