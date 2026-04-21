@@ -131,7 +131,7 @@ export function HomeWorkStages() {
                   )}
                   titleClassName="mt-2 text-3xl leading-[0.95] md:text-4xl"
                   descriptionClassName={cn(
-                    "mt-4 text-lg leading-[1.35] tracking-[-0.03em]",
+                    "mt-4 text-sm leading-[1.35] tracking-[-0.04em] md:text-base",
                     isLightOnMobile ? "text-[var(--text-muted)]" : "text-white",
                     isLightOnDesktop ? "md:text-[var(--text-muted)]" : "md:text-white",
                   )}

@@ -589,7 +589,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   "custom-souvenirs": {
     heroTitle: "Авторская cувенирнаЯ продукция\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_author_souvenir_catalog_cover.png",
+      src: "/catalog/covers/img_author_souvenir_catalog_cover-Photoroom.png",
       alt: "Авторская сувенирная продукция для брендирования",
     },
     products: [

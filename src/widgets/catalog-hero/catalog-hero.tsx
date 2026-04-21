@@ -24,9 +24,9 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
     <section className="relative mb-[45px]">
       <div className="grid grid-cols-1 xl:grid-cols-2" style={{ minHeight: HERO_MIN_HEIGHT }}>
         {/* content */}
-        <div className="relative z-10 min-w-0 xl:pb-[75px]">
+        <div className="relative z-10 min-w-0">
           <div className="flex h-full flex-col gap-8 pt-5 xl:gap-10 xl:rounded-[22px]">
-            <div className="flex flex-col gap-5 xl:gap-6">
+            <div className="flex flex-col gap-4 xl:gap-5">
               <PageHeading
                 title={heroTitle}
                 breadcrumb={{
@@ -49,23 +49,23 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
                 fill
                 quality={80}
                 sizes="(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 70vw, 0px"
-                className="object-contain object-top"
+                className="object-contain object-bottom"
               />
             </div>
 
-            <div className="grid gap-[9px] md:gap-[18px] lg:max-w-[600px] lg:grid-cols-2 2xl:max-w-none 2xl:grid-cols-3 2xl:gap-6">
+            <div className="grid gap-4 max-w-[550px] 2xl:max-w-[600px] xl:grid-cols-2 2xl:max-w-none 2xl:grid-cols-3 2xl:gap-5">
               {HERO_FEATURES.map((feature) => (
                 <div key={feature.text} className="rounded-[9px] bg-[rgba(232,231,226,0.7)] backdrop-blur-[6px] p-[18px] 2xl:min-h-[120px]">
-                  <div className="flex items-start gap-5 2xl:block">
+                  <div className="flex items-center xl:items-start gap-2 2xl:gap-4 2xl:block">
                     <Image
                       src={FEATURE_ICON_SRC}
                       alt=""
                       width={21}
                       height={21}
                       aria-hidden="true"
-                      className="feature-icon-rotate-hover mt-[5px] size-[21px] shrink-0 2xl:mb-[15px] 2xl:mt-0"
+                      className="feature-icon-rotate-hover xl:mt-[5px] size-[21px] shrink-0 2xl:mb-[15px] 2xl:mt-0"
                     />
-                    <p className="text-xs font-medium leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] md:text-sm 2xl:text-[#404040]">
+                    <p className="text-sm font-regular leading-[1.3] tracking-[-0.04em] text-[#2a2a2a] md:text-base 2xl:text-[#404040]">
                       {feature.text}
                     </p>
                   </div>
@@ -84,7 +84,12 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
         {/* desktop image */}
         <div className="relative hidden min-w-0 xl:flex xl:items-end xl:justify-end">
           <div className="relative h-full w-full">
-            <img loading="eager" src={heroImage.src} alt={heroImage.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
+            <img
+              loading="eager"
+              src={heroImage.src}
+              alt={heroImage.alt}
+              className="absolute right-[calc(var(--layout-side-padding)*(-1))] 2xl:right-0 bottom-0 h-full w-auto max-w-none"
+            />
           </div>
         </div>
       </div>

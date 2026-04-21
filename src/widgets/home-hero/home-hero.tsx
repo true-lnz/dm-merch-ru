@@ -35,7 +35,7 @@ export function HomeHero() {
         {/* Content */}
         <div className="relative z-10 min-w-0 xl:mb-[75px]">
           <div className="flex h-full flex-col gap-8 rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.72)] xl:px-10 xl:py-10 xl:backdrop-blur-[8px] 2xl:gap-10 2xl:px-12 2xl:py-12">
-            <div className="flex flex-col gap-5 xl:gap-6">
+            <div className="flex flex-col gap-4 xl:gap-5">
               <PageHeading title={"Мерч, который\nработает на бизнес"} />
               <p className="max-w-[340px] text-sm leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21px]">
                 Создаём корпоративный мерч и подарки, которые носят, помнят и связывают с брендом.

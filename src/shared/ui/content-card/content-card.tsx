@@ -80,7 +80,7 @@ export function ContentCard({
           fill
           quality={80}
           sizes={image.sizes ?? "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"}
-          className={cn("object-cover object-top", image.className)}
+          className={cn("object-cover object-top image-hover-scale", image.className)}
         />
       </div>
       <div className="flex flex-1 flex-col p-[18px] md:p-[27px]">

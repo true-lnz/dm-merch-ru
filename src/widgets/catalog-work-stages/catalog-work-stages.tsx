@@ -46,7 +46,7 @@ export function CatalogWorkStages() {
                     )}
                     titleClassName="whitespace-pre-line mt-4 text-3xl leading-[0.94] md:mt-5 xl:text-4xl"
                     descriptionClassName={cn(
-                      "mt-4 text-sm leading-[1.3] tracking-[-0.04em] md:text-base",
+                      "mt-4 text-sm leading-[1.35] tracking-[-0.04em] md:text-base",
                       isLightOnMobile ? "text-[#404040]" : "text-[rgba(255,255,255,0.92)]",
                       isLightOnDesktop ? "md:text-[#404040]" : "md:text-[rgba(255,255,255,0.92)]",
                     )}

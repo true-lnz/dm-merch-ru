@@ -30,7 +30,6 @@ export function CaseCard({ item }: CaseCardProps) {
   );
 
   const previewThumbs = item.gallery.length > 4 ? item.gallery.slice(0, 4) : item.gallery;
-  const imageRatio = toAspectRatio(item.desktopImageAspect);
   const toggleLabel = isExpanded ? "Скрыть" : "Читать больше";
 
   useEffect(() => {
@@ -68,15 +67,12 @@ export function CaseCard({ item }: CaseCardProps) {
           onToggle={() => setIsExpanded((value) => !value)}
         />
 
-        <div className="lg:flex lg:h-full lg:flex-col">
+        <div className="lg:flex h-full lg:flex-col">
           <div className="mb-[14px] cursor-grab overflow-hidden rounded-[9px] bg-white active:cursor-grabbing lg:flex-1" ref={emblaRef}>
             <div className="flex h-full">
               {item.gallery.map((image) => (
                 <div key={`${item.id}-${image.alt}`} className="min-w-0 shrink-0 grow-0 basis-full">
-                  <div
-                    className="relative w-full overflow-hidden bg-white lg:h-full 2xl:h-auto 2xl:aspect-(--case-image-ratio)"
-                    style={{ "--case-image-ratio": imageRatio } as React.CSSProperties}
-                  >
+                  <div className="relative w-full overflow-hidden bg-white lg:h-full">
                     <Image
                       src={image.src}
                       alt={image.alt}
@@ -91,7 +87,7 @@ export function CaseCard({ item }: CaseCardProps) {
             </div>
           </div>
 
-          <div className="hidden gap-[9px] lg:grid lg:grid-cols-6">
+          <div className="hidden gap-[9px] lg:grid lg:grid-cols-5">
             {previewThumbs.map((image, index) => (
               <ThumbnailButton
                 key={`${item.id}-thumb-${index}`}
@@ -137,8 +133,8 @@ function CaseTextBlock({
     <div className="rounded-[18px] bg-[var(--card-bg)] px-5 pb-5 pt-5 lg:rounded-none lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
       <div className="space-y-3 lg:space-y-[9px]">
         <h2 className="font-heading whitespace-pre-line text-3xl md:text-5xl leading-[0.95] uppercase text-[var(--heading)]">{item.company}</h2>
-        <p className="text-xs md:text-sm leading-[1.3] text-[#404040]">{item.teaser}</p>
-        <p className="text-xs md:text-sm leading-[1.3] text-[#404040]">{item.intro}</p>
+        <p className="text-sm md:text-base leading-[1.3] text-[#404040]">{item.teaser}</p>
+        <p className="text-sm md:text-base leading-[1.3] text-[#404040]">{item.intro}</p>
       </div>
 
       <div className="mt-4 lg:hidden">
@@ -183,7 +179,7 @@ function CaseSection({ heading, text }: { heading: string; text: string }) {
   return (
     <section>
       <h3 className="font-heading text-lg md:text-3xl leading-none uppercase text-[#404040]">{heading}</h3>
-      <p className="mt-[6px] text-xs md:text-sm leading-[1.35] text-[#404040]">{text}</p>
+      <p className="mt-[6px] text-sm md:text-base leading-[1.35] text-[#404040]">{text}</p>
     </section>
   );
 }
@@ -226,9 +222,4 @@ function ThumbnailButton({
       ) : null}
     </button>
   );
-}
-
-function toAspectRatio(value: `${number}/${number}`) {
-  const [width, height] = value.split("/").map(Number);
-  return width / height;
 }
