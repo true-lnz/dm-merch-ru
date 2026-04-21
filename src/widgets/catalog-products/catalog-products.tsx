@@ -4,12 +4,9 @@ import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
 import { ContentCard } from "@/shared/ui/content-card";
+import { MobileSnapCarousel } from "@/shared/ui/mobile-snap-carousel";
 import { PageSubheading } from "@/shared/ui/page-subheading";
-import { SliderControl } from "@/shared/ui/slider-control";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-
-const MOBILE_FADE_DURATION_MS = 180;
 
 type CatalogProductItem = {
   title: string;
@@ -34,6 +31,7 @@ function CatalogCard({ item }: { item: CatalogProductItem }) {
   return (
     <ContentCard
       title={item.title}
+      titleClassName="min-h-[3.6rem] md:min-h-0"
       excerpt={item.description}
       image={{ url: item.imageUrl, alt: item.title, width: 413, height: 291 }}
       imageContainerClassName="aspect-[413/291]"
@@ -43,38 +41,7 @@ function CatalogCard({ item }: { item: CatalogProductItem }) {
 }
 
 export function CatalogProducts({ items, showHeading = false }: { items: CatalogProductItem[]; showHeading?: boolean }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isMobileContentVisible, setIsMobileContentVisible] = useState(true);
-  const transitionTimeoutRef = useRef<number | null>(null);
-  const activeItem = items[activeIndex] ?? items[0];
-
-  useEffect(() => {
-    return () => {
-      if (transitionTimeoutRef.current !== null) {
-        window.clearTimeout(transitionTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  function commitCardChange(nextIndex: number) {
-    if (!items[nextIndex] || nextIndex === activeIndex) {
-      return;
-    }
-
-    if (transitionTimeoutRef.current !== null) {
-      window.clearTimeout(transitionTimeoutRef.current);
-    }
-
-    setIsMobileContentVisible(false);
-
-    transitionTimeoutRef.current = window.setTimeout(() => {
-      setActiveIndex(nextIndex);
-      setIsMobileContentVisible(true);
-      transitionTimeoutRef.current = null;
-    }, MOBILE_FADE_DURATION_MS);
-  }
-
-  if (!activeItem) {
+  if (items.length === 0) {
     return null;
   }
 
@@ -82,20 +49,14 @@ export function CatalogProducts({ items, showHeading = false }: { items: Catalog
     <section className="my-[35px] md:my-[45px]">
       {showHeading ? <PageSubheading title="НАШИ ТОВАРЫ" /> : null}
 
-      <div className={cn("md:hidden flex flex-col", showHeading ? "mt-8" : "mt-0")}>
-        <div className={cn("transition-opacity duration-200", isMobileContentVisible ? "opacity-100" : "opacity-0")}>
-          <CatalogCard item={activeItem} />
-        </div>
-        <SliderControl
-          className="mt-5 self-center"
-          onPrevClick={() => commitCardChange(activeIndex - 1)}
-          onNextClick={() => commitCardChange(activeIndex + 1)}
-          prevDisabled={activeIndex === 0}
-          nextDisabled={activeIndex === items.length - 1}
-          prevAriaLabel={`Предыдущая карточка (${activeIndex + 1} из ${items.length})`}
-          nextAriaLabel={`Следующая карточка (${activeIndex + 1} из ${items.length})`}
-        />
-      </div>
+      <MobileSnapCarousel
+        items={items}
+        className={cn("md:hidden", showHeading ? "mt-8" : "mt-0")}
+        getItemKey={(item) => `${item.title}-${item.imageUrl}`}
+        renderItem={(item) => <CatalogCard item={item} />}
+        prevAriaLabel="Предыдущая карточка"
+        nextAriaLabel="Следующая карточка"
+      />
 
       <div className={cn("hidden gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4", showHeading ? "mt-10" : "mt-0")}>
         {items.map((item) => (
