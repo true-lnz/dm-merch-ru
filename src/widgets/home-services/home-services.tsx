@@ -32,9 +32,9 @@ const HOME_SERVICES = [
   },
 ] as const;
 
-function ServiceRequestDialog() {
+function ServiceRequestDialog({ title }: { title: string }) {
   return (
-    <RequestDialog privacyCheckboxId="home-services-request-privacy">
+    <RequestDialog source="home-services" context={title} privacyCheckboxId="home-services-request-privacy">
       <button
         type="button"
         className="cursor-pointer text-left font-medium text-base md:text-lg leading-[1.3] tracking-[-0.02em] text-[var(--accent)] transition-opacity hover:opacity-80"
@@ -66,7 +66,7 @@ function ServiceCard({ title, description }: ServiceCardProps) {
       <p className="max-w-[90%] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">{description}</p>
 
       <div className="mt-auto">
-        <ServiceRequestDialog />
+        <ServiceRequestDialog title={title} />
       </div>
     </article>
   );

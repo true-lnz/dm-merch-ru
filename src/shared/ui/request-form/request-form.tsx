@@ -1,12 +1,14 @@
 "use client";
 
+import type { RequestPayload, RequestSource, WishlistRequestItem } from "@/shared/lib/request-mail/types";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import Link from "next/link";
-import { type ChangeEvent, type ClipboardEvent, type FocusEvent, type KeyboardEvent, type MouseEvent, useId, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { startTransition, type ChangeEvent, type ClipboardEvent, type FocusEvent, type FormEvent, type KeyboardEvent, type MouseEvent, useId, useState } from "react";
 
 const DEFAULT_PRIVACY_CHECKBOX_ID = "request-form-privacy";
 
@@ -98,6 +100,12 @@ function countDigitsInRange(start: number, end: number) {
 }
 
 type RequestFormProps = {
+  source: RequestSource;
+  requestType?: RequestPayload["type"];
+  context?: string;
+  pageTitle?: string;
+  wishlistItems?: WishlistRequestItem[];
+  totalRub?: number;
   includeEmail?: boolean;
   includeQuantity?: boolean;
   quantityRequired?: boolean;
@@ -109,9 +117,16 @@ type RequestFormProps = {
   showSubmitButton?: boolean;
   messageAsInput?: boolean;
   onAccentSurface?: boolean;
+  onSuccess?: () => void;
 };
 
 export function RequestForm({
+  source,
+  requestType = "general",
+  context,
+  pageTitle,
+  wishlistItems,
+  totalRub,
   includeEmail = true,
   includeQuantity = false,
   quantityRequired = false,
@@ -123,10 +138,15 @@ export function RequestForm({
   showSubmitButton = true,
   messageAsInput = false,
   onAccentSurface = false,
+  onSuccess,
 }: RequestFormProps) {
   const messageFieldId = useId();
+  const router = useRouter();
+  const pathname = usePathname();
   const [phoneDigits, setPhoneDigits] = useState("");
   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const maskedPhoneValue = isPhoneFocused || phoneDigits.length > 0 ? applyPhoneMask(phoneDigits) : "";
 
   function setPhoneCaret(target: HTMLInputElement, digitsCount: number) {
@@ -211,14 +231,87 @@ export function RequestForm({
     setPhoneCaret(event.currentTarget, removeIndex);
   }
 
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (isSubmitting) {
+      return;
+    }
+
+    setSubmitError(null);
+
+    const form = event.currentTarget;
+
+    if (!form.reportValidity()) {
+      return;
+    }
+
+    const formData = new FormData(form);
+    const basePayload = {
+      type: requestType,
+      source,
+      context,
+      pagePath: pathname,
+      pageTitle: pageTitle ?? (typeof document !== "undefined" ? document.title : undefined),
+      name: String(formData.get("name") ?? "").trim(),
+      phone: String(formData.get("phone") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim() || undefined,
+      message: String(formData.get("message") ?? "").trim() || undefined,
+    };
+
+    const payload: RequestPayload =
+      requestType === "wishlist"
+        ? {
+            ...basePayload,
+            type: "wishlist",
+            source: "wishlist-dialog",
+            wishlistItems: wishlistItems ?? [],
+            totalRub: totalRub ?? 0,
+          }
+        : {
+            ...basePayload,
+            type: "general",
+            quantity: includeQuantity ? Number(String(formData.get("quantity") ?? "").trim()) || undefined : undefined,
+          };
+
+    try {
+      setIsSubmitting(true);
+
+      const response = await fetch("/api/requests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json()) as { ok: boolean; error?: string; redirectTo?: string };
+
+      if (!response.ok || !result.ok || !result.redirectTo) {
+        throw new Error(result.error || "Не удалось отправить заявку. Попробуйте еще раз.");
+      }
+
+      const redirectTo = result.redirectTo;
+
+      onSuccess?.();
+
+      startTransition(() => {
+        router.push(redirectTo);
+      });
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Не удалось отправить заявку. Попробуйте еще раз.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <form
       id={formId}
       data-surface={onAccentSurface ? "accent" : "default"}
       className={cn("group/form space-y-4", formClassName)}
-      action="/request-success"
-      target="_blank"
       noValidate
+      onSubmit={handleSubmit}
     >
       <div className="block">
         <Input placeholder="Имя*" name="name" required className={inputClassName} />
@@ -294,9 +387,20 @@ export function RequestForm({
         </div>
       </div>
 
+      {submitError ? (
+        <p className="text-sm leading-[1.4] tracking-[-0.03em] text-[#d13f3f] group-data-[surface=accent]/form:text-white">
+          {submitError}
+        </p>
+      ) : null}
+
       {showSubmitButton ? (
-        <Button type="submit" variant="blue" className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}>
-          {submitLabel}
+        <Button
+          type="submit"
+          variant="blue"
+          disabled={isSubmitting}
+          className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}
+        >
+          {isSubmitting ? "Отправляем..." : submitLabel}
         </Button>
       ) : null}
     </form>

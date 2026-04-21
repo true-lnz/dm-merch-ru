@@ -60,6 +60,7 @@ export function CatalogWorkStages() {
                 Опишите нам свою идею, а&nbsp;мы&nbsp;поможем её&nbsp;реализовать
               </h3>
               <RequestForm
+                source="catalog-work-stages"
                 formClassName="mt-6 md:mt-8"
                 includeEmail={false}
                 privacyCheckboxId="catalog-work-stages-privacy"

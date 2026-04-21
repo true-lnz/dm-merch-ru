@@ -77,7 +77,7 @@ function DigestDefaultCard({ item, layout, isContentVisible }: { item: HomeDiges
         </div>
 
         <div className="pt-[22px] md:pt-6">
-          <RequestDialog>
+          <RequestDialog source="home-digest-card" context={item.title}>
             <DigestRequestButton
               className="h-[48px] rounded-[7px] text-lg transition-colors duration-200 md:h-[47px]"
               label={DIGEST_CTA_LABEL}
@@ -141,7 +141,7 @@ function DigestWildCard({ item, layout, isContentVisible }: { item: HomeDigestWi
         </div>
 
         <div className={cn(isMobile ? "pt-[22px]" : "mt-auto pt-6")}>
-          <RequestDialog>
+          <RequestDialog source="home-digest-card" context={item.title}>
             <DigestRequestButton
               className={cn("rounded-[7px] text-lg transition-colors duration-200 h-[47px] w-full")}
               label={DIGEST_CTA_LABEL}

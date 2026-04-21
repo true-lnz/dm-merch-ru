@@ -79,7 +79,7 @@ export function HomeResults() {
               prevAriaLabel="Предыдущий слайд"
               nextAriaLabel="Следующий слайд"
             />
-            <RequestDialog>
+            <RequestDialog source="home-results" context={activeSlide.image.alt}>
               <button
                 type="button"
                 className="cursor-pointer order-2 inline-flex h-[47px] items-center justify-center rounded-[9px] bg-[var(--accent)] px-6 text-lg font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:order-1 lg:w-[239px]"

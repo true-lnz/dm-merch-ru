@@ -40,7 +40,7 @@ function ContactsMapCard() {
 
 function DiscussionCta() {
   return (
-    <RequestDialog>
+    <RequestDialog source="contacts-page">
       <RequestDialogButton />
     </RequestDialog>
   );

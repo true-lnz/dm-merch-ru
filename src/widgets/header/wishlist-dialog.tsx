@@ -150,11 +150,22 @@ export function WishlistDialog({ variant, className }: WishlistDialogProps) {
 
               <section aria-label="Контактные данные" className="rounded-[14px] bg-white p-4 sm:p-5 lg:col-span-3">
                 <RequestForm
+                  source="wishlist-dialog"
+                  requestType="wishlist"
+                  wishlistItems={items.map((item) => ({
+                    id: item.id,
+                    title: item.title,
+                    articleNumber: item.articleNumber,
+                    quantity: item.quantity,
+                    unitPriceRub: item.unitPriceRub,
+                  }))}
+                  totalRub={totalRub}
                   includeEmail
                   formId="wishlist-request-form"
                   privacyCheckboxId="wishlist-dialog-privacy"
                   showSubmitButton={false}
                   messageAsInput
+                  onSuccess={clear}
                   formClassName="flex h-full flex-col gap-3"
                 />
               </section>

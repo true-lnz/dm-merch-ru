@@ -1,5 +1,6 @@
 "use client";
 
+import type { RequestSource } from "@/shared/lib/request-mail/types";
 import { cn } from "@/shared/lib/cn";
 import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import { RequestForm } from "@/shared/ui/request-form";
@@ -19,6 +20,8 @@ type RequestDialogButtonProps = Omit<ComponentPropsWithoutRef<"button">, "childr
 
 type RequestDialogProps = {
   children: ReactElement;
+  source: RequestSource;
+  context?: string;
   privacyCheckboxId?: string;
   includeQuantity?: boolean;
   quantityRequired?: boolean;
@@ -88,6 +91,8 @@ export const RequestDialogButton = forwardRef<HTMLButtonElement, RequestDialogBu
 
 export function RequestDialog({
   children,
+  source,
+  context,
   privacyCheckboxId,
   includeQuantity = false,
   quantityRequired = false,
@@ -119,6 +124,8 @@ export function RequestDialog({
         </div>
 
         <RequestForm
+          source={source}
+          context={context}
           includeEmail={false}
           includeQuantity={includeQuantity}
           quantityRequired={quantityRequired}

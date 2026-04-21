@@ -74,7 +74,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
             </div>
 
             <div className="mt-auto flex flex-col gap-[10px] pt-2 md:flex-row">
-              <RequestDialog>
+              <RequestDialog source="catalog-hero" context={heroTitle}>
                 <RequestDialogButton className="w-full md:w-auto" label="Обсудить задачу" />
               </RequestDialog>
             </div>
