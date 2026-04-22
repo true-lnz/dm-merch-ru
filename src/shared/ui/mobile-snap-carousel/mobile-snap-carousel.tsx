@@ -1,7 +1,9 @@
 "use client";
 
-import useEmblaCarousel, { type EmblaOptionsType } from "embla-carousel-react";
-import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { observeElementResize } from "@/shared/lib/browser-compat";
+import { EmblaOptionsType } from "embla-carousel";
+import useEmblaCarousel from "embla-carousel-react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 import { cn } from "@/shared/lib/cn";
 import { SliderControl } from "@/shared/ui/slider-control";
@@ -22,6 +24,7 @@ type MobileSnapCarouselProps<T> = {
   slideWidth?: string;
   slideInset?: string;
   gap?: string;
+  equalizeSlideHeight?: boolean;
   opts?: EmblaOptionsType;
 };
 
@@ -45,6 +48,7 @@ export function MobileSnapCarousel<T>({
   slideWidth = DEFAULT_SLIDE_WIDTH,
   slideInset = DEFAULT_SLIDE_INSET,
   gap = DEFAULT_GAP,
+  equalizeSlideHeight = false,
   opts,
 }: MobileSnapCarouselProps<T>) {
   const emblaOptions = useMemo<EmblaOptionsType>(
@@ -66,6 +70,8 @@ export function MobileSnapCarousel<T>({
     canScrollPrev: false,
     canScrollNext: items.length > 1,
   });
+  const [slideHeight, setSlideHeight] = useState(0);
+  const measureSlideRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   const renderedSlides = useMemo(
     () =>
@@ -107,6 +113,40 @@ export function MobileSnapCarousel<T>({
     };
   }, [emblaApi]);
 
+  useEffect(() => {
+    if (!emblaApi || !equalizeSlideHeight) {
+      return;
+    }
+
+    emblaApi.reInit();
+  }, [emblaApi, equalizeSlideHeight, slideHeight]);
+
+  useEffect(() => {
+    if (!equalizeSlideHeight || typeof window === "undefined") {
+      return;
+    }
+
+    const measureHeights = () => {
+      const nextHeight = measureSlideRefs.current.reduce((maxHeight, slideNode) => {
+        if (!slideNode) {
+          return maxHeight;
+        }
+
+        return Math.max(maxHeight, slideNode.getBoundingClientRect().height);
+      }, 0);
+
+      setSlideHeight((currentHeight) => (currentHeight === nextHeight ? currentHeight : nextHeight));
+    };
+
+    const frameId = window.requestAnimationFrame(measureHeights);
+    const cleanupResizeObserver = observeElementResize(measureSlideRefs.current, measureHeights);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      cleanupResizeObserver();
+    };
+  }, [equalizeSlideHeight, renderedSlides]);
+
   if (items.length === 0) {
     return null;
   }
@@ -121,27 +161,19 @@ export function MobileSnapCarousel<T>({
 
   const slideInnerStyle: CSSProperties = {
     paddingInline: slideInset,
+    ...(equalizeSlideHeight && slideHeight > 0 ? { height: `${slideHeight}px` } : {}),
   };
 
   return (
-    <div className={cn("flex flex-col", className)}>
+    <div className={cn("relative flex flex-col", className)}>
       <div
         ref={viewportRef}
-        className={cn(
-          "-mx-[var(--layout-side-padding)] overflow-hidden touch-pan-y select-none",
-          viewportClassName,
-        )}
+        className={cn("-mx-[var(--layout-side-padding)] overflow-hidden touch-pan-y select-none", viewportClassName)}
         role="region"
         aria-roledescription="carousel"
         aria-label={ariaLabel}
       >
-        <div
-          className={cn(
-            "flex items-stretch will-change-transform",
-            trackClassName,
-          )}
-          style={trackStyle}
-        >
+        <div className={cn("flex items-stretch will-change-transform", trackClassName)} style={trackStyle}>
           {renderedSlides.map((slide, index) => (
             <div
               key={slide.key}
@@ -151,11 +183,29 @@ export function MobileSnapCarousel<T>({
               aria-roledescription="slide"
               aria-label={`${index + 1} из ${items.length}`}
             >
-              <div style={slideInnerStyle}>{slide.content}</div>
+              <div style={slideInnerStyle}>
+                <div className="h-full">{slide.content}</div>
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      {equalizeSlideHeight ? (
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 invisible">
+          {renderedSlides.map((slide, index) => (
+            <div key={`measure-${slide.key}`} style={{ paddingInline: slideInset }}>
+              <div
+                ref={(node) => {
+                  measureSlideRefs.current[index] = node;
+                }}
+              >
+                {slide.content}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       {showControls ? (
         <SliderControl
