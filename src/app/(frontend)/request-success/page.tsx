@@ -10,8 +10,9 @@ const HERO_IMAGE = {
   alt: "Команда в фирменном мерче",
 } as const;
 
-const HEADING_TEMPLATE = "Спасибо за обращение,\nТУТ_ИМЯ!";
+const HEADING_TEMPLATE = "Спасибо\nза обращение,\nТУТ_ИМЯ!";
 const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
+const HERO_HEIGHT = "clamp(620px, 72vh, 820px)";
 const MAX_ICON_PATH =
   "M20.2594 31.9333C17.9015 31.9333 16.8061 31.5867 14.9072 30.1995C13.6987 31.7602 9.89454 32.9744 9.72701 30.8931C9.72701 29.3337 9.3785 28.0199 8.99413 26.5739C8.52339 24.8021 8 22.8313 8 19.967C8 13.1376 13.5803 8 20.1972 8C26.8125 8 32 13.3874 32 20.0336C32 26.679 26.6471 31.9335 20.2591 31.9335L20.2594 31.9333ZM20.3549 13.905C17.1355 13.7357 14.6234 15.9781 14.0694 19.4883C13.6102 22.3953 14.4238 25.9372 15.1195 26.1154C15.4479 26.1994 16.2883 25.5169 16.8057 24.9966C17.6582 25.5512 18.6356 25.9812 19.7224 26.0377C23.0278 26.2115 25.9563 23.6149 26.1298 20.2967C26.3034 16.9782 23.6605 14.079 20.3551 13.905H20.3549Z";
 
@@ -39,55 +40,58 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
   const heading = HEADING_TEMPLATE.replace("ТУТ_ИМЯ", resolveName(resolvedSearchParams?.name));
 
   return (
-    <section className="mt-[36px] relative w-full overflow-visible">
-      <div className="flex min-h-0 w-full justify-start xl:h-[80vh] 2xl:h-[90vh]">
-        <div className="pointer-events-none absolute inset-y-0 hidden right-[calc(var(--layout-side-padding)*-1)] w-[65%] xl:block 2xl:w-[55%]">
-          <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill priority unoptimized sizes="42vw" className="object-cover object-[130%_top]" />
-        </div>
-
-        <div className="relative z-10 mb-16 flex w-full justify-center xl:block xl:w-1/2 xl:max-w-[50%]">
-          <div className="flex w-full flex-col px-[0px] pb-[0px] pt-5 xl:h-full xl:max-w-none xl:justify-between rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.7)] xl:px-[50px] xl:pb-[50px] xl:pt-[50px] xl:backdrop-blur-[8px]">
-            <div className="flex flex-col gap-5 xl:gap-[30px]">
+    <section className="relative mt-[35px]">
+      <div
+        className="
+          grid grid-cols-1
+          xl:grid-cols-[minmax(0,580px)_minmax(0,1fr)]
+          2xl:grid-cols-[minmax(0,800px)_minmax(0,1fr)]
+        "
+        style={{ minHeight: HERO_HEIGHT }}
+      >
+        <div className="relative z-10 max-w-none xl:max-w-[45vw] mb-[75px]">
+          <div className="flex h-full flex-col gap-8 rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.72)] xl:px-10 xl:py-10 xl:backdrop-blur-[8px] 2xl:gap-10 2xl:px-12 2xl:py-12">
+            <div className="flex flex-col gap-4 xl:gap-5">
               <PageHeading title={heading} />
-              <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
+              <p className="max-w-[340px] text-sm leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21px]">
                 Ваша заявка уже у нас в работе.
               </p>
-              <p className="max-w-[340px] text-sm md:text-lg xl:text-2xl leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21.6px]">
+              <p className="max-w-[340px] text-sm leading-[1.3] tracking-[-0.03em] text-[#2a2a2a] md:max-w-[38rem] md:text-[18px] xl:max-w-[532px] xl:text-[21px]">
                 Поможем подобрать продукцию, которая будет полезна бизнесу, понравится сотрудникам и усилит бренд.
               </p>
             </div>
 
-            <div className="relative aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] mt-4 xl:hidden">
+            <div className="relative -mb-8 aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden">
               <Image
                 src={HERO_IMAGE.src}
                 alt={HERO_IMAGE.alt}
                 fill
                 priority
-                sizes="(max-width: 767px) calc(100vw - 60px), 420px"
-                className="object-cover object-center"
+                sizes="(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 70vw, 0px"
+                className="object-cover object-top"
               />
             </div>
 
-            <div className="mt-8 sm:mt-0 flex flex-col gap-[10px] md:flex-row">
+            <div className="mt-auto flex flex-col gap-[10px] pt-2 md:flex-row xl:flex-wrap 2xl:flex-nowrap">
               <Link
                 href="/"
-                className="group flex h-[60px] w-full items-center justify-between rounded-[9px] bg-[var(--accent)] px-5 text-lg font-normal tracking-[-0.04em] text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] md:w-[284px] xl:w-[283.6px] xl:text-[19.46px]"
+                className="group flex h-[60px] w-full items-center justify-between rounded-[9px] bg-[var(--accent)] px-5 text-lg font-normal tracking-[-0.04em] text-white transition-colors duration-200 hover:bg-white hover:text-[var(--accent)] md:w-auto md:min-w-[284px] xl:flex-1 2xl:w-[283px] 2xl:flex-none"
               >
                 <span className="self-start pt-2">На главную</span>
-                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-[5px] bg-white transition-colors duration-200 group-hover:bg-[var(--accent)] xl:size-[39.52px] xl:rounded-[4px]">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-[5px] bg-white transition-colors duration-200 group-hover:bg-[var(--accent)]">
                   <Image
                     src={SECONDARY_ARROW_ICON_SRC}
                     alt=""
                     width={17}
                     height={17}
                     aria-hidden="true"
-                    className="size-[17px] transition-[transform,filter] duration-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:brightness-0 group-hover:invert xl:size-[13.55px]"
+                    className="size-[17px] transition-[transform,filter] duration-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:brightness-0 group-hover:invert"
                   />
                 </span>
               </Link>
               <Link
                 href={vkSocialHref}
-                aria-label="MAX"
+                aria-label="VK"
                 target="_blank"
                 rel="noreferrer"
                 className={cn(
@@ -95,7 +99,7 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
                   "group hidden h-[60px] w-[60px] items-center justify-center rounded-[9px] border-transparent bg-white p-0 text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] xl:flex",
                 )}
               >
-                <svg viewBox="0 0 40 40" className="size-[40px] xl:size-[48px]" aria-hidden="true" fill="none">
+                <svg viewBox="0 0 40 40" className="size-[40px]" aria-hidden="true" fill="none">
                   <path d={VK_ICON_PATH} className="fill-[var(--accent)] transition-colors duration-200 group-hover:fill-white" />
                 </svg>
               </Link>
@@ -109,11 +113,17 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
                   "group hidden h-[60px] w-[60px] items-center justify-center rounded-[9px] border-transparent bg-white p-0 text-[var(--accent)] transition-colors duration-200 hover:bg-[var(--accent)] xl:flex",
                 )}
               >
-                <svg viewBox="0 0 40 40" className="size-[40px] xl:size-[48px]" aria-hidden="true" fill="none">
+                <svg viewBox="0 0 40 40" className="size-[40px]" aria-hidden="true" fill="none">
                   <path d={MAX_ICON_PATH} className="fill-[var(--accent)] transition-colors duration-200 group-hover:fill-white" />
                 </svg>
               </Link>
             </div>
+          </div>
+        </div>
+
+        <div className="relative hidden min-w-0 xl:block">
+          <div className="relative h-full w-full 2xl:h-[85vh]">
+            <img loading="eager" src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
           </div>
         </div>
       </div>
