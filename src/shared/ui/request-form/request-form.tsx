@@ -1,18 +1,28 @@
 "use client";
 
-import type { RequestPayload, RequestSource, WishlistRequestItem } from "@/shared/lib/request-mail/types";
 import { cn } from "@/shared/lib/cn";
+import type { RequestPayload, RequestSource, WishlistRequestItem } from "@/shared/lib/request-mail/types";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { startTransition, type ChangeEvent, type ClipboardEvent, type FocusEvent, type FormEvent, type KeyboardEvent, type MouseEvent, useId, useState } from "react";
+import {
+  startTransition,
+  useId,
+  useState,
+  type ChangeEvent,
+  type ClipboardEvent,
+  type FocusEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  type MouseEvent,
+} from "react";
 
 const DEFAULT_PRIVACY_CHECKBOX_ID = "request-form-privacy";
 
-const fieldBaseClassName = "rounded-none border-0 border-b bg-transparent px-0 text-sm md:text-base shadow-none focus-visible:ring-0";
+const fieldBaseClassName = "rounded-none border-0 border-b bg-transparent px-0 text-base shadow-none focus-visible:ring-0";
 
 const fieldSurfaceClassName =
   "border-[var(--field-border)] text-[var(--text)] placeholder:text-[var(--field-text)] focus-visible:border-[var(--accent)] group-data-[surface=accent]/form:border-white/40 group-data-[surface=accent]/form:text-white group-data-[surface=accent]/form:placeholder:text-white/60 group-data-[surface=accent]/form:focus-visible:border-white";
@@ -352,10 +362,7 @@ export function RequestForm({
           <Input id={messageFieldId} placeholder="Сообщение" name="message" className={inputClassName} />
         ) : (
           <>
-            <label
-              htmlFor={messageFieldId}
-              className="mb-2 block text-sm md:text-base text-[var(--field-text)] group-data-[surface=accent]/form:text-white/60"
-            >
+            <label htmlFor={messageFieldId} className="mb-2 block text-base text-[var(--field-text)] group-data-[surface=accent]/form:text-white/60">
               Сообщение
             </label>
             <Textarea id={messageFieldId} floatingLabel={false} placeholder="" name="message" rows={3} className={textareaClassName} />
@@ -392,18 +399,11 @@ export function RequestForm({
       </div>
 
       {submitError ? (
-        <p className="text-sm leading-[1.4] tracking-[-0.03em] text-[#d13f3f] group-data-[surface=accent]/form:text-white">
-          {submitError}
-        </p>
+        <p className="text-sm leading-[1.4] tracking-[-0.03em] text-[#d13f3f] group-data-[surface=accent]/form:text-white">{submitError}</p>
       ) : null}
 
       {showSubmitButton ? (
-        <Button
-          type="submit"
-          variant="blue"
-          disabled={isSubmitting}
-          className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}
-        >
+        <Button type="submit" variant="blue" disabled={isSubmitting} className={cn("h-[47px] w-full cursor-pointer text-lg", submitClassName)}>
           {isSubmitting ? "Отправляем..." : submitLabel}
         </Button>
       ) : null}

@@ -6,7 +6,7 @@ import { RequestForm } from "@/shared/ui/request-form";
 export function RequestCta() {
   return (
     <section className="relative mt-[35px] md:mt-[45px]" aria-label="Форма заявки">
-      <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-[auto_1fr]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-[auto_1fr]">
         <div className="contents lg:relative lg:row-span-2 lg:flex lg:flex-col lg:justify-between">
           <img
             src="/img_cta_cover.svg"
@@ -24,7 +24,7 @@ export function RequestCta() {
                 </>
               }
             />
-            <p className="max-w-[800px] text-base tracking-[0.0354] text-[var(--text)] md:text-2xl">
+            <p className="max-w-[800px] text-sm sm:text-base tracking-[0.0354] text-[var(--text)] md:text-2xl">
               Ответим в течение 30 минут. Подскажем формат, сроки и бюджет.
             </p>
           </div>
@@ -33,13 +33,13 @@ export function RequestCta() {
             email={siteInfo.email}
             phone={siteInfo.phone}
             variant="cta"
-            className="order-3 relative z-10 w-full lg:w-auto lg:self-start mb-[55px]"
+            className="order-3 relative z-10 w-full lg:w-auto lg:self-start mb-[54px]"
           />
         </div>
 
         <RequestForm
           source="request-cta"
-          formClassName="order-2 lg:row-span-2 mb-[55px]"
+          formClassName="order-2 lg:row-span-2 mb-[22.5px] md:mb-[54px]"
           privacyCheckboxId="request-cta-privacy"
           submitClassName="lg:w-[440px]"
         />
