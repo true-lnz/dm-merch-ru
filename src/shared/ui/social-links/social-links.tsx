@@ -15,7 +15,7 @@ const SOCIAL_ICON_CONFIG = {
     path: TG_ICON_PATH,
     viewBox: "0 0 560 450",
     className: "w-auto h-5",
-    menuClassName: "size-full",
+    menuClassName: "w-auto h-5",
   },
   vk: {
     path: VK_ICON_PATH,
