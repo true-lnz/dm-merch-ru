@@ -150,7 +150,15 @@ export function MobileMenu({
                     <ul className="grid gap-[14px] overflow-hidden">
                       {catalogItem.children?.map((item) => (
                         <li key={item.href}>
-                          <TransitionLink href={item.href} source="menu" className={mobileMenuLinkClassName} onClick={onCloseMenu}>
+                          <TransitionLink
+                            href={item.href}
+                            source="menu"
+                            className={cn(
+                              mobileMenuLinkClassName,
+                              item.label === "Каталог продукции" && "font-semibold text-[#404040]",
+                            )}
+                            onClick={onCloseMenu}
+                          >
                             {item.label}
                           </TransitionLink>
                         </li>

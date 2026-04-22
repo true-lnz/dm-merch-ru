@@ -48,14 +48,17 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
                   >
                     {item.label}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="w-[220px] rounded-b-[14px] rounded-t-none bg-white p-0 shadow-none ring-0">
+                  <NavigationMenuContent className="w-[240px] rounded-b-[14px] rounded-t-none bg-white p-0 shadow-none ring-0">
                     <div className="py-[13px]">
                       {item.children.map((child) => (
                         <NavigationMenuLink
                           key={child.href}
                           render={<TransitionLink href={child.href} source="header" />}
                           closeOnClick
-                          className={catalogMenuLinkClassName}
+                          className={cn(
+                            catalogMenuLinkClassName,
+                            child.label === "Каталог продукции" && "font-semibold text-[#404040]",
+                          )}
                         >
                           <span>{child.label}</span>
                           <ChevronRightIcon
