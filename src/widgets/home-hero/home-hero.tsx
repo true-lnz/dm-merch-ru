@@ -111,12 +111,7 @@ export function HomeHero() {
         {/* Desktop image */}
         <div className="relative hidden min-w-0 xl:block">
           <div className="relative h-[72vh] xl:h-[68vh] 2xl:h-[85vh] w-full">
-            <img
-              loading="eager"
-              src={HERO_IMAGE.src}
-              alt={HERO_IMAGE.alt}
-              className="absolute right-[calc(var(--layout-side-padding)*-1)] bottom-0 h-full w-auto max-w-none"
-            />
+            <img loading="eager" src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
           </div>
         </div>
       </div>
