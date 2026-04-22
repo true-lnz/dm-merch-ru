@@ -3,7 +3,7 @@
 import { cn } from "@/shared/lib/cn";
 import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeReview = {
@@ -117,6 +117,10 @@ const TESTIMONIALS = [
 export function HomeReviews() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isQuoteExpanded, setIsQuoteExpanded] = useState(false);
+  const [mobileContentWidth, setMobileContentWidth] = useState(0);
+  const [mobileContentHeights, setMobileContentHeights] = useState({ collapsed: 170, expanded: 310 });
+  const mobileContentRef = useRef<HTMLDivElement | null>(null);
+  const mobileMeasureRef = useRef<HTMLDivElement | null>(null);
   const activeItem = TESTIMONIALS[activeIndex];
   const isFirstSlide = activeIndex === 0;
   const isLastSlide = activeIndex === TESTIMONIALS.length - 1;
@@ -130,6 +134,54 @@ export function HomeReviews() {
   const showNextReview = () => {
     setActiveIndex((currentIndex) => currentIndex + 1);
   };
+
+  useEffect(() => {
+    const element = mobileContentRef.current;
+
+    if (!element || typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    const updateWidth = () => {
+      setMobileContentWidth(element.clientWidth);
+    };
+
+    updateWidth();
+
+    const observer = new ResizeObserver(() => {
+      updateWidth();
+    });
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const measureRoot = mobileMeasureRef.current;
+
+    if (!measureRoot || mobileContentWidth === 0) {
+      return;
+    }
+
+    const collapsedHeights = Array.from(measureRoot.querySelectorAll<HTMLElement>("[data-measure-state='collapsed']"));
+    const expandedHeights = Array.from(measureRoot.querySelectorAll<HTMLElement>("[data-measure-state='expanded']"));
+    const nextCollapsedHeight = Math.max(170, ...collapsedHeights.map((element) => element.offsetHeight));
+    const nextExpandedHeight = Math.max(nextCollapsedHeight, ...expandedHeights.map((element) => element.offsetHeight));
+
+    setMobileContentHeights((currentValue) => {
+      if (currentValue.collapsed === nextCollapsedHeight && currentValue.expanded === nextExpandedHeight) {
+        return currentValue;
+      }
+
+      return {
+        collapsed: nextCollapsedHeight,
+        expanded: nextExpandedHeight,
+      };
+    });
+  }, [mobileContentWidth]);
 
   return (
     <section className="my-[35px] md:my-[45px]">
@@ -172,7 +224,14 @@ export function HomeReviews() {
           <div className="flex flex-1 flex-col gap-[9px]">
             <h3 className="hidden font-heading text-3xl leading-none uppercase md:block md:text-4xl">{activeItem.company}</h3>
 
-            <div className={cn("md:hidden flex flex-col", isQuoteExpanded ? "max-h-[310px] min-h-[310px]" : "min-h-[170px] max-h-[170px]")}>
+            <div
+              ref={mobileContentRef}
+              className="md:hidden flex flex-col"
+              style={{
+                minHeight: isQuoteExpanded ? mobileContentHeights.expanded : mobileContentHeights.collapsed,
+                maxHeight: isQuoteExpanded ? mobileContentHeights.expanded : mobileContentHeights.collapsed,
+              }}
+            >
               <h3
                 className={cn(
                   "mb-2 font-heading text-3xl leading-none uppercase",
@@ -220,6 +279,41 @@ export function HomeReviews() {
             nextAriaLabel={`Следующий отзыв (${activeIndex + 1} из ${TESTIMONIALS.length})`}
           />
         </div>
+      </div>
+
+      <div
+        ref={mobileMeasureRef}
+        className="pointer-events-none absolute -left-[9999px] top-0 invisible md:hidden"
+        aria-hidden="true"
+        style={{ width: mobileContentWidth || undefined }}
+      >
+        {TESTIMONIALS.map((item) => (
+          <div key={`${item.company}-collapsed`} data-measure-state="collapsed" className="flex flex-col">
+            <h3 className="mb-2 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical] font-heading text-3xl leading-none uppercase">
+              {item.company}
+            </h3>
+            <p className="overflow-hidden [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] text-sm leading-[1.35] tracking-[-0.03em]">
+              {item.quote.join(" ")}
+            </p>
+            <button type="button" className="mt-auto pt-3 w-fit border-b border-current pb-0.5 text-sm font-semibold leading-none">
+              Раскрыть больше
+            </button>
+          </div>
+        ))}
+
+        {TESTIMONIALS.map((item) => (
+          <div key={`${item.company}-expanded`} data-measure-state="expanded" className="flex flex-col">
+            <h3 className="mb-2 font-heading text-3xl leading-none uppercase">{item.company}</h3>
+            <div className="space-y-4 text-sm leading-[1.35] tracking-[-0.03em]">
+              {item.quote.map((paragraph) => (
+                <p key={`${item.company}-${paragraph}`}>{paragraph}</p>
+              ))}
+            </div>
+            <button type="button" className="mt-auto pt-3 w-fit border-b border-current pb-0.5 text-sm font-semibold leading-none">
+              Скрыть
+            </button>
+          </div>
+        ))}
       </div>
     </section>
   );
