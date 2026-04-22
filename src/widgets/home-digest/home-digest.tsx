@@ -1,6 +1,9 @@
+"use client";
+
 import { PageSubheading } from "../../shared/ui/page-subheading";
+import { MobileSnapCarousel } from "../../shared/ui/mobile-snap-carousel";
 import { DigestGrid } from "./digest-grid";
-import { DigestMobileCarousel } from "./digest-mobile-carousel";
+import { DigestCard } from "./digest-card";
 import { DIGEST_GRID_LAYOUT, DIGEST_MOBILE_ORDER } from "./home-digest.config";
 import { DIGEST_CARDS, DIGEST_DESCRIPTION, DIGEST_TITLE, type HomeDigestCard, type HomeDigestCardId } from "./home-digest.data";
 
@@ -19,7 +22,14 @@ export function HomeDigest() {
     <section className="mb-[35px] md:mb-[45px]">
       <PageSubheading title={DIGEST_TITLE} description={DIGEST_DESCRIPTION} descriptionPlacement="side" sideDescriptionLayout="two-columns" />
 
-      <DigestMobileCarousel cards={MOBILE_DIGEST_CARDS} className="mt-[36px] md:hidden" />
+      <MobileSnapCarousel
+        items={MOBILE_DIGEST_CARDS}
+        className="mt-[36px] md:hidden"
+        getItemKey={(card) => card.id}
+        renderItem={(card) => <DigestCard item={card} layout="mobile" />}
+        prevAriaLabel="Предыдущая карточка"
+        nextAriaLabel="Следующая карточка"
+      />
 
       <DigestGrid cardsById={DIGEST_CARDS_BY_ID} layoutItems={DIGEST_GRID_LAYOUT.items} className="hidden md:grid mt-[55px]" />
     </section>

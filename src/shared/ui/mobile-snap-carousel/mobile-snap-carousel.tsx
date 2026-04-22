@@ -61,9 +61,20 @@ export function MobileSnapCarousel<T>({
   );
 
   const [viewportRef, emblaApi] = useEmblaCarousel(emblaOptions);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(items.length > 1);
+  const [carouselState, setCarouselState] = useState({
+    selectedIndex: 0,
+    canScrollPrev: false,
+    canScrollNext: items.length > 1,
+  });
+
+  const renderedSlides = useMemo(
+    () =>
+      items.map((item, index) => ({
+        key: getItemKey ? getItemKey(item, index) : index.toString(),
+        content: renderItem(item, index),
+      })),
+    [getItemKey, items, renderItem],
+  );
 
   useEffect(() => {
     if (!emblaApi) {
@@ -71,9 +82,19 @@ export function MobileSnapCarousel<T>({
     }
 
     const syncState = () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-      setCanScrollPrev(emblaApi.canScrollPrev());
-      setCanScrollNext(emblaApi.canScrollNext());
+      const nextState = {
+        selectedIndex: emblaApi.selectedScrollSnap(),
+        canScrollPrev: emblaApi.canScrollPrev(),
+        canScrollNext: emblaApi.canScrollNext(),
+      };
+
+      setCarouselState((currentState) =>
+        currentState.selectedIndex === nextState.selectedIndex &&
+        currentState.canScrollPrev === nextState.canScrollPrev &&
+        currentState.canScrollNext === nextState.canScrollNext
+          ? currentState
+          : nextState,
+      );
     };
 
     syncState();
@@ -121,16 +142,16 @@ export function MobileSnapCarousel<T>({
           )}
           style={trackStyle}
         >
-          {items.map((item, index) => (
+          {renderedSlides.map((slide, index) => (
             <div
-              key={getItemKey ? getItemKey(item, index) : index.toString()}
+              key={slide.key}
               className={cn("min-w-0", slideClassName)}
               style={slideStyle}
               role="group"
               aria-roledescription="slide"
               aria-label={`${index + 1} из ${items.length}`}
             >
-              <div style={slideInnerStyle}>{renderItem(item, index)}</div>
+              <div style={slideInnerStyle}>{slide.content}</div>
             </div>
           ))}
         </div>
@@ -141,10 +162,10 @@ export function MobileSnapCarousel<T>({
           className={cn("mt-5 self-center", controlsClassName)}
           onPrevClick={() => emblaApi?.scrollPrev()}
           onNextClick={() => emblaApi?.scrollNext()}
-          prevDisabled={!canScrollPrev}
-          nextDisabled={!canScrollNext}
-          prevAriaLabel={`${prevAriaLabel} (${selectedIndex + 1} из ${items.length})`}
-          nextAriaLabel={`${nextAriaLabel} (${selectedIndex + 1} из ${items.length})`}
+          prevDisabled={!carouselState.canScrollPrev}
+          nextDisabled={!carouselState.canScrollNext}
+          prevAriaLabel={`${prevAriaLabel} (${carouselState.selectedIndex + 1} из ${items.length})`}
+          nextAriaLabel={`${nextAriaLabel} (${carouselState.selectedIndex + 1} из ${items.length})`}
         />
       ) : null}
     </div>

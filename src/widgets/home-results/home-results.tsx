@@ -1,10 +1,11 @@
 "use client";
 
 import { RequestDialog } from "@/features/request-dialog";
+import { observeElementResize } from "@/shared/lib/browser-compat";
 import { cn } from "@/shared/lib/cn";
 import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeResultSlide = {
@@ -47,50 +48,132 @@ const RESULT_SLIDES = [
   },
 ] satisfies HomeResultSlide[];
 
+function getSlideContentItems(slide: HomeResultSlide) {
+  return [
+    { title: "Было", text: slide.before },
+    { title: "Стало", text: slide.after },
+    { title: "Результат", text: slide.result },
+  ];
+}
+
+type HomeResultsContentProps = {
+  slide: HomeResultSlide;
+  onPrevClick: () => void;
+  onNextClick: () => void;
+  showDialogButton?: boolean;
+};
+
+function HomeResultsContent({
+  slide,
+  onPrevClick,
+  onNextClick,
+  showDialogButton = true,
+}: HomeResultsContentProps) {
+  const contentItems = getSlideContentItems(slide);
+  const actionButtonClassName =
+    "cursor-pointer order-2 inline-flex h-[47px] items-center justify-center rounded-[9px] bg-[var(--accent)] px-6 text-lg font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:order-1 lg:w-[239px]";
+
+  return (
+    <div className="flex h-full flex-col">
+      <div className="grid auto-rows-max grid-cols-1 gap-[18px] xl:mb-0 xl:flex-1 xl:grid-cols-2 xl:gap-x-[18px] xl:gap-y-[18px]">
+        {contentItems.map((item, index) => (
+          <article key={item.title} className={["flex h-full flex-col", index === contentItems.length - 1 ? "xl:col-span-2" : ""].join(" ")}>
+            <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{item.title}</h3>
+            <p className="mt-[15px] text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">{item.text}</p>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-[36px] flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:mt-[40px]">
+        <SliderControl
+          className="order-1 mx-auto md:order-2 md:mx-0"
+          onPrevClick={onPrevClick}
+          onNextClick={onNextClick}
+          prevAriaLabel="Предыдущий слайд"
+          nextAriaLabel="Следующий слайд"
+        />
+        {showDialogButton ? (
+          <RequestDialog source="home-results" context={slide.image.alt}>
+            <button type="button" className={actionButtonClassName}>
+              Оставить заявку
+            </button>
+          </RequestDialog>
+        ) : (
+          <button type="button" className={actionButtonClassName} tabIndex={-1}>
+            Оставить заявку
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function HomeResults() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
+  const measureContentRefs = useRef<Array<HTMLDivElement | null>>([]);
   const activeSlide = RESULT_SLIDES[activeIndex];
-  const contentItems = [
-    { title: "Было", text: activeSlide.before },
-    { title: "Стало", text: activeSlide.after },
-    { title: "Результат", text: activeSlide.result },
-  ];
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const measureHeights = () => {
+      const nextHeight = measureContentRefs.current.reduce((maxHeight, contentNode) => {
+        if (!contentNode) {
+          return maxHeight;
+        }
+
+        return Math.max(maxHeight, contentNode.getBoundingClientRect().height);
+      }, 0);
+
+      setContentHeight((currentHeight) => (currentHeight === nextHeight ? currentHeight : nextHeight));
+    };
+
+    const frameId = window.requestAnimationFrame(measureHeights);
+    const cleanupResizeObserver = observeElementResize(measureContentRefs.current, measureHeights);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      cleanupResizeObserver();
+    };
+  }, []);
 
   return (
     <section className="my-[35px] md:my-[45px]">
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:items-stretch xl:gap-x-[27px]">
-        <div className="order-1 flex flex-col">
-          <PageSubheading title={RESULTS_TITLE} description={RESULTS_DESCRIPTION} descriptionPlacement="bottom" />
+      <PageSubheading title={RESULTS_TITLE} description={RESULTS_DESCRIPTION} descriptionPlacement="bottom" />
 
-          <div className="order-3 my-[36px] grid auto-rows-max grid-cols-1 gap-[18px] xl:mt-[27px] xl:mb-0 xl:flex-1 xl:grid-cols-2 xl:gap-x-[18px] xl:gap-y-[18px]">
-            {contentItems.map((item, index) => (
-              <article key={item.title} className={["flex h-full flex-col", index === contentItems.length - 1 ? "xl:col-span-2" : ""].join(" ")}>
-                <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{item.title}</h3>
-                <p className="mt-[15px] text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">{item.text}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="order-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:mt-[40px]">
-            <SliderControl
-              className="order-1 mx-auto md:order-2 md:mx-0"
+      <div
+        className={cn(
+          "mt-[36px] grid gap-4 [grid-template-areas:'image''content']",
+          "xl:mt-[27px] xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:items-stretch xl:gap-x-[27px] xl:[grid-template-areas:'content_image']",
+        )}
+      >
+        <div className="relative [grid-area:content]">
+          <div className="flex flex-col" style={contentHeight > 0 ? { minHeight: `${contentHeight}px` } : undefined}>
+            <HomeResultsContent
+              slide={activeSlide}
               onPrevClick={() => setActiveIndex((currentIndex) => (currentIndex - 1 + RESULT_SLIDES.length) % RESULT_SLIDES.length)}
               onNextClick={() => setActiveIndex((currentIndex) => (currentIndex + 1) % RESULT_SLIDES.length)}
-              prevAriaLabel="Предыдущий слайд"
-              nextAriaLabel="Следующий слайд"
             />
-            <RequestDialog source="home-results" context={activeSlide.image.alt}>
-              <button
-                type="button"
-                className="cursor-pointer order-2 inline-flex h-[47px] items-center justify-center rounded-[9px] bg-[var(--accent)] px-6 text-lg font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:order-1 lg:w-[239px]"
+          </div>
+
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 invisible">
+            {RESULT_SLIDES.map((slide, index) => (
+              <div
+                key={slide.image.src}
+                ref={(node) => {
+                  measureContentRefs.current[index] = node;
+                }}
               >
-                Оставить заявку
-              </button>
-            </RequestDialog>
+                <HomeResultsContent slide={slide} onPrevClick={() => undefined} onNextClick={() => undefined} showDialogButton={false} />
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="order-2 relative aspect-square overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] xl:h-full xl:aspect-auto">
+        <div className="relative aspect-square overflow-hidden rounded-[18px] bg-white [grid-area:image] md:rounded-[22.5px] xl:h-full xl:aspect-auto">
           {RESULT_SLIDES.map((slide, index) => (
             <div
               key={slide.image.src}
