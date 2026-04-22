@@ -43,7 +43,7 @@ const TESTIMONIALS = [
     },
   },
   {
-    company: "Городское пространство «Арт-квадрат»",
+    company: "Городское пространство «Арт‑квадрат»",
     name: "Айна Федорова",
     role: "Арт-директор",
     quote: [
@@ -116,16 +116,27 @@ const TESTIMONIALS = [
 
 export function HomeReviews() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isQuoteExpanded, setIsQuoteExpanded] = useState(false);
   const activeItem = TESTIMONIALS[activeIndex];
   const isFirstSlide = activeIndex === 0;
   const isLastSlide = activeIndex === TESTIMONIALS.length - 1;
+  const mobileQuoteText = activeItem.quote.join(" ");
+  const toggleLabel = isQuoteExpanded ? "Скрыть" : "Раскрыть больше";
+
+  const showPreviousReview = () => {
+    setActiveIndex((currentIndex) => currentIndex - 1);
+  };
+
+  const showNextReview = () => {
+    setActiveIndex((currentIndex) => currentIndex + 1);
+  };
 
   return (
     <section className="my-[35px] md:my-[45px]">
       <PageSubheading title={TESTIMONIALS_TITLE} />
 
       <div className="mt-8 grid lg:grid-cols-12">
-        <div className="relative min-h-[320px] overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] lg:col-span-7 lg:min-h-[616px]">
+        <div className="relative aspect-3/2 overflow-hidden rounded-[18px] bg-white md:aspect-auto md:min-h-[320px] md:rounded-[22.5px] lg:col-span-7 lg:min-h-[616px]">
           {TESTIMONIALS.map((item, index) => (
             <div
               key={item.company}
@@ -145,20 +156,54 @@ export function HomeReviews() {
           ))}
         </div>
 
-        <div className="flex flex-col gap-[18px] rounded-[18px] bg-[var(--accent)] bg-[url('/home/img_card_cover_home_reviews.svg')] bg-cover bg-center p-[18px] text-white md:gap-[36px] md:rounded-[22.5px] md:p-[27px] lg:col-span-5">
+        <div className="flex flex-col gap-4 rounded-[18px] bg-[var(--accent)] p-[18px] text-white md:gap-5 md:rounded-[22.5px] md:bg-[url('/home/img_card_cover_home_reviews.svg')] md:bg-cover md:bg-center md:p-[27px] lg:col-span-5">
           <div className="flex gap-[18px] md:gap-[22.5px]">
             <div className="relative size-[63px] md:size-[125px] overflow-hidden rounded-[9px] bg-white">
               <Image unoptimized src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="70px" className="object-cover" />
             </div>
             <div>
-              <p className="font-heading text-3xl leading-none uppercase md:text-4xl xl:text-5xl">{activeItem.name}</p>
-              <p className="mt-[10px] text-[9px] leading-[1.35] tracking-[-0.03em] text-white/80 md:text-base xl:text-lg">{activeItem.role}</p>
+              <p className="font-heading text-3xl leading-none uppercase md:text-4xl xl:text-5xl overflow-hidden [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical]">
+                {activeItem.name}
+              </p>
+              <p className="mt-0 md:mt-2 leading-[1.35] tracking-[-0.03em] text-white/80 text-sm md:text-base">{activeItem.role}</p>
             </div>
           </div>
 
-          <div className="flex flex-col gap-[9px]">
-            <h3 className="font-heading text-3xl leading-none uppercase md:text-4xl">{activeItem.company}</h3>
-            <div className="space-y-4 text-sm leading-[1.35] tracking-[-0.03em] text-white/80 md:text-base xl:text-lg">
+          <div className="flex flex-1 flex-col gap-[9px]">
+            <h3 className="hidden font-heading text-3xl leading-none uppercase md:block md:text-4xl">{activeItem.company}</h3>
+
+            <div className={cn("md:hidden flex flex-col", isQuoteExpanded ? "max-h-[310px] min-h-[310px]" : "min-h-[170px] max-h-[170px]")}>
+              <h3
+                className={cn(
+                  "mb-2 font-heading text-3xl leading-none uppercase",
+                  isQuoteExpanded ? "overflow-visible" : "overflow-hidden [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical]",
+                )}
+              >
+                {activeItem.company}
+              </h3>
+
+              {isQuoteExpanded ? (
+                <div className="space-y-4 text-sm leading-[1.35] tracking-[-0.03em] text-white/80">
+                  {activeItem.quote.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+              ) : (
+                <p className="overflow-hidden [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] text-sm leading-[1.35] tracking-[-0.03em] text-white/80">
+                  {mobileQuoteText}
+                </p>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setIsQuoteExpanded((value) => !value)}
+                className="pt-3 w-fit cursor-pointer border-b border-current pb-0.5 text-sm font-semibold leading-none text-white transition-colors hover:text-white/80"
+              >
+                {toggleLabel}
+              </button>
+            </div>
+
+            <div className="hidden space-y-4 text-sm leading-[1.35] tracking-[-0.03em] text-white/80 md:block md:text-base">
               {activeItem.quote.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
@@ -167,8 +212,8 @@ export function HomeReviews() {
 
           <SliderControl
             className="mt-auto"
-            onPrevClick={() => setActiveIndex((currentIndex) => currentIndex - 1)}
-            onNextClick={() => setActiveIndex((currentIndex) => currentIndex + 1)}
+            onPrevClick={showPreviousReview}
+            onNextClick={showNextReview}
             prevDisabled={isFirstSlide}
             nextDisabled={isLastSlide}
             prevAriaLabel={`Предыдущий отзыв (${activeIndex + 1} из ${TESTIMONIALS.length})`}
