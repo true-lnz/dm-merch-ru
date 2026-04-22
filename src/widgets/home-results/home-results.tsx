@@ -58,11 +58,11 @@ export function HomeResults() {
 
   return (
     <section className="my-[35px] md:my-[45px]">
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:items-stretch xl:gap-x-[16px]">
-        <div className="order-1 flex flex-col xl:min-h-[600px]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:items-stretch xl:gap-x-[27px]">
+        <div className="order-1 flex flex-col">
           <PageSubheading title={RESULTS_TITLE} description={RESULTS_DESCRIPTION} descriptionPlacement="bottom" />
 
-          <div className="order-3 my-[36px] grid auto-rows-fr grid-cols-1 gap-[20px] xl:mt-[55px] xl:mb-0 xl:flex-1 xl:grid-cols-2 xl:gap-x-[20px] xl:gap-y-[20px]">
+          <div className="order-3 my-[36px] grid auto-rows-max grid-cols-1 gap-[18px] xl:mt-[27px] xl:mb-0 xl:flex-1 xl:grid-cols-2 xl:gap-x-[18px] xl:gap-y-[18px]">
             {contentItems.map((item, index) => (
               <article key={item.title} className={["flex h-full flex-col", index === contentItems.length - 1 ? "xl:col-span-2" : ""].join(" ")}>
                 <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{item.title}</h3>
@@ -90,7 +90,7 @@ export function HomeResults() {
           </div>
         </div>
 
-        <div className="order-2 relative aspect-square overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
+        <div className="order-2 relative aspect-square overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] xl:h-full xl:aspect-auto">
           {RESULT_SLIDES.map((slide, index) => (
             <div
               key={slide.image.src}
