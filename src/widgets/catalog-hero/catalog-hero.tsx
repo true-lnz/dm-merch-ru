@@ -84,12 +84,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
         {/* desktop image */}
         <div className="relative hidden min-w-0 xl:flex xl:items-end xl:justify-end">
           <div className="relative h-full w-full">
-            <img
-              loading="eager"
-              src={heroImage.src}
-              alt={heroImage.alt}
-              className="absolute right-[calc(var(--layout-side-padding)*(-1))] 2xl:right-0 bottom-0 h-full w-auto max-w-none"
-            />
+            <img loading="eager" src={heroImage.src} alt={heroImage.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
           </div>
         </div>
       </div>

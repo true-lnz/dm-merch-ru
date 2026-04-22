@@ -26,7 +26,6 @@ export type CatalogPageData = {
   };
   showProductsSubheading?: boolean;
   products: CatalogProductItem[];
-  casesTitle: string;
   cases: CatalogCaseItem[];
   casesVariant?: "default" | "stacked";
 };
@@ -101,7 +100,6 @@ export const MAIN_CATALOG_DATA: CatalogPageData = {
       ctaHref: "/catalog?category=verhnyaya-odezhda",
     },
   ],
-  casesTitle: "Примеры\nреализованных работ",
   cases: [
     {
       id: "kolchuga",
@@ -175,7 +173,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         imageUrl: "/catalog/t-shirt-catalog/products/img_futbolka_polo_na_zamke.png",
       },
     ],
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "magadan-estfest",
@@ -267,7 +264,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         imageUrl: "/catalog/sweatshirt-catalog/products/img_23.png",
       },
     ],
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "dark",
@@ -319,7 +315,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         imageUrl: "/catalog/outdoor-catalog/products/img_zhilety.png",
       },
     ],
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "ldgr-estfest",
@@ -363,7 +358,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         imageUrl: "/catalog/hats-catalog/products/img_panami.png",
       },
     ],
-    casesTitle: "Примеры\nреализованных работ",
     casesVariant: "stacked",
     cases: [
       {
@@ -411,7 +405,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
       { title: "Термосумки", description: "От 280 ₽", imageUrl: "/catalog/sumki-catalog/products/img_termosumki.png" },
     ],
     casesVariant: "stacked",
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "damate-bags-1",
@@ -483,7 +476,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
       { title: "браслеты", description: "От 25 ₽", imageUrl: "/catalog/souvenir-catalog/products/img_braslety.png" },
     ],
     casesVariant: "stacked",
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "beloreckiy-armaturniy-zavod",
@@ -598,7 +590,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
       { title: "игра для детей\nна память", description: "От 370 ₽", imageUrl: "/catalog/author-souvenir-catalog/products/img_damate.png" },
     ],
     casesVariant: "stacked",
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "ufaoil-kapsula-vremeni",
@@ -654,7 +645,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
       { title: "паурбанк", description: "От 1470 ₽", imageUrl: "/catalog/bus-accessories-catalog/products/img_paurbank.png" },
     ],
     casesVariant: "stacked",
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "damate-business-accessories",
@@ -713,7 +703,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         imageUrl: "/catalog/sportwear-catalog/products/img_sport_t_shirt.png",
       },
     ],
-    casesTitle: "Примеры\nреализованных работ",
     cases: [],
   },
   trousers: {
@@ -739,7 +728,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         imageUrl: "/catalog/pants-catalog/products/img_bryki_trikotazh.png",
       },
     ],
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "odzhahuri",
@@ -774,7 +762,6 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
         imageUrl: "/catalog/pants-catalog/products/img_bryki_trikotazh.png",
       },
     ],
-    casesTitle: "Примеры\nреализованных работ",
     cases: [
       {
         id: "odzhahuri",

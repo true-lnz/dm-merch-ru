@@ -58,7 +58,7 @@ export function CatalogProducts({ items, showHeading = false }: { items: Catalog
         nextAriaLabel="Следующая карточка"
       />
 
-      <div className={cn("hidden gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4", showHeading ? "mt-10" : "mt-0")}>
+      <div className={cn("hidden gap-4 md:gap-5 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4", showHeading ? "mt-10" : "mt-0")}>
         {items.map((item) => (
           <CatalogCard key={`${item.title}-${item.imageUrl}`} item={item} />
         ))}

@@ -167,7 +167,7 @@ export function HomePartnerProducts({ showIntro = true }: HomePartnerProductsPro
         />
       </div>
 
-      <div className={cn("hidden gap-7 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4", showIntro ? "mt-10" : "mt-0")}>
+      <div className={cn("hidden gap-4 md:gap-5 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4", showIntro ? "mt-10" : "mt-0")}>
         {PARTNER_PRODUCTS.map((item) => (
           <PartnerProductCard key={item.title} item={item} />
         ))}

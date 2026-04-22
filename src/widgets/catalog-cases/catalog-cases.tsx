@@ -9,6 +9,7 @@ import { type TouchEvent, useEffect, useRef, useState } from "react";
 
 const MOBILE_FADE_DURATION_MS = 180;
 const MOBILE_SWIPE_THRESHOLD_PX = 36;
+const CATALOG_CASES_TITLE = "Примеры реализованных работ";
 
 type CatalogCaseImage = {
   src: string;
@@ -134,7 +135,7 @@ function CatalogCasesCard({ item }: { item: CatalogCaseItem }) {
       </article>
 
       {hasSingleImage ? (
-        <article className="hidden md:grid md:grid-cols-[1fr_1fr] md:items-start md:gap-7">
+        <article className="hidden md:grid md:grid-cols-[1fr_1fr] md:items-start md:gap-5">
           <div className="space-y-5 text-[var(--heading)]">
             <h3 className="font-heading text-4xl leading-[0.95] tracking-[0.015em]">{item.company}</h3>
             <p className="text-xs md:text-base leading-[1.3] tracking-[-0.03em] text-[var(--text-muted)]">{item.description}</p>
@@ -149,7 +150,7 @@ function CatalogCasesCard({ item }: { item: CatalogCaseItem }) {
           </div>
         </article>
       ) : (
-        <article className={cn("h-full hidden md:grid md:grid-cols-[1fr_1fr] md:gap-x-7", "md:[grid-template-areas:'square_tall''text_tall']")}>
+        <article className={cn("h-full hidden md:grid md:grid-cols-[1fr_1fr] md:gap-x-5", "md:[grid-template-areas:'square_tall''text_tall']")}>
           <div className="relative aspect-square overflow-hidden rounded-[18px] bg-[var(--surface)] [grid-area:square]">
             <Image src={primaryImage.src} alt={primaryImage.alt} fill sizes="(max-width: 1279px) 46vw, 22vw" className="object-cover" />
           </div>
@@ -197,15 +198,7 @@ function CatalogCasesStackedCard({ item }: { item: CatalogCaseItem }) {
   );
 }
 
-export function CatalogCases({
-  title,
-  items,
-  variant = "default",
-}: {
-  title: string;
-  items: CatalogCaseItem[] | unknown;
-  variant?: CatalogCasesVariant;
-}) {
+export function CatalogCases({ items, variant = "default" }: { items: CatalogCaseItem[] | unknown; variant?: CatalogCasesVariant }) {
   const [mobileCardHeight, setMobileCardHeight] = useState(0);
   const measureCardRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -241,16 +234,9 @@ export function CatalogCases({
 
   return (
     <section className="my-[35px] md:my-[45px]">
-      <PageSubheading title={title} />
+      <PageSubheading title={CATALOG_CASES_TITLE} />
 
-      <div
-        className={cn(
-          "mt-8 grid md:gap-6 xl:grid-cols-2 xl:gap-9",
-          variant !== "stacked" &&
-            "xl:relative xl:before:content-[''] xl:before:absolute xl:before:inset-y-0 xl:before:left-1/2 xl:before:-translate-x-1/2 xl:before:w-px xl:before:bg-border",
-          variant === "stacked" && "xl:gap-y-12",
-        )}
-      >
+      <div className={cn("mt-8 grid md:gap-8 xl:grid-cols-2 xl:gap-10", variant === "stacked" && "xl:gap-y-12")}>
         {items.map((item, index) => (
           <div
             key={item.id}
@@ -260,8 +246,6 @@ export function CatalogCases({
               index > 0 && "border-t border-border",
               "xl:border-t-0 xl:pt-0",
               variant === "stacked" && index > 1 && "xl:border-t xl:border-border xl:pt-10",
-              "xl:[&:nth-child(odd)]:pr-9",
-              "xl:[&:nth-child(2n)]:pl-9",
             )}
           >
             <div className="md:hidden" style={mobileCardHeight > 0 ? { height: `${mobileCardHeight}px` } : undefined}>

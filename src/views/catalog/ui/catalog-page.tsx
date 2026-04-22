@@ -13,7 +13,7 @@ export function CatalogPage({ data }: { data: CatalogPageData }) {
       <WidowFix />
       <CatalogHero heroTitle={data.heroTitle} heroImage={data.heroImage} />
       <CatalogProducts items={data.products} showHeading={data.showProductsSubheading} />
-      <CatalogCases title={data.casesTitle} items={data.cases} variant={data.casesVariant} />
+      <CatalogCases items={data.cases} variant={data.casesVariant} />
       <CatalogWorkStages />
       <FaqSection />
       <RequestCta />
