@@ -107,6 +107,17 @@ export function HomePartnerProducts({ showIntro = true }: HomePartnerProductsPro
         className={cn("md:hidden", showIntro ? "mt-8" : "mt-0")}
         getItemKey={(item) => `${item.title}-${item.imageUrl}`}
         renderItem={(item) => <PartnerProductCard item={item} />}
+        slideWidth="100vw"
+        slideInset="var(--layout-side-padding)"
+        gap="0px"
+        opts={{
+          align: "center",
+          loop: false,
+          dragFree: false,
+          skipSnaps: false,
+          containScroll: false,
+          slidesToScroll: 1,
+        }}
         prevAriaLabel="Предыдущая карточка"
         nextAriaLabel="Следующая карточка"
       />

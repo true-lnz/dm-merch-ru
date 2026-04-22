@@ -2,6 +2,8 @@
 
 import { RequestDialog } from "@/features/request-dialog";
 import { cn } from "@/shared/lib/cn";
+import { buttonVariants } from "@/shared/ui/button";
+import { ContentCard } from "@/shared/ui/content-card";
 import Image from "next/image";
 import type { ComponentPropsWithoutRef } from "react";
 import { forwardRef } from "react";
@@ -28,6 +30,34 @@ function getContentTransitionClass(layout: DigestCardLayout, isContentVisible: b
   return cn("transition-opacity duration-200 ease-out", isContentVisible ? "opacity-100" : "opacity-0");
 }
 
+function DigestMobileCard({ item }: { item: HomeDigestCard }) {
+  const excerpt = item.variant === "wild" ? item.mobileDescription : item.description;
+
+  return (
+    <ContentCard
+      title={item.title}
+      titleClassName="min-h-[3.6rem] md:min-h-0"
+      excerpt={excerpt}
+      image={{
+        url: item.image.src,
+        alt: item.image.alt,
+        width: 413,
+        height: 291,
+        sizes: item.image.sizes,
+        className: item.image.imageClassName,
+      }}
+      imageContainerClassName="aspect-[413/291]"
+      ctaNode={
+        <RequestDialog source="home-digest-card" context={item.title}>
+          <button type="button" className={buttonVariants()} aria-label={`Отправить заявку: ${item.title}`}>
+            {DIGEST_CTA_LABEL}
+          </button>
+        </RequestDialog>
+      }
+    />
+  );
+}
+
 const DigestRequestButton = forwardRef<HTMLButtonElement, DigestRequestButtonProps>(function DigestRequestButton(
   { className, label, variant = "accent", type, ...props },
   ref,
@@ -51,13 +81,14 @@ const DigestRequestButton = forwardRef<HTMLButtonElement, DigestRequestButtonPro
 });
 
 function DigestDefaultCard({ item, layout, isContentVisible }: { item: HomeDigestDefaultCard; layout: DigestCardLayout; isContentVisible: boolean }) {
+  if (layout === "mobile") {
+    return <DigestMobileCard item={item} />;
+  }
+
   const contentTransitionClass = getContentTransitionClass(layout, isContentVisible);
-  const isMobile = layout === "mobile";
 
   return (
-    <article
-      className={cn("flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]", isMobile ? "min-h-[420px]" : "")}
-    >
+    <article className="flex h-full flex-col overflow-hidden rounded-[18px] bg-[var(--card-bg)] md:rounded-[22.5px]">
       <div className={cn("relative aspect-3/2 overflow-hidden bg-white", contentTransitionClass)}>
         <Image
           src={item.image.src}
@@ -91,6 +122,10 @@ function DigestDefaultCard({ item, layout, isContentVisible }: { item: HomeDiges
 }
 
 function DigestWildCard({ item, layout, isContentVisible }: { item: HomeDigestWildCard; layout: DigestCardLayout; isContentVisible: boolean }) {
+  if (layout === "mobile") {
+    return <DigestMobileCard item={item} />;
+  }
+
   const isMobile = layout === "mobile";
   const contentTransitionClass = getContentTransitionClass(layout, isContentVisible);
 

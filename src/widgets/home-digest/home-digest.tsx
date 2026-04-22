@@ -27,6 +27,17 @@ export function HomeDigest() {
         className="mt-[36px] md:hidden"
         getItemKey={(card) => card.id}
         renderItem={(card) => <DigestCard item={card} layout="mobile" />}
+        slideWidth="100vw"
+        slideInset="var(--layout-side-padding)"
+        gap="0px"
+        opts={{
+          align: "center",
+          loop: false,
+          dragFree: false,
+          skipSnaps: false,
+          containScroll: false,
+          slidesToScroll: 1,
+        }}
         prevAriaLabel="Предыдущая карточка"
         nextAriaLabel="Следующая карточка"
       />
