@@ -39,6 +39,10 @@ function normalizePhoneDigits(value: string) {
     return "";
   }
 
+  if (value.trim().startsWith("+7") && digitsOnly.startsWith("7")) {
+    return digitsOnly.slice(1, 1 + PHONE_MAX_DIGITS);
+  }
+
   if (digitsOnly.length >= 11 && (digitsOnly.startsWith("7") || digitsOnly.startsWith("8"))) {
     return digitsOnly.slice(1, 1 + PHONE_MAX_DIGITS);
   }
