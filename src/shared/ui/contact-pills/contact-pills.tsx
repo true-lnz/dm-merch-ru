@@ -51,7 +51,7 @@ const ctaIconClassName =
   "text-white hidden p-[0.55rem] items-center justify-center rounded-[9px] border-2 border-[var(--accent)] bg-[var(--accent)] transition hover:bg-[var(--accent-hover)] lg:inline-flex";
 
 const ctaTextClassName =
-  "text-white inline-flex w-full items-center justify-center rounded-[9px] border border-[var(--accent)] bg-transparent px-4 py-[0.55rem] text-sm font-medium text-[var(--accent)] transition lg:w-[170px] lg:whitespace-nowrap lg:border-[transparent] lg:bg-[var(--accent)] lg:px-[0.8rem] lg:py-[0.55rem] lg:text-base lg:font-normal lg:text-white lg:hover:bg-[var(--accent-hover)]";
+  "text-white inline-flex w-full items-center justify-center rounded-[9px] border border-[var(--accent)] bg-transparent px-4 py-[0.55rem] text-base font-medium text-[var(--accent)] transition lg:w-[170px] lg:whitespace-nowrap lg:border-[transparent] lg:bg-[var(--accent)] lg:px-[0.8rem] lg:py-[0.55rem] lg:font-normal lg:text-white lg:hover:bg-[var(--accent-hover)]";
 
 const defaultTextClassName =
   "text-white inline-flex items-center justify-center whitespace-nowrap rounded-[9px] bg-[var(--accent)] py-[0.45rem] text-base transition hover:bg-[var(--accent-hover)]";
@@ -62,13 +62,7 @@ const menuIconClassName =
 const menuTextClassName =
   "inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-[9px] border border-[var(--accent)] bg-[var(--accent)] px-[0.85rem] text-sm font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)]";
 
-export function ContactPills({
-  email,
-  phone,
-  direction = "row",
-  className,
-  variant = "default",
-}: ContactPillsProps) {
+export function ContactPills({ email, phone, direction = "row", className, variant = "default" }: ContactPillsProps) {
   const [activePair, setActivePair] = useState<"email" | "phone" | null>(null);
   const isCta = variant === "cta";
   const isMenu = variant === "menu";
@@ -104,8 +98,7 @@ export function ContactPills({
       iconSrc: "/icons/ic_contact_pill_mail.png",
       ariaLabel: isCta || isMenu ? "Скопировать email" : "Написать на email",
       textClassName: isCta || isMenu ? "px-[0.8rem]" : "px-[0.8rem]",
-      onClick: (event: React.MouseEvent<HTMLAnchorElement>) =>
-        handleCopy(event, email, "Почта скопирована", "Не удалось скопировать почту"),
+      onClick: (event: React.MouseEvent<HTMLAnchorElement>) => handleCopy(event, email, "Почта скопирована", "Не удалось скопировать почту"),
     },
     {
       key: "phone" as const,
@@ -115,24 +108,14 @@ export function ContactPills({
       ariaLabel: isCta || isMenu ? "Позвонить или скопировать номер" : "Позвонить",
       textClassName: isCta || isMenu ? "px-[1rem]" : "px-[0.9rem]",
       onClick: (event: React.MouseEvent<HTMLAnchorElement>) =>
-        handleCopy(
-          event,
-          phone,
-          "Номер скопирован",
-          "Не удалось скопировать номер",
-          isMobileDevice(),
-        ),
+        handleCopy(event, phone, "Номер скопирован", "Не удалось скопировать номер", isMobileDevice()),
     },
   ];
 
   return (
     <div
       className={cn(
-        isCta
-          ? "inline-flex flex-col items-start gap-[10px]"
-          : isMenu
-            ? "inline-flex flex-col items-start gap-[9px]"
-            : "inline-flex flex-wrap gap-2",
+        isCta ? "inline-flex flex-col items-start gap-[10px]" : isMenu ? "inline-flex flex-col items-start gap-[9px]" : "inline-flex flex-wrap gap-2",
         !isCta && !isMenu && (direction === "column" ? "flex-col items-start" : "items-center"),
         className,
       )}
@@ -143,10 +126,7 @@ export function ContactPills({
         return (
           <div
             key={item.key}
-            className={cn(
-              isCta && "flex w-full items-center gap-[10px] lg:w-auto",
-              isMenu && "flex items-center gap-[9px]",
-            )}
+            className={cn(isCta && "flex w-full items-center gap-[10px] lg:w-auto", isMenu && "flex items-center gap-[9px]")}
             onMouseEnter={isCta ? () => setActivePair(item.key) : undefined}
             onMouseLeave={isCta ? () => setActivePair(null) : undefined}
             onFocus={isCta ? () => setActivePair(item.key) : undefined}
@@ -156,10 +136,7 @@ export function ContactPills({
               <a
                 href={item.href}
                 onClick={item.onClick}
-                className={cn(
-                  isCta ? ctaIconClassName : menuIconClassName,
-                  isActive && "bg-[var(--accent-hover)]",
-                )}
+                className={cn(isCta ? ctaIconClassName : menuIconClassName, isActive && "bg-[var(--accent-hover)]")}
                 aria-label={item.ariaLabel}
               >
                 <Image src={item.iconSrc} alt="" width={20} height={20} aria-hidden="true" />
