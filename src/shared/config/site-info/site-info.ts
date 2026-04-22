@@ -1,5 +1,5 @@
 export type SocialLink = {
-  icon: "vk" | "max";
+  icon: "tg" | "vk" | "max";
   label: string;
   href: string;
 };
@@ -11,6 +11,11 @@ export const siteInfo = {
   phone: "+7 (937) 86-37-777",
   address: "г. Уфа, ул. Энтузиастов, д. 6",
   socials: [
+    {
+      icon: "tg",
+      label: "Telegram",
+      href: "#",
+    },
     {
       icon: "vk",
       label: "VK",
