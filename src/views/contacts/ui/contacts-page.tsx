@@ -93,7 +93,7 @@ function DesktopContactsHero() {
           fill
           priority
           sizes="68vw"
-          className="object-contain object-bottom"
+          className="object-cover object-top"
         />
       </div>
 
