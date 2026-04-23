@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "catalog-export.cdn.portobello.ru",
       },
+      {
+        protocol: "https",
+        hostname: "files.gifts.ru",
+      },
     ],
   },
 };
