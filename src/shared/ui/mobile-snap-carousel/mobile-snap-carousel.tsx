@@ -102,6 +102,7 @@ export function MobileSnapCarousel<T>({
 
   const slideInnerStyle: CSSProperties = {
     paddingInline: slideInset,
+    height: "100%",
   };
 
   return (
@@ -117,13 +118,15 @@ export function MobileSnapCarousel<T>({
           {items.map((item, index) => (
             <div
               key={getItemKey ? getItemKey(item, index) : index.toString()}
-              className={cn("min-w-0", slideClassName)}
+              className={cn("min-w-0 self-stretch", slideClassName)}
               style={slideStyle}
               role="group"
               aria-roledescription="slide"
               aria-label={`${index + 1} из ${items.length}`}
             >
-              <div style={slideInnerStyle}>{renderItem(item, index)}</div>
+              <div className="h-full w-full" style={slideInnerStyle}>
+                {renderItem(item, index)}
+              </div>
             </div>
           ))}
         </div>

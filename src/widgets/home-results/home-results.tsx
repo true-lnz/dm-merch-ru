@@ -232,7 +232,7 @@ export function HomeResults() {
 
   return (
     <section className="my-[35px] md:my-[45px]">
-      <div className="mt-8 xl:mt-[27px]">
+      <div className="">
         <div ref={contentRef} style={contentHeight > 0 ? { height: `${contentHeight}px` } : undefined}>
           <ResultSlideLayout slide={activeSlide} activeIndex={activeIndex} onPrevClick={showPreviousSlide} onNextClick={showNextSlide} />
         </div>

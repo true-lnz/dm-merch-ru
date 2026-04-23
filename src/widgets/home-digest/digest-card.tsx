@@ -36,7 +36,6 @@ function DigestMobileCard({ item }: { item: HomeDigestCard }) {
   return (
     <ContentCard
       title={item.title}
-      titleClassName="min-h-[3.6rem] md:min-h-0"
       excerpt={excerpt}
       image={{
         url: item.image.src,

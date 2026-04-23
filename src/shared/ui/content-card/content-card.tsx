@@ -74,7 +74,7 @@ export function ContentCard({
   }
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]">
+    <article className="flex h-full w-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]">
       <div className={cn("relative w-full overflow-hidden bg-[var(--surface)]", imageAspectClass)}>
         <Image
           src={image.url}

@@ -25,7 +25,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
       <div className="grid grid-cols-1 xl:grid-cols-2" style={{ minHeight: HERO_MIN_HEIGHT }}>
         {/* content */}
         <div className="relative z-10 min-w-0">
-          <div className="flex h-full flex-col gap-8 pt-5 xl:gap-10 xl:rounded-[22px]">
+          <div className="flex h-full flex-col gap-5 pt-5 xl:gap-10 xl:rounded-[22px]">
             <div className="flex flex-col gap-4 xl:gap-5">
               <PageHeading
                 title={heroTitle}
@@ -42,7 +42,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
             </div>
 
             {/* mobile / tablet image */}
-            <div className="relative -mb-8 aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden">
+            <div className="relative -mb-5 aspect-[340/314] w-full overflow-hidden md:aspect-[16/12] xl:hidden">
               <Image
                 src={heroImage.src}
                 alt={heroImage.alt}

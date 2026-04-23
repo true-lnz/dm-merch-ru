@@ -31,7 +31,6 @@ function CatalogCard({ item }: { item: CatalogProductItem }) {
   return (
     <ContentCard
       title={item.title}
-      titleClassName="min-h-[3.6rem] md:min-h-0"
       excerpt={item.description}
       image={{ url: item.imageUrl, alt: item.title, width: 413, height: 291 }}
       imageContainerClassName="aspect-[413/291]"
