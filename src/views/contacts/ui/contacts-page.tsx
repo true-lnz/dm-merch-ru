@@ -55,7 +55,7 @@ function MobileContactsHero() {
             src="/contacts/img_contacts_cover.png"
             alt="Команда в фирменном мерче"
             fill
-            priority
+            preload={true}
             sizes="(max-width: 767px) 340px, 760px"
             className="object-cover object-top"
           />

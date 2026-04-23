@@ -14,7 +14,7 @@ export function Footer() {
         <div className="grid gap-10 md:gap-12 xl:grid-cols-[minmax(0,1fr)_190px_292px] xl:items-start xl:gap-12">
           <div className="max-w-[480px] flex flex-col gap-[36px] md:gap-[48px]">
             <Link href="/" aria-label={siteInfo.brandName} className="inline-flex w-[220px] md:w-[260px] xl:w-[380px]">
-              <Image src="/logo-dm-white.svg" alt={siteInfo.brandName} width={300} height={40} priority className="h-auto w-full" />
+              <Image src="/logo-dm-white.svg" alt={siteInfo.brandName} width={300} height={40} className="h-auto w-full" />
             </Link>
 
             <p className="max-w-[480px] text-[15px] leading-[1.3] tracking-[-0.03em] text-white/50">{footerDescription}</p>

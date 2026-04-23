@@ -48,6 +48,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
                 alt={heroImage.alt}
                 fill
                 quality={80}
+                preload={true}
                 sizes="(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 70vw, 0px"
                 className="object-contain object-bottom"
               />
@@ -95,7 +96,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
               alt={heroImage.alt}
               width={750}
               height={850}
-              priority
+              preload={true}
               sizes="50vw"
               className="absolute right-0 bottom-0 h-full w-auto max-w-none"
             />

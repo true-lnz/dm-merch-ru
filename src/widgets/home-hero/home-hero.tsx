@@ -116,7 +116,7 @@ export function HomeHero() {
             width={1200}
             height={900}
             className="absolute right-0 2xl:right-auto top-0 h-full 2xl:h-auto w-auto 2xl:w-full max-w-none"
-            priority
+            preload={true}
           />
         </div>
       </div>

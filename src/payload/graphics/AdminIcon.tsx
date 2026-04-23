@@ -15,7 +15,6 @@ export default function AdminIcon() {
         alt="DM Merch"
         height={32}
         width={32}
-        priority
         src="/logo-dm-minimized.svg"
         style={{ height: "100%", objectFit: "contain", width: "100%" }}
       />

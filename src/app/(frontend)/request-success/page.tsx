@@ -66,7 +66,7 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
                 src={HERO_IMAGE.src}
                 alt={HERO_IMAGE.alt}
                 fill
-                priority
+                preload={true}
                 sizes="(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 70vw, 0px"
                 className="object-cover object-top"
               />
