@@ -42,7 +42,7 @@ const RESULT_SLIDES = [
     result:
       "250 пледов для Уфаойл стали частью имиджевой коммуникации с партнёрами. Подарок подчеркнул уровень компании, показал уважение к получателю и усилил ценность деловых отношений.",
     image: {
-      src: "/home/results_2.png",
+      src: "/home/results5.png",
       alt: "Подарочный набор с пледом",
     },
   },
@@ -156,7 +156,7 @@ function ResultSlideLayout({ slide, activeIndex, onPrevClick, onNextClick }: Res
                 alt={item.image.alt}
                 fill
                 sizes="(max-width: 1279px) 100vw, 447px"
-                className="object-cover object-top image-hover-scale"
+                className="object-cover image-hover-scale"
               />
             </div>
           ))}

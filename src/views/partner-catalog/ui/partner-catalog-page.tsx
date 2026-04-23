@@ -55,6 +55,12 @@ function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
   return "src" in src ? src.src : src.default.src;
 }
 
+function shouldBypassNextImageOptimizer(src: ComponentProps<typeof Image>["src"]) {
+  const imageSrc = getCatalogImageCacheKey(src);
+
+  return imageSrc.startsWith("/gifts_export/");
+}
+
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
   useEffect(() => {
     if (!enabled) {
@@ -214,6 +220,7 @@ function CatalogImageWithSkeleton({
       <Image
         {...props}
         alt={alt}
+        unoptimized={props.unoptimized ?? shouldBypassNextImageOptimizer(props.src)}
         onLoad={(event) => {
           loadedCatalogImageKeys.add(imageCacheKey);
           setIsLoaded(true);

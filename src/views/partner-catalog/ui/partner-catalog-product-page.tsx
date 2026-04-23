@@ -50,6 +50,12 @@ function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
   return "src" in src ? src.src : src.default.src;
 }
 
+function shouldBypassNextImageOptimizer(src: ComponentProps<typeof Image>["src"]) {
+  const imageSrc = getCatalogImageCacheKey(src);
+
+  return imageSrc.startsWith("/gifts_export/");
+}
+
 type PartnerCatalogProductPageProps = {
   detail: PartnerCatalogProductDetail;
   listingHref: string;
@@ -297,6 +303,7 @@ function DetailImageWithSkeleton({
       <Image
         {...props}
         alt={alt}
+        unoptimized={props.unoptimized ?? shouldBypassNextImageOptimizer(props.src)}
         onLoad={(event) => {
           loadedDetailImageKeys.add(imageCacheKey);
           setIsLoaded(true);
