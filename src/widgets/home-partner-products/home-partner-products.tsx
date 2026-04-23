@@ -16,7 +16,7 @@ const PARTNER_PRODUCTS_DESCRIPTION = "Комбинируем модели, тк�
 
 const PARTNER_PRODUCTS = [
   {
-    title: "Футболки \nи поло",
+    title: "Футболки и поло",
     description: "Для команды, мероприятий и повседневного использования",
     imageUrl: "/home/partner-products/01-futbolki-i-polo.png",
     href: "/catalog?category=futbolki",
@@ -52,13 +52,13 @@ const PARTNER_PRODUCTS = [
     href: "/catalog?category=verhnyaya-odezhda",
   },
   {
-    title: "ГОЛОВНЫЕ\nУБОРЫ",
+    title: "ГОЛОВНЫЕ УБОРЫ",
     description: "Легко носить. Легко масштабировать. Легко узнать бренд",
     imageUrl: "/home/partner-products/07-golovnye-ubory.png",
     href: "/catalog?category=headwear",
   },
   {
-    title: "СУМКИ \nИ РЮКЗАКИ",
+    title: "СУМКИ И РЮКЗАКИ",
     description: "Чем чаще используют — тем сильнее работает бренд",
     imageUrl: "/home/partner-products/08-sumki-i-ryukzaki.png",
     href: "/catalog?category=bags",
@@ -70,7 +70,7 @@ const PARTNER_PRODUCTS = [
     href: "/partner-catalog",
   },
   {
-    title: "Деловые\nаксессуары",
+    title: "Деловые аксессуары",
     description: "Детали, которые формируют образ компании",
     imageUrl: "/home/partner-products/10-delovye-aksessuary.png",
     href: "/catalog?category=business-accessories",
