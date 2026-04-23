@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const HERO_IMAGE = {
-  src: "/home/img_home_hero_cover.png",
+  src: "/home/img_home_hero_cover.webp",
   alt: "Команда в фирменном мерче",
 } as const;
 

@@ -6,7 +6,7 @@ import { PageSubheading } from "@/shared/ui/page-subheading";
 import Image from "next/image";
 
 const SERVICES_IMAGE = {
-  src: "/home/img_home_services_cover.png",
+  src: "/home/img_home_services_cover.webp",
   alt: "Синий термос с брендированием Академии успеха",
 };
 

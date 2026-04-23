@@ -3,7 +3,7 @@ import Image from "next/image";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 const LEAD_CTA_IMAGE = {
-  src: "/home/img_lead_cta_cover.png",
+  src: "/home/img_lead_cta_cover.webp",
   alt: "Примеры корпоративного мерча",
 };
 

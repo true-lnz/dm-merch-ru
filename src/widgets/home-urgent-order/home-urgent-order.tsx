@@ -4,7 +4,7 @@ import Image from "next/image";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 const URGENT_ORDER_IMAGE = {
-  src: "/home/img_home_urgent_order_cover.png",
+  src: "/home/img_home_urgent_order_cover.webp",
   alt: "Срочный запуск мерча",
 };
 

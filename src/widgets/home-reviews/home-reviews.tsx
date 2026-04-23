@@ -34,11 +34,11 @@ const TESTIMONIALS = [
       "Гости фестиваля отдельно спрашивали, можно ли купить дождевики, и это был лучший индикатор, что мерч действительно получился сильным.",
     ],
     image: {
-      src: "/home/reviews/img_home_reviews_1.png",
+      src: "/home/reviews/img_home_reviews_1.webp",
       alt: "Команда ресторана в мерче",
     },
     avatar: {
-      src: "/home/reviews/img_reviews_avatar_1.png",
+      src: "/home/reviews/img_reviews_avatar_1.webp",
       alt: "Портрет Эльноры",
     },
   },
@@ -52,11 +52,11 @@ const TESTIMONIALS = [
       "А когда соответствует качество и цена - что может быть лучше?)",
     ],
     image: {
-      src: "/home/reviews/img_home_reviews_5.png",
+      src: "/home/reviews/img_home_reviews_5.webp",
       alt: "Отзыв клиента Арт-квадрат",
     },
     avatar: {
-      src: "/home/reviews/img_reviews_avatar_2.png",
+      src: "/home/reviews/img_reviews_avatar_2.webp",
       alt: "Портрет Айны Федоровой",
     },
   },
@@ -70,11 +70,11 @@ const TESTIMONIALS = [
       "Несмотря на то, что сотрудничаем мы недолго, за этот период команда уже показала себя как надежный подрядчик, с которым приятно работать и к которому хочется обращаться снова с новыми проектами.",
     ],
     image: {
-      src: "/home/reviews/img_home_reviews_ufanet.png",
+      src: "/home/reviews/img_home_reviews_ufanet.webp",
       alt: "Отзыв клиента Уфанет",
     },
     avatar: {
-      src: "/home/reviews/img_reviews_avatar_3.png",
+      src: "/home/reviews/img_reviews_avatar_3.webp",
       alt: "Портрет Лилии",
     },
   },
@@ -87,11 +87,11 @@ const TESTIMONIALS = [
       "Понравилось, что команда вникает в задачи, предлагает решения, а не просто принимает ТЗ. В итоге получили продукцию, которой реально пользуются, а не кладут на полку. Мерч стал частью корпоративной культуры, а не разовой акцией.",
     ],
     image: {
-      src: "/home/reviews/img_home_reviews_3_2.png",
+      src: "/home/reviews/img_home_reviews_3_2.webp",
       alt: "Отзыв клиента Уфаойл",
     },
     avatar: {
-      src: "/home/reviews/img_reviews_avatar_4.png",
+      src: "/home/reviews/img_reviews_avatar_4.webp",
       alt: "Портрет Анны",
     },
   },
@@ -104,11 +104,11 @@ const TESTIMONIALS = [
       "С командой было легко и спокойно работать: помогли с выбором, подсказали по материалам и нанесению, внимательно отнеслись к деталям и всё сделали в срок. В итоге получился именно такой набор, как мы и хотели, — качественный, цельный и достойный. Такие вещи приятно дарить от имени компании, потому что они действительно отражают отношение к людям и к своему бренду.",
     ],
     image: {
-      src: "/home/reviews/img_home_reviews_2.png",
+      src: "/home/reviews/img_home_reviews_2.webp",
       alt: "Отзыв клиента Тихий дом",
     },
     avatar: {
-      src: "/home/reviews/img_reviews_avatar_5.png",
+      src: "/home/reviews/img_reviews_avatar_5.webp",
       alt: "Портрет Дмитрия",
     },
   },

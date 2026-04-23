@@ -51,7 +51,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
     title: "Подарки\nдля партнеров",
     description: "Подарок — продолжение деловых отношений",
     image: {
-      src: "/home/digest-partners.png",
+      src: "/home/digest-partners.webp",
       alt: "Подарок для партнеров",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 360px, 412px",
       imageClassName: "object-cover object-center",
@@ -63,7 +63,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
     title: "Мерч\nдля мероприятий",
     description: "Когда бренд должен запомниться, а не потеряться",
     image: {
-      src: "/home/digest-events.png",
+      src: "/home/digest-events.webp",
       alt: "Мерч для мероприятий",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 360px, 413px",
       imageClassName: "object-cover object-center",
@@ -80,7 +80,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
     details: "Подходит для адаптации, внутренних мероприятий, подарочных наборов и командных событий.",
     backgroundImageSrc: "/home/img_card_cover_home_digest_v1.svg",
     image: {
-      src: "/home/digest-team.png",
+      src: "/home/digest-team.webp",
       alt: "Мерч\nдля команды",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 480px, 413px",
       imageClassName: "object-cover object-top",
@@ -98,7 +98,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
       "Практичные и брендированные решения, которые усиливают узнаваемость компании и поддерживают имидж бренда.",
     backgroundImageSrc: "/home/img_card_cover_home_digest_v2.svg",
     image: {
-      src: "/home/digest-souvenirs.png",
+      src: "/home/digest-souvenirs.webp",
       alt: "Сувенирная продукция",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 480px, 413px",
       imageClassName: "object-cover object-center",
@@ -110,7 +110,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
     title: "Корпоративная\nуниформа",
     description: "Когда команда должна выглядеть собранно, а бренд - узнаваемо",
     image: {
-      src: "/home/digest-uniform.png",
+      src: "/home/digest-uniform.webp",
       alt: "Корпоративная униформа",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 360px, 413px",
       imageClassName: "object-cover object-top",
@@ -122,7 +122,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
     title: "Корпоративная\nспецодежда",
     description: "Внешний вид — продолжение стандарта компании",
     image: {
-      src: "/home/digest-workwear.png",
+      src: "/home/digest-workwear.webp",
       alt: "Корпоративная спецодежда",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 360px, 412px",
       imageClassName: "object-cover object-top",

@@ -30,7 +30,7 @@ const RESULT_SLIDES = [
     result:
       "Команда «Магадана» выглядела собранно и узнаваемо на протяжении всего мероприятия, независимо от погоды. Мерч помог сохранить комфорт сотрудников, поддержать единый образ бренда и спокойно отработать фестиваль в любых условиях.",
     image: {
-      src: "/home/results_1.png",
+      src: "/home/results_1.webp",
       alt: "Команда ресторана в фирменном мерче",
     },
   },
@@ -42,7 +42,7 @@ const RESULT_SLIDES = [
     result:
       "250 пледов для Уфаойл стали частью имиджевой коммуникации с партнёрами. Подарок подчеркнул уровень компании, показал уважение к получателю и усилил ценность деловых отношений.",
     image: {
-      src: "/home/results5.png",
+      src: "/home/results5.webp",
       alt: "Подарочный набор с пледом",
     },
   },
@@ -151,13 +151,7 @@ function ResultSlideLayout({ slide, activeIndex, onPrevClick, onNextClick }: Res
                 index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
-              <Image
-                src={item.image.src}
-                alt={item.image.alt}
-                fill
-                sizes="(max-width: 1279px) 100vw, 447px"
-                className="object-cover image-hover-scale"
-              />
+              <Image src={item.image.src} alt={item.image.alt} fill sizes="60w" className="object-cover image-hover-scale" />
             </div>
           ))}
         </div>

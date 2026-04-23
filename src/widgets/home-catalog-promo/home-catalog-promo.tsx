@@ -5,27 +5,27 @@ import Link from "next/link";
 
 const PROMO_COLLAGE = [
   {
-    src: "/home/partner-products/01-futbolki-i-polo.png",
+    src: "/home/partner-products/01-futbolki-i-polo.webp",
     alt: "Футболки и поло для брендирования",
     className: "left-0 top-5 z-20 w-[34%] rotate-[-10deg] md:left-[6%] md:top-[8%] md:w-[28%]",
   },
   {
-    src: "/home/partner-products/09-elektronika.png",
+    src: "/home/partner-products/09-elektronika.webp",
     alt: "Электроника для брендирования",
     className: "left-[24%] top-0 z-10 w-[42%] rotate-[7deg] md:left-[28%] md:top-[2%] md:w-[34%]",
   },
   {
-    src: "/home/partner-products/12-pakety.png",
+    src: "/home/partner-products/12-pakety.webp",
     alt: "Пакеты для брендирования",
     className: "right-0 top-[18%] z-30 w-[35%] rotate-[10deg] md:right-[4%] md:top-[16%] md:w-[28%]",
   },
   {
-    src: "/home/partner-products/08-sumki-i-ryukzaki.png",
+    src: "/home/partner-products/08-sumki-i-ryukzaki.webp",
     alt: "Сумки и рюкзаки для брендирования",
     className: "left-[10%] bottom-0 z-10 w-[44%] rotate-[-4deg] md:left-[12%] md:bottom-[2%] md:w-[34%]",
   },
   {
-    src: "/home/partner-products/11-suvenirnaya-produkciya.png",
+    src: "/home/partner-products/11-suvenirnaya-produkciya.webp",
     alt: "Сувенирная продукция для брендирования",
     className: "right-[8%] bottom-[2%] z-20 w-[38%] rotate-[8deg] md:right-[12%] md:bottom-[4%] md:w-[30%]",
   },
