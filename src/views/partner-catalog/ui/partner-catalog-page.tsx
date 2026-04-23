@@ -236,7 +236,7 @@ function ProductCardImage({ variant, href }: { variant: PartnerCatalogVariant; h
   return (
     <Link href={href} target="_blank" rel="noreferrer" aria-label={`Открыть товар ${variant.title}`} className="block">
       <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
-        <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover" />
+        <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-contain" />
       </div>
     </Link>
   );
