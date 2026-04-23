@@ -585,26 +585,33 @@ function parseProject111Tree() {
 
 function getProject111Images(block) {
   const images = [];
-  const imageTags = [
-    getTagAttrValue(block, "super_big_image", "src"),
-    getTagAttrValue(block, "big_image", "src"),
-    getTagAttrValue(block, "small_image", "src"),
-  ].filter(Boolean);
+  const imageKeys = new Set();
+  const superBigImage = getTagAttrValue(block, "super_big_image", "src");
+  const bigImage = getTagAttrValue(block, "big_image", "src");
+  const smallImage = getTagAttrValue(block, "small_image", "src");
+  const galleryImages = getAllTagValues(block, "image");
 
-  for (const image of imageTags) {
+  function getImageKey(url) {
+    return url.replace(/_(?:200x200|1000x1000)(\.[a-z0-9]+)$/i, "$1");
+  }
+
+  for (const image of [superBigImage, ...galleryImages, bigImage]) {
     const absolute = ensureAbsoluteUrl(image);
+    const imageKey = absolute ? getImageKey(absolute) : null;
 
-    if (absolute && !images.includes(absolute)) {
+    if (absolute && imageKey && !imageKeys.has(imageKey)) {
       images.push(absolute);
+      imageKeys.add(imageKey);
     }
   }
 
-  for (const image of getAllTagValues(block, "image")) {
-    const absolute = ensureAbsoluteUrl(image);
+  // Use the 200x200 image only as a last-resort fallback, not as a gallery slide.
+  const fallbackSmallImage = ensureAbsoluteUrl(smallImage);
+  const fallbackSmallImageKey = fallbackSmallImage ? getImageKey(fallbackSmallImage) : null;
 
-    if (absolute && !images.includes(absolute)) {
-      images.push(absolute);
-    }
+  if (images.length === 0 && fallbackSmallImage && fallbackSmallImageKey && !imageKeys.has(fallbackSmallImageKey)) {
+    images.push(fallbackSmallImage);
+    imageKeys.add(fallbackSmallImageKey);
   }
 
   return images;
