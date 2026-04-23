@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 import { MERGED_CATALOG_CONFIG } from "./catalog-merge-config.mjs";
 
 const PORTOBELLO_IMAGE_FALLBACK = "/catalog/img_card_cover_main.svg";
-const PROJECT111_IMAGE_BASE = "https://files.gifts.ru/";
+const PROJECT111_IMAGE_BASE = resolveProject111ImageBase();
 const OUTPUT_FILE = join(process.cwd(), "public", "_temp", "merged-catalog.json");
 
 function readJson(filePath) {
@@ -17,6 +17,20 @@ function readText(filePath) {
 function writeJson(filePath, value) {
   mkdirSync(dirname(filePath), { recursive: true });
   writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+}
+
+function resolveProject111ImageBase() {
+  const rawValue = process.env.PROJECT111_IMAGE_BASE_URL?.trim();
+
+  if (!rawValue) {
+    return "https://files.gifts.ru/";
+  }
+
+  if (rawValue === "/") {
+    return "/";
+  }
+
+  return rawValue.endsWith("/") ? rawValue : `${rawValue}/`;
 }
 
 function decodeXmlEntities(value) {
@@ -144,7 +158,7 @@ function ensureAbsoluteUrl(url) {
     return null;
   }
 
-  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/")) {
+  if (url.startsWith("http://") || url.startsWith("https://")) {
     return url;
   }
 
@@ -152,7 +166,17 @@ function ensureAbsoluteUrl(url) {
     return `https:${url}`;
   }
 
-  return `${PROJECT111_IMAGE_BASE}${url.replace(/^\/+/, "")}`;
+  const normalizedPath = url.replace(/^\/+/, "");
+
+  if (PROJECT111_IMAGE_BASE === "/") {
+    return `/${normalizedPath}`;
+  }
+
+  if (PROJECT111_IMAGE_BASE.startsWith("/")) {
+    return `${PROJECT111_IMAGE_BASE}${normalizedPath}`;
+  }
+
+  return `${PROJECT111_IMAGE_BASE}${normalizedPath}`;
 }
 
 function formatMilliliters(value) {
@@ -886,6 +910,7 @@ console.log(
   JSON.stringify(
     {
       outputFile: OUTPUT_FILE,
+      project111ImageBase: PROJECT111_IMAGE_BASE,
       totalProducts: mergedCatalog.stats.totalProducts,
       totalVariants: mergedCatalog.stats.totalVariants,
       categories: mergedCatalog.categories.map((category) => ({
