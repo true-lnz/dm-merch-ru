@@ -8,7 +8,7 @@ export const siteInfo = {
   brandName: "Держи Марку!",
   legalName: "DM Merch",
   email: "zakaz@dm-merch.ru",
-  phone: "+7 (937) 86-37-777",
+  phone: "+7 (931) 107-77-75",
   address: "г. Уфа, ул. Энтузиастов, д. 6",
   socials: [
     {

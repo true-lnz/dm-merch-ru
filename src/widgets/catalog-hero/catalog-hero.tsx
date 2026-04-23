@@ -53,7 +53,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
               />
             </div>
 
-            <div className="grid gap-4 max-w-[550px] 2xl:max-w-[600px] xl:grid-cols-2 2xl:max-w-none 2xl:grid-cols-3 2xl:gap-5">
+            <div className="grid gap-4 max-w-none 2xl:max-w-[600px] xl:grid-cols-2 2xl:max-w-none 2xl:grid-cols-3 2xl:gap-5">
               {HERO_FEATURES.map((feature) => (
                 <div key={feature.text} className="rounded-[9px] bg-[rgba(232,231,226,0.7)] backdrop-blur-[6px] p-[18px] 2xl:min-h-[120px]">
                   <div className="flex items-center xl:items-start gap-2 2xl:gap-4 2xl:block">
@@ -87,6 +87,20 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
             <img loading="eager" src={heroImage.src} alt={heroImage.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
           </div>
         </div>
+
+        {/* <div className="relative hidden min-w-0 xl:flex xl:items-end xl:justify-end overflow-visible">
+          <div className="relative h-full w-full">
+            <Image
+              src={heroImage.src}
+              alt={heroImage.alt}
+              width={750}
+              height={850}
+              priority
+              sizes="50vw"
+              className="absolute right-0 bottom-0 h-full w-auto max-w-none"
+            />
+          </div>
+        </div> */}
       </div>
     </section>
   );
