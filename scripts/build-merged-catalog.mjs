@@ -873,7 +873,9 @@ function buildMergedCatalog() {
   const categoryIndex = buildCategoryIndex(MERGED_CATALOG_CONFIG);
   const portobello = parsePortobelloDataset(categoryIndex);
   const project111 = parseProject111Dataset(categoryIndex);
-  const products = [...portobello.products, ...project111.products].sort((left, right) => {
+  const products = [...portobello.products, ...project111.products]
+    .filter((product) => product.sectionId !== categoryIndex.fallbackChild.id)
+    .sort((left, right) => {
     if (left.rootSectionId !== right.rootSectionId) {
       return compareRu(left.unifiedCategory.rootName, right.unifiedCategory.rootName);
     }
@@ -883,7 +885,7 @@ function buildMergedCatalog() {
     }
 
     return compareRu(left.title, right.title);
-  });
+    });
   const categories = buildCategoryStats(categoryIndex, products);
 
   return {

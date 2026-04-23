@@ -240,12 +240,10 @@ const getPartnerCatalogDataset = cache((): PartnerCatalogDataset => {
               name: childCategory.name,
               productCount: childCategory.productCount,
             }),
-          )
-          .sort((left, right) => right.productCount - left.productCount || left.name.localeCompare(right.name, "ru")),
+          ),
       }),
     )
-    .filter((rootCategory) => rootCategory.productCount > 0)
-    .sort((left, right) => right.productCount - left.productCount || left.name.localeCompare(right.name, "ru"));
+    .filter((rootCategory) => rootCategory.id !== "misc" && rootCategory.productCount > 0);
 
   const categoryQuerySource = categories.map((rootCategory) => ({
     id: rootCategory.id,
