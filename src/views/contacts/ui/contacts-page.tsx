@@ -88,10 +88,10 @@ function DesktopContactsHero() {
     <div className="relative hidden h-[720px] xl:block">
       <div className="absolute inset-y-0 right-[calc(var(--layout-side-padding)*-1)] w-[68%]">
         <Image
-          src="/contacts/img_contacts_cover.png"
+          src="/contacts/img_contacts_cover.webp"
           alt="Команда в фирменном мерче"
           fill
-          priority
+          preload={true}
           sizes="68vw"
           className="object-cover object-top"
         />
