@@ -18,5 +18,5 @@ export default async function Page({
   const { category } = await searchParams;
   const data = getCatalogData(category);
 
-  return <CatalogPage data={data} />;
+  return <CatalogPage data={data} category={category} />;
 }

@@ -33,7 +33,7 @@ export type CatalogPageData = {
 export const MAIN_CATALOG_DATA: CatalogPageData = {
   heroTitle: "КАТАЛОГ",
   heroImage: {
-    src: "/catalog/covers/img_main_catalog_cover.png",
+    src: "/catalog/covers/img_main_catalog_cover.webp",
     alt: "Команда в фирменном мерче",
   },
   showProductsSubheading: true,
@@ -128,7 +128,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   futbolki: {
     heroTitle: "ФУТБОЛКИ\nДЛЯ БРЕНДИРОВАНИЯ",
     heroImage: {
-      src: "/catalog/covers/img_t_shirts_catalog_cover.png",
+      src: "/catalog/covers/img_t_shirts_catalog_cover.webp",
       alt: "Футболки для брендирования",
     },
     products: [
@@ -199,7 +199,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   tolstovki: {
     heroTitle: "Толстовки\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_sweatshirt_catalog_cover.png",
+      src: "/catalog/covers/img_sweatshirt_catalog_cover.webp",
       alt: "Толстовки для брендирования",
     },
     products: [
@@ -290,7 +290,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   "verhnyaya-odezhda": {
     heroTitle: "Верхняя одежда\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_outdoor_catalog_cover.png",
+      src: "/catalog/covers/img_outdoor_catalog_cover.webp",
       alt: "Верхняя одежда для брендирования",
     },
     products: [
@@ -343,7 +343,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   headwear: {
     heroTitle: "Головные уборы\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_hats_catalog_cover.png",
+      src: "/catalog/covers/img_hats_catalog_cover.webp",
       alt: "Головные уборы для брендирования",
     },
     products: [
@@ -394,7 +394,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   bags: {
     heroTitle: "сумки и рюкзаки\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_sumki_catalog_cover.png",
+      src: "/catalog/covers/img_sumki_catalog_cover.webp",
       alt: "Сумки и рюкзаки для брендирования",
     },
     products: [
@@ -463,7 +463,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   souvenirs: {
     heroTitle: "cувенирнаЯ продукция\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_souvenir_catalog_cover.png",
+      src: "/catalog/covers/img_souvenir_catalog_cover.webp",
       alt: "Сувенирная продукция для брендирования",
     },
     products: [
@@ -581,7 +581,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   "custom-souvenirs": {
     heroTitle: "Авторская cувенирнаЯ продукция\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_author_souvenir_catalog_cover-Photoroom.png",
+      src: "/catalog/covers/img_author_souvenir_catalog_cover-Photoroom.webp",
       alt: "Авторская сувенирная продукция для брендирования",
     },
     products: [
@@ -631,7 +631,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   "business-accessories": {
     heroTitle: "ДЕЛОВЫЕ АКСЕССУАРЫ\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_business_accessories_catalog_cover.png",
+      src: "/catalog/covers/img_business_accessories_catalog_cover.webp",
       alt: "Деловые аксессуары для брендирования",
     },
     products: [
@@ -693,7 +693,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   sportswear: {
     heroTitle: "спортивная одежда\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_sportwear_catalog_cover.png",
+      src: "/catalog/covers/img_sportwear_catalog_cover.webp",
       alt: "Спортивная одежда для брендирования",
     },
     products: [
@@ -708,7 +708,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   trousers: {
     heroTitle: "Брюки\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_pants_catalog_cover.png",
+      src: "/catalog/covers/img_pants_catalog_cover.webp",
       alt: "Брюки для брендирования",
     },
     products: [
@@ -742,7 +742,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
   bryuki: {
     heroTitle: "Брюки\nдля брендирования",
     heroImage: {
-      src: "/catalog/covers/img_pants_catalog_cover.png",
+      src: "/catalog/covers/img_pants_catalog_cover.webp",
       alt: "Брюки для брендирования",
     },
     products: [

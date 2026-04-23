@@ -82,13 +82,13 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
         </div>
 
         {/* desktop image */}
-        <div className="relative hidden min-w-0 xl:flex xl:items-end xl:justify-end">
+        {/* <div className="relative hidden min-w-0 xl:flex xl:items-end xl:justify-end">
           <div className="relative h-full w-full">
             <img loading="eager" src={heroImage.src} alt={heroImage.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
           </div>
-        </div>
+        </div> */}
 
-        {/* <div className="relative hidden min-w-0 xl:flex xl:items-end xl:justify-end overflow-visible">
+        <div className="relative hidden min-w-0 xl:flex xl:items-end xl:justify-end overflow-visible">
           <div className="relative h-full w-full">
             <Image
               src={heroImage.src}
@@ -100,7 +100,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
               className="absolute right-0 bottom-0 h-full w-auto max-w-none"
             />
           </div>
-        </div> */}
+        </div>
       </div>
     </section>
   );

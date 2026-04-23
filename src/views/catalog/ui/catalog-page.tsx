@@ -7,11 +7,19 @@ import { CatalogProducts } from "@/widgets/catalog-products";
 import { CatalogWorkStages } from "@/widgets/catalog-work-stages";
 import { FaqSection } from "@/widgets/faq-section";
 
-export function CatalogPage({ data }: { data: CatalogPageData }) {
+export function CatalogPage({
+  data,
+  category,
+}: {
+  data: CatalogPageData;
+  category?: string;
+}) {
+  const heroKey = `${category ?? "main"}:${data.heroImage.src}`;
+
   return (
     <>
       <WidowFix />
-      <CatalogHero heroTitle={data.heroTitle} heroImage={data.heroImage} />
+      <CatalogHero key={heroKey} heroTitle={data.heroTitle} heroImage={data.heroImage} />
       <CatalogProducts items={data.products} showHeading={data.showProductsSubheading} />
       <CatalogCases items={data.cases} variant={data.casesVariant} />
       <CatalogWorkStages />
