@@ -24,14 +24,7 @@ const HERO_HEIGHT = "clamp(520px, 66vh, 820px)";
 export function HomeHero() {
   return (
     <section className="relative mt-[35px] mb-[35px] md:mb-[45px]">
-      <div
-        className="
-				grid grid-cols-1
-				xl:grid-cols-2
-				items-stretch
-			"
-        style={{ minHeight: HERO_HEIGHT }}
-      >
+      <div className="grid grid-cols-1 xl:grid-cols-2 items-stretch gap-8 xl:gap-10" style={{ minHeight: HERO_HEIGHT }}>
         {/* Content */}
         <div className="relative z-10 min-w-0 xl:mb-0 h-full">
           <div className="flex h-full flex-col gap-8 rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.72)] xl:px-10 xl:py-10 xl:backdrop-blur-[8px] 2xl:gap-10 2xl:px-12 2xl:py-12">
