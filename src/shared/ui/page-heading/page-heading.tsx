@@ -13,7 +13,7 @@ export function PageHeading({ title, breadcrumb }: PageHeadingProps) {
   return (
     <section className="flex flex-col">
       {breadcrumb?.href ? <PageBreadcrumb item={breadcrumb} /> : null}
-      <h1 className="whitespace-pre-line m-0 font-heading text-4xl md:text-6xl xl:text-[72px] 2xl:text-7xl font-bold uppercase text-[var(--heading)]">
+      <h1 className="md:whitespace-pre-line m-0 font-heading text-4xl md:text-6xl xl:text-[72px] 2xl:text-7xl font-bold uppercase text-[var(--heading)]">
         {title}
       </h1>
     </section>
