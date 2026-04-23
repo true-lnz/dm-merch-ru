@@ -122,6 +122,7 @@ export function HomeReviews() {
   const mobileContentRef = useRef<HTMLDivElement | null>(null);
   const mobileMeasureRef = useRef<HTMLDivElement | null>(null);
   const activeItem = TESTIMONIALS[activeIndex];
+  const activeAvatarKey = `${activeItem.company}:${activeItem.avatar.src}`;
   const isFirstSlide = activeIndex === 0;
   const isLastSlide = activeIndex === TESTIMONIALS.length - 1;
   const mobileQuoteText = activeItem.quote.join(" ");
@@ -197,21 +198,15 @@ export function HomeReviews() {
                 index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
-              <Image
-                src={item.image.src}
-                alt={item.image.alt}
-                fill
-                sizes="(max-width: 1023px) 100vw, 58vw"
-                className="object-cover object-top image-hover-scale"
-              />
+              <Image src={item.image.src} alt={item.image.alt} fill sizes="70vw" className="object-cover object-top image-hover-scale" />
             </div>
           ))}
         </div>
 
         <div className="flex flex-col gap-4 rounded-[18px] bg-[var(--accent)] p-[18px] text-white md:gap-5 md:rounded-[22.5px] md:bg-[url('/home/img_card_cover_home_reviews.svg')] md:bg-cover md:bg-center md:p-[27px] lg:col-span-5">
           <div className="flex gap-[18px] md:gap-[22.5px]">
-            <div className="relative size-[63px] md:size-[125px] overflow-hidden rounded-[9px] bg-white">
-              <Image unoptimized src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="70px" className="object-cover" />
+            <div key={activeAvatarKey} className="relative size-[63px] md:size-[125px] overflow-hidden rounded-[9px] bg-white">
+              <Image src={activeItem.avatar.src} alt={activeItem.avatar.alt} fill sizes="20vw" className="object-cover" />
             </div>
             <div>
               <p className="font-heading text-3xl leading-none uppercase md:text-4xl xl:text-5xl overflow-hidden [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical]">
