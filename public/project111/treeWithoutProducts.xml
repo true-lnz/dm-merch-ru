@@ -1,0 +1,1243 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<doct timestamp="22.04.2026 05:15:15" title="gifts.ru directories structure export with articles">
+<page>
+<page_id>1</page_id>
+<name>Каталог</name>
+<uri>catalog</uri>
+<page parent_page_id="1">
+<page_id>1104129</page_id>
+<name>Корпоративная одежда с логотипом</name>
+<uri>odejda</uri>
+<page parent_page_id="1104129">
+<page_id>1111983</page_id>
+<name>Перчатки и варежки с логотипом</name>
+<uri>perchatki-i-varejki-s-logotipom</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1108055</page_id>
+<name>Вязаные комплекты</name>
+<uri>odejda-vyazanye-komplekty</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105702</page_id>
+<name>Ветровки</name>
+<uri>odejda-vetrovki</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105688</page_id>
+<name>Футболки поло</name>
+<uri>polo-s-logotipom</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1108451</page_id>
+<name>Панамы</name>
+<uri>odejda-panamy</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105701</page_id>
+<name>Толстовки с логотипом</name>
+<uri>odejda-tolstovki</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1104128</page_id>
+<name>Футболки с логотипом</name>
+<uri>futbolki</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1109179</page_id>
+<name>Футболки с длинным рукавом</name>
+<uri>longsleeve</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105695</page_id>
+<name>Офисные рубашки</name>
+<uri>odejda-rubashki</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1111832</page_id>
+<name>Свитшоты под нанесение логотипа</name>
+<uri>sweatshirts</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1111833</page_id>
+<name>Худи под нанесение логотипа</name>
+<uri>hoodie</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1106932</page_id>
+<name>Флисовые куртки и кофты</name>
+<uri>flisovye-kurtki-i-kofty</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1110445</page_id>
+<name>Дождевики</name>
+<uri>odejda-dojdeviki</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1106914</page_id>
+<name>Трикотажные шапки</name>
+<uri>odejda-trikotajnye-shapki</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1108599</page_id>
+<name>Фартуки с логотипом</name>
+<uri>odejda-fartuki</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1107096</page_id>
+<name>Джемперы и кардиганы</name>
+<uri>odejda-jumper</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1106755</page_id>
+<name>Спортивная одежда</name>
+<uri>odejda-sportivnaya-odezhda</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1112561</page_id>
+<name>Брюки и шорты с логотипом</name>
+<uri>bruki-i-shorty</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105699</page_id>
+<name>Кепки и бейсболки</name>
+<uri>odejda-kepki</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105697</page_id>
+<name>Жилеты</name>
+<uri>odejda-jilety</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1106007</page_id>
+<name>Детская одежда</name>
+<uri>detskaya-odejda</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105700</page_id>
+<name>Шарфы</name>
+<uri>odejda-sharfy</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105853</page_id>
+<name>Аксессуары</name>
+<uri>odejda-aksessuary</uri>
+</page>
+<page parent_page_id="1104129">
+<page_id>1105846</page_id>
+<name>Куртки</name>
+<uri>odejda-kurtki</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104130</page_id>
+<name>Дом</name>
+<uri>dom</uri>
+<page parent_page_id="1104130">
+<page_id>1105712</page_id>
+<name>Интерьерные подарки</name>
+<uri>dom-interernye-podarki</uri>
+</page>
+<page parent_page_id="1104130">
+<page_id>1111189</page_id>
+<name>Аксессуары и средства для ухода</name>
+<uri>aksessuary-i-sredstva-dlya-uhoda</uri>
+</page>
+<page parent_page_id="1104130">
+<page_id>1106959</page_id>
+<name>Полотенца с логотипом</name>
+<uri>s-polotenca-s-logotipom</uri>
+</page>
+<page parent_page_id="1104130">
+<page_id>1104143</page_id>
+<name>Часы и метеостанции</name>
+<uri>chasy</uri>
+</page>
+<page parent_page_id="1104130">
+<page_id>1105856</page_id>
+<name>Игрушки</name>
+<uri>dom-igrushki</uri>
+</page>
+<page parent_page_id="1104130">
+<page_id>1108476</page_id>
+<name>Декоративные свечи и подсвечники</name>
+<uri>dom-dekorativnye-svechi</uri>
+</page>
+<page parent_page_id="1104130">
+<page_id>1106953</page_id>
+<name>Пледы</name>
+<uri>dom-pledy</uri>
+</page>
+<page parent_page_id="1104130">
+<page_id>1105866</page_id>
+<name>Домашний текстиль</name>
+<uri>dom-tekstil</uri>
+</page>
+<page parent_page_id="1104130">
+<page_id>1112214</page_id>
+<name>Ароматические диффузоры с логотипом</name>
+<uri>aromaticheskie-diffuzory-s-logotipom</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104131</page_id>
+<name>Отдых</name>
+<uri>otdyh</uri>
+<page parent_page_id="1104131">
+<page_id>1111862</page_id>
+<name>Оптические приборы</name>
+<uri>opticheskie-pribory</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1105718</page_id>
+<name>Автомобильные аксессуары</name>
+<uri>otdyh-avtoprinadlejnosti</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1106824</page_id>
+<name>Светодиодные фонарики</name>
+<uri>s-svetodiodnye-fonariki</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1108937</page_id>
+<name>Подарки для дачи</name>
+<uri>podarki-dlya-dachi</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1105850</page_id>
+<name>Пляжный отдых</name>
+<uri>otdyh-plyajnyy-otdyh</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1105724</page_id>
+<name>Товары для путешествий</name>
+<uri>otdyh-dorojnye-aksessuary</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1106904</page_id>
+<name>Подушки под шею</name>
+<uri>s-podushki-pod-sheyu</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1112317</page_id>
+<name>Складные ножи с логотипом</name>
+<uri>skladnye-nozhi</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1105716</page_id>
+<name>Инструменты</name>
+<uri>dom-instrumenty</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1106109</page_id>
+<name>Туристические принадлежности</name>
+<uri>otdyh-turisticheskiye-prinadlezhnosti</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1105723</page_id>
+<name>Наборы для пикника и барбекю с логотипом</name>
+<uri>otdyh-nabory-dlya-piknika</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1105721</page_id>
+<name>Игры и головоломки</name>
+<uri>otdyh-igry</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1105722</page_id>
+<name>Мультитулы с логотипом</name>
+<uri>multituly</uri>
+</page>
+<page parent_page_id="1104131">
+<page_id>1108978</page_id>
+<name>Банные принадлежности</name>
+<uri>s-bannye-nabory-dlya-mujchin</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104132</page_id>
+<name>Посуда</name>
+<uri>posuda</uri>
+<page parent_page_id="1104132">
+<page_id>1108474</page_id>
+<name>Стаканы</name>
+<uri>posuda-stakany</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1105730</page_id>
+<name>Кружки с логотипом</name>
+<uri>posuda-krujki</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1107414</page_id>
+<name>Чайные наборы</name>
+<uri>s-chaynye-nabory</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1108859</page_id>
+<name>Бокалы</name>
+<uri>posuda-bokaly</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1105711</page_id>
+<name>Кухонные принадлежности</name>
+<uri>dom-kuhonnye-prisposobleniya</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1111959</page_id>
+<name>Мельницы для специй</name>
+<uri>melnicy-dlya-speciy</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1109691</page_id>
+<name>Барные аксессуары</name>
+<uri>posuda-barnye-aksessuary</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1110074</page_id>
+<name>Термосы для еды с логотипом</name>
+<uri>termosy-dlia-edy</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1112033</page_id>
+<name>Многоразовые стаканы с крышкой</name>
+<uri>mnogorazovye-stakany-s-kryshkoy</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1107473</page_id>
+<name>Ланч-боксы</name>
+<uri>s-lanch-boksy</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1114130</page_id>
+<name>Фляжки с логотипом</name>
+<uri>flyajki-s-logotipom</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1107498</page_id>
+<name>Термосы с логотипом</name>
+<uri>s-otdyh-thermos</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1108861</page_id>
+<name>Заварочные чайники</name>
+<uri>posuda-zavarochnye-chainiki</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1109708</page_id>
+<name>Пивные бокалы с логотипом</name>
+<uri>posuda-pivnye-bokaly</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1107415</page_id>
+<name>Кофейные наборы</name>
+<uri>s-kofeynye-nabory</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1110066</page_id>
+<name>Костеры с логотипом</name>
+<uri>kostery</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1108809</page_id>
+<name>Предметы сервировки</name>
+<uri>posuda-predmety-servirovki</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1107466</page_id>
+<name>Бутылки для воды</name>
+<uri>s-butylka-dlya-vody</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1110064</page_id>
+<name>Разделочные доски</name>
+<uri>razdelochnye-doski</uri>
+</page>
+<page parent_page_id="1104132">
+<page_id>1106906</page_id>
+<name>Термокружки с логотипом</name>
+<uri>posuda-termokruzki</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104133</page_id>
+<name>Ручки с логотипом</name>
+<uri>ruchki</uri>
+<page parent_page_id="1104133">
+<page_id>1105734</page_id>
+<name>Наборы с ручками под логотип</name>
+<uri>ruchki-nabory-ruchek</uri>
+</page>
+<page parent_page_id="1104133">
+<page_id>1105736</page_id>
+<name>Пластиковые ручки с логотипом</name>
+<uri>ruchki-plastikovye</uri>
+</page>
+<page parent_page_id="1104133">
+<page_id>1105732</page_id>
+<name>Карандаши с логотипом</name>
+<uri>ruchki-karandashi</uri>
+</page>
+<page parent_page_id="1104133">
+<page_id>1105733</page_id>
+<name>Бумажные и эко ручки с логотипом</name>
+<uri>eko-ruchki-bumazhnye</uri>
+</page>
+<page parent_page_id="1104133">
+<page_id>1106909</page_id>
+<name>Футляры для ручек</name>
+<uri>futlyary-dlya-ruchek</uri>
+</page>
+<page parent_page_id="1104133">
+<page_id>1105735</page_id>
+<name>Металлические ручки с логотипом</name>
+<uri>ruchki-metallicheskie</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104134</page_id>
+<name>Сумки</name>
+<uri>sumki</uri>
+<page parent_page_id="1104134">
+<page_id>1105744</page_id>
+<name>Сумки для ноутбука</name>
+<uri>sumki-sumki-dlya-noutbuka</uri>
+</page>
+<page parent_page_id="1104134">
+<page_id>1109473</page_id>
+<name>Поясные сумки</name>
+<uri>s-sumki-na-poyas</uri>
+</page>
+<page parent_page_id="1104134">
+<page_id>1105738</page_id>
+<name>Несессеры и косметички</name>
+<uri>sumki-nesessery</uri>
+</page>
+<page parent_page_id="1104134">
+<page_id>1105743</page_id>
+<name>Рюкзаки</name>
+<uri>sumki-ryukzaki</uri>
+</page>
+<page parent_page_id="1104134">
+<page_id>1105742</page_id>
+<name>Сумки для документов</name>
+<uri>sumki-konferenc-sumki</uri>
+</page>
+<page parent_page_id="1104134">
+<page_id>1106108</page_id>
+<name>Сумки для пикника</name>
+<uri>sumki-dlya-piknika</uri>
+</page>
+<page parent_page_id="1104134">
+<page_id>1105740</page_id>
+<name>Дорожные сумки</name>
+<uri>sumki-dorojnye</uri>
+</page>
+<page parent_page_id="1104134">
+<page_id>1105739</page_id>
+<name>Шоперы с логотипом</name>
+<uri>sumki-sumki-dlya-pokupok</uri>
+</page>
+<page parent_page_id="1104134">
+<page_id>1107028</page_id>
+<name>Чемоданы</name>
+<uri>sumki-chemodany</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104136</page_id>
+<name>Зонты с логотипом</name>
+<uri>zonty</uri>
+<page parent_page_id="1104136">
+<page_id>1105767</page_id>
+<name>Складные зонты с логотипом</name>
+<uri>zonty-skladnye-zonty</uri>
+</page>
+<page parent_page_id="1104136">
+<page_id>1105768</page_id>
+<name>Зонты трости с логотипом</name>
+<uri>zonty-zonty-trosti</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104139</page_id>
+<name>Электроника и гаджеты</name>
+<uri>elektronika</uri>
+<page parent_page_id="1104139">
+<page_id>1106025</page_id>
+<name>Внешние аккумуляторы power bank с логотипом</name>
+<uri>vneshniye-akkumulyatory-powerbanks</uri>
+</page>
+<page parent_page_id="1104139">
+<page_id>1104140</page_id>
+<name>Флешки</name>
+<uri>fleshki</uri>
+</page>
+<page parent_page_id="1104139">
+<page_id>1105746</page_id>
+<name>Компьютерные и мобильные аксессуары</name>
+<uri>elektronika-aksessuary-dlya-mobilnyh-ustroystv</uri>
+</page>
+<page parent_page_id="1104139">
+<page_id>1108533</page_id>
+<name>Бытовая техника</name>
+<uri>elektronika-bytovaya-tehnika</uri>
+</page>
+<page parent_page_id="1104139">
+<page_id>1105855</page_id>
+<name>Зарядные устройства для телефона с логотипом</name>
+<uri>zariadnye-ustroistva-i-adaptery</uri>
+</page>
+<page parent_page_id="1104139">
+<page_id>1109305</page_id>
+<name>Лампы и светильники</name>
+<uri>electronica-lampy-i-svetilniki-s-logotipom</uri>
+</page>
+<page parent_page_id="1104139">
+<page_id>1112145</page_id>
+<name>Увлажнители воздуха с логотипом</name>
+<uri>uvlajniteli-vozduha</uri>
+</page>
+<page parent_page_id="1104139">
+<page_id>1114013</page_id>
+<name>Гаджеты для умного дома с логотипом</name>
+<uri>ustroystva-dlya-umnogo-doma</uri>
+</page>
+<page parent_page_id="1104139">
+<page_id>1106929</page_id>
+<name>Портативные колонки и наушники</name>
+<uri>elektronika-portativnye-kolonki</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104141</page_id>
+<name>Корпоративные подарки</name>
+<uri>korporativnye-podarki</uri>
+<page parent_page_id="1104141">
+<page_id>1111200</page_id>
+<name>Канцелярские принадлежности</name>
+<uri>kancelyarskie-prinadlejnosti</uri>
+</page>
+<page parent_page_id="1104141">
+<page_id>1105762</page_id>
+<name>Настольные аксессуары</name>
+<uri>ofis-nastolnye-aksessuary</uri>
+</page>
+<page parent_page_id="1104141">
+<page_id>1105791</page_id>
+<name>Брелки с логотипом</name>
+<uri>brelki-s-logotipom</uri>
+</page>
+<page parent_page_id="1104141">
+<page_id>1111600</page_id>
+<name>Бейджи и аксессуары</name>
+<uri>beydji-i-aksessuary</uri>
+</page>
+<page parent_page_id="1104141">
+<page_id>1105783</page_id>
+<name>Зажигалки</name>
+<uri>promo-zajigalki</uri>
+</page>
+<page parent_page_id="1104141">
+<page_id>1105792</page_id>
+<name>Антистрессы</name>
+<uri>promo-antistressy</uri>
+</page>
+<page parent_page_id="1104141">
+<page_id>1105789</page_id>
+<name>Светоотражатели</name>
+<uri>promo-svetootrajateli</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1104144</page_id>
+<name>Ежедневники и блокноты</name>
+<uri>ejednevniki-i-bloknoty</uri>
+<page parent_page_id="1104144">
+<page_id>1107316</page_id>
+<name>Наборы с ежедневниками</name>
+<uri>nabori-s-ejednevnikami</uri>
+</page>
+<page parent_page_id="1104144">
+<page_id>1108650</page_id>
+<name>Ежедневники с логотипом</name>
+<uri>ejednevniki</uri>
+</page>
+<page parent_page_id="1104144">
+<page_id>1106110</page_id>
+<name>Блокноты с логотипом</name>
+<uri>bloknoty</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1105759</page_id>
+<name>Наградная продукция</name>
+<uri>nagrady</uri>
+<page parent_page_id="1105759">
+<page_id>1113087</page_id>
+<name>Значки с логотипом</name>
+<uri>znachki-s-logotipom</uri>
+</page>
+<page parent_page_id="1105759">
+<page_id>1108632</page_id>
+<name>Наградные стелы</name>
+<uri>nagrady-nagradnye-stely</uri>
+</page>
+<page parent_page_id="1105759">
+<page_id>1117445</page_id>
+<name>Наградные плакетки</name>
+<uri>nagradnye-plaketki</uri>
+</page>
+<page parent_page_id="1105759">
+<page_id>1111941</page_id>
+<name>Наградные кубки</name>
+<uri>nagradnye-kubki</uri>
+</page>
+<page parent_page_id="1105759">
+<page_id>1108633</page_id>
+<name>Медали с логотипом</name>
+<uri>medali-s-logotipom</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1105845</page_id>
+<name>Корпоративные подарки на Новый год</name>
+<uri>novyy-god</uri>
+<page parent_page_id="1105845">
+<page_id>1107252</page_id>
+<name>Новогодние наборы</name>
+<uri>s-novogodnie-nabory</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1105862</page_id>
+<name>Украшения для офиса к новому году</name>
+<uri>novyy-god-dekor-dlya-ofisa</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1106045</page_id>
+<name>Новогодние елочные шары</name>
+<uri>s-novogodnie-shary</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1105857</page_id>
+<name>Подарки с символом 2026 года</name>
+<uri>novyy-god-simvol-goda</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1107355</page_id>
+<name>Новогодние свечи и подсвечники</name>
+<uri>s-novogodnie-svechi</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1105861</page_id>
+<name>Новогодние елочные игрушки</name>
+<uri>novogodnie-igrushki</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1107027</page_id>
+<name>Оригинальные календари</name>
+<uri>novyy-god-originalnye-kalendari</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1106902</page_id>
+<name>Новогодние елки с логотипом</name>
+<uri>korporativnye-elki-s-logotipom</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1105877</page_id>
+<name>Новогодняя вязаная одежда</name>
+<uri>novogodniaia-viazanaia-odezhda</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1106895</page_id>
+<name>Новогодние подушки и пледы</name>
+<uri>novogodnie-podushki-i-pledy</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1111733</page_id>
+<name>Новогодние гирлянды и светильники</name>
+<uri>novogodnie-girlyandy-i-svetilniki</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1105997</page_id>
+<name>Новогодняя упаковка для подарков</name>
+<uri>upakovka-dlya-novogodnih-podarkov</uri>
+</page>
+<page parent_page_id="1105845">
+<page_id>1105858</page_id>
+<name>Новогодний стол</name>
+<uri>novogodnie-ukrasheniya-dlya-stola</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1105888</page_id>
+<name>Сувениры на заказ</name>
+<uri>na-zakaz</uri>
+<page parent_page_id="1105888">
+<page_id>1105926</page_id>
+<name>Корпоративные подарки на заказ</name>
+<uri>ofisnye-prinadlezhnosti-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1105930</page_id>
+<name>Подарки и сувениры для дома на заказ</name>
+<uri>podarki-suveniry-dlia-doma-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1107231</page_id>
+<name>Сумки на заказ</name>
+<uri>sumki-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1119683</page_id>
+<name>Подарки с полной запечаткой</name>
+<uri>podarki-s-polnoy-zapechatkoy</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1107229</page_id>
+<name>Часы на заказ</name>
+<uri>chasy-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1105931</page_id>
+<name>Промо подарки на заказ</name>
+<uri>promo-suveniry-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1105896</page_id>
+<name>Флешки на заказ</name>
+<uri>fleshki-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1105929</page_id>
+<name>Одежда и личные аксессуары на заказ</name>
+<uri>odejda-i-aksessuary-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1111353</page_id>
+<name>Посуда и кухонные аксессуары на заказ</name>
+<uri>posuda-i-kuhonnye-aksessuary-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1107253</page_id>
+<name>Вязаный трикотаж на заказ</name>
+<uri>vyazanyy-trikotazh-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1105927</page_id>
+<name>Подарки для отдыха и путешествий на заказ</name>
+<uri>podarki-dlya-otdyha-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1110440</page_id>
+<name>Производство вязаных пледов на заказ</name>
+<uri>proizvodstvo-vyazanyh-pledov-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1118008</page_id>
+<name>Сладости на заказ</name>
+<uri>sladosti-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1118009</page_id>
+<name>Подарочная упаковка на заказ</name>
+<uri>podarochnaya-upakovka-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1105925</page_id>
+<name>Ежедневники и блокноты по индивидуальному дизайну</name>
+<uri>ejednevniki-po-individualnomu-disainu</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1119240</page_id>
+<name>Сувениры на 3D-принтере. Печать на заказ</name>
+<uri>suveniry-na-3d-printere-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1105928</page_id>
+<name>Игры и игрушки на заказ</name>
+<uri>igry-i-igrushki-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1106008</page_id>
+<name>Новогодние подарки на заказ</name>
+<uri>novogodnie-podarky-na-zakaz</uri>
+</page>
+<page parent_page_id="1105888">
+<page_id>1107230</page_id>
+<name>Зонты на заказ</name>
+<uri>zonty-na-zakaz</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1105899</page_id>
+<name>Сувениры к праздникам</name>
+<uri>suveniry-k-prazdnikam</uri>
+<page parent_page_id="1105899">
+<page_id>1106946</page_id>
+<name>Подарки на День знаний 1 сентября</name>
+<uri>den-znaniy-1-sentyabrya</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1105905</page_id>
+<name>Подарки детям</name>
+<uri>den-zashhity-detey</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106943</page_id>
+<name>Подарки на День Победы 9 мая</name>
+<uri>den-pobedy-9-maya</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106942</page_id>
+<name>Подарки на День металлурга</name>
+<uri>den-metallurga</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106921</page_id>
+<name>Подарки на День рождения компании</name>
+<uri>podarki-na-den-rozhdeniya-kompanii</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106941</page_id>
+<name>Подарки на День железнодорожника</name>
+<uri>den-jeleznodorojnika</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106884</page_id>
+<name>Подарки автомобилисту</name>
+<uri>podarki-avtomobilistu</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1105895</page_id>
+<name>Сувениры к 8 марта</name>
+<uri>suveniry-k-8-marta</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106920</page_id>
+<name>Подарки на День энергетика 22 декабря</name>
+<uri>podarki-na-den-energetika</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1105912</page_id>
+<name>Подарки ко Дню нефтяника</name>
+<uri>den-neftyanika</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1105910</page_id>
+<name>Подарки на День авиации</name>
+<uri>den-aviacii</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1105907</page_id>
+<name>Подарки на День медицинского работника</name>
+<uri>den-medrabotnika</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1105909</page_id>
+<name>Подарки на День строителя</name>
+<uri>den-stroitelya</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106883</page_id>
+<name>Подарок коллеге</name>
+<uri>podarki-kollege</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106924</page_id>
+<name>Подарки на День России 12 июня</name>
+<uri>podarki-na-den-rossii</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1106882</page_id>
+<name>Подарки руководителю</name>
+<uri>podarki-nachalniku</uri>
+</page>
+<page parent_page_id="1105899">
+<page_id>1105893</page_id>
+<name>Сувениры к 23 февраля</name>
+<uri>suveniry-k-23-fevralya</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1105994</page_id>
+<name>Упаковка</name>
+<uri>upakovka</uri>
+<page parent_page_id="1105994">
+<page_id>1105828</page_id>
+<name>Упаковка для ежедневников</name>
+<uri>ejednevniki-upakovka</uri>
+</page>
+<page parent_page_id="1105994">
+<page_id>1105995</page_id>
+<name>Подарочная упаковка</name>
+<uri>podarochnaya-upakovka</uri>
+</page>
+<page parent_page_id="1105994">
+<page_id>1105998</page_id>
+<name>Подарочные пакеты</name>
+<uri>podarochnye-pakety</uri>
+</page>
+<page parent_page_id="1105994">
+<page_id>1107407</page_id>
+<name>Подарочные коробки</name>
+<uri>podarochnye-korobki</uri>
+</page>
+<page parent_page_id="1105994">
+<page_id>1114622</page_id>
+<name>Производство полноцветной самосборной упаковки на заказ</name>
+<uri>proizvodstvo-upakovki-na-zakaz</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1107210</page_id>
+<name>Подарочные наборы</name>
+<uri>podarochnye-nabory</uri>
+<page parent_page_id="1107210">
+<page_id>1112024</page_id>
+<name>Подарочные наборы для детей</name>
+<uri>podarochnye-nabory-dlya-detey</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1108609</page_id>
+<name>Наборы для сыра</name>
+<uri>podarochnye-nabory-dlya-syra</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1109501</page_id>
+<name>Подарочные наборы с флешками</name>
+<uri>podarochnye-nabory-s-fleshkami</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1110525</page_id>
+<name>Спортивные наборы</name>
+<uri>sportivnye-nabory</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1109500</page_id>
+<name>Дорожные наборы для путешествий</name>
+<uri>dorojnye-nabory-dlya-puteshestviy</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1109606</page_id>
+<name>Подарочные наборы с мультитулами</name>
+<uri>podarochnye-nabory-s-multitulami</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1120755</page_id>
+<name>Подарочные наборы с антистрессами</name>
+<uri>podarochnye-nabory-s-antistressami</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1108073</page_id>
+<name>Подарочные наборы для мужчин</name>
+<uri>s-podarochnye-nabory-dlya-mujchin</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1117541</page_id>
+<name>Подарочные наборы с кружками</name>
+<uri>podarochnye-nabory-s-krujkami</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1110027</page_id>
+<name>Подарочные наборы с пледами</name>
+<uri>podarochnye-nabory-s-pledami</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1111508</page_id>
+<name>Подарочные наборы изделий из кожи с логотипом</name>
+<uri>podarochnye-nabory-iz-koji</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1108069</page_id>
+<name>Подарочные наборы с термокружками</name>
+<uri>s-podarochnye-nabory-s-termokrujkami</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1105807</page_id>
+<name>Бизнес наборы</name>
+<uri>podarochnye-biznes-nabory</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1108072</page_id>
+<name>Подарочные наборы для женщин</name>
+<uri>s-podarochnye-nabory-dlya-jenshhin</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1108065</page_id>
+<name>Подарочные наборы с аккумуляторами</name>
+<uri>s-podarochnye-nabory-s-vneshnimi-akkumulyatorami</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1120198</page_id>
+<name>Подарочные наборы с зонтами</name>
+<uri>podarochnye-nabory-s-zontami</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1115013</page_id>
+<name>Подарочные наборы welcome pack</name>
+<uri>podarochnye-nabory-welcome-pack</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1117567</page_id>
+<name>Подарочные наборы с бутылками для воды</name>
+<uri>podarochnye-nabory-s-butylkami-dlya-vody</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1105715</page_id>
+<name>Винные наборы</name>
+<uri>dom-vinnye-nabory</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1107058</page_id>
+<name>Наборы стаканов и камни для виски</name>
+<uri>s-nabory-dlya-viski</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1112973</page_id>
+<name>Кухонные подарочные наборы</name>
+<uri>kuhonnye-podarochnye-nabory</uri>
+</page>
+<page parent_page_id="1107210">
+<page_id>1109068</page_id>
+<name>Наборы для выращивания растений</name>
+<uri>nabory-dlya-vyrashhivaniya-rasteniy</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1109719</page_id>
+<name>Коллекции с принтами</name>
+<uri>podarki-s-printami</uri>
+<page parent_page_id="1109719">
+<page_id>1109755</page_id>
+<name>Плащи-дождевики с принтом</name>
+<uri>dozhdeviki-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1109723</page_id>
+<name>Кружки с принтом</name>
+<uri>krujki-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1108956</page_id>
+<name>Футболки с принтом</name>
+<uri>odejda-futbolki-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1109722</page_id>
+<name>Сумки и рюкзаки с принтом</name>
+<uri>sumki-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1109728</page_id>
+<name>Оригинальные подарки с принтом</name>
+<uri>originalnye-podarki-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1111041</page_id>
+<name>Джемперы с принтом</name>
+<uri>jumpery-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1109721</page_id>
+<name>Толстовки с принтом</name>
+<uri>tolstovki-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1110647</page_id>
+<name>Детские футболки с принтом</name>
+<uri>detskie-futbolki-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1111958</page_id>
+<name>Худи с принтом</name>
+<uri>hudi-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1111179</page_id>
+<name>Зонты с принтом</name>
+<uri>zonty-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1110649</page_id>
+<name>Бейсболки, панамы и шапки с принтом</name>
+<uri>beysbolki-i-panamy-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1111040</page_id>
+<name>Шарфы с принтом</name>
+<uri>sharfy-s-printom</uri>
+</page>
+<page parent_page_id="1109719">
+<page_id>1111059</page_id>
+<name>Новогодний мерч</name>
+<uri>novogodniy-merch</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1110903</page_id>
+<name>Съедобные корпоративные подарки с логотипом</name>
+<uri>sjedobnye-podarki</uri>
+<page parent_page_id="1110903">
+<page_id>1107076</page_id>
+<name>Подарочные продуктовые наборы</name>
+<uri>s-podarochnye-produktovye-nabory</uri>
+</page>
+<page parent_page_id="1110903">
+<page_id>1112129</page_id>
+<name>Снеки, орехи, сухофрукты</name>
+<uri>orekhi-iagody-sukhofrukty-s-logotipom</uri>
+</page>
+<page parent_page_id="1110903">
+<page_id>1112131</page_id>
+<name>Конфеты, сладости, печенье</name>
+<uri>ledentsy-s-logotipom</uri>
+</page>
+<page parent_page_id="1110903">
+<page_id>1109744</page_id>
+<name>Подарочные наборы с чаем</name>
+<uri>podarochnye-nabory-s-chaem</uri>
+</page>
+<page parent_page_id="1110903">
+<page_id>1112128</page_id>
+<name>Наборы шоколада с логотипом</name>
+<uri>shokoladnye-nabory-s-logotipom</uri>
+</page>
+<page parent_page_id="1110903">
+<page_id>1109697</page_id>
+<name>Подарочные наборы с вареньем</name>
+<uri>podarochnye-nabory-s-varenem</uri>
+</page>
+<page parent_page_id="1110903">
+<page_id>1109696</page_id>
+<name>Подарочные наборы с медом</name>
+<uri>podarochnye-nabory-s-medom</uri>
+</page>
+<page parent_page_id="1110903">
+<page_id>1112130</page_id>
+<name>Наборы специй с логотипом</name>
+<uri>nabory-spetsii-s-logotipom</uri>
+</page>
+<page parent_page_id="1110903">
+<page_id>1109745</page_id>
+<name>Подарочные наборы с кофе</name>
+<uri>podarochnye-nabory-s-kofe</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1111935</page_id>
+<name>Спортивные товары с логотипом</name>
+<uri>sportivnye-tovary</uri>
+<page parent_page_id="1111935">
+<page_id>1114028</page_id>
+<name>Спортивные полотенца с логотипом</name>
+<uri>sportivnye-polotenca</uri>
+</page>
+<page parent_page_id="1111935">
+<page_id>1116472</page_id>
+<name>Спортивные сумки с логотипом</name>
+<uri>sportivnye-sumki</uri>
+</page>
+<page parent_page_id="1111935">
+<page_id>1109465</page_id>
+<name>Мячи с логотипом</name>
+<uri>myachi-s-logotipom</uri>
+</page>
+<page parent_page_id="1111935">
+<page_id>1114221</page_id>
+<name>Массажеры</name>
+<uri>massajery</uri>
+</page>
+<page parent_page_id="1111935">
+<page_id>1111936</page_id>
+<name>Спортивные аксессуары с логотипом</name>
+<uri>sportivnye-aksessuary</uri>
+</page>
+<page parent_page_id="1111935">
+<page_id>1111934</page_id>
+<name>Спортивный инвентарь с логотипом</name>
+<uri>sportivnyi-inventar</uri>
+</page>
+<page parent_page_id="1111935">
+<page_id>1111931</page_id>
+<name>Фитнес подарки с логотипом</name>
+<uri>tovary-dlya-fitnesa</uri>
+</page>
+<page parent_page_id="1111935">
+<page_id>1112199</page_id>
+<name>Велосипедные аксессуары</name>
+<uri>velosipednye-aksessuary</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1113918</page_id>
+<name>Элементы брендирования и кастомизации</name>
+<uri>elementy-kastomizatsii</uri>
+<page parent_page_id="1113918">
+<page_id>1113919</page_id>
+<name>Фурнитура</name>
+<uri>furnitura</uri>
+</page>
+<page parent_page_id="1113918">
+<page_id>1114198</page_id>
+<name>Ленты, стропы, шнуры</name>
+<uri>lenty-stropy-shnury</uri>
+</page>
+<page parent_page_id="1113918">
+<page_id>1117953</page_id>
+<name>Заготовки из ткани, детали кроя, карманы</name>
+<uri>zagotovki-iz-tkani-detali-kroya-karmany</uri>
+</page>
+<page parent_page_id="1113918">
+<page_id>1113921</page_id>
+<name>Ремувки и пуллеры</name>
+<uri>remuvki-i-pullery</uri>
+</page>
+<page parent_page_id="1113918">
+<page_id>1113920</page_id>
+<name>Лейблы и шильды</name>
+<uri>leibly-shildy</uri>
+</page>
+</page>
+<page parent_page_id="1">
+<page_id>1120523</page_id>
+<name>Личные аксессуары из натуральной и искусственной кожи</name>
+<uri>lichnye-aksessuary-iz-koji</uri>
+<page parent_page_id="1120523">
+<page_id>1112876</page_id>
+<name>Чехлы для пропуска</name>
+<uri>chehly-dlya-propuska</uri>
+</page>
+<page parent_page_id="1120523">
+<page_id>1105809</page_id>
+<name>Дорожные органайзеры</name>
+<uri>personalnye-dorojnye-organayzery</uri>
+</page>
+<page parent_page_id="1120523">
+<page_id>1105804</page_id>
+<name>Папки, портфели</name>
+<uri>korporativnye-papki-portfeli</uri>
+</page>
+<page parent_page_id="1120523">
+<page_id>1105810</page_id>
+<name>Визитницы</name>
+<uri>personalnye-vizitnicy</uri>
+</page>
+<page parent_page_id="1120523">
+<page_id>1107985</page_id>
+<name>Чехлы для карт</name>
+<uri>korporativnye-cartholdery</uri>
+</page>
+<page parent_page_id="1120523">
+<page_id>1105808</page_id>
+<name>Обложки для документов</name>
+<uri>personalnye-oblojki-dlya-dokumentov</uri>
+</page>
+<page parent_page_id="1120523">
+<page_id>1105811</page_id>
+<name>Кошельки</name>
+<uri>personalnye-koshelki</uri>
+</page>
+</page>
+</page>
+</doct>
