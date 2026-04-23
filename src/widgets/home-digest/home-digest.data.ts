@@ -1,10 +1,4 @@
-export type HomeDigestCardId =
-  | "partners"
-  | "events"
-  | "team"
-  | "souvenirs"
-  | "uniform"
-  | "workwear";
+export type HomeDigestCardId = "partners" | "events" | "team" | "souvenirs" | "uniform" | "workwear";
 
 export type HomeDigestDefaultCard = {
   id: HomeDigestCardId;
@@ -39,8 +33,7 @@ export type HomeDigestCard = HomeDigestDefaultCard | HomeDigestWildCard;
 
 export const DIGEST_TITLE = "1571+ проект\nпод задачи бизнеса";
 
-export const DIGEST_DESCRIPTION =
-  "Создаем мерч для любых бизнес-задач: от униформы и welcome-паков до подарков партнерам";
+export const DIGEST_DESCRIPTION = "Создаем мерч для любых бизнес-задач: от униформы и welcome-паков до подарков партнерам";
 
 export const DIGEST_CTA_LABEL = "Отправить заявку";
 
@@ -75,8 +68,7 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
     title: "Мерч\nдля команды",
     description:
       "Мерч для сотрудников, который помогает формировать чувство принадлежности, поддерживать корпоративную культуру и делать бренд частью повседневной среды.",
-    mobileDescription:
-      "Подходит для внутренних мероприятий, подарочных наборов и командных событий",
+    mobileDescription: "Подходит для внутренних мероприятий, подарочных наборов и командных событий",
     details: "Подходит для адаптации, внутренних мероприятий, подарочных наборов и командных событий.",
     backgroundImageSrc: "/home/img_card_cover_home_digest_v1.svg",
     image: {
@@ -92,16 +84,14 @@ export const DIGEST_CARDS: HomeDigestCard[] = [
     title: "Сувенирная\nпродукция",
     description:
       "Сувенирная продукция для клиентов, партнеров и сотрудников: для мероприятий, деловых подарков, выставок, корпоративных активностей и welcome-наборов.",
-    mobileDescription:
-      "Практичные и брендированные решения, которые усиливают узнаваемость компании",
-    details:
-      "Практичные и брендированные решения, которые усиливают узнаваемость компании и поддерживают имидж бренда.",
+    mobileDescription: "Практичные и брендированные решения, которые усиливают узнаваемость компании",
+    details: "Практичные и брендированные решения, которые усиливают узнаваемость компании и поддерживают имидж бренда.",
     backgroundImageSrc: "/home/img_card_cover_home_digest_v2.svg",
     image: {
       src: "/home/digest-souvenirs.webp",
       alt: "Сувенирная продукция",
       sizes: "(max-width: 767px) calc(100vw - 60px), (max-width: 1279px) 480px, 413px",
-      imageClassName: "object-cover object-center",
+      imageClassName: "object-contain object-center scale-[1.4] md:scale-100 md:object-cover",
     },
   },
   {
