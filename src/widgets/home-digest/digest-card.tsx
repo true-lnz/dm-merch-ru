@@ -126,14 +126,11 @@ function DigestWildCard({ item, layout, isContentVisible }: { item: HomeDigestWi
     return <DigestMobileCard item={item} />;
   }
 
-  const isMobile = layout === "mobile";
   const contentTransitionClass = getContentTransitionClass(layout, isContentVisible);
 
   return (
-    <article
-      className={cn("relative overflow-hidden rounded-[18px] md:rounded-[22.5px]", isMobile ? "flex h-full min-h-[420px] flex-col" : "flex h-full")}
-    >
-      <div className={cn("relative overflow-hidden bg-white", isMobile ? "aspect-3/2" : "w-[calc(50%-15px)] shrink-0", contentTransitionClass)}>
+    <article className="relative flex h-full overflow-hidden rounded-[18px] md:rounded-[22.5px]">
+      <div className={cn("relative w-[calc(50%-15px)] shrink-0 overflow-hidden bg-white", contentTransitionClass)}>
         <Image
           src={item.image.src}
           alt={item.image.alt}
@@ -146,7 +143,7 @@ function DigestWildCard({ item, layout, isContentVisible }: { item: HomeDigestWi
       <div
         className={cn(
           "min-w-0 overflow-hidden bg-[var(--accent)] text-white",
-          isMobile ? "flex flex-1 flex-col p-[18px]" : "flex flex-[0_0_calc(50%+15px)] flex-col py-[27px] px-[36px] pt-[36px]",
+          "flex flex-[0_0_calc(50%+15px)] flex-col px-[36px] py-[27px] pt-[36px]",
         )}
         style={{
           backgroundImage: `url("${item.backgroundImageSrc}")`,
@@ -155,27 +152,13 @@ function DigestWildCard({ item, layout, isContentVisible }: { item: HomeDigestWi
           backgroundSize: "cover",
         }}
       >
-        <div className={cn("flex flex-1 flex-col", isMobile ? contentTransitionClass : "")}>
-          <h3
-            className={cn(
-              "font-heading whitespace-pre-line leading-[0.94] tracking-[0.015em] uppercase",
-              isMobile ? "text-3xl" : "text-4xl md:text-5xl",
-            )}
-          >
-            {item.title}
-          </h3>
-          <p
-            className={cn(
-              "leading-[1.3] tracking-[-0.04em] text-white/80 text-sm md:text-base",
-              isMobile ? "mt-[10px] max-w-[19rem] text-white/82" : "mt-4",
-            )}
-          >
-            {isMobile ? item.mobileDescription : item.description}
-          </p>
-          {!isMobile ? <p className="mt-3 text-base leading-[1.3] tracking-[-0.04em] text-white/80">{item.details}</p> : null}
+        <div className="flex flex-1 flex-col">
+          <h3 className="font-heading whitespace-pre-line text-4xl leading-[0.94] tracking-[0.015em] uppercase md:text-5xl">{item.title}</h3>
+          <p className="mt-4 text-sm leading-[1.3] tracking-[-0.04em] text-white/80 md:text-base">{item.description}</p>
+          <p className="mt-3 text-base leading-[1.3] tracking-[-0.04em] text-white/80">{item.details}</p>
         </div>
 
-        <div className={cn(isMobile ? "pt-[22px]" : "mt-auto pt-6")}>
+        <div className="mt-auto pt-6">
           <RequestDialog source="home-digest-card" context={item.title}>
             <DigestRequestButton
               className={cn("rounded-[7px] text-lg transition-colors duration-200 h-[47px] w-full")}
