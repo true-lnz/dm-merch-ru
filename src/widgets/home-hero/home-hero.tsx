@@ -19,21 +19,21 @@ const HERO_FEATURES = [
 const FEATURE_ICON_SRC = "/icons/ic_feature.svg";
 const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
-const HERO_HEIGHT = "clamp(620px, 72vh, 820px)";
+const HERO_HEIGHT = "clamp(520px, 66vh, 820px)";
 
 export function HomeHero() {
   return (
     <section className="relative mt-[35px] mb-[35px] md:mb-[45px]">
       <div
         className="
-          grid grid-cols-1
-          xl:grid-cols-[minmax(0,580px)_minmax(0,1fr)]
-          2xl:grid-cols-[minmax(0,800px)_minmax(0,1fr)]
-        "
+				grid grid-cols-1
+				xl:grid-cols-2
+				items-stretch
+			"
         style={{ minHeight: HERO_HEIGHT }}
       >
         {/* Content */}
-        <div className="relative z-10 min-w-0 xl:mb-[75px]">
+        <div className="relative z-10 min-w-0 xl:mb-0 h-full">
           <div className="flex h-full flex-col gap-8 rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.72)] xl:px-10 xl:py-10 xl:backdrop-blur-[8px] 2xl:gap-10 2xl:px-12 2xl:py-12">
             <div className="flex flex-col gap-4 xl:gap-5">
               <PageHeading title={"Мерч, который\nработает на бизнес"} />
@@ -109,10 +109,15 @@ export function HomeHero() {
         </div>
 
         {/* Desktop image */}
-        <div className="relative hidden min-w-0 xl:block">
-          <div className="relative h-[72vh] xl:h-[68vh] 2xl:h-[85vh] w-full">
-            <img loading="eager" src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
-          </div>
+        <div className="relative hidden xl:block h-full overflow-visible 2xl:overflow-hidden">
+          <Image
+            src={HERO_IMAGE.src}
+            alt={HERO_IMAGE.alt}
+            width={1200}
+            height={900}
+            className="absolute right-0 2xl:right-auto top-0 h-full 2xl:h-auto w-auto 2xl:w-full max-w-none"
+            priority
+          />
         </div>
       </div>
     </section>

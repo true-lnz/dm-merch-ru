@@ -1,9 +1,9 @@
 "use client";
 
-import { PageSubheading } from "../../shared/ui/page-subheading";
 import { MobileSnapCarousel } from "../../shared/ui/mobile-snap-carousel";
-import { DigestGrid } from "./digest-grid";
+import { PageSubheading } from "../../shared/ui/page-subheading";
 import { DigestCard } from "./digest-card";
+import { DigestGrid } from "./digest-grid";
 import { DIGEST_GRID_LAYOUT, DIGEST_MOBILE_ORDER } from "./home-digest.config";
 import { DIGEST_CARDS, DIGEST_DESCRIPTION, DIGEST_TITLE, type HomeDigestCard, type HomeDigestCardId } from "./home-digest.data";
 
@@ -19,7 +19,7 @@ const MOBILE_DIGEST_CARDS = DIGEST_MOBILE_ORDER.map((cardId) => DIGEST_CARDS_BY_
 
 export function HomeDigest() {
   return (
-    <section className="mb-[35px] md:mb-[45px]">
+    <section className="my-[35px] md:my-[45px]">
       <PageSubheading title={DIGEST_TITLE} description={DIGEST_DESCRIPTION} descriptionPlacement="side" sideDescriptionLayout="two-columns" />
 
       <MobileSnapCarousel
