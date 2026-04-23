@@ -14,7 +14,7 @@ export const siteInfo = {
     {
       icon: "tg",
       label: "Telegram",
-      href: "#",
+      href: "https://t.me/dm_merch",
     },
     {
       icon: "vk",
