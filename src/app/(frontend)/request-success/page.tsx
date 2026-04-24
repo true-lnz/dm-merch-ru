@@ -40,16 +40,9 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
   const heading = HEADING_TEMPLATE.replace("ТУТ_ИМЯ", resolveName(resolvedSearchParams?.name));
 
   return (
-    <section className="relative mt-[35px]">
-      <div
-        className="
-          grid grid-cols-1
-          xl:grid-cols-[minmax(0,580px)_minmax(0,1fr)]
-          2xl:grid-cols-[minmax(0,800px)_minmax(0,1fr)]
-        "
-        style={{ minHeight: HERO_HEIGHT }}
-      >
-        <div className="relative z-10 max-w-none xl:max-w-[45vw] mb-[75px]">
+    <section className="relative mt-[35px] mb-[70px] md:mb-[90px]">
+      <div className="grid grid-cols-1 items-stretch gap-8 xl:grid-cols-2 xl:gap-10" style={{ minHeight: HERO_HEIGHT }}>
+        <div className="relative z-10 min-w-0 xl:mb-0 h-full">
           <div className="flex h-full flex-col gap-8 rounded-[18px] md:rounded-[22.5px] xl:bg-[rgba(232,231,226,0.72)] xl:px-10 xl:py-10 xl:backdrop-blur-[8px] 2xl:gap-10 2xl:px-12 2xl:py-12">
             <div className="flex flex-col gap-4 xl:gap-5">
               <PageHeading title={heading} />
@@ -121,10 +114,13 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
           </div>
         </div>
 
-        <div className="relative hidden min-w-0 xl:block">
-          <div className="relative h-full w-full 2xl:h-[85vh]">
-            <img loading="eager" src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} className="absolute right-0 bottom-0 h-full w-auto max-w-none" />
-          </div>
+        <div className="relative hidden xl:block h-full overflow-visible 2xl:overflow-hidden">
+          <img
+            loading="eager"
+            src={HERO_IMAGE.src}
+            alt={HERO_IMAGE.alt}
+            className="absolute right-0 2xl:right-auto top-0 h-full 2xl:h-auto w-auto 2xl:w-full max-w-none"
+          />
         </div>
       </div>
     </section>

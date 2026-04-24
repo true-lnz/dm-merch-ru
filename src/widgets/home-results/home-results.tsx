@@ -112,7 +112,7 @@ function ResultActions({ onPrevClick, onNextClick, dialogContext }: ResultAction
       <RequestDialog source="home-results" context={dialogContext}>
         <button
           type="button"
-          className="order-2 inline-flex h-[54px] w-full items-center justify-center rounded-[12px] bg-[var(--accent)] px-6 text-lg font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:h-[47px] xl:order-1 xl:w-[239px]"
+          className="cursor-pointer order-2 inline-flex h-[54px] w-full items-center justify-center rounded-[12px] bg-[var(--accent)] px-6 text-lg font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)] md:h-[47px] xl:order-1 xl:w-[239px]"
         >
           Оставить заявку
         </button>
@@ -151,7 +151,7 @@ function ResultSlideLayout({ slide, activeIndex, onPrevClick, onNextClick }: Res
                 index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
-              <Image src={item.image.src} alt={item.image.alt} fill sizes="60w" className="object-cover image-hover-scale" />
+              <Image src={item.image.src} alt={item.image.alt} fill sizes="60w" className="object-cover object-top image-hover-scale" />
             </div>
           ))}
         </div>
