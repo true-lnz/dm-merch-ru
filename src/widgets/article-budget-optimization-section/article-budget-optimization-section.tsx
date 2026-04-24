@@ -23,7 +23,9 @@ export function ArticleBudgetOptimizationSection({ section }: ArticleBudgetOptim
             {section.items.map((item) => (
               <article key={item.number} className="rounded-[18px] bg-[var(--card-bg)] px-5 py-[22px] md:rounded-[20px] md:px-[30px] md:py-[26px]">
                 <div className="flex items-start gap-4 md:gap-7">
-                  <span className="font-heading shrink-0 text-3xl leading-none tracking-[0.01em] text-[var(--heading)] md:text-4xl">{item.number}</span>
+                  <span className="font-heading shrink-0 text-3xl leading-none tracking-[0.01em] text-[var(--heading)] md:text-4xl">
+                    {item.number}
+                  </span>
                   <p className="pt-[2px] text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text)] md:text-base">{item.text}</p>
                 </div>
               </article>
@@ -37,7 +39,7 @@ export function ArticleBudgetOptimizationSection({ section }: ArticleBudgetOptim
             alt={section.image.alt}
             fill
             sizes="(max-width: 1279px) calc(100vw - 60px), 669px"
-            className="object-cover object-center"
+            className="object-cover object-top"
           />
         </div>
       </div>
