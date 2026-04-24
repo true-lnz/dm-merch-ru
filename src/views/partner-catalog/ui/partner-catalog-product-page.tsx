@@ -10,7 +10,7 @@ import { SliderControl } from "@/shared/ui/slider-control";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type ComponentProps, type RefObject } from "react";
+import { useEffect, useRef, useState, type ComponentProps, type PointerEvent, type RefObject } from "react";
 import { toast } from "sonner";
 import type { PartnerCatalogProductDetail } from "../model/partner-catalog-data";
 
@@ -66,6 +66,11 @@ type DescriptionContentBlock = {
   html: string;
   kind: "html" | "summary";
   summaryListHtml?: string;
+};
+
+type ZoomPosition = {
+  x: number;
+  y: number;
 };
 
 const descriptionContentClassName =
@@ -228,8 +233,20 @@ function buildDescriptionContentBlocks(descriptionHtml: string): DescriptionCont
   return contentBlocks;
 }
 
+function DescriptionPlaceholder() {
+  return (
+    <p className="text-sm leading-[1.55] text-[var(--text-muted)] md:text-base">
+      Для этого товара подробное описание пока не добавлено.
+    </p>
+  );
+}
+
 function SummaryDescription({ descriptionHtml }: { descriptionHtml: string }) {
   const contentBlocks = buildDescriptionContentBlocks(descriptionHtml);
+
+  if (contentBlocks.length === 0) {
+    return <DescriptionPlaceholder />;
+  }
 
   return (
     <div className="space-y-4">
@@ -317,11 +334,15 @@ function DetailImageWithSkeleton({
 
 export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalogProductPageProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isImageZoomed, setIsImageZoomed] = useState(false);
+  const [isDesktopViewport, setIsDesktopViewport] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState<ZoomPosition>({ x: 50, y: 50 });
   const { isInWishlist, addItem, removeItem } = useWishlist();
   const [isWishlistPopoverOpen, setIsWishlistPopoverOpen] = useState(false);
   const [quantity, setQuantity] = useState("50");
   const wishlistPopoverRef = useRef<HTMLDivElement | null>(null);
   const hasMultipleImages = detail.imageUrls.length > 1;
+  const hasVariantChoices = detail.variants.length > 1;
   const addedToWishlist = isInWishlist(detail.article);
 
   useOutsideClick(wishlistPopoverRef, () => setIsWishlistPopoverOpen(false), isWishlistPopoverOpen);
@@ -344,12 +365,37 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
     };
   }, [isWishlistPopoverOpen]);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1280px)");
+
+    function syncDesktopViewport() {
+      if (!mediaQuery.matches) {
+        setIsImageZoomed(false);
+      }
+
+      setIsDesktopViewport(mediaQuery.matches);
+    }
+
+    syncDesktopViewport();
+    mediaQuery.addEventListener("change", syncDesktopViewport);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncDesktopViewport);
+    };
+  }, []);
+
+  function activateImage(index: number) {
+    setIsImageZoomed(false);
+    setZoomPosition({ x: 50, y: 50 });
+    setActiveImageIndex(index);
+  }
+
   function showPreviousImage() {
-    setActiveImageIndex((currentIndex) => (currentIndex === 0 ? detail.imageUrls.length - 1 : currentIndex - 1));
+    activateImage(activeImageIndex === 0 ? detail.imageUrls.length - 1 : activeImageIndex - 1);
   }
 
   function showNextImage() {
-    setActiveImageIndex((currentIndex) => (currentIndex === detail.imageUrls.length - 1 ? 0 : currentIndex + 1));
+    activateImage(activeImageIndex === detail.imageUrls.length - 1 ? 0 : activeImageIndex + 1);
   }
 
   function handleWishlistClick() {
@@ -379,6 +425,35 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
     toast.success("Товар добавлен в вишлист");
     setIsWishlistPopoverOpen(false);
   }
+
+  function handleMainImagePointerMove(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "touch" || !isDesktopViewport) {
+      return;
+    }
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const nextX = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const nextY = ((event.clientY - bounds.top) / bounds.height) * 100;
+
+    setZoomPosition({
+      x: Math.min(100, Math.max(0, nextX)),
+      y: Math.min(100, Math.max(0, nextY)),
+    });
+  }
+
+  function handleMainImagePointerEnter(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "touch" || !isDesktopViewport) {
+      return;
+    }
+
+    setIsImageZoomed(true);
+    handleMainImagePointerMove(event);
+  }
+
+  function handleMainImagePointerLeave() {
+    setIsImageZoomed(false);
+  }
+
   return (
     <>
       <section className="mb-[35px] md:mb-[45px]">
@@ -406,7 +481,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                           <button
                             key={`${imageUrl}-${index}`}
                             type="button"
-                            onClick={() => setActiveImageIndex(index)}
+                            onClick={() => activateImage(index)}
                             aria-label={`Открыть фото ${index + 1}`}
                             aria-pressed={isActive}
                             className={cn(
@@ -431,7 +506,12 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
 
               <div className={cn("order-1", hasMultipleImages ? "md:order-2 md:col-span-5" : "md:col-span-6")}>
                 <div className="relative overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px]">
-                  <div className="relative aspect-square">
+                  <div
+                    className={cn("relative aspect-square", isDesktopViewport ? (isImageZoomed ? "cursor-zoom-out" : "cursor-zoom-in") : null)}
+                    onPointerEnter={handleMainImagePointerEnter}
+                    onPointerMove={handleMainImagePointerMove}
+                    onPointerLeave={handleMainImagePointerLeave}
+                  >
                     {detail.imageUrls.map((imageUrl, index) => {
                       const isActive = index === activeImageIndex;
 
@@ -450,8 +530,25 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                             fill
                             priority={index === 0}
                             sizes="(max-width: 767px) 100vw, (max-width: 1279px) calc(100vw - 160px), 700px"
-                            className="object-cover"
+                            className={cn("object-cover transition-opacity duration-200", isActive && isImageZoomed && isDesktopViewport ? "opacity-0" : "opacity-100")}
                           />
+                          <div
+                            aria-hidden="true"
+                            className={cn(
+                              "absolute inset-0 hidden transition-opacity duration-200 xl:block",
+                              isActive && isImageZoomed && isDesktopViewport ? "opacity-100" : "pointer-events-none opacity-0",
+                            )}
+                          >
+                            <DetailImageWithSkeleton
+                              src={imageUrl}
+                              alt=""
+                              fill
+                              sizes="(max-width: 767px) 100vw, (max-width: 1279px) calc(100vw - 160px), 700px"
+                              className="scale-110 object-cover will-change-transform"
+                              style={{ transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }}
+                            />
+                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_58%,rgba(255,255,255,0.08)_100%)]" />
+                          </div>
                         </div>
                       );
                     })}
@@ -485,36 +582,40 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
               </div>
             </div>
 
-            <div className="space-y-3">
-              <p className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--heading)]">Цвета</p>
-              <div className="flex flex-wrap gap-3">
-                {detail.variants.map((variant) => {
-                  const isActive = variant.id === detail.productId;
-                  const formattedColorLabel = formatColorLabel(variant.colorLabel);
+            {hasVariantChoices ? (
+              <div className="space-y-3">
+                <p className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--heading)]">Цвета</p>
+                <div className="flex flex-wrap gap-3">
+                  {detail.variants.map((variant) => {
+                    const isActive = variant.id === detail.productId;
+                    const formattedColorLabel = formatColorLabel(variant.colorLabel);
 
-                  return (
-                    <Link
-                      key={variant.id}
-                      href={variant.href}
-                      aria-current={isActive ? "page" : undefined}
-                      className={cn(
-                        "flex min-w-[138px] items-center gap-3 rounded-[14px] border bg-white px-3 py-3 transition-colors",
-                        isActive ? "border-[var(--accent)]" : "border-transparent hover:border-black/10",
-                      )}
-                    >
-                      <span className="relative size-12 shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface)]">
-                        <DetailImageWithSkeleton src={variant.imageUrl} alt={formattedColorLabel} fill sizes="48px" className="object-cover" />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block truncate text-sm md:text-base font-medium text-[var(--heading)]">{formattedColorLabel}</span>
-                        <span className="block truncate text-xs text-[var(--text-muted)]">арт. {variant.article}</span>
-                      </span>
-                    </Link>
-                  );
-                })}
+                    return (
+                      <Link
+                        key={variant.id}
+                        href={variant.href}
+                        aria-current={isActive ? "page" : undefined}
+                        className={cn(
+                          "flex min-w-[138px] items-center gap-3 rounded-[14px] border bg-white px-3 py-3 transition-colors",
+                          isActive ? "border-[var(--accent)]" : "border-transparent hover:border-black/10",
+                        )}
+                      >
+                        <span className="relative size-12 shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface)]">
+                          <DetailImageWithSkeleton src={variant.imageUrl} alt={formattedColorLabel} fill sizes="48px" className="object-cover" />
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm md:text-base font-medium text-[var(--heading)]">{formattedColorLabel}</span>
+                          <span className="block truncate text-xs text-[var(--text-muted)]">арт. {variant.article}</span>
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+                <p className="text-sm leading-[1.35] text-[var(--text-muted)] md:text-base">Наличие: {detail.stock} шт.</p>
               </div>
+            ) : (
               <p className="text-sm leading-[1.35] text-[var(--text-muted)] md:text-base">Наличие: {detail.stock} шт.</p>
-            </div>
+            )}
 
             <div className="flex flex-row flex-wrap gap-3">
               <div className="relative flex-1" ref={wishlistPopoverRef}>
@@ -607,7 +708,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
         {detail.descriptionHtml ? (
           <SummaryDescription descriptionHtml={detail.descriptionHtml} />
         ) : (
-          <p className="text-sm leading-[1.55] text-[var(--text-muted)] md:text-base">Описание для этого товара пока не добавлено.</p>
+          <DescriptionPlaceholder />
         )}
       </section>
 
