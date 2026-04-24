@@ -73,6 +73,8 @@ export function ContentCard({
     );
   }
 
+  const cta = renderCta();
+
   return (
     <article className="flex h-full w-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--card-bg)]">
       <div className={cn("relative w-full overflow-hidden bg-[var(--surface)]", imageAspectClass)}>
@@ -99,7 +101,7 @@ export function ContentCard({
             <p className="text-sm md:text-base text-[var(--text-muted)] tracking-[-0.03em] leading-[1.35] whitespace-pre-line">{excerpt}</p>
           ) : null}
         </div>
-        <div className="mt-auto">{renderCta()}</div>
+        {cta ? <div className="mt-auto">{cta}</div> : null}
       </div>
     </article>
   );

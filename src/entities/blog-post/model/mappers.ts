@@ -12,10 +12,9 @@ export function mapBlogArticleFromDto(dto: BlogArticleDto): BlogArticle {
 
   return {
     ...post,
-    pageTitle: dto.pageTitle ?? dto.title,
-    seoTitle: dto.seoTitle ?? dto.pageTitle ?? dto.title,
+    pageTitle: dto.pageTitle ?? dto.cardTitle,
+    seoTitle: dto.seoTitle ?? dto.pageTitle ?? dto.cardTitle,
     breadcrumbCurrentLabel: dto.breadcrumbCurrentLabel ?? "Статьи",
-    heroImage: dto.heroImage ?? dto.image,
     sections: dto.sections ?? [],
   };
 }

@@ -1,42 +1,27 @@
 import type { BlogArticleSummarySection } from "@/entities/blog-post";
+import { PageSubheading } from "@/shared/ui/page-subheading";
 import Image from "next/image";
 
 type ArticleSummarySectionProps = {
   section: BlogArticleSummarySection;
 };
 
-function SummaryDecoration() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 960 540"
-      className="pointer-events-none absolute -right-[118px] -top-[122px] h-[440px] w-[440px] text-[#4c86df] opacity-70 md:-right-[148px] md:-top-[152px] md:h-[560px] md:w-[560px] xl:-right-[238px] xl:-top-[208px] xl:h-[728px] xl:w-[728px]"
-    >
-      <circle cx="480" cy="270" r="188" fill="none" stroke="currentColor" strokeWidth="42" />
-      <circle cx="480" cy="270" r="310" fill="none" stroke="currentColor" strokeWidth="42" />
-      <circle cx="480" cy="270" r="432" fill="none" stroke="currentColor" strokeWidth="42" />
-    </svg>
-  );
-}
-
 export function ArticleSummarySection({ section }: ArticleSummarySectionProps) {
   return (
-    <section className="mb-[35px] md:mb-[45px]" aria-label={section.title}>
-      <div className="grid gap-5 md:gap-6 xl:grid-cols-[minmax(0,1114px)_minmax(0,586px)] xl:gap-10">
-        <div className="relative order-2 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] px-5 py-5 text-white md:px-[30px] md:py-8 xl:order-1 xl:min-h-[418px] xl:px-20 xl:py-[76px]">
-          <SummaryDecoration />
+    <section aria-label={section.title}>
+      <div className="grid gap-5 md:gap-6 xl:grid-cols-[8fr_4fr] xl:gap-10">
+        <div className="relative order-2 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] px-5 py-5 text-white md:px-[30px] md:py-8 xl:order-1 xl:p-[54px]">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[url('/blog/articles/img_summary_card_cover.svg')] bg-[length:auto_100%] bg-[position:right_center] bg-no-repeat opacity-70"
+          />
 
-          <div className="relative z-10 max-w-[962px]">
-            <h2 className="m-0 font-heading text-[2.5rem] leading-none uppercase tracking-[0.01em] md:text-[4rem] xl:text-[6rem] xl:leading-[0.97]">
-              {section.title}
-            </h2>
+          <div className="relative z-10">
+            <PageSubheading title={section.title} titleClassName="text-white" />
 
-            <div className="mt-5 space-y-4 md:mt-6 md:space-y-5 xl:mt-[30px] xl:space-y-[14px]">
+            <div className="mt-4 md:mt-5 flex flex-col gap-2 md:gap-2.5">
               {section.paragraphs.map((paragraph) => (
-                <p
-                  key={paragraph}
-                  className="m-0 max-w-[962px] text-xs leading-[1.3] tracking-[-0.04em] text-[#f5f4ef] md:text-base xl:text-[1.25rem]"
-                >
+                <p key={paragraph} className="m-0 text-sm leading-[1.3] tracking-[-0.04em] text-white md:text-base xl:text-lg">
                   {paragraph}
                 </p>
               ))}
@@ -44,7 +29,7 @@ export function ArticleSummarySection({ section }: ArticleSummarySectionProps) {
           </div>
         </div>
 
-        <div className="relative order-1 aspect-[340/256] overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white md:aspect-[586/418] xl:order-2">
+        <div className="relative order-1 aspect-3/2 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white xl:order-2">
           <Image
             src={section.image.url}
             alt={section.image.alt}

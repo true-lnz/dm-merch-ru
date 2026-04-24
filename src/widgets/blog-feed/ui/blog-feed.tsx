@@ -12,10 +12,10 @@ export function BlogFeed({ posts }: BlogFeedProps) {
         {posts.map((post) => (
           <ContentCard
             key={post.id}
-            title={post.title}
+            title={post.cardTitle}
             excerpt={post.excerpt}
-            href="/blog/soon"
-            image={post.image}
+            href={post.href}
+            image={post.cardImage}
             imageContainerClassName="aspect-18/9 object-top"
           />
         ))}
