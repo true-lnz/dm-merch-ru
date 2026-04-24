@@ -29,6 +29,8 @@ export type {
   BlogArticleTextMiniCardsSectionDto,
   BlogArticleTextColumnsImageSection,
   BlogArticleTextColumnsImageSectionDto,
+  BlogArticleTextSplitSection,
+  BlogArticleTextSplitSectionDto,
   BlogArticleTextImageSection,
   BlogArticleTextImageSectionDto,
   BlogArticleTextColumn,

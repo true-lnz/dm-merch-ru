@@ -25,9 +25,18 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
               const paragraphData = typeof paragraph === "string" ? { text: paragraph, variant: "default" as const } : paragraph;
 
               if (paragraphData.variant === "highlighted") {
+                const highlightedParts = paragraphData.text.split("\n\n");
+
                 return (
                   <div key={`${paragraphData.text}-${index}`} className="rounded-[18px] bg-[var(--card-bg)] px-5 py-[22px] md:rounded-[20px] md:px-[30px] md:py-[26px]">
-                    <p className="text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text)] md:text-base">{paragraphData.text}</p>
+                    <div className="flex flex-col gap-5">
+                      {highlightedParts.map((part, highlightedIndex) => (
+                        <div key={`${part}-${highlightedIndex}`}>
+                          {highlightedIndex > 0 ? <div className="mb-5 h-px bg-[rgba(64,64,64,0.2)]" /> : null}
+                          <p className="text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text)] md:text-base">{part}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 );
               }

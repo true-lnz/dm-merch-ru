@@ -12,6 +12,7 @@ import { ArticleTaskGoalsSection } from "@/widgets/article-task-goals-section";
 import { ArticleTextColumnsImageSection } from "@/widgets/article-text-columns-image-section";
 import { ArticleTextImageSection } from "@/widgets/article-text-image-section";
 import { ArticleTextMiniCardsSection } from "@/widgets/article-text-mini-cards-section";
+import { ArticleTextSplitSection } from "@/widgets/article-text-split-section";
 import { ArticleTextColumnsSection } from "@/widgets/article-text-columns-section";
 import { FaqSection } from "@/widgets/faq-section";
 import type { PropsWithChildren } from "react";
@@ -36,6 +37,8 @@ function renderArticleSection(section: BlogArticleSection, index: number) {
       return <ArticleTaskGoalsSection key={`${section.type}-${index}`} section={section} />;
     case "text-columns-image":
       return <ArticleTextColumnsImageSection key={`${section.type}-${index}`} section={section} />;
+    case "text-split":
+      return <ArticleTextSplitSection key={`${section.type}-${index}`} section={section} />;
     case "text-image":
       return <ArticleTextImageSection key={`${section.type}-${index}`} section={section} />;
     case "numbered-mini-cards":

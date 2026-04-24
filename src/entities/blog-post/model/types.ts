@@ -139,6 +139,13 @@ export type BlogArticleTextColumnsImageSectionDto = {
   imageAspectRatio?: string;
 };
 
+export type BlogArticleTextSplitSectionDto = {
+  type: "text-split";
+  title: string;
+  leftParagraphs: string[];
+  rightParagraphs: string[];
+};
+
 export type BlogArticleSectionDto =
   | BlogArticleSummarySectionDto
   | BlogArticleTextColumnsSectionDto
@@ -150,7 +157,8 @@ export type BlogArticleSectionDto =
   | BlogArticleTextImageSectionDto
   | BlogArticleNumberedMiniCardsSectionDto
   | BlogArticleBudgetOptimizationSectionDto
-  | BlogArticleTextColumnsImageSectionDto;
+  | BlogArticleTextColumnsImageSectionDto
+  | BlogArticleTextSplitSectionDto;
 
 export type BlogArticleDto = BlogPostDto & {
   pageTitle?: string;
@@ -274,6 +282,13 @@ export type BlogArticleTextColumnsImageSection = {
   imageAspectRatio?: string;
 };
 
+export type BlogArticleTextSplitSection = {
+  type: "text-split";
+  title: string;
+  leftParagraphs: string[];
+  rightParagraphs: string[];
+};
+
 export type BlogArticleSection =
   | BlogArticleSummarySection
   | BlogArticleTextColumnsSection
@@ -285,7 +300,8 @@ export type BlogArticleSection =
   | BlogArticleTextImageSection
   | BlogArticleNumberedMiniCardsSection
   | BlogArticleBudgetOptimizationSection
-  | BlogArticleTextColumnsImageSection;
+  | BlogArticleTextColumnsImageSection
+  | BlogArticleTextSplitSection;
 
 export type BlogArticle = BlogPost & {
   pageTitle: string;
