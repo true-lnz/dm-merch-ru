@@ -14,6 +14,7 @@ export function ArticleTextMiniCardsSection({ section }: ArticleTextMiniCardsSec
           title={section.title}
           description={section.description}
           descriptionPlacement={section.description ? "side" : "bottom"}
+          sideDescriptionLayout={section.descriptionLayout ?? "two-columns"}
           titleClassName="max-w-[950px]"
           descriptionClassName="max-w-[553px] text-sm md:text-base xl:text-lg"
         />

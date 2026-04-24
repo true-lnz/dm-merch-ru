@@ -17,7 +17,7 @@ export function ArticleChecklistSection({ section }: ArticleChecklistSectionProp
 
   return (
     <section aria-label={section.title}>
-      <div className="relative overflow-hidden rounded-[18px] bg-[var(--accent)] p-[27px] md:rounded-[22.5px] md:p-[54px]">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden rounded-none bg-[var(--accent)] p-[27px] md:left-auto md:w-auto md:translate-x-0 md:rounded-[22.5px] md:p-[54px]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[length:auto_100%] bg-[position:right_center] bg-no-repeat opacity-70"
@@ -39,7 +39,7 @@ export function ArticleChecklistSection({ section }: ArticleChecklistSectionProp
                   number={item.number}
                   text={item.text}
                   className={cn(
-                    "min-h-[170px]",
+                    "min-h-none md:min-h-[150px]",
                     isLightOnMobile ? "bg-[#F8F6F0] text-[var(--heading)]" : "bg-[rgba(248,246,240,0.2)] text-white",
                     isLightOnTablet ? "md:bg-[#F8F6F0] md:text-[var(--heading)]" : "md:bg-[rgba(248,246,240,0.2)] md:text-white",
                     isLightOnDesktop ? "xl:bg-[#F8F6F0] xl:text-[var(--heading)]" : "xl:bg-[rgba(248,246,240,0.2)] xl:text-white",

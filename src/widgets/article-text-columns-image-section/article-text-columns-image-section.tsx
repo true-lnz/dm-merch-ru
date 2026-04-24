@@ -12,7 +12,7 @@ export function ArticleTextColumnsImageSection({ section }: ArticleTextColumnsIm
         <div className="grid gap-8 xl:grid-cols-2 xl:gap-[100px]">
           {section.columns.map((column) => (
             <div key={column.title} className="flex flex-col gap-4 md:gap-5">
-              <h2 className="font-heading whitespace-pre-line text-3xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)] md:text-4xl xl:text-5xl">
+              <h2 className="font-heading whitespace-pre-line text-2xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)] md:text-4xl xl:text-5xl">
                 {column.title}
               </h2>
               <div className="space-y-4 md:space-y-5">

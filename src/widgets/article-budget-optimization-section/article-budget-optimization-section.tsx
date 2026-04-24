@@ -31,7 +31,7 @@ export function ArticleBudgetOptimizationSection({ section }: ArticleBudgetOptim
           </div>
         </div>
 
-        <div className="relative aspect-[669/636] overflow-hidden rounded-[18px] bg-white md:rounded-[20px]">
+        <div className="relative aspect-[669/636] overflow-hidden rounded-[18px] bg-white md:rounded-[20px] xl:h-full xl:aspect-auto">
           <Image
             src={section.image.url}
             alt={section.image.alt}

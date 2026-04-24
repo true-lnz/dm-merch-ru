@@ -14,7 +14,7 @@ export function ArticleTextColumnsSection({ section }: ArticleTextColumnsSection
           {section.columns.map((column) => (
             <div key={column.title} className="flex flex-col gap-5 md:gap-6">
               {!section.hideColumnTitles ? (
-                <h3 className="font-heading whitespace-pre-line text-3xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-4xl xl:max-w-[70%]">
+                <h3 className="font-heading whitespace-pre-line text-2xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)] md:text-4xl xl:max-w-[70%]">
                   {column.title}
                 </h3>
               ) : null}

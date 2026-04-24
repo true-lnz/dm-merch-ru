@@ -9,8 +9,7 @@ type ArticleNumberedMiniCardsSectionProps = {
 
 export function ArticleNumberedMiniCardsSection({ section }: ArticleNumberedMiniCardsSectionProps) {
   const isAccent = (section.variant ?? "accent") === "accent";
-  const desktopColumnsClassName =
-    section.items.length >= 4 ? "xl:grid-cols-4" : section.items.length === 3 ? "xl:grid-cols-3" : "xl:grid-cols-2";
+  const desktopColumnsClassName = section.items.length >= 4 ? "xl:grid-cols-4" : section.items.length === 3 ? "xl:grid-cols-3" : "xl:grid-cols-2";
 
   return (
     <section aria-label={section.title}>
@@ -30,7 +29,8 @@ export function ArticleNumberedMiniCardsSection({ section }: ArticleNumberedMini
               number={item.number}
               text={item.text}
               variant={isAccent ? "accent" : "light"}
-              className="min-h-[170px]"
+              showAccentBackground={false}
+              className="min-h-0 md:min-h-[150px]"
               textClassName={isAccent ? "text-white" : undefined}
             />
           ))}

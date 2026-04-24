@@ -27,7 +27,7 @@ export function ArticleTaskGoalsSection({ section }: ArticleTaskGoalsSectionProp
 
           <div className="flex flex-col gap-5 md:gap-6">
             {section.label ? (
-              <h3 className="font-heading whitespace-pre-line text-3xl leading-[0.95] tracking-[0.015em] uppercase text-white md:text-4xl xl:text-5xl">
+              <h3 className="font-heading whitespace-pre-line text-2xl leading-[0.95] tracking-[0.015em] uppercase text-white md:text-4xl xl:text-5xl">
                 {section.label}
               </h3>
             ) : null}
@@ -38,7 +38,9 @@ export function ArticleTaskGoalsSection({ section }: ArticleTaskGoalsSectionProp
             </div>
           </div>
 
-          {section.note ? <p className="max-w-[480px] text-sm leading-[1.35] tracking-[-0.03em] text-white md:text-base xl:text-lg">{section.note}</p> : null}
+          {section.note ? (
+            <p className="max-w-[480px] text-sm leading-[1.35] tracking-[-0.03em] text-white md:text-base xl:text-lg">{section.note}</p>
+          ) : null}
         </div>
       </div>
     </section>

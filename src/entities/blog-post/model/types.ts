@@ -59,6 +59,7 @@ export type BlogArticleTextMiniCardsSectionDto = {
   type: "text-mini-cards";
   title: string;
   description?: string;
+  descriptionLayout?: "two-columns" | "three-columns-middle";
   cards: BlogArticleMiniCardDto[];
   conclusion?: string;
 };
@@ -202,6 +203,7 @@ export type BlogArticleTextMiniCardsSection = {
   type: "text-mini-cards";
   title: string;
   description?: string;
+  descriptionLayout?: "two-columns" | "three-columns-middle";
   cards: BlogArticleMiniCard[];
   conclusion?: string;
 };

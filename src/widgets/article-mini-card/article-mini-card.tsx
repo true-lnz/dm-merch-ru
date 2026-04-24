@@ -5,6 +5,7 @@ type ArticleMiniCardProps = {
   text: string;
   number?: string;
   variant?: "light" | "accent";
+  showAccentBackground?: boolean;
   className?: string;
   numberClassName?: string;
   titleClassName?: string;
@@ -16,6 +17,7 @@ export function ArticleMiniCard({
   text,
   number,
   variant = "light",
+  showAccentBackground = true,
   className,
   numberClassName,
   titleClassName,
@@ -31,7 +33,7 @@ export function ArticleMiniCard({
         className,
       )}
     >
-      {isAccent ? (
+      {isAccent && showAccentBackground ? (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[url('/blog/img_feature_card_cover.svg')] bg-cover bg-center bg-no-repeat opacity-100"
@@ -53,7 +55,7 @@ export function ArticleMiniCard({
         {title ? (
           <h3
             className={cn(
-              "font-heading whitespace-pre-line text-3xl leading-[0.95] tracking-[0.015em] uppercase md:text-4xl",
+              "font-heading whitespace-pre-line text-2xl leading-[0.95] tracking-[0.015em] uppercase md:text-4xl",
               isAccent ? "text-white" : "text-[var(--heading)]",
               titleClassName,
             )}

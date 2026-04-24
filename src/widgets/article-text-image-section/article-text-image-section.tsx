@@ -59,17 +59,11 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
 
         <div
           className={cn(
-            "relative order-2 min-h-[240px] overflow-hidden bg-white md:min-h-[320px] xl:h-full xl:min-h-0",
+            "relative order-2 aspect-square overflow-hidden bg-white md:min-h-[320px] md:aspect-auto xl:h-full xl:min-h-0",
             isAccent ? "rounded-[18px] md:rounded-[22.5px]" : "rounded-[18px] md:rounded-[22.5px]",
           )}
         >
-          <Image
-            src={section.image.url}
-            alt={section.image.alt}
-            fill
-            sizes={isAccent ? "(max-width: 1279px) calc(100vw - 114px), 542px" : "(max-width: 1279px) calc(100vw - 60px), 669px"}
-            className="object-cover object-center"
-          />
+          <Image src={section.image.url} alt={section.image.alt} fill sizes="70vw" className="object-cover object-top" />
         </div>
       </div>
     </section>

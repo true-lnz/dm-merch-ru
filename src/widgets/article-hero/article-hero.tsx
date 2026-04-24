@@ -22,14 +22,7 @@ export function ArticleHero({ article }: ArticleHeroProps) {
 
       <div className="mt-4 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white md:mt-5">
         <div className="relative aspect-[1740/400] min-h-[125px] w-full xl:min-h-0">
-          <Image
-            src={article.heroImage.url}
-            alt={article.heroImage.alt}
-            fill
-            preload={true}
-            sizes="(max-width: 767px) 100vw, (max-width: 1279px) calc(100vw - 60px), 1740px"
-            className="object-cover"
-          />
+          <Image src={article.heroImage.url} alt={article.heroImage.alt} fill unoptimized preload={true} sizes="100vw" className="object-cover" />
         </div>
       </div>
     </section>

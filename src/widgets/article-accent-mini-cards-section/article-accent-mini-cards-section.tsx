@@ -9,7 +9,7 @@ type ArticleAccentMiniCardsSectionProps = {
 export function ArticleAccentMiniCardsSection({ section }: ArticleAccentMiniCardsSectionProps) {
   return (
     <section aria-label={section.title}>
-      <div className="relative overflow-hidden rounded-[18px] bg-[var(--accent)] p-[27px] md:rounded-[22.5px] md:p-[54px]">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden rounded-none bg-[var(--accent)] p-[27px] md:left-auto md:w-auto md:translate-x-0 md:rounded-[22.5px] md:p-[54px]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[length:auto_100%] bg-[position:right_center] bg-no-repeat opacity-70"

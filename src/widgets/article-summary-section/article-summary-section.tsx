@@ -29,7 +29,7 @@ export function ArticleSummarySection({ section }: ArticleSummarySectionProps) {
           </div>
         </div>
 
-        <div className="relative order-1 aspect-3/2 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white xl:order-2">
+        <div className="relative order-1 aspect-3/2 md:aspect-auto overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white xl:order-2">
           <Image
             src={section.image.url}
             alt={section.image.alt}
