@@ -15,7 +15,8 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
       <div
         className={cn(
           "grid gap-5 md:gap-6 xl:grid-cols-[1fr_669px] xl:items-start xl:gap-10",
-          isAccent && "rounded-[18px] bg-[var(--accent)] p-[27px] md:rounded-[22.5px] md:p-[54px] xl:grid-cols-[minmax(0,1fr)_542px] xl:gap-[60px]",
+          isAccent &&
+            "relative left-1/2 w-screen -translate-x-1/2 rounded-none bg-[var(--accent)] px-[30px] py-[27px] md:left-auto md:w-auto md:translate-x-0 md:rounded-[22.5px] md:p-[54px] xl:grid-cols-[minmax(0,1fr)_542px] xl:gap-[60px]",
         )}
       >
         <div className={cn("order-1 flex flex-col gap-4 md:gap-5", !isAccent && "xl:pt-[13px]")}>
@@ -28,7 +29,10 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
                 const highlightedParts = paragraphData.text.split("\n\n");
 
                 return (
-                  <div key={`${paragraphData.text}-${index}`} className="rounded-[18px] bg-[var(--card-bg)] px-5 py-[22px] md:rounded-[20px] md:px-[30px] md:py-[26px]">
+                  <div
+                    key={`${paragraphData.text}-${index}`}
+                    className="rounded-[18px] bg-[var(--card-bg)] px-5 py-[22px] md:rounded-[20px] md:px-[30px] md:py-[26px]"
+                  >
                     <div className="flex flex-col gap-5">
                       {highlightedParts.map((part, highlightedIndex) => (
                         <div key={`${part}-${highlightedIndex}`}>
@@ -42,7 +46,10 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
               }
 
               return (
-                <p key={`${paragraphData.text}-${index}`} className={cn("text-sm leading-[1.35] tracking-[-0.03em] md:text-base xl:text-lg", isAccent ? "text-white" : "text-[var(--text)]")}>
+                <p
+                  key={`${paragraphData.text}-${index}`}
+                  className={cn("text-sm leading-[1.35] tracking-[-0.03em] md:text-base xl:text-lg", isAccent ? "text-white" : "text-[var(--text)]")}
+                >
                   {paragraphData.text}
                 </p>
               );
@@ -52,10 +59,9 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
 
         <div
           className={cn(
-            "relative overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px]",
-            isAccent ? "order-2 aspect-[542/357] xl:mt-[16px]" : "order-2 aspect-[669/361]",
+            "relative order-2 min-h-[240px] overflow-hidden bg-white md:min-h-[320px] xl:h-full xl:min-h-0",
+            isAccent ? "rounded-[18px] md:rounded-[22.5px]" : "rounded-[18px] md:rounded-[22.5px]",
           )}
-          style={{ aspectRatio: section.imageAspectRatio ?? (isAccent ? "542 / 357" : "669 / 361") }}
         >
           <Image
             src={section.image.url}

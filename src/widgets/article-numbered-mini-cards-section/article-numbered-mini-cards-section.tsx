@@ -39,7 +39,7 @@ export function ArticleNumberedMiniCardsSection({ section }: ArticleNumberedMini
         {section.note ? (
           <div className="border-t border-[rgba(64,64,64,0.2)] pt-10">
             <div className="flex items-start gap-[15px]">
-              <span className="mt-[7px] block size-[10px] rounded-full bg-[var(--accent)]" />
+              <span className="mt-[7px] block size-[10px] shrink-0 rounded-full bg-[var(--accent)]" />
               <p className={cn("text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text)] md:text-base xl:text-lg")}>{section.note}</p>
             </div>
           </div>

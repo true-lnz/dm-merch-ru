@@ -26,7 +26,7 @@ export function ArticleTextColumnsImageSection({ section }: ArticleTextColumnsIm
           ))}
         </div>
 
-        <div className="relative overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px]" style={{ aspectRatio: section.imageAspectRatio ?? "1740 / 290" }}>
+        <div className="relative overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] aspect-1740/600 md:aspect-1740/290">
           <Image
             src={section.image.url}
             alt={section.image.alt}
