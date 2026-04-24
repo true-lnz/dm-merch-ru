@@ -2,12 +2,14 @@ import type { BlogArticle, BlogArticleSection } from "@/entities/blog-post";
 import { RequestCta } from "@/features/request-cta";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { ArticleAccentMiniCardsSection } from "@/widgets/article-accent-mini-cards-section";
+import { ArticleBudgetOptimizationSection } from "@/widgets/article-budget-optimization-section";
 import { ArticleChecklistSection } from "@/widgets/article-checklist-section";
 import { ArticleHero } from "@/widgets/article-hero";
 import { ArticleMerchTypesSection } from "@/widgets/article-merch-types-section";
 import { ArticleNumberedMiniCardsSection } from "@/widgets/article-numbered-mini-cards-section";
 import { ArticleSummarySection } from "@/widgets/article-summary-section";
 import { ArticleTaskGoalsSection } from "@/widgets/article-task-goals-section";
+import { ArticleTextColumnsImageSection } from "@/widgets/article-text-columns-image-section";
 import { ArticleTextImageSection } from "@/widgets/article-text-image-section";
 import { ArticleTextMiniCardsSection } from "@/widgets/article-text-mini-cards-section";
 import { ArticleTextColumnsSection } from "@/widgets/article-text-columns-section";
@@ -32,10 +34,14 @@ function renderArticleSection(section: BlogArticleSection, index: number) {
       return <ArticleChecklistSection key={`${section.type}-${index}`} section={section} />;
     case "task-goals":
       return <ArticleTaskGoalsSection key={`${section.type}-${index}`} section={section} />;
+    case "text-columns-image":
+      return <ArticleTextColumnsImageSection key={`${section.type}-${index}`} section={section} />;
     case "text-image":
       return <ArticleTextImageSection key={`${section.type}-${index}`} section={section} />;
     case "numbered-mini-cards":
       return <ArticleNumberedMiniCardsSection key={`${section.type}-${index}`} section={section} />;
+    case "budget-optimization":
+      return <ArticleBudgetOptimizationSection key={`${section.type}-${index}`} section={section} />;
     case "summary":
       return <ArticleSummarySection key={`${section.type}-${index}`} section={section} />;
   }

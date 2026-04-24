@@ -91,25 +91,52 @@ export type BlogArticleTaskGoalsSectionDto = {
   type: "task-goals";
   title: string;
   description: string;
-  label: string;
+  label?: string;
   cards: BlogArticleMiniCardDto[];
-  note: string;
+  note?: string;
+  columns?: 2 | 3;
   backgroundAssetUrl?: string;
 };
+
+export type BlogArticleParagraphDto =
+  | string
+  | {
+      text: string;
+      variant?: "default" | "highlighted";
+    };
 
 export type BlogArticleTextImageSectionDto = {
   type: "text-image";
   title: string;
-  paragraphs: string[];
+  paragraphs: BlogArticleParagraphDto[];
   image: CmsImage;
   variant?: "default" | "accent";
+  imageAspectRatio?: string;
 };
 
 export type BlogArticleNumberedMiniCardsSectionDto = {
   type: "numbered-mini-cards";
   title: string;
+  description?: string;
+  descriptionPlacement?: "side" | "bottom";
+  variant?: "accent" | "light";
   items: BlogArticleChecklistItemDto[];
   note?: string;
+};
+
+export type BlogArticleBudgetOptimizationSectionDto = {
+  type: "budget-optimization";
+  title: string;
+  description: string;
+  items: BlogArticleChecklistItemDto[];
+  image: CmsImage;
+};
+
+export type BlogArticleTextColumnsImageSectionDto = {
+  type: "text-columns-image";
+  columns: BlogArticleTextColumnDto[];
+  image: CmsImage;
+  imageAspectRatio?: string;
 };
 
 export type BlogArticleSectionDto =
@@ -121,7 +148,9 @@ export type BlogArticleSectionDto =
   | BlogArticleChecklistSectionDto
   | BlogArticleTaskGoalsSectionDto
   | BlogArticleTextImageSectionDto
-  | BlogArticleNumberedMiniCardsSectionDto;
+  | BlogArticleNumberedMiniCardsSectionDto
+  | BlogArticleBudgetOptimizationSectionDto
+  | BlogArticleTextColumnsImageSectionDto;
 
 export type BlogArticleDto = BlogPostDto & {
   pageTitle?: string;
@@ -197,25 +226,52 @@ export type BlogArticleTaskGoalsSection = {
   type: "task-goals";
   title: string;
   description: string;
-  label: string;
+  label?: string;
   cards: BlogArticleMiniCard[];
-  note: string;
+  note?: string;
+  columns?: 2 | 3;
   backgroundAssetUrl?: string;
 };
+
+export type BlogArticleParagraph =
+  | string
+  | {
+      text: string;
+      variant?: "default" | "highlighted";
+    };
 
 export type BlogArticleTextImageSection = {
   type: "text-image";
   title: string;
-  paragraphs: string[];
+  paragraphs: BlogArticleParagraph[];
   image: CmsImage;
   variant?: "default" | "accent";
+  imageAspectRatio?: string;
 };
 
 export type BlogArticleNumberedMiniCardsSection = {
   type: "numbered-mini-cards";
   title: string;
+  description?: string;
+  descriptionPlacement?: "side" | "bottom";
+  variant?: "accent" | "light";
   items: BlogArticleChecklistItem[];
   note?: string;
+};
+
+export type BlogArticleBudgetOptimizationSection = {
+  type: "budget-optimization";
+  title: string;
+  description: string;
+  items: BlogArticleChecklistItem[];
+  image: CmsImage;
+};
+
+export type BlogArticleTextColumnsImageSection = {
+  type: "text-columns-image";
+  columns: BlogArticleTextColumn[];
+  image: CmsImage;
+  imageAspectRatio?: string;
 };
 
 export type BlogArticleSection =
@@ -227,7 +283,9 @@ export type BlogArticleSection =
   | BlogArticleChecklistSection
   | BlogArticleTaskGoalsSection
   | BlogArticleTextImageSection
-  | BlogArticleNumberedMiniCardsSection;
+  | BlogArticleNumberedMiniCardsSection
+  | BlogArticleBudgetOptimizationSection
+  | BlogArticleTextColumnsImageSection;
 
 export type BlogArticle = BlogPost & {
   pageTitle: string;

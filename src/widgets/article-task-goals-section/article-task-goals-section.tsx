@@ -1,4 +1,5 @@
 import type { BlogArticleTaskGoalsSection } from "@/entities/blog-post";
+import { cn } from "@/shared/lib/cn";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import { ArticleMiniCard } from "@/widgets/article-mini-card";
 
@@ -7,6 +8,8 @@ type ArticleTaskGoalsSectionProps = {
 };
 
 export function ArticleTaskGoalsSection({ section }: ArticleTaskGoalsSectionProps) {
+  const isThreeColumns = section.columns === 3;
+
   return (
     <section aria-label={section.title}>
       <div className="relative overflow-hidden rounded-[18px] bg-[var(--accent)] p-[27px] md:rounded-[22.5px] md:p-[54px]">
@@ -23,17 +26,19 @@ export function ArticleTaskGoalsSection({ section }: ArticleTaskGoalsSectionProp
           </div>
 
           <div className="flex flex-col gap-5 md:gap-6">
-            <h3 className="font-heading whitespace-pre-line text-3xl leading-[0.95] tracking-[0.015em] uppercase text-white md:text-4xl xl:text-5xl">
-              {section.label}
-            </h3>
-            <div className="grid gap-4 md:grid-cols-2 xl:max-w-[1024px]">
+            {section.label ? (
+              <h3 className="font-heading whitespace-pre-line text-3xl leading-[0.95] tracking-[0.015em] uppercase text-white md:text-4xl xl:text-5xl">
+                {section.label}
+              </h3>
+            ) : null}
+            <div className={cn("grid gap-4 md:grid-cols-2", isThreeColumns ? "xl:grid-cols-3" : "xl:max-w-[1024px]")}>
               {section.cards.map((card) => (
                 <ArticleMiniCard key={card.title} title={card.title} text={card.text} />
               ))}
             </div>
           </div>
 
-          <p className="max-w-[480px] text-sm leading-[1.35] tracking-[-0.03em] text-white md:text-base xl:text-lg">{section.note}</p>
+          {section.note ? <p className="max-w-[480px] text-sm leading-[1.35] tracking-[-0.03em] text-white md:text-base xl:text-lg">{section.note}</p> : null}
         </div>
       </div>
     </section>

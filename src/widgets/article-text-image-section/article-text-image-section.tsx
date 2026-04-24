@@ -20,12 +20,24 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
       >
         <div className={cn("order-1 flex flex-col gap-4 md:gap-5", !isAccent && "xl:pt-[13px]")}>
           <PageSubheading title={section.title} titleClassName={cn("max-w-[1057px]", isAccent && "text-white")} />
-          <div className="space-y-4 md:space-y-5">
-            {section.paragraphs.map((paragraph) => (
-              <p key={paragraph} className={cn("text-sm leading-[1.35] tracking-[-0.03em] md:text-base xl:text-lg", isAccent ? "text-white" : "text-[var(--text)]")}>
-                {paragraph}
-              </p>
-            ))}
+          <div className="flex flex-col gap-4 md:gap-5">
+            {section.paragraphs.map((paragraph, index) => {
+              const paragraphData = typeof paragraph === "string" ? { text: paragraph, variant: "default" as const } : paragraph;
+
+              if (paragraphData.variant === "highlighted") {
+                return (
+                  <div key={`${paragraphData.text}-${index}`} className="rounded-[18px] bg-[var(--card-bg)] px-5 py-[22px] md:rounded-[20px] md:px-[30px] md:py-[26px]">
+                    <p className="text-sm leading-[1.3] tracking-[-0.03em] text-[var(--text)] md:text-base">{paragraphData.text}</p>
+                  </div>
+                );
+              }
+
+              return (
+                <p key={`${paragraphData.text}-${index}`} className={cn("text-sm leading-[1.35] tracking-[-0.03em] md:text-base xl:text-lg", isAccent ? "text-white" : "text-[var(--text)]")}>
+                  {paragraphData.text}
+                </p>
+              );
+            })}
           </div>
         </div>
 
@@ -34,6 +46,7 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
             "relative overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px]",
             isAccent ? "order-2 aspect-[542/357] xl:mt-[16px]" : "order-2 aspect-[669/361]",
           )}
+          style={{ aspectRatio: section.imageAspectRatio ?? (isAccent ? "542 / 357" : "669 / 361") }}
         >
           <Image
             src={section.image.url}
