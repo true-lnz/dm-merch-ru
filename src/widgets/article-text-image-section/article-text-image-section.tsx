@@ -63,7 +63,7 @@ export function ArticleTextImageSection({ section }: ArticleTextImageSectionProp
             isAccent ? "rounded-[18px] md:rounded-[22.5px]" : "rounded-[18px] md:rounded-[22.5px]",
           )}
         >
-          <Image src={section.image.url} alt={section.image.alt} fill sizes="70vw" className="object-cover object-top" />
+          <Image src={section.image.url} alt={section.image.alt} fill sizes="70vw" quality={95} className="object-cover object-top" />
         </div>
       </div>
     </section>

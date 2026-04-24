@@ -15,7 +15,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
       height: 250,
     },
     heroImage: {
-      url: "/blog/articles/img_article_cover_4.png",
+      url: "/blog/articles/img_article_cover_4.webp",
       alt: "Как мерч влияет на имидж и узнаваемость бренда",
       width: 1740,
       height: 400,
@@ -49,7 +49,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Именно поэтому мерч для компании рассматривается как долгосрочный носитель бренда, который усиливает узнаваемость без дополнительных рекламных затрат.",
         ],
         image: {
-          url: "/blog/articles/article-brand-contact-point.png",
+          url: "/blog/articles/article-brand-contact-point.webp",
           alt: "Сотрудник в брендированной кепке и фартуке",
           width: 542,
           height: 444,
@@ -66,7 +66,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Особенно эффективно работают корпоративные футболки с логотипом, худи с логотипом компании и другие элементы одежды, которые часто находятся в поле зрения окружающих.",
         ],
         image: {
-          url: "/blog/articles/article-brand-visual-image.png",
+          url: "/blog/articles/article-brand-visual-image.webp",
           alt: "Команда в брендированной одежде",
           width: 669,
           height: 444,
@@ -94,7 +94,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           },
         ],
         image: {
-          url: "/blog/articles/article-brand-trust-wide.png",
+          url: "/blog/articles/article-brand-trust-wide.webp",
           alt: "Брендированная бутылка крупным планом",
           width: 1740,
           height: 290,
@@ -110,7 +110,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "В долгосрочной перспективе сильный внутренний имидж положительно влияет и на внешний образ бренда.",
         ],
         image: {
-          url: "/blog/articles/article-brand-internal-image.png",
+          url: "/blog/articles/article-brand-internal-image.webp",
           alt: "Сотрудницы в брендированных футболках",
           width: 669,
           height: 420,
@@ -126,7 +126,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Таким образом, корпоративный мерч становится частью офлайн-стратегии бренда и усиливает его присутствие в профессиональной среде.",
         ],
         image: {
-          url: "/blog/articles/article-brand-offline-image.png",
+          url: "/blog/articles/article-brand-offline-image.webp",
           alt: "Команда в футболках разных цветов",
           width: 542,
           height: 420,
@@ -146,7 +146,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Если мерч гармонично вписывается в повседневную жизнь аудитории, он используется регулярно. Это обеспечивает постоянное присутствие бренда и усиливает его восприятие на рынке.",
         ],
         image: {
-          url: "/blog/articles/article-brand-image-impact.png",
+          url: "/blog/articles/article-brand-image-impact.webp",
           alt: "Смартфон с фирменной символикой",
           width: 669,
           height: 484,
@@ -161,7 +161,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "При грамотном подходе мерч для компании становится не просто сувенирной продукцией, а стратегическим инструментом укрепления бренда и его долгосрочной узнаваемости.",
         ],
         image: {
-          url: "/blog/articles/article-brand-summary.png",
+          url: "/blog/articles/article-brand-summary.webp",
           alt: "Набор брендированных аксессуаров",
           width: 586,
           height: 442,
@@ -182,7 +182,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
       height: 250,
     },
     heroImage: {
-      url: "/blog/articles/img_article_cover_5.png",
+      url: "/blog/articles/img_article_cover_5.webp",
       alt: "Экспресс-мерч",
       width: 1740,
       height: 400,
@@ -216,7 +216,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Важно понимать, что скорость зависит от выбранных позиций, сложности дизайна и тиража. Простые изделия запускаются быстрее, чем сложные подарочные наборы.",
         ],
         image: {
-          url: "/blog/articles/article-express-merch-about.png",
+          url: "/blog/articles/article-express-merch-about.webp",
           alt: "Модели в поло компании",
           width: 455,
           height: 682,
@@ -296,7 +296,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Дополнительно ускоряет процесс единый контакт по проекту, который оперативно согласует дизайн, тираж и комплектацию.",
         ],
         image: {
-          url: "/blog/articles/article-express-merch-speedup.png",
+          url: "/blog/articles/article-express-merch-speedup.webp",
           alt: "Календарь и печатные материалы",
           width: 543,
           height: 814,
@@ -314,7 +314,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           },
         ],
         image: {
-          url: "/blog/articles/article-express-merch-demand.png",
+          url: "/blog/articles/article-express-merch-demand.webp",
           alt: "Коробка и сертификаты",
           width: 611,
           height: 916,
@@ -329,7 +329,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Понимание этапов, выбор подходящих форматов и чёткая постановка задачи помогают быстро реализовать проект и вовремя получить брендированный мерч, который будет использоваться сотрудниками, клиентами и партнёрами.",
         ],
         image: {
-          url: "/blog/articles/article-express-merch-summary.png",
+          url: "/blog/articles/article-express-merch-summary.webp",
           alt: "Команда в черной корпоративной одежде",
           width: 744,
           height: 497,
@@ -350,7 +350,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
       height: 250,
     },
     heroImage: {
-      url: "/blog/articles/img_article_cover_3.png",
+      url: "/blog/articles/img_article_cover_3.webp",
       alt: "Сколько стоит мерч",
       width: 1740,
       height: 400,
@@ -435,7 +435,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Качественный брендированный мерч используется дольше, выглядит презентабельно и формирует положительное восприятие бренда. Это особенно важно, когда создаются подарки сотрудникам с логотипом или наборы для клиентов.",
         ],
         image: {
-          url: "/blog/articles/cheap-merch-costs-more.png",
+          url: "/blog/articles/cheap-merch-costs-more.webp",
           alt: "Модели в брендированном мерче",
           width: 670,
           height: 447,
@@ -461,7 +461,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           },
         ],
         image: {
-          url: "/blog/articles/merch-budget-optimization.png",
+          url: "/blog/articles/merch-budget-optimization.webp",
           alt: "Модель в корпоративной одежде",
           width: 730,
           height: 1094,
@@ -475,7 +475,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "За это время бренд получает сотни визуальных контактов без дополнительных рекламных расходов. Именно поэтому мерч для компании всё чаще рассматривается как долгосрочный маркетинговый инструмент, а не как разовая статья затрат.",
         ],
         image: {
-          url: "/blog/articles/merch-investment.png",
+          url: "/blog/articles/merch-investment.webp",
           alt: "Сумка Nefaz",
           width: 675,
           height: 1012,
@@ -489,7 +489,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Грамотный подход позволяет создать брендированный мерч, который будет использоваться регулярно, усиливать узнаваемость бренда и приносить долгосрочную ценность для компании.",
         ],
         image: {
-          url: "/blog/articles/merch-cost-summary.png",
+          url: "/blog/articles/merch-cost-summary.webp",
           alt: "Черная брендированная бутылка в руках",
           width: 587,
           height: 880,
@@ -510,7 +510,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
       height: 250,
     },
     heroImage: {
-      url: "/blog/articles/img_article_cover_2.png",
+      url: "/blog/articles/img_article_cover_2.webp",
       alt: "Как выбрать мерч под задачу",
       width: 1740,
       height: 400,
@@ -591,7 +591,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Если брендированные сувениры не вписываются в повседневную жизнь аудитории, они быстро перестают использоваться, а бренд теряет точки контакта.",
         ],
         image: {
-          url: "/blog/articles/merch-audience.png",
+          url: "/blog/articles/merch-audience.webp",
           alt: "Аудитория, использующая мерч",
           width: 256,
           height: 256,
@@ -605,7 +605,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Лучшие практики это минимализм, аккуратное размещение логотипа, нейтральные цвета и современная айдентика бренда. Тогда фирменный мерч становится частью повседневного гардероба или рабочего пространства.",
         ],
         image: {
-          url: "/blog/articles/merch-design-factor.png",
+          url: "/blog/articles/merch-design-factor.webp",
           alt: "Дизайн как фактор использования мерча",
           width: 256,
           height: 256,
@@ -619,7 +619,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Одежда и полезные аксессуары могут использоваться от 6 до 24 месяцев. За это время бренд получает сотни визуальных контактов без дополнительных рекламных расходов. Поэтому корпоративные подарки с логотипом стоит рассматривать как долгосрочный маркетинговый инструмент.",
         ],
         image: {
-          url: "/blog/articles/merch-efficiency.png",
+          url: "/blog/articles/merch-efficiency.webp",
           alt: "Эффективность мерча как инвестиции",
           width: 256,
           height: 256,
@@ -657,7 +657,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           "Тогда брендированный мерч превращается в постоянный носитель бренда, усиливает узнаваемость и формирует устойчивую лояльность сотрудников, клиентов и партнёров.",
         ],
         image: {
-          url: "/blog/articles/article-merch-guide-summary.png",
+          url: "/blog/articles/article-merch-guide-summary.webp",
           alt: "Подборка мерча для бизнеса",
           width: 256,
           height: 256,
@@ -678,7 +678,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
       height: 250,
     },
     heroImage: {
-      url: "/blog/articles/img_article_cover_1.png",
+      url: "/blog/articles/img_article_cover_1.webp",
       alt: "Корпоративный мерч",
       width: 1740,
       height: 400,
@@ -763,7 +763,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
             excerpt:
               "Корпоративные футболки с логотипом, худи с логотипом компании, брендированные толстовки и другая корпоративная одежда с логотипом являются самыми сильными носителями бренда. Их носят регулярно, поэтому бренд постоянно на виду.",
             image: {
-              url: "/blog/articles/merch-type-clothes.png",
+              url: "/blog/articles/merch-type-clothes.webp",
               alt: "Одежда с логотипом",
               width: 1707,
               height: 2560,
@@ -774,7 +774,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
             excerpt:
               "Брендированные кружки, сумки шопперы с логотипом, бейджи и ланьярды с логотипом, а также брендированные ручки используются в повседневной жизни и в офисе, что усиливает количество контактов с брендом.",
             image: {
-              url: "/blog/articles/merch-type-accessories.png",
+              url: "/blog/articles/merch-type-accessories.webp",
               alt: "Повседневные аксессуары",
               width: 1707,
               height: 2560,
@@ -785,7 +785,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
             excerpt:
               "Корпоративные подарочные наборы и подарки сотрудникам с логотипом особенно эффективны в онбординге, на праздниках и при работе с партнёрами.",
             image: {
-              url: "/blog/articles/merch-type-gift-sets.png",
+              url: "/blog/articles/merch-type-gift-sets.webp",
               alt: "Подарочные наборы",
               width: 1707,
               height: 2560,
