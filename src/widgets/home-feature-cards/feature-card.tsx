@@ -32,14 +32,14 @@ export function FeatureCard({ title, description, backgroundImageUrl, accent = f
         <Image
           src="/icons/ic_feature.svg"
           alt=""
-          width={36}
-          height={36}
+          width={28}
+          height={28}
           aria-hidden="true"
-          className={cn("feature-icon-rotate-hover size-[36px]", accent && "brightness-0 invert")}
+          className={cn("feature-icon-rotate-hover size-7 md:size-[36px]", accent && "brightness-0 invert")}
         />
         <h3
           className={cn(
-            "font-heading text-3xl whitespace-pre-line leading-[0.95] tracking-[0.015em] uppercase md:text-4xl w-[95%]",
+            "font-heading text-3xl whitespace-pre-line leading-[0.95] tracking-[0.015em] w-auto w-[105%] uppercase md:text-4xl",
             accent ? "text-white" : "text-[var(--heading)]",
           )}
         >

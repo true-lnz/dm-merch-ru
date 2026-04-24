@@ -63,7 +63,7 @@ function FeatureCardsSection({ title, description, items }: FeatureCardsSectionP
   return (
     <section className="my-[35px] md:my-[45px]">
       <PageSubheading title={title} description={description} descriptionPlacement="bottom" descriptionClassName="max-w-[43rem]" />
-      <div className="mt-8 grid auto-rows-fr grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-5">
+      <div className="mt-8 grid grid-cols-1 gap-4 xl:auto-rows-fr xl:grid-cols-3 xl:gap-5">
         {items.map((item, index) => (
           <FeatureCard
             key={item.title}
@@ -71,7 +71,7 @@ function FeatureCardsSection({ title, description, items }: FeatureCardsSectionP
             description={item.description}
             backgroundImageUrl={item.backgroundImageUrl}
             accent={index === 0}
-            className="h-full"
+            className="xl:h-full"
           />
         ))}
       </div>
