@@ -97,7 +97,7 @@ export function CatalogHero({ heroImage, heroTitle }: CatalogHeroProps) {
               width={750}
               height={850}
               preload={true}
-              sizes="50vw"
+              sizes="100vw"
               className="absolute right-0 bottom-0 h-full w-auto max-w-none"
             />
           </div>
