@@ -11,7 +11,6 @@ export function ArticleHero({ article }: ArticleHeroProps) {
   return (
     <section>
       <PageBreadcrumb
-        className="mb-4 mt-8 md:mb-5 md:mt-12 xl:mb-[42px] xl:mt-[39px]"
         items={[
           { label: "Главная", href: "/" },
           { label: "Блог", href: "/blog" },
@@ -21,7 +20,7 @@ export function ArticleHero({ article }: ArticleHeroProps) {
 
       <PageHeading title={article.pageTitle} />
 
-      <div className="mt-8 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white md:mt-10 xl:mt-[59px]">
+      <div className="mt-4 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-white md:mt-5">
         <div className="relative aspect-[1740/400] min-h-[125px] w-full xl:min-h-0">
           <Image
             src={article.heroImage.url}
