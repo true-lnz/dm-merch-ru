@@ -11,20 +11,42 @@ type ArticleMiniCardProps = {
   textClassName?: string;
 };
 
-export function ArticleMiniCard({ title, text, number, variant = "light", className, numberClassName, titleClassName, textClassName }: ArticleMiniCardProps) {
+export function ArticleMiniCard({
+  title,
+  text,
+  number,
+  variant = "light",
+  className,
+  numberClassName,
+  titleClassName,
+  textClassName,
+}: ArticleMiniCardProps) {
   const isAccent = variant === "accent";
 
   return (
     <article
       className={cn(
-        "rounded-[18px] p-5 md:rounded-[22.5px] md:p-[27px]",
+        "relative overflow-hidden rounded-[18px] p-5 md:rounded-[22.5px] md:p-[27px]",
         isAccent ? "bg-[var(--accent)] text-white" : "bg-[var(--card-bg)] text-[var(--heading)]",
         className,
       )}
     >
-      <div className="flex h-full flex-col gap-3 md:gap-4">
+      {isAccent ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[url('/blog/img_feature_card_cover.svg')] bg-cover bg-center bg-no-repeat opacity-100"
+        />
+      ) : null}
+
+      <div className="relative z-10 flex h-full flex-col gap-3 md:gap-4">
         {number ? (
-          <span className={cn("font-heading text-3xl leading-none tracking-[0.01em] md:text-4xl", isAccent ? "text-white" : "text-[var(--accent)]", numberClassName)}>
+          <span
+            className={cn(
+              "font-heading text-3xl leading-none tracking-[0.01em] md:text-4xl",
+              isAccent ? "text-white" : "text-[var(--accent)]",
+              numberClassName,
+            )}
+          >
             {number}
           </span>
         ) : null}
@@ -41,7 +63,7 @@ export function ArticleMiniCard({ title, text, number, variant = "light", classN
         ) : null}
         <p
           className={cn(
-            "whitespace-pre-line text-sm leading-[1.3] tracking-[-0.03em] md:text-base",
+            "whitespace-pre-line text-sm leading-[1.3] tracking-[-0.03em] md:text-base xl:text-lg",
             isAccent ? "text-white/80" : "text-[var(--text-muted)]",
             textClassName,
           )}

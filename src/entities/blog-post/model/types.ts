@@ -39,6 +39,7 @@ export type BlogArticleTextColumnDto = {
 export type BlogArticleTextColumnsSectionDto = {
   type: "text-columns";
   title?: string;
+  hideColumnTitles?: boolean;
   columns: BlogArticleTextColumnDto[];
 };
 
@@ -54,9 +55,10 @@ export type BlogArticleAccentMiniCardsSectionDto = {
   cards: BlogArticleMiniCardDto[];
 };
 
-export type BlogArticleProblemMiniCardsSectionDto = {
-  type: "problem-mini-cards";
+export type BlogArticleTextMiniCardsSectionDto = {
+  type: "text-mini-cards";
   title: string;
+  description?: string;
   cards: BlogArticleMiniCardDto[];
   conclusion?: string;
 };
@@ -85,13 +87,41 @@ export type BlogArticleChecklistSectionDto = {
   items: BlogArticleChecklistItemDto[];
 };
 
+export type BlogArticleTaskGoalsSectionDto = {
+  type: "task-goals";
+  title: string;
+  description: string;
+  label: string;
+  cards: BlogArticleMiniCardDto[];
+  note: string;
+  backgroundAssetUrl?: string;
+};
+
+export type BlogArticleTextImageSectionDto = {
+  type: "text-image";
+  title: string;
+  paragraphs: string[];
+  image: CmsImage;
+  variant?: "default" | "accent";
+};
+
+export type BlogArticleNumberedMiniCardsSectionDto = {
+  type: "numbered-mini-cards";
+  title: string;
+  items: BlogArticleChecklistItemDto[];
+  note?: string;
+};
+
 export type BlogArticleSectionDto =
   | BlogArticleSummarySectionDto
   | BlogArticleTextColumnsSectionDto
   | BlogArticleAccentMiniCardsSectionDto
-  | BlogArticleProblemMiniCardsSectionDto
+  | BlogArticleTextMiniCardsSectionDto
   | BlogArticleMerchTypesSectionDto
-  | BlogArticleChecklistSectionDto;
+  | BlogArticleChecklistSectionDto
+  | BlogArticleTaskGoalsSectionDto
+  | BlogArticleTextImageSectionDto
+  | BlogArticleNumberedMiniCardsSectionDto;
 
 export type BlogArticleDto = BlogPostDto & {
   pageTitle?: string;
@@ -115,6 +145,7 @@ export type BlogArticleTextColumn = {
 export type BlogArticleTextColumnsSection = {
   type: "text-columns";
   title?: string;
+  hideColumnTitles?: boolean;
   columns: BlogArticleTextColumn[];
 };
 
@@ -130,9 +161,10 @@ export type BlogArticleAccentMiniCardsSection = {
   cards: BlogArticleMiniCard[];
 };
 
-export type BlogArticleProblemMiniCardsSection = {
-  type: "problem-mini-cards";
+export type BlogArticleTextMiniCardsSection = {
+  type: "text-mini-cards";
   title: string;
+  description?: string;
   cards: BlogArticleMiniCard[];
   conclusion?: string;
 };
@@ -161,13 +193,41 @@ export type BlogArticleChecklistSection = {
   items: BlogArticleChecklistItem[];
 };
 
+export type BlogArticleTaskGoalsSection = {
+  type: "task-goals";
+  title: string;
+  description: string;
+  label: string;
+  cards: BlogArticleMiniCard[];
+  note: string;
+  backgroundAssetUrl?: string;
+};
+
+export type BlogArticleTextImageSection = {
+  type: "text-image";
+  title: string;
+  paragraphs: string[];
+  image: CmsImage;
+  variant?: "default" | "accent";
+};
+
+export type BlogArticleNumberedMiniCardsSection = {
+  type: "numbered-mini-cards";
+  title: string;
+  items: BlogArticleChecklistItem[];
+  note?: string;
+};
+
 export type BlogArticleSection =
   | BlogArticleSummarySection
   | BlogArticleTextColumnsSection
   | BlogArticleAccentMiniCardsSection
-  | BlogArticleProblemMiniCardsSection
+  | BlogArticleTextMiniCardsSection
   | BlogArticleMerchTypesSection
-  | BlogArticleChecklistSection;
+  | BlogArticleChecklistSection
+  | BlogArticleTaskGoalsSection
+  | BlogArticleTextImageSection
+  | BlogArticleNumberedMiniCardsSection;
 
 export type BlogArticle = BlogPost & {
   pageTitle: string;

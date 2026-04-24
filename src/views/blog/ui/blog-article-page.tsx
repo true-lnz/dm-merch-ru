@@ -5,8 +5,11 @@ import { ArticleAccentMiniCardsSection } from "@/widgets/article-accent-mini-car
 import { ArticleChecklistSection } from "@/widgets/article-checklist-section";
 import { ArticleHero } from "@/widgets/article-hero";
 import { ArticleMerchTypesSection } from "@/widgets/article-merch-types-section";
-import { ArticleProblemMiniCardsSection } from "@/widgets/article-problem-mini-cards-section";
+import { ArticleNumberedMiniCardsSection } from "@/widgets/article-numbered-mini-cards-section";
 import { ArticleSummarySection } from "@/widgets/article-summary-section";
+import { ArticleTaskGoalsSection } from "@/widgets/article-task-goals-section";
+import { ArticleTextImageSection } from "@/widgets/article-text-image-section";
+import { ArticleTextMiniCardsSection } from "@/widgets/article-text-mini-cards-section";
 import { ArticleTextColumnsSection } from "@/widgets/article-text-columns-section";
 import { FaqSection } from "@/widgets/faq-section";
 import type { PropsWithChildren } from "react";
@@ -21,12 +24,18 @@ function renderArticleSection(section: BlogArticleSection, index: number) {
       return <ArticleTextColumnsSection key={`${section.type}-${index}`} section={section} />;
     case "accent-mini-cards":
       return <ArticleAccentMiniCardsSection key={`${section.type}-${index}`} section={section} />;
-    case "problem-mini-cards":
-      return <ArticleProblemMiniCardsSection key={`${section.type}-${index}`} section={section} />;
+    case "text-mini-cards":
+      return <ArticleTextMiniCardsSection key={`${section.type}-${index}`} section={section} />;
     case "merch-types":
       return <ArticleMerchTypesSection key={`${section.type}-${index}`} section={section} />;
     case "checklist":
       return <ArticleChecklistSection key={`${section.type}-${index}`} section={section} />;
+    case "task-goals":
+      return <ArticleTaskGoalsSection key={`${section.type}-${index}`} section={section} />;
+    case "text-image":
+      return <ArticleTextImageSection key={`${section.type}-${index}`} section={section} />;
+    case "numbered-mini-cards":
+      return <ArticleNumberedMiniCardsSection key={`${section.type}-${index}`} section={section} />;
     case "summary":
       return <ArticleSummarySection key={`${section.type}-${index}`} section={section} />;
   }

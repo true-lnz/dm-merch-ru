@@ -1,16 +1,22 @@
-import type { BlogArticleProblemMiniCardsSection } from "@/entities/blog-post";
+import type { BlogArticleTextMiniCardsSection } from "@/entities/blog-post";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import { ArticleMiniCard } from "@/widgets/article-mini-card";
 
-type ArticleProblemMiniCardsSectionProps = {
-  section: BlogArticleProblemMiniCardsSection;
+type ArticleTextMiniCardsSectionProps = {
+  section: BlogArticleTextMiniCardsSection;
 };
 
-export function ArticleProblemMiniCardsSection({ section }: ArticleProblemMiniCardsSectionProps) {
+export function ArticleTextMiniCardsSection({ section }: ArticleTextMiniCardsSectionProps) {
   return (
     <section aria-label={section.title}>
       <div className="flex flex-col gap-8 md:gap-10 xl:gap-[60px]">
-        <PageSubheading title={section.title} titleClassName="max-w-[1350px]" />
+        <PageSubheading
+          title={section.title}
+          description={section.description}
+          descriptionPlacement={section.description ? "side" : "bottom"}
+          titleClassName="max-w-[950px]"
+          descriptionClassName="max-w-[553px] text-sm md:text-base xl:text-lg"
+        />
 
         <div className="grid gap-5 xl:grid-cols-3">
           {section.cards.map((card) => (
