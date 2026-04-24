@@ -219,7 +219,7 @@ export function CatalogCases({ items, variant = "default" }: { items: CatalogCas
             className={cn(
               "relative",
               "pt-6 first:pt-0",
-              index > 0 && "border-t border-border pb-6 last:pb-0",
+              index > 0 && "border-t border-border pb-6 xl:pb-0 last:pb-0",
               "xl:border-t-0 xl:pt-0",
               variant === "stacked" && index > 1 && "xl:border-t xl:border-border xl:pt-10",
             )}
