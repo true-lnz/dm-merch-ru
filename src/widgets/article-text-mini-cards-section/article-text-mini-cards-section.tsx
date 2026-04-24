@@ -9,7 +9,7 @@ type ArticleTextMiniCardsSectionProps = {
 export function ArticleTextMiniCardsSection({ section }: ArticleTextMiniCardsSectionProps) {
   return (
     <section aria-label={section.title}>
-      <div className="flex flex-col gap-8 md:gap-10 xl:gap-[60px]">
+      <div className="flex flex-col gap-8 md:gap-10">
         <PageSubheading
           title={section.title}
           description={section.description}
@@ -25,7 +25,9 @@ export function ArticleTextMiniCardsSection({ section }: ArticleTextMiniCardsSec
           ))}
         </div>
 
-        {section.conclusion ? <p className="text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text)] md:text-base xl:text-lg">{section.conclusion}</p> : null}
+        {section.conclusion ? (
+          <p className="text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text)] md:text-base xl:text-lg">{section.conclusion}</p>
+        ) : null}
       </div>
     </section>
   );

@@ -119,6 +119,7 @@ export type BlogArticleNumberedMiniCardsSectionDto = {
   type: "numbered-mini-cards";
   title: string;
   description?: string;
+  descriptionLayout?: "two-columns" | "three-columns-middle";
   descriptionPlacement?: "side" | "bottom";
   variant?: "accent" | "light";
   items: BlogArticleChecklistItemDto[];
@@ -263,6 +264,7 @@ export type BlogArticleNumberedMiniCardsSection = {
   type: "numbered-mini-cards";
   title: string;
   description?: string;
+  descriptionLayout?: "two-columns" | "three-columns-middle";
   descriptionPlacement?: "side" | "bottom";
   variant?: "accent" | "light";
   items: BlogArticleChecklistItem[];

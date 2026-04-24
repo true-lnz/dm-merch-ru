@@ -229,6 +229,7 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
         title: "Реальные сроки \nпроизводства экспресс-мерча",
         description: "Сроки зависят от типа продукции и уровня кастомизации. В среднем можно ориентироваться на следующие диапазоны.",
         descriptionPlacement: "side",
+        descriptionLayout: "three-columns-middle",
         variant: "accent",
         items: [
           {

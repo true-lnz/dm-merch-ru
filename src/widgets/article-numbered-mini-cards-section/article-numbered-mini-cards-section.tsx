@@ -18,6 +18,7 @@ export function ArticleNumberedMiniCardsSection({ section }: ArticleNumberedMini
           title={section.title}
           description={section.description}
           descriptionPlacement={section.descriptionPlacement ?? "bottom"}
+          sideDescriptionLayout={section.descriptionLayout ?? "two-columns"}
           titleClassName="max-w-[1143px]"
           descriptionClassName="max-w-[1143px] text-sm md:text-base xl:text-lg"
         />
@@ -37,7 +38,7 @@ export function ArticleNumberedMiniCardsSection({ section }: ArticleNumberedMini
         </div>
 
         {section.note ? (
-          <div className="border-t border-[rgba(64,64,64,0.2)] pt-10">
+          <div className="border-t border-[rgba(64,64,64,0.2)] pt-8">
             <div className="flex items-start gap-[15px]">
               <span className="mt-[7px] block size-[10px] shrink-0 rounded-full bg-[var(--accent)]" />
               <p className={cn("text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text)] md:text-base xl:text-lg")}>{section.note}</p>

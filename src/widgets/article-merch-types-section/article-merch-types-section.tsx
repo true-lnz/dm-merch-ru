@@ -9,7 +9,7 @@ type ArticleMerchTypesSectionProps = {
 export function ArticleMerchTypesSection({ section }: ArticleMerchTypesSectionProps) {
   return (
     <section aria-label={section.title}>
-      <div className="flex flex-col gap-8 md:gap-10 xl:gap-[60px]">
+      <div className="flex flex-col gap-8 md:gap-10">
         <PageSubheading title={section.title} titleClassName="max-w-[1350px]" />
 
         <div className="grid gap-5 xl:grid-cols-3">

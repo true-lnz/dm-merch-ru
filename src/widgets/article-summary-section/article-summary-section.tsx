@@ -9,7 +9,7 @@ type ArticleSummarySectionProps = {
 export function ArticleSummarySection({ section }: ArticleSummarySectionProps) {
   return (
     <section aria-label={section.title}>
-      <div className="grid gap-0 md:gap-6 xl:grid-cols-[8fr_4fr] xl:gap-10">
+      <div className="grid gap-0 md:gap-4 xl:grid-cols-[8fr_4fr] xl:gap-5">
         <div className="relative order-2 overflow-hidden rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] px-5 py-5 text-white md:px-[30px] md:py-8 xl:order-1 xl:p-[54px]">
           <div
             aria-hidden="true"

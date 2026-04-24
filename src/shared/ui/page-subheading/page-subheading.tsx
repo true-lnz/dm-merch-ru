@@ -50,6 +50,7 @@ export function PageSubheading({
       <h2
         className={cn(
           "font-heading whitespace-pre-line text-4xl sm:text-5xl md:text-6xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)]",
+          descriptionPlacement === "side" && sideDescriptionLayout === "three-columns-middle" && "xl:col-span-2",
           titleClassName,
         )}
       >
@@ -59,7 +60,7 @@ export function PageSubheading({
         className={cn(
           "max-w-[44rem] text-sm sm:text-lg xl:text-2xl leading-[1.35] tracking-[-0.03em] text-[#404040]",
           descriptionPlacement === "side" && "xl:mb-[10px]",
-          descriptionPlacement === "side" && sideDescriptionLayout === "three-columns-middle" && "xl:col-start-2 xl:justify-self-stretch",
+          descriptionPlacement === "side" && sideDescriptionLayout === "three-columns-middle" && "xl:col-start-3 xl:justify-self-stretch",
           descriptionClassName,
         )}
       >

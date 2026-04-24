@@ -10,7 +10,7 @@ export function ArticleTextColumnsSection({ section }: ArticleTextColumnsSection
     <section aria-label={section.title ?? "Текстовый блок статьи"}>
       <div className="flex flex-col gap-4 xl:gap-5">
         {section.title ? <PageSubheading title={section.title} /> : null}
-        <div className="grid gap-4 xl:grid-cols-2 xl:gap-5">
+        <div className="grid gap-8 xl:grid-cols-2 xl:gap-10">
           {section.columns.map((column) => (
             <div key={column.title} className="flex flex-col gap-5 md:gap-6">
               {!section.hideColumnTitles ? (
