@@ -6,6 +6,7 @@ type SliderControlProps = {
   onNextClick: () => void;
   prevDisabled?: boolean;
   nextDisabled?: boolean;
+  mini?: boolean;
   className?: string;
   prevAriaLabel: string;
   nextAriaLabel: string;
@@ -16,23 +17,25 @@ export function SliderControl({
   onNextClick,
   prevDisabled = false,
   nextDisabled = false,
+  mini = false,
   className,
   prevAriaLabel,
   nextAriaLabel,
 }: SliderControlProps) {
   return (
-    <div className={cn("flex items-center gap-[18px]", className)}>
+    <div className={cn("flex items-center", mini ? "gap-2.5" : "gap-[18px]", className)}>
       <button
         type="button"
         onClick={onPrevClick}
         disabled={prevDisabled}
         aria-label={prevAriaLabel}
         className={cn(
-          "inline-flex size-[55px] items-center justify-center rounded-[7px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
+          "inline-flex items-center justify-center rounded-[7px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
+          mini ? "size-9" : "size-[55px]",
           prevDisabled ? "cursor-default opacity-45" : "cursor-pointer hover:bg-[#e3e1db]",
         )}
       >
-        <ChevronLeftIcon className="size-[24px]" strokeWidth={1.5} />
+        <ChevronLeftIcon className={mini ? "size-4" : "size-[24px]"} strokeWidth={1.5} />
       </button>
 
       <button
@@ -41,11 +44,12 @@ export function SliderControl({
         disabled={nextDisabled}
         aria-label={nextAriaLabel}
         className={cn(
-          "inline-flex size-[55px] items-center justify-center rounded-[7px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
+          "inline-flex items-center justify-center rounded-[7px] bg-[#ecebe6] text-[#2a2a2a] transition-colors",
+          mini ? "size-9" : "size-[55px]",
           nextDisabled ? "cursor-default opacity-45" : "cursor-pointer hover:bg-[#e3e1db]",
         )}
       >
-        <ChevronRightIcon className="size-[24px]" strokeWidth={1.5} />
+        <ChevronRightIcon className={mini ? "size-4" : "size-[24px]"} strokeWidth={1.5} />
       </button>
     </div>
   );

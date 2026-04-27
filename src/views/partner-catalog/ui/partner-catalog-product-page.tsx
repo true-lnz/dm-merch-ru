@@ -555,13 +555,23 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                   </div>
 
                   {hasMultipleImages ? (
-                    <SliderControl
-                      onPrevClick={showPreviousImage}
-                      onNextClick={showNextImage}
-                      prevAriaLabel="Предыдущее фото"
-                      nextAriaLabel="Следующее фото"
-                      className="absolute right-4 bottom-4 z-10"
-                    />
+                    <>
+                      <SliderControl
+                        mini
+                        onPrevClick={showPreviousImage}
+                        onNextClick={showNextImage}
+                        prevAriaLabel="Предыдущее фото"
+                        nextAriaLabel="Следующее фото"
+                        className="absolute right-4 bottom-4 z-10 md:hidden"
+                      />
+                      <SliderControl
+                        onPrevClick={showPreviousImage}
+                        onNextClick={showNextImage}
+                        prevAriaLabel="Предыдущее фото"
+                        nextAriaLabel="Следующее фото"
+                        className="absolute right-4 bottom-4 z-10 hidden md:flex"
+                      />
+                    </>
                   ) : null}
                 </div>
               </div>

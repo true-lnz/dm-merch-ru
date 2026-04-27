@@ -93,7 +93,7 @@ export function CaseCard({ item }: CaseCardProps) {
           <div
             ref={emblaRef}
             className="mb-[14px] cursor-grab overflow-hidden rounded-[18px] bg-white active:cursor-grabbing lg:flex-1 lg:rounded-[9px]"
-            style={{ aspectRatio: item.desktopImageAspect }}
+            style={{ aspectRatio: "3 / 2" }}
           >
             <div className="flex h-full">
               {item.gallery.map((image) => (
