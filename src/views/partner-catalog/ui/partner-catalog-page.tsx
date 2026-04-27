@@ -23,7 +23,6 @@ import {
   type PartnerCatalogRootSection,
   type PartnerCatalogVariant,
 } from "../model/partner-catalog-data";
-import { getPartnerCatalogPreviewImageUrl } from "../model/partner-catalog-image";
 import {
   getPartnerCatalogPathForFilter,
   getPartnerCatalogProductPath,
@@ -59,7 +58,7 @@ function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
 function shouldBypassNextImageOptimizer(src: ComponentProps<typeof Image>["src"]) {
   const imageSrc = getCatalogImageCacheKey(src);
 
-  return imageSrc.startsWith("/gifts_export/") || imageSrc.startsWith("/images/");
+  return imageSrc.startsWith("/images/");
 }
 
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
@@ -234,12 +233,10 @@ function CatalogImageWithSkeleton({
 }
 
 function ProductCardImage({ variant, href }: { variant: PartnerCatalogVariant; href: string }) {
-  const previewImageUrl = getPartnerCatalogPreviewImageUrl(variant.imageUrl);
-
   return (
     <Link href={href} target="_blank" rel="noreferrer" aria-label={`Открыть товар ${variant.title}`} className="block">
       <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
-        <CatalogImageWithSkeleton src={previewImageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-contain" />
+        <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-contain" />
       </div>
     </Link>
   );
@@ -323,7 +320,6 @@ function VariantSelectorStrip({
     >
       {variants.map((variant) => {
         const isActive = variant.id === activeVariantId;
-        const previewImageUrl = getPartnerCatalogPreviewImageUrl(variant.imageUrl);
 
         return (
           <button
@@ -338,7 +334,7 @@ function VariantSelectorStrip({
             aria-pressed={isActive}
           >
             <CatalogImageWithSkeleton
-              src={previewImageUrl}
+              src={variant.imageUrl}
               alt={variant.colorLabel}
               fill
               sizes="40px"

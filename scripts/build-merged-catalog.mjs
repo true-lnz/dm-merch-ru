@@ -166,6 +166,14 @@ function ensureAbsoluteUrl(url) {
     return `https:${url}`;
   }
 
+  if (url.startsWith("/gifts_export/")) {
+    return url.replace("/gifts_export/", "/images/");
+  }
+
+  if (url.startsWith("/images/")) {
+    return url;
+  }
+
   const normalizedPath = url.replace(/^\/+/, "");
 
   if (PROJECT111_IMAGE_BASE === "/") {

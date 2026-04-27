@@ -204,7 +204,7 @@ function compareArticles(left: string, right: string) {
 }
 
 function normalizePartnerCatalogImageUrl(value: string) {
-  return value.startsWith("/gifts_export/") ? value.replace("/gifts_export/", "/images/") : value;
+  return value;
 }
 
 function mapVariant(source: MergedCatalogVariant): PartnerCatalogVariant {
