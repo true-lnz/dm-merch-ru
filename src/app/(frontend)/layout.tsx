@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     default: "Держи Марку!",
     template: "%s — Держи Марку!",
   },
+  verification: {
+    yandex: "884bd85350dbdd33",
+  },
   description: "Мерч-агентство: каталог, кейсы, блог и контакты.",
   keywords: "Купить мерч, производство мерча, сувернирка, сувенирная продукция, сделать принт, изготовить футболки, толстовки, мерч для бизнеса, корпоративный мерч",
   manifest: "/favicon/site.webmanifest",
