@@ -57,7 +57,7 @@ export function CasesPage() {
                   type="button"
                   onClick={() => handleThemeChange(theme)}
                   className={cn(
-                    "flex min-h-[60px] md:min-h-[90px] w-[75%] shrink-0 cursor-pointer snap-start flex-col items-start justify-start rounded-[18px] px-[18px] py-4 text-left font-heading text-lg md:text-3xl leading-[0.95] uppercase transition-colors xl:w-full",
+                    "flex min-h-[60px] md:min-h-[90px] w-[75%] shrink-0 cursor-pointer snap-start flex-col items-start justify-center rounded-[18px] px-[18px] py-4 text-left font-heading text-xl md:text-3xl leading-[0.95] uppercase transition-colors xl:w-full",
                     isActive ? "bg-[var(--accent)] text-white" : "bg-[var(--card-bg)] text-[#404040] hover:bg-[#e1e0db]",
                   )}
                 >
