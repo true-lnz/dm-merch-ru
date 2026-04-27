@@ -189,6 +189,9 @@ export type PartnerCatalogProductDetail = {
   };
 };
 
+const PROJECT111_PREVIEW_IMAGE_SEGMENT = "_1000x1000";
+const PROJECT111_PREVIEW_IMAGE_REPLACEMENT = "_200x200";
+
 function readJsonFile<T>(fileName: string): T {
   const filePath = join(process.cwd(), "public", "_temp", fileName);
 
@@ -205,6 +208,16 @@ function compareArticles(left: string, right: string) {
 
 function normalizePartnerCatalogImageUrl(value: string) {
   return value.startsWith("/gifts_export/") ? value.replace("/gifts_export/", "/images/") : value;
+}
+
+export function getPartnerCatalogPreviewImageUrl(value: string) {
+  if (!value.startsWith("/images/") && !value.startsWith("/gifts_export/")) {
+    return value;
+  }
+
+  return value.includes(PROJECT111_PREVIEW_IMAGE_SEGMENT)
+    ? value.replace(PROJECT111_PREVIEW_IMAGE_SEGMENT, PROJECT111_PREVIEW_IMAGE_REPLACEMENT)
+    : value;
 }
 
 function mapVariant(source: MergedCatalogVariant): PartnerCatalogVariant {

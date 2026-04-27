@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getPartnerCatalogProductsPage, PARTNER_CATALOG_ALL_FILTER_ID } from "@/views/partner-catalog/model/partner-catalog-data";
 
 const DEFAULT_LIMIT = 16;
-const MAX_LIMIT = 100;
+const MAX_LIMIT = 80;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

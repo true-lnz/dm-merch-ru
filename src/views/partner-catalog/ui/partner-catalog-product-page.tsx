@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ComponentProps, type PointerEvent, type RefObject } from "react";
 import { toast } from "sonner";
-import type { PartnerCatalogProductDetail } from "../model/partner-catalog-data";
+import { getPartnerCatalogPreviewImageUrl, type PartnerCatalogProductDetail } from "../model/partner-catalog-data";
 
 const loadedDetailImageKeys = new Set<string>();
 
@@ -344,6 +344,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
   const hasMultipleImages = detail.imageUrls.length > 1;
   const hasVariantChoices = detail.variants.length > 1;
   const addedToWishlist = isInWishlist(detail.article);
+  const detailPreviewImageUrls = detail.imageUrls.map(getPartnerCatalogPreviewImageUrl);
 
   useOutsideClick(wishlistPopoverRef, () => setIsWishlistPopoverOpen(false), isWishlistPopoverOpen);
 
@@ -476,6 +477,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                     <div className="flex max-w-full min-w-0 gap-3 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:h-[min(78vh,720px)] md:flex-col md:gap-3 md:overflow-y-auto md:overflow-x-hidden">
                       {detail.imageUrls.map((imageUrl, index) => {
                         const isActive = index === activeImageIndex;
+                        const previewImageUrl = detailPreviewImageUrls[index] ?? imageUrl;
 
                         return (
                           <button
@@ -490,7 +492,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                             )}
                           >
                             <DetailImageWithSkeleton
-                              src={imageUrl}
+                              src={previewImageUrl}
                               alt=""
                               fill
                               sizes="(max-width: 767px) 96px, (max-width: 1279px) 16vw, 180px"
@@ -599,6 +601,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                   {detail.variants.map((variant) => {
                     const isActive = variant.id === detail.productId;
                     const formattedColorLabel = formatColorLabel(variant.colorLabel);
+                    const previewImageUrl = getPartnerCatalogPreviewImageUrl(variant.imageUrl);
 
                     return (
                       <Link
@@ -609,9 +612,9 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                           "flex min-w-[138px] items-center gap-3 rounded-[14px] border bg-white px-3 py-3 transition-colors",
                           isActive ? "border-[var(--accent)]" : "border-transparent hover:border-black/10",
                         )}
-                      >
+                        >
                         <span className="relative size-12 shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface)]">
-                          <DetailImageWithSkeleton src={variant.imageUrl} alt={formattedColorLabel} fill sizes="48px" className="object-cover" />
+                          <DetailImageWithSkeleton src={previewImageUrl} alt={formattedColorLabel} fill sizes="48px" className="object-cover" />
                         </span>
                         <span className="min-w-0">
                           <span className="block truncate text-sm md:text-base font-medium text-[var(--heading)]">{formattedColorLabel}</span>

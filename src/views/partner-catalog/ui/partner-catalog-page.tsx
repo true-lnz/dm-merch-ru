@@ -16,12 +16,13 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { memo, useEffect, useMemo, useRef, useState, type ComponentProps, type RefObject } from "react";
 import { toast } from "sonner";
-import type {
-  PartnerCatalogInitialData,
-  PartnerCatalogPageSlice,
-  PartnerCatalogProduct,
-  PartnerCatalogRootSection,
-  PartnerCatalogVariant,
+import {
+  getPartnerCatalogPreviewImageUrl,
+  type PartnerCatalogInitialData,
+  type PartnerCatalogPageSlice,
+  type PartnerCatalogProduct,
+  type PartnerCatalogRootSection,
+  type PartnerCatalogVariant,
 } from "../model/partner-catalog-data";
 import {
   getPartnerCatalogPathForFilter,
@@ -33,7 +34,7 @@ import {
 
 const ALL_FILTER_ID = "all";
 const MOBILE_PAGE_SIZE = 16;
-const PAGE_SIZE_OPTIONS = [50, 100, 200] as const;
+const PAGE_SIZE_OPTIONS = [25, 50, 80] as const;
 const CATALOG_API_ROUTE = "/api/partner-catalog";
 const loadedCatalogImageKeys = new Set<string>();
 
@@ -233,10 +234,12 @@ function CatalogImageWithSkeleton({
 }
 
 function ProductCardImage({ variant, href }: { variant: PartnerCatalogVariant; href: string }) {
+  const previewImageUrl = getPartnerCatalogPreviewImageUrl(variant.imageUrl);
+
   return (
     <Link href={href} target="_blank" rel="noreferrer" aria-label={`Открыть товар ${variant.title}`} className="block">
       <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
-        <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-contain" />
+        <CatalogImageWithSkeleton src={previewImageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-contain" />
       </div>
     </Link>
   );
@@ -320,6 +323,7 @@ function VariantSelectorStrip({
     >
       {variants.map((variant) => {
         const isActive = variant.id === activeVariantId;
+        const previewImageUrl = getPartnerCatalogPreviewImageUrl(variant.imageUrl);
 
         return (
           <button
@@ -334,7 +338,7 @@ function VariantSelectorStrip({
             aria-pressed={isActive}
           >
             <CatalogImageWithSkeleton
-              src={variant.imageUrl}
+              src={previewImageUrl}
               alt={variant.colorLabel}
               fill
               sizes="40px"
@@ -558,7 +562,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const searchParams = useSearchParams();
   const [activeFilterId, setActiveFilterId] = useState(initialData.initialFilterId);
   const [expandedRootId, setExpandedRootId] = useState<string | null>(initialData.initialExpandedRootId);
-  const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(50);
+  const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(25);
   const [products, setProducts] = useState(initialData.initialSlice.items);
   const [totalCount, setTotalCount] = useState(initialData.initialSlice.total);
   const [isDesktop, setIsDesktop] = useState(false);
