@@ -12,7 +12,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ComponentProps, type PointerEvent, type RefObject } from "react";
 import { toast } from "sonner";
-import { getPartnerCatalogPreviewImageUrl, type PartnerCatalogProductDetail } from "../model/partner-catalog-data";
+import type { PartnerCatalogProductDetail } from "../model/partner-catalog-data";
+import { getPartnerCatalogPreviewImageUrl } from "../model/partner-catalog-image";
 
 const loadedDetailImageKeys = new Set<string>();
 

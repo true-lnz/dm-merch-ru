@@ -17,13 +17,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { memo, useEffect, useMemo, useRef, useState, type ComponentProps, type RefObject } from "react";
 import { toast } from "sonner";
 import {
-  getPartnerCatalogPreviewImageUrl,
   type PartnerCatalogInitialData,
   type PartnerCatalogPageSlice,
   type PartnerCatalogProduct,
   type PartnerCatalogRootSection,
   type PartnerCatalogVariant,
 } from "../model/partner-catalog-data";
+import { getPartnerCatalogPreviewImageUrl } from "../model/partner-catalog-image";
 import {
   getPartnerCatalogPathForFilter,
   getPartnerCatalogProductPath,
