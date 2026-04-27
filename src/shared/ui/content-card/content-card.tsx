@@ -63,7 +63,7 @@ export function ContentCard({
       );
     }
 
-    if (!href) {
+    if (!linkProps) {
       return null;
     }
 
