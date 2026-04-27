@@ -23,7 +23,7 @@ function resolveProject111ImageBase() {
   const rawValue = process.env.PROJECT111_IMAGE_BASE_URL?.trim();
 
   if (!rawValue) {
-    return "/gifts_export/";
+    return "/images/";
   }
 
   if (rawValue === "/") {

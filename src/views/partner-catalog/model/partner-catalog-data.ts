@@ -203,12 +203,16 @@ function compareArticles(left: string, right: string) {
   return left.localeCompare(right, "ru");
 }
 
+function normalizePartnerCatalogImageUrl(value: string) {
+  return value.startsWith("/gifts_export/") ? value.replace("/gifts_export/", "/images/") : value;
+}
+
 function mapVariant(source: MergedCatalogVariant): PartnerCatalogVariant {
   return {
     id: source.id,
     article: source.article,
     title: source.title,
-    imageUrl: source.imageUrl,
+    imageUrl: normalizePartnerCatalogImageUrl(source.imageUrl),
     colorCode: source.colorCode,
     colorLabel: source.colorLabel,
     priceRub: source.priceRub,
@@ -278,7 +282,15 @@ const getPartnerCatalogDataset = cache((): PartnerCatalogDataset => {
       return {
         id: product.id,
         sectionId: product.sectionId,
-        detail: product,
+        detail: {
+          ...product,
+          imageUrls: product.imageUrls.map(normalizePartnerCatalogImageUrl),
+          variants: product.variants.map((variant) => ({
+            ...variant,
+            imageUrl: normalizePartnerCatalogImageUrl(variant.imageUrl),
+            imageUrls: variant.imageUrls?.map(normalizePartnerCatalogImageUrl),
+          })),
+        },
         routeContext: {
           rootName: routeContext.rootName,
           rootSlug: routeContext.rootSlug,
