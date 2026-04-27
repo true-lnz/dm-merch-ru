@@ -5,6 +5,7 @@ import { HomeDigest } from "@/widgets/home-digest";
 import { HomeBenefits, HomeFeatures } from "@/widgets/home-feature-cards/home-feature-cards";
 import { HomeHero } from "@/widgets/home-hero";
 import { HomeLeadCta } from "@/widgets/home-lead-cta";
+import { HomeMarquiz } from "@/widgets/home-marquiz";
 import { HomePartnerProducts } from "@/widgets/home-partner-products";
 import { HomeResults } from "@/widgets/home-results";
 import { HomeReviews } from "@/widgets/home-reviews";
@@ -20,6 +21,7 @@ export function HomePage() {
       <HomeDigest />
       <HomeResults />
       <HomeServices />
+      <HomeMarquiz />
       <HomeBenefits />
       <HomeLeadCta />
       <HomePartnerProducts />
