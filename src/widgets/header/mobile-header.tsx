@@ -1,11 +1,12 @@
-﻿import Image from "next/image";
-import { TransitionLink } from "@/shared/ui/page-transition";
-import { ChevronDownIcon, XIcon } from "lucide-react";
-import type { HeaderNavigationItem } from "@/shared/config/navigation";
+﻿import type { HeaderNavigationItem } from "@/shared/config/navigation";
 import { siteInfo } from "@/shared/config/site-info";
 import { cn } from "@/shared/lib/cn";
 import { ContactPills } from "@/shared/ui/contact-pills";
+import { TransitionLink } from "@/shared/ui/page-transition";
 import { SocialLinks } from "@/shared/ui/social-links";
+import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
+import { ChevronDownIcon, XIcon } from "lucide-react";
+import Image from "next/image";
 import {
   HeaderIconLink,
   getEmailHref,
@@ -15,27 +16,36 @@ import {
   mobilePrimaryLinkClassName,
   scaleFigma,
 } from "./header.shared";
-import { WishlistDialog } from "./wishlist-dialog";
 
-function MobileHeaderActions({ onOpenMenu }: { onOpenMenu: () => void }) {
+function MobileHeaderActions({
+  onOpenMenu,
+  onOpenWishlist,
+  showWishlist,
+  wishlistCount,
+}: {
+  onOpenMenu: () => void;
+  onOpenWishlist: () => void;
+  showWishlist: boolean;
+  wishlistCount: number;
+}) {
   const actionSize = scaleFigma(28);
   const burgerWidth = scaleFigma(50);
   const burgerHeight = scaleFigma(28);
 
   return (
     <div className="flex items-center gap-2 lg:hidden">
-      <HeaderIconLink
-        href={getPhoneHref()}
-        ariaLabel="Позвонить"
-        iconSrc="/icons/ic_contact_pill_phone.png"
-        size={actionSize}
-      />
-      <HeaderIconLink
-        href={getEmailHref()}
-        ariaLabel="Написать на email"
-        iconSrc="/icons/ic_contact_pill_mail.png"
-        size={actionSize}
-      />
+      {showWishlist ? (
+        <WishlistTrigger
+          count={wishlistCount}
+          variant="mobile-header"
+          onClick={onOpenWishlist}
+          style={{ width: `${actionSize}px`, height: `${actionSize}px` }}
+        />
+      ) : null}
+      <div className="hidden min-[360px]:flex items-center gap-2">
+        <HeaderIconLink href={getPhoneHref()} ariaLabel="Позвонить" iconSrc="/icons/ic_contact_pill_phone.png" size={actionSize} />
+        <HeaderIconLink href={getEmailHref()} ariaLabel="Написать на email" iconSrc="/icons/ic_contact_pill_mail.png" size={actionSize} />
+      </div>
       <button
         type="button"
         className="inline-flex items-center justify-center transition-transform hover:scale-[1.02]"
@@ -66,6 +76,7 @@ export function MobileMenu({
   mobilePrimaryLinks,
   onToggleCatalog,
   onCloseMenu,
+  onOpenWishlist,
 }: {
   pathname: string | null;
   isOpen: boolean;
@@ -76,6 +87,7 @@ export function MobileMenu({
   mobilePrimaryLinks: HeaderNavigationItem[];
   onToggleCatalog: () => void;
   onCloseMenu: () => void;
+  onOpenWishlist: () => void;
 }) {
   if (!isOpen) {
     return null;
@@ -85,11 +97,7 @@ export function MobileMenu({
 
   return (
     <>
-      <div
-        className="fixed inset-0 z-40 bg-[#232323]/24 backdrop-blur-[10px] lg:hidden"
-        onClick={onCloseMenu}
-        aria-hidden="true"
-      />
+      <div className="fixed inset-0 z-40 bg-[#232323]/24 backdrop-blur-[10px] lg:hidden" onClick={onCloseMenu} aria-hidden="true" />
 
       <div
         id="mobile-header-menu"
@@ -110,9 +118,17 @@ export function MobileMenu({
             </button>
           </div>
 
-          {showWishlist && wishlistCount > 0 ? (
+          {showWishlist ? (
             <div className="mb-6">
-              <WishlistDialog variant="mobile" />
+              <WishlistTrigger
+                count={wishlistCount}
+                variant="mobile-menu"
+                className="-mx-1 flex w-[calc(100%+1rem)] justify-between"
+                onClick={() => {
+                  onCloseMenu();
+                  onOpenWishlist();
+                }}
+              />
             </div>
           ) : null}
 
@@ -132,10 +148,7 @@ export function MobileMenu({
                   >
                     <span>{catalogItem.label}</span>
                     <ChevronDownIcon
-                      className={cn(
-                        "size-4 shrink-0 transition-transform duration-200",
-                        isCatalogOpen && "rotate-180",
-                      )}
+                      className={cn("size-4 shrink-0 transition-transform duration-200", isCatalogOpen && "rotate-180")}
                       strokeWidth={1.8}
                     />
                   </button>
@@ -153,10 +166,7 @@ export function MobileMenu({
                           <TransitionLink
                             href={item.href}
                             source="menu"
-                            className={cn(
-                              mobileMenuLinkClassName,
-                              item.label === "Каталог продукции" && "font-semibold text-[#404040]",
-                            )}
+                            className={cn(mobileMenuLinkClassName, item.label === "Каталог продукции" && "font-semibold text-[#404040]")}
                             onClick={onCloseMenu}
                           >
                             {item.label}
@@ -189,15 +199,8 @@ export function MobileMenu({
 
           <div className="my-10 flex flex-col items-start gap-4">
             <SocialLinks size="menu" />
-            <ContactPills
-              email={siteInfo.email}
-              phone={siteInfo.phone}
-              variant="menu"
-              className="gap-[9px]"
-            />
-            <p className="text-sm leading-[1.35] tracking-[-0.04em] text-[#404040]">
-              Офис: {siteInfo.address}
-            </p>
+            <ContactPills email={siteInfo.email} phone={siteInfo.phone} variant="menu" className="gap-[9px]" />
+            <p className="text-sm leading-[1.35] tracking-[-0.04em] text-[#404040]">Офис: {siteInfo.address}</p>
           </div>
         </div>
       </div>
@@ -205,20 +208,24 @@ export function MobileMenu({
   );
 }
 
-export function MobileHeaderBar({ onOpenMenu }: { onOpenMenu: () => void }) {
+export function MobileHeaderBar({
+  onOpenMenu,
+  onOpenWishlist,
+  showWishlist,
+  wishlistCount,
+}: {
+  onOpenMenu: () => void;
+  onOpenWishlist: () => void;
+  showWishlist: boolean;
+  wishlistCount: number;
+}) {
   return (
     <div className="relative z-10 flex min-h-[80px] items-center justify-between gap-5 py-3 lg:hidden">
       <TransitionLink href="/" source="header" className="inline-flex items-center" aria-label="На главную страницу">
-        <Image
-          src="/logo-dm.svg"
-          alt="Держи Марку"
-          width={273}
-          height={37}
-          className="h-auto w-[147px] md:w-[178px]"
-        />
+        <Image src="/logo-dm.svg" alt="Держи Марку" width={273} height={37} className="h-auto w-[147px] md:w-[178px]" />
       </TransitionLink>
 
-      <MobileHeaderActions onOpenMenu={onOpenMenu} />
+      <MobileHeaderActions onOpenMenu={onOpenMenu} onOpenWishlist={onOpenWishlist} showWishlist={showWishlist} wishlistCount={wishlistCount} />
     </div>
   );
 }

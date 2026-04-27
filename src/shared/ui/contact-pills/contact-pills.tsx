@@ -58,10 +58,10 @@ const defaultTextClassName =
   "text-white inline-flex items-center justify-center whitespace-nowrap rounded-[9px] bg-[var(--accent)] py-[0.45rem] text-base transition hover:bg-[var(--accent-hover)]";
 
 const menuIconClassName =
-  "inline-flex size-9 items-center justify-center rounded-[9px] border border-[var(--accent)] bg-[var(--accent)] transition hover:bg-[var(--accent-hover)]";
+  "inline-flex size-9 shrink-0 items-center justify-center rounded-[9px] border border-[var(--accent)] bg-[var(--accent)] transition hover:bg-[var(--accent-hover)]";
 
 const menuTextClassName =
-  "inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-[9px] border border-[var(--accent)] bg-[var(--accent)] px-[0.85rem] text-sm font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)]";
+  "inline-flex min-h-9 w-full items-center justify-center whitespace-nowrap rounded-[9px] border border-[var(--accent)] bg-[var(--accent)] px-[0.85rem] text-sm font-medium tracking-[-0.04em] text-white transition hover:bg-[var(--accent-hover)]";
 
 export function ContactPills({ email, phone, direction = "row", className, variant = "default" }: ContactPillsProps) {
   const [activePair, setActivePair] = useState<"email" | "phone" | null>(null);
@@ -93,15 +93,6 @@ export function ContactPills({ email, phone, direction = "row", className, varia
   const phoneHref = formatPhoneHref(phone);
   const contactItems = [
     {
-      key: "email" as const,
-      href: emailHref,
-      label: email,
-      iconSrc: "/icons/ic_contact_pill_mail.png",
-      ariaLabel: isCta || isMenu ? "Скопировать email" : "Написать на email",
-      textClassName: isCta || isMenu ? "px-[0.8rem]" : "px-[0.8rem]",
-      onClick: (event: React.MouseEvent<HTMLAnchorElement>) => handleCopy(event, email, "Почта скопирована", "Не удалось скопировать почту"),
-    },
-    {
       key: "phone" as const,
       href: phoneHref,
       label: phone,
@@ -110,6 +101,15 @@ export function ContactPills({ email, phone, direction = "row", className, varia
       textClassName: isCta || isMenu ? "px-[1rem]" : "px-[0.9rem]",
       onClick: (event: React.MouseEvent<HTMLAnchorElement>) =>
         handleCopy(event, phone, "Номер скопирован", "Не удалось скопировать номер", isMobileDevice()),
+    },
+    {
+      key: "email" as const,
+      href: emailHref,
+      label: email,
+      iconSrc: "/icons/ic_contact_pill_mail.png",
+      ariaLabel: isCta || isMenu ? "Скопировать email" : "Написать на email",
+      textClassName: isCta || isMenu ? "px-[0.8rem]" : "px-[0.8rem]",
+      onClick: (event: React.MouseEvent<HTMLAnchorElement>) => handleCopy(event, email, "Почта скопирована", "Не удалось скопировать почту"),
     },
   ];
 
@@ -127,7 +127,7 @@ export function ContactPills({ email, phone, direction = "row", className, varia
         return (
           <div
             key={item.key}
-            className={cn(isCta && "flex w-full items-center gap-[10px] lg:w-auto", isMenu && "flex items-center gap-[9px]")}
+            className={cn(isCta && "flex w-full items-center gap-[10px] lg:w-auto", isMenu && "flex w-full items-center gap-[9px]")}
             onMouseEnter={isCta ? () => setActivePair(item.key) : undefined}
             onMouseLeave={isCta ? () => setActivePair(null) : undefined}
             onFocus={isCta ? () => setActivePair(item.key) : undefined}

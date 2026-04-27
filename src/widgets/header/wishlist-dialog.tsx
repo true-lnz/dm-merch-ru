@@ -1,15 +1,14 @@
 import { Button } from "@/shared/ui/button";
 import { useWishlist, type WishlistItem } from "@/shared/lib/wishlist";
-import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { RequestForm } from "@/shared/ui/request-form";
-import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
 import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { useMemo } from "react";
 
 type WishlistDialogProps = {
-  variant: "desktop" | "mobile";
-  className?: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };
 
 const rubFormatter = new Intl.NumberFormat("ru-RU");
@@ -86,14 +85,13 @@ function WishlistProductCard({
   );
 }
 
-export function WishlistDialog({ variant, className }: WishlistDialogProps) {
-  const { items, count, updateQuantity, increaseQuantity, decreaseQuantity, removeItem, clear } = useWishlist();
+export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
+  const { items, updateQuantity, increaseQuantity, decreaseQuantity, removeItem, clear } = useWishlist();
 
   const totalRub = useMemo(() => items.reduce((sum, item) => sum + item.unitPriceRub * item.quantity, 0), [items]);
 
   return (
-    <Dialog>
-      <DialogTrigger render={<WishlistTrigger count={count} variant={variant} className={className} />} />
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
         className="block h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] bg-[url('/img_wishlist_card_cover.svg')] bg-cover bg-center bg-no-repeat p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:max-w-none lg:h-auto lg:max-h-[calc(100vh-2rem)] lg:max-h-[calc(100dvh-2rem)] lg:w-[min(1120px,calc(100vw-2rem))] lg:max-w-none lg:rounded-[18px] lg:p-8 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"

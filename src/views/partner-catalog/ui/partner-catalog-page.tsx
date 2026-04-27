@@ -3,7 +3,7 @@
 import { RequestCta } from "@/features/request-cta";
 import { subscribeToMediaQuery } from "@/shared/lib/browser-compat";
 import { cn } from "@/shared/lib/cn";
-import { useWishlist } from "@/shared/lib/wishlist";
+import { showWishlistAddedToast, useWishlist } from "@/shared/lib/wishlist";
 import { buttonVariants } from "@/shared/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible";
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
@@ -140,7 +140,7 @@ function WishlistActionButton({ variant, productHref }: { variant: PartnerCatalo
       },
       safeQuantity,
     );
-    toast.success("Товар добавлен в вишлист");
+    showWishlistAddedToast();
     setIsPopoverOpen(false);
   }
 

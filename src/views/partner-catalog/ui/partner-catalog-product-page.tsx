@@ -2,7 +2,7 @@
 
 import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
-import { useWishlist } from "@/shared/lib/wishlist";
+import { showWishlistAddedToast, useWishlist } from "@/shared/lib/wishlist";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import { buttonVariants } from "@/shared/ui/button";
 import { Skeleton } from "@/shared/ui/skeleton";
@@ -422,7 +422,7 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
       },
       safeQuantity,
     );
-    toast.success("Товар добавлен в вишлист");
+    showWishlistAddedToast();
     setIsWishlistPopoverOpen(false);
   }
 

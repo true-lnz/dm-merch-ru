@@ -1,9 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { headerNavigation } from "@/shared/config/navigation";
-import { useWishlist } from "@/shared/lib/wishlist";
+import { subscribeToWishlistDialogOpen, useWishlist } from "@/shared/lib/wishlist";
 import { cn } from "@/shared/lib/cn";
 import { DesktopHeader } from "./desktop-header";
 import {
@@ -14,6 +14,7 @@ import {
   useScrolledHeader,
 } from "./header.shared";
 import { MobileHeaderBar, MobileMenu } from "./mobile-header";
+import { WishlistDialog } from "./wishlist-dialog";
 
 export function Header() {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ export function Header() {
   const isScrolled = useScrolledHeader();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const { count: wishlistCount } = useWishlist();
 
   const catalogItem = headerNavigation.find((item) => item.children);
@@ -36,8 +38,14 @@ export function Header() {
     setIsMenuOpen(true);
   };
 
+  const openWishlist = () => {
+    setIsWishlistOpen(true);
+  };
+
   useLockedBodyScroll(isMenuOpen);
   useEscapeToClose(isMenuOpen, closeMenu);
+
+  useEffect(() => subscribeToWishlistDialogOpen(() => setIsWishlistOpen(true)), []);
 
   return (
     <>
@@ -57,9 +65,19 @@ export function Header() {
           )}
         />
 
-        <DesktopHeader pathname={pathname} showWishlist={isPartnerCatalogPage} />
+        <DesktopHeader
+          pathname={pathname}
+          showWishlist={isPartnerCatalogPage}
+          wishlistCount={wishlistCount}
+          onOpenWishlist={openWishlist}
+        />
 
-        <MobileHeaderBar onOpenMenu={openMenu} />
+        <MobileHeaderBar
+          onOpenMenu={openMenu}
+          onOpenWishlist={openWishlist}
+          showWishlist={isPartnerCatalogPage}
+          wishlistCount={wishlistCount}
+        />
       </header>
 
       <MobileMenu
@@ -72,7 +90,10 @@ export function Header() {
         mobilePrimaryLinks={mobilePrimaryLinks}
         onToggleCatalog={() => setIsCatalogOpen((open) => !open)}
         onCloseMenu={closeMenu}
+        onOpenWishlist={openWishlist}
       />
+
+      {isPartnerCatalogPage ? <WishlistDialog open={isWishlistOpen} onOpenChange={setIsWishlistOpen} /> : null}
     </>
   );
 }
