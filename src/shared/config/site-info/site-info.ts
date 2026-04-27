@@ -24,7 +24,7 @@ export const siteInfo = {
     {
       icon: "max",
       label: "MAX",
-      href: "#",
+      href: "https://max.ru/join/E11Gq-pvtQdlstRI7bYES_M64Flg9ocThjJga6bHJA0",
     },
   ] satisfies SocialLink[],
   privacyHref: "/privacy",
