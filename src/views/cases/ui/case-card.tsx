@@ -80,7 +80,7 @@ export function CaseCard({ item }: CaseCardProps) {
 
   return (
     <article className="rounded-[18px] md:rounded-[22.5px] lg:bg-[var(--card-bg)] lg:p-[30px]">
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,50.7%)] lg:items-stretch lg:gap-[22.5px] 2xl:items-start">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,50.7%)] lg:gap-[22.5px] 2xl:items-start">
         <CaseTextBlock
           item={item}
           sections={sections}
@@ -89,11 +89,11 @@ export function CaseCard({ item }: CaseCardProps) {
           onToggle={() => setIsExpanded((value) => !value)}
         />
 
-        <div className="lg:flex h-full lg:flex-col">
+        <div className="lg:flex lg:flex-col">
           <div
             ref={emblaRef}
-            className="mb-[14px] cursor-grab overflow-hidden rounded-[18px] bg-white active:cursor-grabbing lg:flex-1 lg:rounded-[9px]"
-            style={{ aspectRatio: "3 / 2" }}
+            className="mb-[14px] cursor-grab overflow-hidden rounded-[18px] bg-white active:cursor-grabbing lg:rounded-[9px]"
+            style={{ aspectRatio: "4 / 3" }}
           >
             <div className="flex h-full">
               {item.gallery.map((image) => (

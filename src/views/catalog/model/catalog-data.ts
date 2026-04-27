@@ -593,7 +593,7 @@ export const CATEGORY_CATALOG_DATA: Record<string, CatalogPageData> = {
     cases: [
       {
         id: "ufaoil-kapsula-vremeni",
-        company: "Уфаоил – «Капсула времени»",
+        company: "Уфаоил – «Новогодний набор»",
         description: "Разработали концепцию и продукцию с собственной торговой маркой меда\nдля памятного проекта.",
         result: "Уникальный продукт, который усиливает эмоциональную ценность бренда.",
         images: [{ src: "/catalog/cases/img_ufaoil_landscape_4.webp", alt: "Уфаоил – «Капсула времени» — кейс" }],

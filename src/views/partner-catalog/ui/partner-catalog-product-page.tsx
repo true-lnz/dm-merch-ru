@@ -530,24 +530,24 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
                             fill
                             priority={index === 0}
                             sizes="(max-width: 767px) 100vw, (max-width: 1279px) calc(100vw - 160px), 700px"
-                            className={cn("object-cover transition-opacity duration-200", isActive && isImageZoomed && isDesktopViewport ? "opacity-0" : "opacity-100")}
+                            className={cn(
+                              "object-cover transition-transform duration-200 ease-out will-change-transform",
+                              isActive && isImageZoomed && isDesktopViewport ? "scale-110" : "scale-100",
+                            )}
+                            style={
+                              isActive && isDesktopViewport
+                                ? { transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }
+                                : undefined
+                            }
                           />
                           <div
                             aria-hidden="true"
                             className={cn(
-                              "absolute inset-0 hidden transition-opacity duration-200 xl:block",
-                              isActive && isImageZoomed && isDesktopViewport ? "opacity-100" : "pointer-events-none opacity-0",
+                              "pointer-events-none absolute inset-0 hidden transition-opacity duration-200 xl:block",
+                              isActive && isImageZoomed && isDesktopViewport ? "opacity-100" : "opacity-0",
                             )}
                           >
-                            <DetailImageWithSkeleton
-                              src={imageUrl}
-                              alt=""
-                              fill
-                              sizes="(max-width: 767px) 100vw, (max-width: 1279px) calc(100vw - 160px), 700px"
-                              className="scale-110 object-cover will-change-transform"
-                              style={{ transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }}
-                            />
-                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_58%,rgba(255,255,255,0.08)_100%)]" />
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_58%,rgba(255,255,255,0.08)_100%)]" />
                           </div>
                         </div>
                       );
