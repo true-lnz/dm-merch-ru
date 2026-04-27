@@ -1,6 +1,7 @@
 "use client";
 
 import { PageSubheading } from "@/shared/ui/page-subheading";
+import Image from "next/image";
 import Script from "next/script";
 import { useEffect, useState } from "react";
 
@@ -41,6 +42,10 @@ declare global {
 }
 
 const MARQUIZ_ID = "69ef0bea8ae1ec001990bdb0";
+const MARQUIZ_IMAGE = {
+  src: "/home/img_lead_cta_cover2.webp",
+  alt: "Коробка с брендированным мерчем",
+} as const;
 
 const MARQUIZ_INIT_OPTIONS = {
   host: "//quiz.marquiz.ru",
@@ -99,7 +104,23 @@ export function HomeMarquiz() {
 
       <PageSubheading className="mb-8" title="Ответьте на 5 простых вопросов и получите точный расчет стоимости вашего мерча" />
 
-      <div className="overflow-hidden rounded-[18px] bg-[#ecebe7] md:rounded-[22.5px]" data-marquiz-id={MARQUIZ_ID} />
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[8.075fr_3.925fr] xl:grid-rows-1 xl:gap-5">
+        <div className="overflow-hidden rounded-[18px] bg-[#ecebe7] md:rounded-[22.5px]">
+          <div data-marquiz-id={MARQUIZ_ID} />
+        </div>
+
+        <div className="hidden rounded-[18px] bg-white xl:self-stretch md:rounded-[22.5px] xl:block">
+          <div className="relative aspect-square overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] xl:h-full xl:aspect-auto">
+            <Image
+              src={MARQUIZ_IMAGE.src}
+              alt={MARQUIZ_IMAGE.alt}
+              fill
+              sizes="(max-width: 1279px) 100vw, 34vw"
+              className="object-cover image-hover-scale object-top"
+            />
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
