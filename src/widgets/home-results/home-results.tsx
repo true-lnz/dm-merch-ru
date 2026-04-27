@@ -151,7 +151,13 @@ function ResultSlideLayout({ slide, activeIndex, onPrevClick, onNextClick }: Res
                 index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
-              <Image src={item.image.src} alt={item.image.alt} fill sizes="60w" className="object-cover object-top image-hover-scale" />
+              <Image
+                src={item.image.src}
+                alt={item.image.alt}
+                fill
+                sizes="60w"
+                className="object-cover 3xl:object-contain object-top 2xl:object-center image-hover-scale"
+              />
             </div>
           ))}
         </div>

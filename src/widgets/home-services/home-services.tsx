@@ -78,7 +78,7 @@ export function HomeServices() {
       <PageSubheading title="Услуги, которые закрывают ваши задачи" />
 
       <div className="mt-8 grid grid-cols-1 gap-4 xl:grid-cols-[8.075fr_3.925fr] xl:grid-rows-1 xl:gap-5">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-5">
+        <div className="grid grid-cols-1 xl:grid-cols-2 3xl:grid-cols-1 gap-4 xl:gap-5">
           {HOME_SERVICES.map((item) => (
             <ServiceCard key={item.title} title={item.title} description={item.description} />
           ))}
