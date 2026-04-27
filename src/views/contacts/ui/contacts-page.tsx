@@ -1,12 +1,13 @@
 import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import { siteInfo } from "@/shared/config/site-info";
+import { formatPhoneHref } from "@/shared/lib/phone";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import Image from "next/image";
 import { YandexMapCard } from "./yandex-map-card";
 
 const contactLinks = [
   {
-    href: `tel:${siteInfo.phone.replace(/\D+/g, "")}`,
+    href: formatPhoneHref(siteInfo.phone),
     label: siteInfo.phone,
   },
   {

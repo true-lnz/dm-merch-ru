@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/shared/lib/cn";
+import { formatPhoneHref } from "@/shared/lib/phone";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -89,7 +90,7 @@ export function ContactPills({ email, phone, direction = "row", className, varia
   }
 
   const emailHref = `mailto:${email}`;
-  const phoneHref = `tel:${phone.replace(/\D+/g, "")}`;
+  const phoneHref = formatPhoneHref(phone);
   const contactItems = [
     {
       key: "email" as const,

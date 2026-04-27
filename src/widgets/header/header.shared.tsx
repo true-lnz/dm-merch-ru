@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { siteInfo } from "@/shared/config/site-info";
+import { formatPhoneHref } from "@/shared/lib/phone";
 
 export const navLinkClassName =
   "inline-flex items-center justify-center !bg-transparent px-4 py-2 font-medium tracking-[-0.02em] text-[#404040] transition-colors hover:!bg-transparent hover:text-[var(--text-muted)] focus:!bg-transparent focus-visible:!bg-transparent data-active:!bg-transparent";
@@ -137,7 +138,7 @@ export function HeaderIconLink({
 }
 
 export function getPhoneHref() {
-  return `tel:${siteInfo.phone.replace(/\D+/g, "")}`;
+  return formatPhoneHref(siteInfo.phone);
 }
 
 export function getEmailHref() {
