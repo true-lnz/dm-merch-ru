@@ -9,6 +9,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { PageHeading } from "@/shared/ui/page-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { Spinner } from "@/shared/ui/spinner";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { CheckIcon, ChevronDownIcon, FunnelIcon, XIcon } from "lucide-react";
 import Image from "next/image";
@@ -29,14 +30,18 @@ import {
   getPartnerCatalogProductPath,
   hasActivePartnerCatalogFilters,
   normalizePartnerCatalogFilters,
+  normalizePartnerCatalogSort,
+  PARTNER_CATALOG_DEFAULT_SORT,
   PARTNER_CATALOG_QUERY_CATEGORY_KEY,
   PARTNER_CATALOG_QUERY_PRICE_FROM_KEY,
   PARTNER_CATALOG_QUERY_PRICE_TO_KEY,
+  PARTNER_CATALOG_QUERY_SORT_KEY,
   PARTNER_CATALOG_QUERY_STOCK_FROM_KEY,
   PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY,
   resolvePartnerCatalogSelection,
   type PartnerCatalogFilterInputValues,
   type PartnerCatalogFilters,
+  type PartnerCatalogSortKey,
 } from "../model/partner-catalog-query";
 
 const ALL_FILTER_ID = "all";
@@ -44,6 +49,12 @@ const MOBILE_PAGE_SIZE = 16;
 const PAGE_SIZE_OPTIONS = [24, 50, 80] as const;
 const CATALOG_API_ROUTE = "/api/partner-catalog";
 const loadedCatalogImageKeys = new Set<string>();
+const SORT_OPTIONS: { value: PartnerCatalogSortKey; label: string }[] = [
+  { value: "price-asc", label: "По возрастанию цены" },
+  { value: "price-desc", label: "По убыванию цены" },
+  { value: "stock-asc", label: "По возрастанию количества" },
+  { value: "stock-desc", label: "По убыванию количества" },
+];
 
 const rubFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -126,7 +137,37 @@ function matchesVariantFilters(variant: PartnerCatalogVariant, filters: PartnerC
   return true;
 }
 
-async function fetchCatalogPageSlice(filterId: string, filters: PartnerCatalogFilterInputValues, offset: number, limit: number) {
+function getRepresentativeVariantForSort(product: PartnerCatalogProduct, filters: PartnerCatalogFilters) {
+  return product.variants.find((variant) => matchesVariantFilters(variant, filters)) ?? product.variants[0];
+}
+
+function sortPartnerCatalogProductsForClient(products: PartnerCatalogProduct[], filters: PartnerCatalogFilters, sort: PartnerCatalogSortKey) {
+  return [...products].sort((left, right) => {
+    const leftVariant = getRepresentativeVariantForSort(left, filters);
+    const rightVariant = getRepresentativeVariantForSort(right, filters);
+
+    if (!leftVariant || !rightVariant) {
+      return left.id.localeCompare(right.id, "ru");
+    }
+
+    const metric =
+      sort === "price-asc" || sort === "price-desc" ? leftVariant.priceRub - rightVariant.priceRub : leftVariant.stock - rightVariant.stock;
+
+    if (metric !== 0) {
+      return sort === "price-desc" || sort === "stock-desc" ? -metric : metric;
+    }
+
+    return leftVariant.article.localeCompare(rightVariant.article, "ru");
+  });
+}
+
+async function fetchCatalogPageSlice(
+  filterId: string,
+  filters: PartnerCatalogFilterInputValues,
+  sort: PartnerCatalogSortKey,
+  offset: number,
+  limit: number,
+) {
   const params = new URLSearchParams({
     filterId,
     offset: String(offset),
@@ -143,6 +184,10 @@ async function fetchCatalogPageSlice(filterId: string, filters: PartnerCatalogFi
 
   if (filters.stockFrom) {
     params.set(PARTNER_CATALOG_QUERY_STOCK_FROM_KEY, filters.stockFrom);
+  }
+
+  if (sort !== PARTNER_CATALOG_DEFAULT_SORT) {
+    params.set(PARTNER_CATALOG_QUERY_SORT_KEY, sort);
   }
 
   const response = await fetch(`${CATALOG_API_ROUTE}?${params.toString()}`, { cache: "no-store" });
@@ -290,7 +335,7 @@ function CatalogImageWithSkeleton({
 function ProductCardImage({ variant, href }: { variant: PartnerCatalogVariant; href: string }) {
   return (
     <Link href={href} target="_blank" rel="noreferrer" aria-label={`Открыть товар ${variant.title}`} className="block">
-      <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface)]">
+      <div className="relative aspect-square w-full overflow-hidden rounded-t-[18px] md:rounded-t-[22.5px]  bg-[var(--surface)]">
         <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-contain" />
       </div>
     </Link>
@@ -409,29 +454,22 @@ function ProductCardContent({
   activeVariant,
   activeVariantId,
   productHref,
-  expandedTitle = false,
   onVariantSelect,
 }: {
   variants: PartnerCatalogVariant[];
   activeVariant: PartnerCatalogVariant;
   activeVariantId: string;
   productHref: string;
-  expandedTitle?: boolean;
   onVariantSelect: (variantId: string) => void;
 }) {
   return (
-    <div className="flex flex-1 flex-col gap-2 bg-[var(--card-bg)] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]">
+    <div className="flex flex-1 flex-col gap-2 bg-[var(--card-bg)] rounded-b-[18px] md:rounded-b-[22.5px] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]">
       <div className="flex items-baseline gap-2 font-sans">
         <span className="text-base font-semibold text-black">{formatRubPrice(activeVariant.priceRub)}</span>
       </div>
 
-      <div className="pt-[2px]">
-        <h3
-          className={cn(
-            "font-heading text-2xl leading-[1.2] tracking-[0.01em] text-[var(--heading)]",
-            expandedTitle ? "block" : "overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]",
-          )}
-        >
+      <div className="min-h-[2.4em] pt-[2px]">
+        <h3 className="font-heading text-2xl leading-[1.2] tracking-[0.01em] text-[var(--heading)] overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] md:group-hover:block md:group-hover:overflow-visible md:group-hover:[-webkit-line-clamp:unset]">
           <Link href={productHref} target="_blank" rel="noreferrer" className="transition-colors hover:text-[var(--accent)]">
             {activeVariant.title}
           </Link>
@@ -456,38 +494,50 @@ function ProductCardShell({
   activeVariant,
   activeVariantId,
   productHref,
+  className,
   onVariantSelect,
-  expandedTitle = false,
-  shadow = false,
-  ariaHidden = false,
 }: {
   variants: PartnerCatalogVariant[];
   activeVariant: PartnerCatalogVariant;
   activeVariantId: string;
   productHref: string;
+  className?: string;
   onVariantSelect: (variantId: string) => void;
-  expandedTitle?: boolean;
-  shadow?: boolean;
-  ariaHidden?: boolean;
 }) {
   return (
     <article
-      aria-hidden={ariaHidden || undefined}
       className={cn(
-        "flex h-full flex-col overflow-hidden rounded-[18px] border border-transparent bg-[var(--card-bg)] transition-colors md:rounded-[22.5px] md:hover:border",
-        shadow ? "shadow-[0_16px_40px_rgba(42,42,42,0.16)]" : null,
+        "absolute inset-x-0 top-0 h-full overflow-visible rounded-[18px] bg-transparent md:rounded-[22.5px] md:group-hover:z-20",
+        className,
       )}
     >
-      <ProductCardImage variant={activeVariant} href={productHref} />
-      <ProductCardContent
-        variants={variants}
-        activeVariant={activeVariant}
-        activeVariantId={activeVariantId}
-        productHref={productHref}
-        onVariantSelect={onVariantSelect}
-        expandedTitle={expandedTitle}
-      />
+      <div className="flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] border border-transparent bg-[var(--card-bg)] transition-[border-color,box-shadow,height] md:group-hover:h-auto md:group-hover:min-h-full md:group-hover:overflow-visible md:group-hover:border-[rgba(42,42,42,0.12)] md:group-hover:shadow-[0_16px_40px_rgba(42,42,42,0.16)]">
+        <ProductCardImage variant={activeVariant} href={productHref} />
+        <ProductCardContent
+          variants={variants}
+          activeVariant={activeVariant}
+          activeVariantId={activeVariantId}
+          productHref={productHref}
+          onVariantSelect={onVariantSelect}
+        />
+      </div>
     </article>
+  );
+}
+
+function ProductCardPlaceholder() {
+  return (
+    <div aria-hidden="true" className="pointer-events-none invisible">
+      <div className="aspect-square w-full" />
+      <div className="bg-[var(--card-bg)] px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]">
+        <div className="flex flex-col gap-2">
+          <div className="h-6" />
+          <div className="min-h-[2.4em] pt-[2px]" />
+          <div className="h-[88px]" />
+          <div className="h-[47px]" />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -501,7 +551,6 @@ const PartnerProductCard = memo(function PartnerProductCard({
   filterInputs: PartnerCatalogFilterInputValues;
 }) {
   const [activeVariantId, setActiveVariantId] = useState(item.variants[0]?.id ?? "");
-  const [isHovered, setIsHovered] = useState(false);
   const normalizedFilters = useMemo(() => normalizePartnerCatalogFilters(filterInputs), [filterInputs]);
   const visibleVariants = useMemo(() => {
     if (!hasActivePartnerCatalogFilters(normalizedFilters)) {
@@ -522,11 +571,8 @@ const PartnerProductCard = memo(function PartnerProductCard({
   }
 
   return (
-    <div
-      className="group relative z-0 h-full overflow-visible md:hover:z-20"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="group relative z-0 h-full overflow-visible md:hover:z-20">
+      <ProductCardPlaceholder />
       <ProductCardShell
         variants={visibleVariants}
         activeVariant={activeVariant}
@@ -534,23 +580,6 @@ const PartnerProductCard = memo(function PartnerProductCard({
         productHref={productHref}
         onVariantSelect={setActiveVariantId}
       />
-
-      {isHovered ? (
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md:block">
-          <div className="pointer-events-auto">
-            <ProductCardShell
-              variants={visibleVariants}
-              activeVariant={activeVariant}
-              activeVariantId={activeVariant.id}
-              productHref={productHref}
-              onVariantSelect={setActiveVariantId}
-              expandedTitle
-              shadow
-              ariaHidden
-            />
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 });
@@ -619,26 +648,32 @@ function CatalogNumericFilters({
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <div className="relative rounded-[18px] bg-white p-4 md:rounded-[22.5px] md:p-5">
         <div className="flex items-center justify-between gap-3">
-          <CollapsibleTrigger showChevron={false} className="flex w-full cursor-pointer items-center justify-between gap-3 text-left">
+          <CollapsibleTrigger showChevron={false} className="flex !w-auto cursor-pointer items-center gap-3 text-left">
             <span className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.05em] text-[var(--heading)]">
               <span>Фильтры</span>
               <ChevronDownIcon className={cn("size-4 shrink-0 text-[#7d7d7d] transition-transform", isOpen ? "rotate-180" : null)} />
             </span>
           </CollapsibleTrigger>
 
-          {isOpen ? (
+          <div
+            aria-hidden={!hasActiveFilters}
+            className={cn(
+              "overflow-hidden transition-[max-width,opacity,margin] duration-200 ease-out",
+              hasActiveFilters ? "ml-2 max-w-[140px] opacity-100" : "ml-0 max-w-0 opacity-0",
+            )}
+          >
             <button
               type="button"
               onClick={onReset}
               disabled={!hasActiveFilters}
               className={cn(
-                "shrink-0 text-sm transition-colors",
+                "shrink-0 whitespace-nowrap text-sm transition-colors",
                 hasActiveFilters ? "cursor-pointer text-[var(--accent)] hover:text-[var(--accent-hover)]" : "cursor-default text-[#a3a3a3]",
               )}
             >
               Сбросить
             </button>
-          ) : null}
+          </div>
         </div>
 
         <CollapsibleContent className="overflow-hidden data-[closed]:animate-accordion-up data-[open]:animate-accordion-down">
@@ -667,7 +702,7 @@ function FilterApplyPopover({
   const label = isLoading ? "Ищем товары..." : `Показать ${total ?? 0} товаров`;
 
   return (
-    <div className={cn("z-30", className)}>
+    <div className={cn("z-25", className)}>
       <div className="relative rounded-[16px] bg-[var(--accent)] px-4 py-3 text-white shadow-[0_18px_40px_rgba(60,120,255,0.28)]">
         <div aria-hidden="true" className="absolute top-1/2 -left-[6px] size-[16px] -translate-y-1/2 rotate-45 bg-[var(--accent)]" />
         <div className="flex items-center gap-3">
@@ -689,6 +724,52 @@ function FilterApplyPopover({
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function CatalogSortSelect({ value, onChange }: { value: PartnerCatalogSortKey; onChange: (value: PartnerCatalogSortKey) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+  const activeOption = SORT_OPTIONS.find((option) => option.value === value) ?? SORT_OPTIONS[0];
+
+  useOutsideClick(popoverRef, () => setIsOpen(false), isOpen);
+
+  return (
+    <div className="relative" ref={popoverRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((open) => !open)}
+        className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full bg-[var(--card-bg)] px-4 py-2 text-sm text-[var(--heading)] transition-colors hover:bg-[#e1e0db]"
+      >
+        <span className="whitespace-nowrap">{activeOption.label}</span>
+        <ChevronDownIcon className={cn("size-4 shrink-0 transition-transform", isOpen ? "rotate-180" : null)} />
+      </button>
+
+      {isOpen ? (
+        <div className="absolute top-[calc(100%+8px)] right-0 z-30 min-w-[280px] rounded-[16px] border border-black/10 bg-white p-2 shadow-[0_18px_40px_rgba(42,42,42,0.16)]">
+          {SORT_OPTIONS.map((option) => {
+            const isActive = option.value === value;
+
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  onChange(option.value);
+                  setIsOpen(false);
+                }}
+                className={cn(
+                  "flex w-full cursor-pointer items-center rounded-[12px] px-3 py-2 text-left text-sm transition-colors",
+                  isActive ? "bg-[var(--card-bg)] text-[var(--heading)]" : "text-[#5f5f5f] hover:bg-[var(--card-bg)] hover:text-[var(--heading)]",
+                )}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -761,6 +842,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const searchParams = useSearchParams();
   const [activeFilterId, setActiveFilterId] = useState(initialData.initialFilterId);
   const [expandedRootId, setExpandedRootId] = useState<string | null>(initialData.initialExpandedRootId);
+  const [sortKey, setSortKey] = useState<PartnerCatalogSortKey>(initialData.initialSort);
   const [draftFilterInputs, setDraftFilterInputs] = useState<PartnerCatalogFilterInputValues>(initialData.initialFilters);
   const [appliedFilterInputs, setAppliedFilterInputs] = useState<PartnerCatalogFilterInputValues>(initialData.initialFilters);
   const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(24);
@@ -771,6 +853,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const [isFilterApplyPopoverDismissed, setIsFilterApplyPopoverDismissed] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isFetchingProducts, setIsFetchingProducts] = useState(false);
+  const [isGridRefreshing, setIsGridRefreshing] = useState(false);
   const [isMobileCategoryDialogOpen, setIsMobileCategoryDialogOpen] = useState(false);
   const [isMobileFilterDialogOpen, setIsMobileFilterDialogOpen] = useState(false);
   const listStartRef = useRef<HTMLDivElement | null>(null);
@@ -778,6 +861,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const draftPreviewRequestIdRef = useRef(0);
   const activeFilterIdRef = useRef(initialData.initialFilterId);
   const expandedRootIdRef = useRef<string | null>(initialData.initialExpandedRootId);
+  const sortKeyRef = useRef(initialData.initialSort);
   const draftFilterInputsRef = useRef(initialData.initialFilters);
   const appliedFilterInputsRef = useRef(initialData.initialFilters);
   const searchParamsKey = searchParams.toString();
@@ -801,6 +885,10 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const activeCategoryLabel = activeChildCategory?.name ?? "Все товары";
   const hasPendingFilterChanges = !areFilterInputValuesEqual(normalizedDraftFilterInputs, appliedFilterInputs);
   const shouldShowFilterApplyPopover = hasPendingFilterChanges && !isFilterApplyPopoverDismissed;
+  const displayedProducts = useMemo(
+    () => sortPartnerCatalogProductsForClient(products, normalizePartnerCatalogFilters(appliedFilterInputs), sortKey),
+    [appliedFilterInputs, products, sortKey],
+  );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
@@ -823,8 +911,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       return;
     }
 
-    void loadCatalogSlice(activeFilterId, appliedFilterInputs, 0, targetPageSize, false);
-  }, [activeFilterId, appliedFilterInputs, isDesktop, pageSize, products.length, totalCount]);
+    void loadCatalogSlice(activeFilterId, appliedFilterInputs, sortKey, 0, targetPageSize, false);
+  }, [activeFilterId, appliedFilterInputs, isDesktop, pageSize, products.length, sortKey, totalCount]);
 
   useEffect(() => {
     activeFilterIdRef.current = activeFilterId;
@@ -833,6 +921,10 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   useEffect(() => {
     expandedRootIdRef.current = expandedRootId;
   }, [expandedRootId]);
+
+  useEffect(() => {
+    sortKeyRef.current = sortKey;
+  }, [sortKey]);
 
   useEffect(() => {
     draftFilterInputsRef.current = draftFilterInputs;
@@ -858,7 +950,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     setIsFetchingDraftPreview(true);
 
     const timeoutId = window.setTimeout(() => {
-      void fetchCatalogPageSlice(activeFilterId, normalizedDraftFilterInputs, 0, 1)
+      void fetchCatalogPageSlice(activeFilterId, normalizedDraftFilterInputs, sortKey, 0, 1)
         .then((slice) => {
           if (draftPreviewRequestIdRef.current !== nextRequestId) {
             return;
@@ -883,7 +975,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [activeFilterId, hasPendingFilterChanges, normalizedDraftFilterInputs, totalCount]);
+  }, [activeFilterId, hasPendingFilterChanges, normalizedDraftFilterInputs, sortKey, totalCount]);
 
   useEffect(() => {
     const queryCategory = searchParams.get(PARTNER_CATALOG_QUERY_CATEGORY_KEY) ?? undefined;
@@ -893,6 +985,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       priceTo: searchParams.get(PARTNER_CATALOG_QUERY_PRICE_TO_KEY) ?? undefined,
       stockFrom: searchParams.get(PARTNER_CATALOG_QUERY_STOCK_FROM_KEY) ?? undefined,
     });
+    const querySort = normalizePartnerCatalogSort(searchParams.get(PARTNER_CATALOG_QUERY_SORT_KEY) ?? undefined);
     const normalizedQueryFilters = getPartnerCatalogFilterInputValues(queryFilters);
     const currentPageSize = isDesktop ? pageSize : MOBILE_PAGE_SIZE;
     const resolvedSelection = resolvePartnerCatalogSelection(
@@ -909,6 +1002,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       ALL_FILTER_ID,
       pathname,
       normalizedQueryFilters,
+      querySort,
     );
     const currentPath = `${pathname}${searchParams.size > 0 ? `?${searchParams.toString()}` : ""}`;
 
@@ -927,26 +1021,30 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     if (!areFilterInputValuesEqual(normalizedQueryFilters, appliedFilterInputsRef.current)) {
       setAppliedFilterInputs(normalizedQueryFilters);
     }
+    if (querySort !== sortKeyRef.current) {
+      setSortKey(querySort);
+    }
     setDraftPreviewTotal(totalCount);
     setIsFetchingDraftPreview(false);
 
     if (
       resolvedSelection.filterId === activeFilterIdRef.current &&
-      areFilterInputValuesEqual(normalizedQueryFilters, appliedFilterInputsRef.current)
+      areFilterInputValuesEqual(normalizedQueryFilters, appliedFilterInputsRef.current) &&
+      querySort === sortKeyRef.current
     ) {
       return;
     }
 
     setActiveFilterId(resolvedSelection.filterId);
-    void loadCatalogSlice(resolvedSelection.filterId, normalizedQueryFilters, 0, currentPageSize, false);
+    void loadCatalogSlice(resolvedSelection.filterId, normalizedQueryFilters, querySort, 0, currentPageSize, false);
   }, [initialData.categories, isDesktop, pageSize, pathname, router, searchParams, searchParamsKey]);
 
   function getCurrentPageSize() {
     return isDesktop ? pageSize : MOBILE_PAGE_SIZE;
   }
 
-  function syncFilterUrl(nextFilterId: string, nextFilterInputs: PartnerCatalogFilterInputValues) {
-    router.replace(getPartnerCatalogPathForFilter(initialData.categories, nextFilterId, ALL_FILTER_ID, pathname, nextFilterInputs), {
+  function syncFilterUrl(nextFilterId: string, nextFilterInputs: PartnerCatalogFilterInputValues, nextSortKey: PartnerCatalogSortKey = sortKey) {
+    router.replace(getPartnerCatalogPathForFilter(initialData.categories, nextFilterId, ALL_FILTER_ID, pathname, nextFilterInputs, nextSortKey), {
       scroll: false,
     });
   }
@@ -954,6 +1052,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   async function loadCatalogSlice(
     filterId: string,
     nextFilterInputs: PartnerCatalogFilterInputValues,
+    nextSortKey: PartnerCatalogSortKey,
     offset: number,
     limit: number,
     append: boolean,
@@ -961,9 +1060,10 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     const nextRequestId = requestIdRef.current + 1;
     requestIdRef.current = nextRequestId;
     setIsFetchingProducts(true);
+    setIsGridRefreshing(!append);
 
     try {
-      const nextSlice = await fetchCatalogPageSlice(filterId, nextFilterInputs, offset, limit);
+      const nextSlice = await fetchCatalogPageSlice(filterId, nextFilterInputs, nextSortKey, offset, limit);
 
       if (requestIdRef.current !== nextRequestId) {
         return;
@@ -978,6 +1078,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     } finally {
       if (requestIdRef.current === nextRequestId) {
         setIsFetchingProducts(false);
+        setIsGridRefreshing(false);
       }
     }
   }
@@ -989,8 +1090,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
     const nextPageSize = getCurrentPageSize();
     setActiveFilterId(nextFilterId);
-    syncFilterUrl(nextFilterId, appliedFilterInputs);
-    void loadCatalogSlice(nextFilterId, appliedFilterInputs, 0, nextPageSize, false);
+    syncFilterUrl(nextFilterId, appliedFilterInputs, sortKey);
+    void loadCatalogSlice(nextFilterId, appliedFilterInputs, sortKey, 0, nextPageSize, false);
     listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -1007,7 +1108,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     setPageSize(nextPageSize);
 
     if (isDesktop) {
-      void loadCatalogSlice(activeFilterId, appliedFilterInputs, 0, nextPageSize, false);
+      void loadCatalogSlice(activeFilterId, appliedFilterInputs, sortKey, 0, nextPageSize, false);
     }
   }
 
@@ -1016,14 +1117,14 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       return;
     }
 
-    void loadCatalogSlice(activeFilterId, appliedFilterInputs, products.length, getCurrentPageSize(), true);
+    void loadCatalogSlice(activeFilterId, appliedFilterInputs, sortKey, products.length, getCurrentPageSize(), true);
   }
 
   function handleAllProductsClick() {
     setExpandedRootId(null);
 
     if (activeFilterId === ALL_FILTER_ID) {
-      syncFilterUrl(ALL_FILTER_ID, appliedFilterInputs);
+      syncFilterUrl(ALL_FILTER_ID, appliedFilterInputs, sortKey);
       return;
     }
 
@@ -1049,9 +1150,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     setDraftFilterInputs(nextFilterInputs);
     setAppliedFilterInputs(nextFilterInputs);
     setDraftPreviewTotal(null);
-    syncFilterUrl(activeFilterId, nextFilterInputs);
-    void loadCatalogSlice(activeFilterId, nextFilterInputs, 0, nextPageSize, false);
-    listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    syncFilterUrl(activeFilterId, nextFilterInputs, sortKey);
+    void loadCatalogSlice(activeFilterId, nextFilterInputs, sortKey, 0, nextPageSize, false);
   }
 
   function handleResetFilters() {
@@ -1064,13 +1164,23 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     setDraftFilterInputs(clearedFilters);
     setAppliedFilterInputs(clearedFilters);
     setDraftPreviewTotal(null);
-    syncFilterUrl(activeFilterId, clearedFilters);
-    void loadCatalogSlice(activeFilterId, clearedFilters, 0, getCurrentPageSize(), false);
-    listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    syncFilterUrl(activeFilterId, clearedFilters, sortKey);
+    void loadCatalogSlice(activeFilterId, clearedFilters, sortKey, 0, getCurrentPageSize(), false);
   }
 
   function handleDismissFilterApplyPopover() {
     setIsFilterApplyPopoverDismissed(true);
+  }
+
+  function handleSortChange(nextSortKey: PartnerCatalogSortKey) {
+    if (nextSortKey === sortKey || isFetchingProducts) {
+      return;
+    }
+
+    const nextPageSize = getCurrentPageSize();
+    setSortKey(nextSortKey);
+    syncFilterUrl(activeFilterId, appliedFilterInputs, nextSortKey);
+    void loadCatalogSlice(activeFilterId, appliedFilterInputs, nextSortKey, 0, nextPageSize, false);
   }
 
   return (
@@ -1110,9 +1220,14 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
           </div>
 
           <div className="mt-3 flex flex-col gap-3 md:mt-0 md:flex-row md:items-center md:justify-between">
-            <p className="text-sm text-[var(--text-muted)]">
-              Показано {products.length} из {totalCount}
-            </p>
+            <div className="flex items-center gap-3 self-start md:self-auto">
+              <div className="hidden md:block">
+                <CatalogSortSelect value={sortKey} onChange={handleSortChange} />
+              </div>
+              <p className="text-sm text-[var(--text-muted)]">
+                Показано {products.length} из {totalCount}
+              </p>
+            </div>
 
             <div className="hidden flex-wrap items-center gap-2 md:flex">
               <span className="text-sm text-[var(--text-muted)]">Отображать по:</span>
@@ -1165,12 +1280,21 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
           <div ref={listStartRef} className="scroll-mt-[88px] md:scroll-mt-[112px]">
             {products.length > 0 ? (
-              <>
+              <div className="relative">
                 <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4">
-                  {products.map((item) => (
+                  {displayedProducts.map((item) => (
                     <PartnerProductCard key={item.id} item={item} categories={initialData.categories} filterInputs={appliedFilterInputs} />
                   ))}
                 </div>
+
+                {isGridRefreshing ? (
+                  <div className="absolute inset-0 z-30 flex items-start justify-center rounded-[18px] bg-white/65 pt-6 backdrop-blur-[2px] md:rounded-[22.5px] md:pt-8">
+                    <div className="inline-flex items-center gap-3 rounded-full bg-white/92 px-4 py-2 text-sm font-medium text-[var(--heading)] shadow-[0_12px_30px_rgba(42,42,42,0.12)]">
+                      <Spinner className="size-4 text-[var(--accent)]" />
+                      <span>Обновляем товары...</span>
+                    </div>
+                  </div>
+                ) : null}
 
                 {nextCursor !== null ? (
                   <div className="mt-10 flex justify-center md:mt-12">
@@ -1184,7 +1308,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
                     </button>
                   </div>
                 ) : null}
-              </>
+              </div>
             ) : (
               <div className="rounded-[18px] bg-[var(--card-bg)] p-4 text-sm leading-[1.4] text-[var(--text-muted)] md:p-6">
                 {isFetchingProducts ? "Загрузка товаров..." : "Для выбранной категории пока нет товаров."}
