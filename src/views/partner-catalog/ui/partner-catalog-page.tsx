@@ -10,7 +10,7 @@ import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dia
 import { PageHeading } from "@/shared/ui/page-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { WidowFix } from "@/shared/ui/widow-fix";
-import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, FunnelIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -24,11 +24,19 @@ import {
   type PartnerCatalogVariant,
 } from "../model/partner-catalog-data";
 import {
+  getPartnerCatalogFilterInputValues,
   getPartnerCatalogPathForFilter,
   getPartnerCatalogProductPath,
+  hasActivePartnerCatalogFilters,
+  normalizePartnerCatalogFilters,
   PARTNER_CATALOG_QUERY_CATEGORY_KEY,
+  PARTNER_CATALOG_QUERY_PRICE_FROM_KEY,
+  PARTNER_CATALOG_QUERY_PRICE_TO_KEY,
+  PARTNER_CATALOG_QUERY_STOCK_FROM_KEY,
   PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY,
   resolvePartnerCatalogSelection,
+  type PartnerCatalogFilterInputValues,
+  type PartnerCatalogFilters,
 } from "../model/partner-catalog-query";
 
 const ALL_FILTER_ID = "all";
@@ -83,12 +91,59 @@ function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => vo
   }, [enabled, onOutside, ref]);
 }
 
-async function fetchCatalogPageSlice(filterId: string, offset: number, limit: number) {
+function areFilterInputValuesEqual(left: PartnerCatalogFilterInputValues, right: PartnerCatalogFilterInputValues) {
+  return left.priceFrom === right.priceFrom && left.priceTo === right.priceTo && left.stockFrom === right.stockFrom;
+}
+
+function sanitizeNumericInput(value: string, integer = false) {
+  if (!value) {
+    return "";
+  }
+
+  const normalizedValue = value.replace(",", ".").replace(/[^\d.]/g, "");
+  const [integerPart = "", ...fractionParts] = normalizedValue.split(".");
+
+  if (integer) {
+    return integerPart;
+  }
+
+  return fractionParts.length > 0 ? `${integerPart}.${fractionParts.join("")}` : integerPart;
+}
+
+function matchesVariantFilters(variant: PartnerCatalogVariant, filters: PartnerCatalogFilters) {
+  if (filters.priceFrom !== undefined && variant.priceRub < filters.priceFrom) {
+    return false;
+  }
+
+  if (filters.priceTo !== undefined && variant.priceRub > filters.priceTo) {
+    return false;
+  }
+
+  if (filters.stockFrom !== undefined && variant.stock < filters.stockFrom) {
+    return false;
+  }
+
+  return true;
+}
+
+async function fetchCatalogPageSlice(filterId: string, filters: PartnerCatalogFilterInputValues, offset: number, limit: number) {
   const params = new URLSearchParams({
     filterId,
     offset: String(offset),
     limit: String(limit),
   });
+
+  if (filters.priceFrom) {
+    params.set(PARTNER_CATALOG_QUERY_PRICE_FROM_KEY, filters.priceFrom);
+  }
+
+  if (filters.priceTo) {
+    params.set(PARTNER_CATALOG_QUERY_PRICE_TO_KEY, filters.priceTo);
+  }
+
+  if (filters.stockFrom) {
+    params.set(PARTNER_CATALOG_QUERY_STOCK_FROM_KEY, filters.stockFrom);
+  }
 
   const response = await fetch(`${CATALOG_API_ROUTE}?${params.toString()}`, { cache: "no-store" });
 
@@ -439,14 +494,24 @@ function ProductCardShell({
 const PartnerProductCard = memo(function PartnerProductCard({
   item,
   categories,
+  filterInputs,
 }: {
   item: PartnerCatalogProduct;
   categories: PartnerCatalogRootSection[];
+  filterInputs: PartnerCatalogFilterInputValues;
 }) {
   const [activeVariantId, setActiveVariantId] = useState(item.variants[0]?.id ?? "");
   const [isHovered, setIsHovered] = useState(false);
+  const normalizedFilters = useMemo(() => normalizePartnerCatalogFilters(filterInputs), [filterInputs]);
+  const visibleVariants = useMemo(() => {
+    if (!hasActivePartnerCatalogFilters(normalizedFilters)) {
+      return item.variants;
+    }
 
-  const activeVariant = item.variants.find((variant) => variant.id === activeVariantId) ?? item.variants[0];
+    const matchingVariants = item.variants.filter((variant) => matchesVariantFilters(variant, normalizedFilters));
+    return matchingVariants.length > 0 ? matchingVariants : item.variants;
+  }, [item.variants, normalizedFilters]);
+  const activeVariant = visibleVariants.find((variant) => variant.id === activeVariantId) ?? visibleVariants[0];
   const productHref = useMemo(
     () => (activeVariant ? getPartnerCatalogProductPath(categories, item.sectionId, activeVariant.id) : "/partner-catalog"),
     [activeVariant, categories, item.sectionId],
@@ -463,7 +528,7 @@ const PartnerProductCard = memo(function PartnerProductCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       <ProductCardShell
-        variants={item.variants}
+        variants={visibleVariants}
         activeVariant={activeVariant}
         activeVariantId={activeVariant.id}
         productHref={productHref}
@@ -474,7 +539,7 @@ const PartnerProductCard = memo(function PartnerProductCard({
         <div className="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md:block">
           <div className="pointer-events-auto">
             <ProductCardShell
-              variants={item.variants}
+              variants={visibleVariants}
               activeVariant={activeVariant}
               activeVariantId={activeVariant.id}
               productHref={productHref}
@@ -489,6 +554,144 @@ const PartnerProductCard = memo(function PartnerProductCard({
     </div>
   );
 });
+
+function CatalogFilterFields({
+  values,
+  onChange,
+}: {
+  values: PartnerCatalogFilterInputValues;
+  onChange: (key: keyof PartnerCatalogFilterInputValues, value: string) => void;
+}) {
+  return (
+    <div className="space-y-4">
+      <div>
+        <p className="text-sm font-medium text-[#404040]">Цена, ₽</p>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          <input
+            type="text"
+            inputMode="decimal"
+            placeholder="От"
+            value={values.priceFrom}
+            onChange={(event) => onChange("priceFrom", event.target.value)}
+            className="h-10 rounded-[10px] border border-transparent bg-[#f2f1eb] px-3 text-sm text-[var(--heading)] outline-none transition-colors placeholder:text-[#9b9b9b] focus:border-[var(--accent)]"
+          />
+          <input
+            type="text"
+            inputMode="decimal"
+            placeholder="До"
+            value={values.priceTo}
+            onChange={(event) => onChange("priceTo", event.target.value)}
+            className="h-10 rounded-[10px] border border-transparent bg-[#f2f1eb] px-3 text-sm text-[var(--heading)] outline-none transition-colors placeholder:text-[#9b9b9b] focus:border-[var(--accent)]"
+          />
+        </div>
+      </div>
+
+      <div>
+        <p className="text-sm font-medium text-[#404040]">Количество от</p>
+        <div className="mt-2">
+          <input
+            type="text"
+            inputMode="numeric"
+            placeholder="Например, 50"
+            value={values.stockFrom}
+            onChange={(event) => onChange("stockFrom", event.target.value)}
+            className="h-10 w-full rounded-[10px] border border-transparent bg-[#f2f1eb] px-3 text-sm text-[var(--heading)] outline-none transition-colors placeholder:text-[#9b9b9b] focus:border-[var(--accent)]"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CatalogNumericFilters({
+  values,
+  onChange,
+  onReset,
+}: {
+  values: PartnerCatalogFilterInputValues;
+  onChange: (key: keyof PartnerCatalogFilterInputValues, value: string) => void;
+  onReset: () => void;
+}) {
+  const hasActiveFilters = values.priceFrom !== "" || values.priceTo !== "" || values.stockFrom !== "";
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <div className="relative rounded-[18px] bg-white p-4 md:rounded-[22.5px] md:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <CollapsibleTrigger showChevron={false} className="flex w-full cursor-pointer items-center justify-between gap-3 text-left">
+            <span className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.05em] text-[var(--heading)]">
+              <span>Фильтры</span>
+              <ChevronDownIcon className={cn("size-4 shrink-0 text-[#7d7d7d] transition-transform", isOpen ? "rotate-180" : null)} />
+            </span>
+          </CollapsibleTrigger>
+
+          {isOpen ? (
+            <button
+              type="button"
+              onClick={onReset}
+              disabled={!hasActiveFilters}
+              className={cn(
+                "shrink-0 text-sm transition-colors",
+                hasActiveFilters ? "cursor-pointer text-[var(--accent)] hover:text-[var(--accent-hover)]" : "cursor-default text-[#a3a3a3]",
+              )}
+            >
+              Сбросить
+            </button>
+          ) : null}
+        </div>
+
+        <CollapsibleContent className="overflow-hidden data-[closed]:animate-accordion-up data-[open]:animate-accordion-down">
+          <div className="mt-4">
+            <CatalogFilterFields values={values} onChange={onChange} />
+          </div>
+        </CollapsibleContent>
+      </div>
+    </Collapsible>
+  );
+}
+
+function FilterApplyPopover({
+  total,
+  isLoading,
+  onApply,
+  onDismiss,
+  className,
+}: {
+  total: number | null;
+  isLoading: boolean;
+  onApply: () => void;
+  onDismiss: () => void;
+  className?: string;
+}) {
+  const label = isLoading ? "Ищем товары..." : `Показать ${total ?? 0} товаров`;
+
+  return (
+    <div className={cn("z-30", className)}>
+      <div className="relative rounded-[16px] bg-[var(--accent)] px-4 py-3 text-white shadow-[0_18px_40px_rgba(60,120,255,0.28)]">
+        <div aria-hidden="true" className="absolute top-1/2 -left-[6px] size-[16px] -translate-y-1/2 rotate-45 bg-[var(--accent)]" />
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={onApply}
+            disabled={isLoading}
+            className="cursor-pointer whitespace-nowrap border-b border-dotted border-white/45 text-left text-sm font-medium leading-none transition-opacity hover:opacity-90 disabled:cursor-default disabled:opacity-70"
+          >
+            {label}
+          </button>
+          <button
+            type="button"
+            onClick={onDismiss}
+            aria-label="Скрыть подсказку применения фильтра"
+            className="inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/16 transition-colors hover:bg-white/24"
+          >
+            <XIcon className="size-4" strokeWidth={2.3} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function CategoryFilterList({
   categories,
@@ -558,17 +761,30 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const searchParams = useSearchParams();
   const [activeFilterId, setActiveFilterId] = useState(initialData.initialFilterId);
   const [expandedRootId, setExpandedRootId] = useState<string | null>(initialData.initialExpandedRootId);
-  const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(25);
+  const [draftFilterInputs, setDraftFilterInputs] = useState<PartnerCatalogFilterInputValues>(initialData.initialFilters);
+  const [appliedFilterInputs, setAppliedFilterInputs] = useState<PartnerCatalogFilterInputValues>(initialData.initialFilters);
+  const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(24);
   const [products, setProducts] = useState(initialData.initialSlice.items);
   const [totalCount, setTotalCount] = useState(initialData.initialSlice.total);
+  const [draftPreviewTotal, setDraftPreviewTotal] = useState<number | null>(initialData.initialSlice.total);
+  const [isFetchingDraftPreview, setIsFetchingDraftPreview] = useState(false);
+  const [isFilterApplyPopoverDismissed, setIsFilterApplyPopoverDismissed] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isFetchingProducts, setIsFetchingProducts] = useState(false);
   const [isMobileCategoryDialogOpen, setIsMobileCategoryDialogOpen] = useState(false);
+  const [isMobileFilterDialogOpen, setIsMobileFilterDialogOpen] = useState(false);
   const listStartRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
+  const draftPreviewRequestIdRef = useRef(0);
   const activeFilterIdRef = useRef(initialData.initialFilterId);
   const expandedRootIdRef = useRef<string | null>(initialData.initialExpandedRootId);
+  const draftFilterInputsRef = useRef(initialData.initialFilters);
+  const appliedFilterInputsRef = useRef(initialData.initialFilters);
   const searchParamsKey = searchParams.toString();
+  const normalizedDraftFilterInputs = useMemo(
+    () => getPartnerCatalogFilterInputValues(normalizePartnerCatalogFilters(draftFilterInputs)),
+    [draftFilterInputs],
+  );
 
   const activeRootCategory = useMemo(
     () =>
@@ -583,6 +799,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   );
   const nextCursor = products.length < totalCount ? products.length : null;
   const activeCategoryLabel = activeChildCategory?.name ?? "Все товары";
+  const hasPendingFilterChanges = !areFilterInputValuesEqual(normalizedDraftFilterInputs, appliedFilterInputs);
+  const shouldShowFilterApplyPopover = hasPendingFilterChanges && !isFilterApplyPopoverDismissed;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
@@ -605,8 +823,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       return;
     }
 
-    void loadCatalogSlice(activeFilterId, 0, targetPageSize, false);
-  }, [activeFilterId, isDesktop, pageSize, products.length, totalCount]);
+    void loadCatalogSlice(activeFilterId, appliedFilterInputs, 0, targetPageSize, false);
+  }, [activeFilterId, appliedFilterInputs, isDesktop, pageSize, products.length, totalCount]);
 
   useEffect(() => {
     activeFilterIdRef.current = activeFilterId;
@@ -617,8 +835,65 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   }, [expandedRootId]);
 
   useEffect(() => {
+    draftFilterInputsRef.current = draftFilterInputs;
+  }, [draftFilterInputs]);
+
+  useEffect(() => {
+    appliedFilterInputsRef.current = appliedFilterInputs;
+  }, [appliedFilterInputs]);
+
+  useEffect(() => {
+    setIsFilterApplyPopoverDismissed(false);
+  }, [normalizedDraftFilterInputs, activeFilterId]);
+
+  useEffect(() => {
+    if (!hasPendingFilterChanges) {
+      setDraftPreviewTotal(totalCount);
+      setIsFetchingDraftPreview(false);
+      return;
+    }
+
+    const nextRequestId = draftPreviewRequestIdRef.current + 1;
+    draftPreviewRequestIdRef.current = nextRequestId;
+    setIsFetchingDraftPreview(true);
+
+    const timeoutId = window.setTimeout(() => {
+      void fetchCatalogPageSlice(activeFilterId, normalizedDraftFilterInputs, 0, 1)
+        .then((slice) => {
+          if (draftPreviewRequestIdRef.current !== nextRequestId) {
+            return;
+          }
+
+          setDraftPreviewTotal(slice.total);
+        })
+        .catch(() => {
+          if (draftPreviewRequestIdRef.current !== nextRequestId) {
+            return;
+          }
+
+          setDraftPreviewTotal(null);
+        })
+        .finally(() => {
+          if (draftPreviewRequestIdRef.current === nextRequestId) {
+            setIsFetchingDraftPreview(false);
+          }
+        });
+    }, 180);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [activeFilterId, hasPendingFilterChanges, normalizedDraftFilterInputs, totalCount]);
+
+  useEffect(() => {
     const queryCategory = searchParams.get(PARTNER_CATALOG_QUERY_CATEGORY_KEY) ?? undefined;
     const querySubcategory = searchParams.get(PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY) ?? undefined;
+    const queryFilters = normalizePartnerCatalogFilters({
+      priceFrom: searchParams.get(PARTNER_CATALOG_QUERY_PRICE_FROM_KEY) ?? undefined,
+      priceTo: searchParams.get(PARTNER_CATALOG_QUERY_PRICE_TO_KEY) ?? undefined,
+      stockFrom: searchParams.get(PARTNER_CATALOG_QUERY_STOCK_FROM_KEY) ?? undefined,
+    });
+    const normalizedQueryFilters = getPartnerCatalogFilterInputValues(queryFilters);
     const currentPageSize = isDesktop ? pageSize : MOBILE_PAGE_SIZE;
     const resolvedSelection = resolvePartnerCatalogSelection(
       initialData.categories,
@@ -628,7 +903,13 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       },
       ALL_FILTER_ID,
     );
-    const normalizedPath = getPartnerCatalogPathForFilter(initialData.categories, resolvedSelection.filterId, ALL_FILTER_ID, pathname);
+    const normalizedPath = getPartnerCatalogPathForFilter(
+      initialData.categories,
+      resolvedSelection.filterId,
+      ALL_FILTER_ID,
+      pathname,
+      normalizedQueryFilters,
+    );
     const currentPath = `${pathname}${searchParams.size > 0 ? `?${searchParams.toString()}` : ""}`;
 
     if (normalizedPath !== currentPath) {
@@ -639,29 +920,50 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       setExpandedRootId(resolvedSelection.expandedRootId);
     }
 
-    if (resolvedSelection.filterId === activeFilterIdRef.current) {
+    if (!areFilterInputValuesEqual(normalizedQueryFilters, draftFilterInputsRef.current)) {
+      setDraftFilterInputs(normalizedQueryFilters);
+    }
+
+    if (!areFilterInputValuesEqual(normalizedQueryFilters, appliedFilterInputsRef.current)) {
+      setAppliedFilterInputs(normalizedQueryFilters);
+    }
+    setDraftPreviewTotal(totalCount);
+    setIsFetchingDraftPreview(false);
+
+    if (
+      resolvedSelection.filterId === activeFilterIdRef.current &&
+      areFilterInputValuesEqual(normalizedQueryFilters, appliedFilterInputsRef.current)
+    ) {
       return;
     }
 
     setActiveFilterId(resolvedSelection.filterId);
-    void loadCatalogSlice(resolvedSelection.filterId, 0, currentPageSize, false);
+    void loadCatalogSlice(resolvedSelection.filterId, normalizedQueryFilters, 0, currentPageSize, false);
   }, [initialData.categories, isDesktop, pageSize, pathname, router, searchParams, searchParamsKey]);
 
   function getCurrentPageSize() {
     return isDesktop ? pageSize : MOBILE_PAGE_SIZE;
   }
 
-  function syncFilterUrl(nextFilterId: string) {
-    router.replace(getPartnerCatalogPathForFilter(initialData.categories, nextFilterId, ALL_FILTER_ID, pathname), { scroll: false });
+  function syncFilterUrl(nextFilterId: string, nextFilterInputs: PartnerCatalogFilterInputValues) {
+    router.replace(getPartnerCatalogPathForFilter(initialData.categories, nextFilterId, ALL_FILTER_ID, pathname, nextFilterInputs), {
+      scroll: false,
+    });
   }
 
-  async function loadCatalogSlice(filterId: string, offset: number, limit: number, append: boolean) {
+  async function loadCatalogSlice(
+    filterId: string,
+    nextFilterInputs: PartnerCatalogFilterInputValues,
+    offset: number,
+    limit: number,
+    append: boolean,
+  ) {
     const nextRequestId = requestIdRef.current + 1;
     requestIdRef.current = nextRequestId;
     setIsFetchingProducts(true);
 
     try {
-      const nextSlice = await fetchCatalogPageSlice(filterId, offset, limit);
+      const nextSlice = await fetchCatalogPageSlice(filterId, nextFilterInputs, offset, limit);
 
       if (requestIdRef.current !== nextRequestId) {
         return;
@@ -687,8 +989,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
     const nextPageSize = getCurrentPageSize();
     setActiveFilterId(nextFilterId);
-    syncFilterUrl(nextFilterId);
-    void loadCatalogSlice(nextFilterId, 0, nextPageSize, false);
+    syncFilterUrl(nextFilterId, appliedFilterInputs);
+    void loadCatalogSlice(nextFilterId, appliedFilterInputs, 0, nextPageSize, false);
     listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -705,7 +1007,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     setPageSize(nextPageSize);
 
     if (isDesktop) {
-      void loadCatalogSlice(activeFilterId, 0, nextPageSize, false);
+      void loadCatalogSlice(activeFilterId, appliedFilterInputs, 0, nextPageSize, false);
     }
   }
 
@@ -714,14 +1016,14 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       return;
     }
 
-    void loadCatalogSlice(activeFilterId, products.length, getCurrentPageSize(), true);
+    void loadCatalogSlice(activeFilterId, appliedFilterInputs, products.length, getCurrentPageSize(), true);
   }
 
   function handleAllProductsClick() {
     setExpandedRootId(null);
 
     if (activeFilterId === ALL_FILTER_ID) {
-      syncFilterUrl(ALL_FILTER_ID);
+      syncFilterUrl(ALL_FILTER_ID, appliedFilterInputs);
       return;
     }
 
@@ -731,6 +1033,44 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   function handleMobileChildCategoryClick(rootCategoryId: string, childCategoryId: string) {
     handleChildCategoryClick(rootCategoryId, childCategoryId);
     setIsMobileCategoryDialogOpen(false);
+  }
+
+  function handleFilterInputChange(key: keyof PartnerCatalogFilterInputValues, value: string) {
+    setDraftFilterInputs((currentInputs) => ({
+      ...currentInputs,
+      [key]: sanitizeNumericInput(value, key === "stockFrom"),
+    }));
+  }
+
+  function handleApplyFilters() {
+    const nextFilterInputs = normalizedDraftFilterInputs;
+    const nextPageSize = getCurrentPageSize();
+
+    setDraftFilterInputs(nextFilterInputs);
+    setAppliedFilterInputs(nextFilterInputs);
+    setDraftPreviewTotal(null);
+    syncFilterUrl(activeFilterId, nextFilterInputs);
+    void loadCatalogSlice(activeFilterId, nextFilterInputs, 0, nextPageSize, false);
+    listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function handleResetFilters() {
+    const clearedFilters = {
+      priceFrom: "",
+      priceTo: "",
+      stockFrom: "",
+    };
+
+    setDraftFilterInputs(clearedFilters);
+    setAppliedFilterInputs(clearedFilters);
+    setDraftPreviewTotal(null);
+    syncFilterUrl(activeFilterId, clearedFilters);
+    void loadCatalogSlice(activeFilterId, clearedFilters, 0, getCurrentPageSize(), false);
+    listStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function handleDismissFilterApplyPopover() {
+    setIsFilterApplyPopoverDismissed(true);
   }
 
   return (
@@ -747,15 +1087,25 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
       <section className="mt-[28.8px] mb-[35px] md:mb-[45px]">
         <div className="mb-5 md:mb-4 md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-center md:gap-8 xl:gap-[63px]">
-          <div className="flex items-center gap-3">
-            <p className="text-base font-bold uppercase tracking-[0.05em] text-[var(--heading)]">Категория:</p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <p className="text-base font-bold uppercase tracking-[0.05em] text-[var(--heading)]">Категория:</p>
+              <button
+                type="button"
+                onClick={() => setIsMobileCategoryDialogOpen(true)}
+                className="inline-flex min-w-0 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm text-[var(--heading)] md:hidden"
+              >
+                <span className="truncate">{activeCategoryLabel}</span>
+                <ChevronDownIcon className="size-4 shrink-0" />
+              </button>
+            </div>
             <button
               type="button"
-              onClick={() => setIsMobileCategoryDialogOpen(true)}
-              className="inline-flex min-w-0 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm text-[var(--heading)] md:hidden"
+              onClick={() => setIsMobileFilterDialogOpen(true)}
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-[var(--heading)] md:hidden"
+              aria-label="Открыть фильтры"
             >
-              <span className="truncate">{activeCategoryLabel}</span>
-              <ChevronDownIcon className="size-4 shrink-0" />
+              <FunnelIcon className="size-4 shrink-0" />
             </button>
           </div>
 
@@ -789,14 +1139,28 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
         <div className="md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-start md:gap-8 xl:gap-[63px]">
           <aside className="hidden md:block">
-            <CategoryFilterList
-              categories={initialData.categories}
-              activeFilterId={activeFilterId}
-              expandedRootId={expandedRootId}
-              onExpandedRootChange={setExpandedRootId}
-              onAllProductsClick={handleAllProductsClick}
-              onChildCategoryClick={handleChildCategoryClick}
-            />
+            <div className="space-y-4">
+              <CategoryFilterList
+                categories={initialData.categories}
+                activeFilterId={activeFilterId}
+                expandedRootId={expandedRootId}
+                onExpandedRootChange={setExpandedRootId}
+                onAllProductsClick={handleAllProductsClick}
+                onChildCategoryClick={handleChildCategoryClick}
+              />
+              <div className="relative">
+                <CatalogNumericFilters values={draftFilterInputs} onChange={handleFilterInputChange} onReset={handleResetFilters} />
+                {shouldShowFilterApplyPopover ? (
+                  <FilterApplyPopover
+                    total={draftPreviewTotal}
+                    isLoading={isFetchingDraftPreview}
+                    onApply={handleApplyFilters}
+                    onDismiss={handleDismissFilterApplyPopover}
+                    className="absolute top-1/2 left-full ml-4 hidden -translate-y-1/2 md:block"
+                  />
+                ) : null}
+              </div>
+            </div>
           </aside>
 
           <div ref={listStartRef} className="scroll-mt-[88px] md:scroll-mt-[112px]">
@@ -804,7 +1168,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
               <>
                 <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4">
                   {products.map((item) => (
-                    <PartnerProductCard key={item.id} item={item} categories={initialData.categories} />
+                    <PartnerProductCard key={item.id} item={item} categories={initialData.categories} filterInputs={appliedFilterInputs} />
                   ))}
                 </div>
 
@@ -844,17 +1208,70 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
               <XIcon className="size-5" strokeWidth={2.5} />
             </DialogClose>
           </div>
-          <CategoryFilterList
-            categories={initialData.categories}
-            activeFilterId={activeFilterId}
-            expandedRootId={expandedRootId}
-            onExpandedRootChange={setExpandedRootId}
-            onAllProductsClick={() => {
-              handleAllProductsClick();
-              setIsMobileCategoryDialogOpen(false);
-            }}
-            onChildCategoryClick={handleMobileChildCategoryClick}
-          />
+          <div className="space-y-4">
+            <CategoryFilterList
+              categories={initialData.categories}
+              activeFilterId={activeFilterId}
+              expandedRootId={expandedRootId}
+              onExpandedRootChange={setExpandedRootId}
+              onAllProductsClick={() => {
+                handleAllProductsClick();
+                setIsMobileCategoryDialogOpen(false);
+              }}
+              onChildCategoryClick={handleMobileChildCategoryClick}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isMobileFilterDialogOpen} onOpenChange={setIsMobileFilterDialogOpen}>
+        <DialogContent
+          showCloseButton={false}
+          className="block h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[var(--card-bg)] p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:p-[72px] sm:pt-[72px] sm:pb-[72px] sm:h-auto sm:max-h-[calc(100vh-2rem)] sm:max-h-[calc(100dvh-2rem)] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-md sm:rounded-[22.5px] md:hidden"
+        >
+          <div className="mb-7 flex items-start justify-between gap-4">
+            <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Фильтры</DialogTitle>
+            <DialogClose
+              className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center text-[#b3b3b3] transition-colors hover:text-[#2a2a2a]"
+              aria-label="Закрыть фильтры"
+            >
+              <XIcon className="size-5" strokeWidth={2.5} />
+            </DialogClose>
+          </div>
+
+          <div className="space-y-4">
+            <div className="rounded-[18px] bg-white p-4">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <p className="text-sm font-semibold uppercase tracking-[0.05em] text-[var(--heading)]">Фильтры</p>
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className={cn(
+                    "shrink-0 text-sm transition-colors",
+                    draftFilterInputs.priceFrom !== "" || draftFilterInputs.priceTo !== "" || draftFilterInputs.stockFrom !== ""
+                      ? "cursor-pointer text-[var(--accent)] hover:text-[var(--accent-hover)]"
+                      : "cursor-default text-[#a3a3a3]",
+                  )}
+                >
+                  Сбросить
+                </button>
+              </div>
+
+              <CatalogFilterFields values={draftFilterInputs} onChange={handleFilterInputChange} />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                handleApplyFilters();
+                setIsMobileFilterDialogOpen(false);
+              }}
+              disabled={isFetchingDraftPreview}
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-[14px] bg-[var(--accent)] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)] disabled:cursor-default disabled:opacity-70"
+            >
+              {isFetchingDraftPreview ? "Ищем товары..." : `Показать ${draftPreviewTotal ?? 0} товаров`}
+            </button>
+          </div>
         </DialogContent>
       </Dialog>
 

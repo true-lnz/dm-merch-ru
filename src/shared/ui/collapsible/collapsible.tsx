@@ -7,7 +7,11 @@ function Collapsible({ className, ...props }: CollapsiblePrimitive.Root.Props) {
   return <CollapsiblePrimitive.Root data-slot="collapsible" className={cn("w-full", className)} {...props} />;
 }
 
-function CollapsibleTrigger({ className, children, ...props }: CollapsiblePrimitive.Trigger.Props) {
+type CollapsibleTriggerProps = CollapsiblePrimitive.Trigger.Props & {
+  showChevron?: boolean;
+};
+
+function CollapsibleTrigger({ className, children, showChevron = true, ...props }: CollapsibleTriggerProps) {
   return (
     <CollapsiblePrimitive.Trigger
       data-slot="collapsible-trigger"
@@ -18,7 +22,7 @@ function CollapsibleTrigger({ className, children, ...props }: CollapsiblePrimit
       {...props}
     >
       <span>{children}</span>
-      <ChevronDownIcon className="size-4 shrink-0 transition-transform duration-200 group-data-[panel-open]/collapsible:rotate-180" />
+      {showChevron ? <ChevronDownIcon className="size-4 shrink-0 transition-transform duration-200 group-data-[panel-open]/collapsible:rotate-180" /> : null}
     </CollapsiblePrimitive.Trigger>
   );
 }

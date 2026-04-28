@@ -4,9 +4,13 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
 import {
+  getPartnerCatalogFilterInputValues,
   getPartnerCatalogProductPath,
   getPartnerCatalogSectionContext,
+  normalizePartnerCatalogFilters,
   resolvePartnerCatalogSelection,
+  type PartnerCatalogFilters,
+  type PartnerCatalogFilterInputValues,
   type PartnerCatalogQueryParams,
 } from "./partner-catalog-query";
 
@@ -151,6 +155,7 @@ export type PartnerCatalogInitialData = {
   initialFilterId: string;
   initialExpandedRootId: string | null;
   initialQuery: PartnerCatalogQueryParams;
+  initialFilters: PartnerCatalogFilterInputValues;
   initialSlice: PartnerCatalogPageSlice;
 };
 
@@ -221,12 +226,31 @@ function mapVariant(source: MergedCatalogVariant): PartnerCatalogVariant {
   };
 }
 
-function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string) {
-  if (filterId === PARTNER_CATALOG_ALL_FILTER_ID) {
-    return products;
+function matchesPartnerCatalogVariantFilters(variant: PartnerCatalogVariant, filters: PartnerCatalogFilters) {
+  if (filters.priceFrom !== undefined && variant.priceRub < filters.priceFrom) {
+    return false;
   }
 
-  return products.filter((product) => product.sectionId === filterId);
+  if (filters.priceTo !== undefined && variant.priceRub > filters.priceTo) {
+    return false;
+  }
+
+  if (filters.stockFrom !== undefined && variant.stock < filters.stockFrom) {
+    return false;
+  }
+
+  return true;
+}
+
+function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string, filters: PartnerCatalogFilters) {
+  const categoryFilteredProducts =
+    filterId === PARTNER_CATALOG_ALL_FILTER_ID ? products : products.filter((product) => product.sectionId === filterId);
+
+  if (filters.priceFrom === undefined && filters.priceTo === undefined && filters.stockFrom === undefined) {
+    return categoryFilteredProducts;
+  }
+
+  return categoryFilteredProducts.filter((product) => product.variants.some((variant) => matchesPartnerCatalogVariantFilters(variant, filters)));
 }
 
 const getPartnerCatalogDataset = cache((): PartnerCatalogDataset => {
@@ -332,9 +356,9 @@ export const getPartnerCatalogData = cache((): PartnerCatalogData => {
 });
 
 export const getPartnerCatalogProductsPage = cache(
-  (filterId: string, offset: number, limit: number): PartnerCatalogPageSlice => {
+  (filterId: string, offset: number, limit: number, filters: PartnerCatalogFilters = {}): PartnerCatalogPageSlice => {
     const { products } = getPartnerCatalogDataset();
-    const filteredProducts = getFilteredProducts(products, filterId);
+    const filteredProducts = getFilteredProducts(products, filterId, filters);
     const safeOffset = Math.max(0, offset);
     const safeLimit = Math.max(1, limit);
 
@@ -348,6 +372,7 @@ export const getPartnerCatalogProductsPage = cache(
 export const getPartnerCatalogInitialData = cache((limit: number, query: PartnerCatalogQueryParams = {}): PartnerCatalogInitialData => {
   const { categories } = getPartnerCatalogDataset();
   const selection = resolvePartnerCatalogSelection(categories, query, PARTNER_CATALOG_ALL_FILTER_ID);
+  const filters = normalizePartnerCatalogFilters(query);
 
   return {
     categories,
@@ -357,7 +382,8 @@ export const getPartnerCatalogInitialData = cache((limit: number, query: Partner
       category: selection.categorySlug,
       subcategory: selection.subcategorySlug,
     },
-    initialSlice: getPartnerCatalogProductsPage(selection.filterId, 0, limit),
+    initialFilters: getPartnerCatalogFilterInputValues(filters),
+    initialSlice: getPartnerCatalogProductsPage(selection.filterId, 0, limit, filters),
   };
 });
 

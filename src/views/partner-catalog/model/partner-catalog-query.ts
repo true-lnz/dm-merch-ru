@@ -1,11 +1,29 @@
 export const PARTNER_CATALOG_QUERY_CATEGORY_KEY = "category";
 export const PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY = "subcategory";
 export const PARTNER_CATALOG_QUERY_PRODUCT_KEY = "product";
+export const PARTNER_CATALOG_QUERY_PRICE_FROM_KEY = "priceFrom";
+export const PARTNER_CATALOG_QUERY_PRICE_TO_KEY = "priceTo";
+export const PARTNER_CATALOG_QUERY_STOCK_FROM_KEY = "stockFrom";
 
 export type PartnerCatalogQueryParams = {
   category?: string;
   subcategory?: string;
   product?: string;
+  priceFrom?: string;
+  priceTo?: string;
+  stockFrom?: string;
+};
+
+export type PartnerCatalogFilters = {
+  priceFrom?: number;
+  priceTo?: number;
+  stockFrom?: number;
+};
+
+export type PartnerCatalogFilterInputValues = {
+  priceFrom: string;
+  priceTo: string;
+  stockFrom: string;
 };
 
 export type PartnerCatalogQueryChildSection = {
@@ -53,6 +71,60 @@ type PartnerCatalogQueryIndex = {
 
 function transliterateToSlug(value: string) {
   return value.trim();
+}
+
+function parseNonNegativeNumber(value: string | undefined, integer = false) {
+  if (!value) {
+    return undefined;
+  }
+
+  const normalizedValue = value.trim().replace(",", ".");
+
+  if (!normalizedValue) {
+    return undefined;
+  }
+
+  const parsedValue = Number.parseFloat(normalizedValue);
+
+  if (!Number.isFinite(parsedValue) || parsedValue < 0) {
+    return undefined;
+  }
+
+  return integer ? Math.floor(parsedValue) : parsedValue;
+}
+
+function formatFilterInputValue(value: number | undefined) {
+  return value === undefined ? "" : String(value);
+}
+
+export function normalizePartnerCatalogFilters(
+  query: Pick<PartnerCatalogQueryParams, "priceFrom" | "priceTo" | "stockFrom">,
+): PartnerCatalogFilters {
+  let priceFrom = parseNonNegativeNumber(query.priceFrom);
+  let priceTo = parseNonNegativeNumber(query.priceTo);
+  const stockFrom = parseNonNegativeNumber(query.stockFrom, true);
+
+  if (priceFrom !== undefined && priceTo !== undefined && priceFrom > priceTo) {
+    [priceFrom, priceTo] = [priceTo, priceFrom];
+  }
+
+  return {
+    priceFrom,
+    priceTo,
+    stockFrom,
+  };
+}
+
+export function getPartnerCatalogFilterInputValues(filters: PartnerCatalogFilters): PartnerCatalogFilterInputValues {
+  return {
+    priceFrom: formatFilterInputValue(filters.priceFrom),
+    priceTo: formatFilterInputValue(filters.priceTo),
+    stockFrom: formatFilterInputValue(filters.stockFrom),
+  };
+}
+
+export function hasActivePartnerCatalogFilters(filters: PartnerCatalogFilters) {
+  return filters.priceFrom !== undefined || filters.priceTo !== undefined || filters.stockFrom !== undefined;
 }
 
 function makeStableSlug(name: string, id: string, usedSlugs: Set<string>) {
@@ -189,6 +261,7 @@ export function getPartnerCatalogPathForFilter(
   filterId: string,
   allFilterId: string,
   pathname = "/partner-catalog",
+  filters: Partial<Pick<PartnerCatalogQueryParams, "priceFrom" | "priceTo" | "stockFrom">> = {},
 ) {
   const query = getPartnerCatalogQueryForFilter(categories, filterId, allFilterId);
   const params = new URLSearchParams();
@@ -199,6 +272,22 @@ export function getPartnerCatalogPathForFilter(
 
   if (query.subcategory) {
     params.set(PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY, query.subcategory);
+  }
+
+  const priceFrom = filters.priceFrom?.trim();
+  const priceTo = filters.priceTo?.trim();
+  const stockFrom = filters.stockFrom?.trim();
+
+  if (priceFrom) {
+    params.set(PARTNER_CATALOG_QUERY_PRICE_FROM_KEY, priceFrom);
+  }
+
+  if (priceTo) {
+    params.set(PARTNER_CATALOG_QUERY_PRICE_TO_KEY, priceTo);
+  }
+
+  if (stockFrom) {
+    params.set(PARTNER_CATALOG_QUERY_STOCK_FROM_KEY, stockFrom);
   }
 
   const queryString = params.toString();

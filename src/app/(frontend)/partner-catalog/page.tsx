@@ -6,8 +6,11 @@ import {
   PARTNER_CATALOG_ALL_FILTER_ID,
 } from "@/views/partner-catalog/model/partner-catalog-data";
 import {
+  PARTNER_CATALOG_QUERY_PRICE_FROM_KEY,
+  PARTNER_CATALOG_QUERY_PRICE_TO_KEY,
   PARTNER_CATALOG_QUERY_CATEGORY_KEY,
   PARTNER_CATALOG_QUERY_PRODUCT_KEY,
+  PARTNER_CATALOG_QUERY_STOCK_FROM_KEY,
   PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY,
   getPartnerCatalogPathForFilter,
   resolvePartnerCatalogSelection,
@@ -23,6 +26,9 @@ type PartnerCatalogPageSearchParams = Promise<{
   [PARTNER_CATALOG_QUERY_CATEGORY_KEY]?: string;
   [PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY]?: string;
   [PARTNER_CATALOG_QUERY_PRODUCT_KEY]?: string;
+  [PARTNER_CATALOG_QUERY_PRICE_FROM_KEY]?: string;
+  [PARTNER_CATALOG_QUERY_PRICE_TO_KEY]?: string;
+  [PARTNER_CATALOG_QUERY_STOCK_FROM_KEY]?: string;
 }>;
 
 export default async function Page({ searchParams }: { searchParams: PartnerCatalogPageSearchParams }) {
@@ -30,6 +36,9 @@ export default async function Page({ searchParams }: { searchParams: PartnerCata
   const initialData = getPartnerCatalogInitialData(16, {
     category: resolvedSearchParams.category,
     subcategory: resolvedSearchParams.subcategory,
+    priceFrom: resolvedSearchParams.priceFrom,
+    priceTo: resolvedSearchParams.priceTo,
+    stockFrom: resolvedSearchParams.stockFrom,
   });
   const productId = resolvedSearchParams.product?.trim();
 
