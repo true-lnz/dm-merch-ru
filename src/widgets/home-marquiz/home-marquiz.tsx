@@ -43,7 +43,7 @@ declare global {
 
 const MARQUIZ_ID = "69ef0bea8ae1ec001990bdb0";
 const MARQUIZ_IMAGE = {
-  src: "/home/img_lead_cta_cover2.webp",
+  src: "/img_marquiz_card_cover.webp",
   alt: "Коробка с брендированным мерчем",
 } as const;
 
