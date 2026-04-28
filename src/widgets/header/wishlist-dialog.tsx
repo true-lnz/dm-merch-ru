@@ -94,9 +94,9 @@ export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="block h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none overflow-y-auto rounded-none bg-[#f5f4ef] bg-[url('/img_wishlist_card_cover.svg')] bg-cover bg-center bg-no-repeat p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:max-w-none lg:h-auto lg:max-h-[calc(100vh-2rem)] lg:max-h-[calc(100dvh-2rem)] lg:w-[min(1120px,calc(100vw-2rem))] lg:max-w-none lg:rounded-[18px] lg:p-8 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
+        className="flex h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none flex-col overflow-hidden rounded-none bg-[#f5f4ef] bg-[url('/img_wishlist_card_cover.svg')] bg-cover bg-center bg-no-repeat p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:max-w-none lg:h-auto lg:max-h-[calc(100vh-2rem)] lg:max-h-[calc(100dvh-2rem)] lg:w-[min(1120px,calc(100vw-2rem))] lg:max-w-none lg:rounded-[18px] lg:p-8 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
       >
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex shrink-0 items-start justify-between gap-4">
           <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Вишлист</DialogTitle>
           <DialogClose
             className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center text-[#b3b3b3] transition-colors hover:text-[#2a2a2a] xl:mt-1 xl:size-10"
@@ -114,8 +114,8 @@ export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
             </p>
           </div>
         ) : (
-          <div className="mt-5 space-y-3">
-            <div className="flex items-center justify-between gap-3">
+          <div className="mt-5 flex min-h-0 flex-1 flex-col gap-3">
+            <div className="flex shrink-0 items-center justify-between gap-3">
               <p className="text-sm font-medium leading-[1.3] tracking-[-0.03em] text-[#5a5a5a]">Товары в вишлисте: {items.length}</p>
               <button
                 type="button"
@@ -126,27 +126,29 @@ export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
               </button>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-5 lg:items-start">
-              <section aria-label="Товары в вишлисте" className="space-y-3 lg:col-span-2">
-                <div className="grid gap-3">
-                  {items.map((item) => (
-                    <WishlistProductCard
-                      key={item.id}
-                      item={item}
-                      onIncrease={increaseQuantity}
-                      onDecrease={decreaseQuantity}
-                      onChangeQuantity={updateQuantity}
-                      onRemove={removeItem}
-                    />
-                  ))}
+            <div className="grid min-h-0 flex-1 gap-6 overflow-hidden lg:grid-cols-5 lg:items-start">
+              <section aria-label="Товары в вишлисте" className="flex min-h-0 flex-col gap-3 overflow-hidden lg:col-span-2">
+                <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+                  <div className="grid gap-3">
+                    {items.map((item) => (
+                      <WishlistProductCard
+                        key={item.id}
+                        item={item}
+                        onIncrease={increaseQuantity}
+                        onDecrease={decreaseQuantity}
+                        onChangeQuantity={updateQuantity}
+                        onRemove={removeItem}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <div className="border-t border-[var(--border)] pt-3 flex justify-end text-base font-semibold leading-[1.3] tracking-[-0.03em] text-[#2a2a2a]">
+                <div className="flex justify-end border-t border-[var(--border)] pt-3 text-base font-semibold leading-[1.3] tracking-[-0.03em] text-[#2a2a2a]">
                   <span>Итого: {formatRub(totalRub)}</span>
                 </div>
                 <p className="text-xs leading-[1.4] tracking-[-0.02em] text-[#6f6f6f]">При больших тиражах цена рассчитывается индивидуально.</p>
               </section>
 
-              <section aria-label="Контактные данные" className="rounded-[14px] bg-white p-4 sm:p-5 lg:col-span-3">
+              <section aria-label="Контактные данные" className="min-h-0 rounded-[14px] bg-white p-4 sm:p-5 lg:col-span-3 lg:flex lg:flex-col">
                 <RequestForm
                   source="wishlist-dialog"
                   requestType="wishlist"
@@ -165,12 +167,12 @@ export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
                   showSubmitButton={false}
                   messageAsInput
                   onSuccess={clear}
-                  formClassName="flex h-full flex-col gap-3"
+                  formClassName="flex h-full min-h-0 flex-col gap-3"
                 />
               </section>
             </div>
 
-            <Button type="submit" form="wishlist-request-form" variant="blue" className="mt-4 h-[47px] w-full cursor-pointer text-lg">
+            <Button type="submit" form="wishlist-request-form" variant="blue" className="h-[47px] w-full shrink-0 cursor-pointer text-lg">
               Запросить коммерческое предложние
             </Button>
           </div>
