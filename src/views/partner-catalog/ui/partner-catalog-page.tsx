@@ -33,7 +33,7 @@ import {
 
 const ALL_FILTER_ID = "all";
 const MOBILE_PAGE_SIZE = 16;
-const PAGE_SIZE_OPTIONS = [25, 50, 80] as const;
+const PAGE_SIZE_OPTIONS = [24, 50, 80] as const;
 const CATALOG_API_ROUTE = "/api/partner-catalog";
 const loadedCatalogImageKeys = new Set<string>();
 
@@ -220,7 +220,7 @@ function CatalogImageWithSkeleton({
       <Image
         {...props}
         alt={alt}
-        unoptimized={props.unoptimized ?? shouldBypassNextImageOptimizer(props.src)}
+        // unoptimized={props.unoptimized ?? shouldBypassNextImageOptimizer(props.src)}
         onLoad={(event) => {
           loadedCatalogImageKeys.add(imageCacheKey);
           setIsLoaded(true);

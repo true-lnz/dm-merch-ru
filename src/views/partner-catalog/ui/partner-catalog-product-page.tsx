@@ -320,7 +320,7 @@ function DetailImageWithSkeleton({
       <Image
         {...props}
         alt={alt}
-        unoptimized={props.unoptimized ?? shouldBypassNextImageOptimizer(props.src)}
+        // unoptimized={props.unoptimized ?? shouldBypassNextImageOptimizer(props.src)}
         onLoad={(event) => {
           loadedDetailImageKeys.add(imageCacheKey);
           setIsLoaded(true);
