@@ -16,6 +16,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://dm-merch.ru"),
   title: {
     default: "Держи Марку!",
     template: "%s — Держи Марку!",
@@ -23,8 +24,16 @@ export const metadata: Metadata = {
   verification: {
     yandex: "884bd85350dbdd33",
   },
-  description: "Мерч-агентство: каталог, кейсы, блог и контакты.",
+  description: "Производство мерча и сувенирной продукции с логотипом для бизнеса. От 50 000₽, цена 25% от рынка, 1571+ проект. Образцы перед поставкой, договор.",
   keywords: "Купить мерч, производство мерча, сувернирка, сувенирная продукция, сделать принт, изготовить футболки, толстовки, мерч для бизнеса, корпоративный мерч",
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    siteName: "Держи Марку!",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
   manifest: "/favicon/site.webmanifest",
   icons: {
     icon: [
