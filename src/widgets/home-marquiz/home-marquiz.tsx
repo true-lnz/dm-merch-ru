@@ -115,7 +115,7 @@ export function HomeMarquiz() {
               src={MARQUIZ_IMAGE.src}
               alt={MARQUIZ_IMAGE.alt}
               fill
-              sizes="(max-width: 1279px) 100vw, 34vw"
+              sizes="(max-width: 1279px) 100vw, 60vw"
               className="object-cover image-hover-scale object-top"
             />
           </div>
