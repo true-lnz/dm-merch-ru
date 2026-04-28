@@ -4,6 +4,8 @@ export const PARTNER_CATALOG_QUERY_PRODUCT_KEY = "product";
 export const PARTNER_CATALOG_QUERY_PRICE_FROM_KEY = "priceFrom";
 export const PARTNER_CATALOG_QUERY_PRICE_TO_KEY = "priceTo";
 export const PARTNER_CATALOG_QUERY_STOCK_FROM_KEY = "stockFrom";
+export const PARTNER_CATALOG_QUERY_SORT_KEY = "sort";
+export const PARTNER_CATALOG_DEFAULT_SORT = "price-asc";
 
 export type PartnerCatalogQueryParams = {
   category?: string;
@@ -12,6 +14,7 @@ export type PartnerCatalogQueryParams = {
   priceFrom?: string;
   priceTo?: string;
   stockFrom?: string;
+  sort?: string;
 };
 
 export type PartnerCatalogFilters = {
@@ -25,6 +28,8 @@ export type PartnerCatalogFilterInputValues = {
   priceTo: string;
   stockFrom: string;
 };
+
+export type PartnerCatalogSortKey = "price-asc" | "price-desc" | "stock-asc" | "stock-desc";
 
 export type PartnerCatalogQueryChildSection = {
   id: string;
@@ -125,6 +130,18 @@ export function getPartnerCatalogFilterInputValues(filters: PartnerCatalogFilter
 
 export function hasActivePartnerCatalogFilters(filters: PartnerCatalogFilters) {
   return filters.priceFrom !== undefined || filters.priceTo !== undefined || filters.stockFrom !== undefined;
+}
+
+export function normalizePartnerCatalogSort(sort: string | undefined): PartnerCatalogSortKey {
+  switch (sort) {
+    case "price-desc":
+    case "stock-asc":
+    case "stock-desc":
+      return sort;
+    case "price-asc":
+    default:
+      return PARTNER_CATALOG_DEFAULT_SORT;
+  }
 }
 
 function makeStableSlug(name: string, id: string, usedSlugs: Set<string>) {
@@ -262,6 +279,7 @@ export function getPartnerCatalogPathForFilter(
   allFilterId: string,
   pathname = "/partner-catalog",
   filters: Partial<Pick<PartnerCatalogQueryParams, "priceFrom" | "priceTo" | "stockFrom">> = {},
+  sort: string = PARTNER_CATALOG_DEFAULT_SORT,
 ) {
   const query = getPartnerCatalogQueryForFilter(categories, filterId, allFilterId);
   const params = new URLSearchParams();
@@ -288,6 +306,12 @@ export function getPartnerCatalogPathForFilter(
 
   if (stockFrom) {
     params.set(PARTNER_CATALOG_QUERY_STOCK_FROM_KEY, stockFrom);
+  }
+
+  const normalizedSort = normalizePartnerCatalogSort(sort);
+
+  if (normalizedSort !== PARTNER_CATALOG_DEFAULT_SORT) {
+    params.set(PARTNER_CATALOG_QUERY_SORT_KEY, normalizedSort);
   }
 
   const queryString = params.toString();

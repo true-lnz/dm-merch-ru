@@ -4,14 +4,17 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
 import {
+  PARTNER_CATALOG_DEFAULT_SORT,
   getPartnerCatalogFilterInputValues,
   getPartnerCatalogProductPath,
   getPartnerCatalogSectionContext,
   normalizePartnerCatalogFilters,
+  normalizePartnerCatalogSort,
   resolvePartnerCatalogSelection,
   type PartnerCatalogFilters,
   type PartnerCatalogFilterInputValues,
   type PartnerCatalogQueryParams,
+  type PartnerCatalogSortKey,
 } from "./partner-catalog-query";
 
 export const PARTNER_CATALOG_ALL_FILTER_ID = "all";
@@ -156,6 +159,7 @@ export type PartnerCatalogInitialData = {
   initialExpandedRootId: string | null;
   initialQuery: PartnerCatalogQueryParams;
   initialFilters: PartnerCatalogFilterInputValues;
+  initialSort: PartnerCatalogSortKey;
   initialSlice: PartnerCatalogPageSlice;
 };
 
@@ -242,15 +246,42 @@ function matchesPartnerCatalogVariantFilters(variant: PartnerCatalogVariant, fil
   return true;
 }
 
-function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string, filters: PartnerCatalogFilters) {
+function getProductRepresentativeVariant(product: PartnerCatalogProduct, filters: PartnerCatalogFilters) {
+  return product.variants.find((variant) => matchesPartnerCatalogVariantFilters(variant, filters)) ?? product.variants[0];
+}
+
+function sortPartnerCatalogProducts(products: PartnerCatalogProduct[], filters: PartnerCatalogFilters, sort: PartnerCatalogSortKey) {
+  return [...products].sort((left, right) => {
+    const leftVariant = getProductRepresentativeVariant(left, filters);
+    const rightVariant = getProductRepresentativeVariant(right, filters);
+
+    if (!leftVariant || !rightVariant) {
+      return left.id.localeCompare(right.id, "ru");
+    }
+
+    const metric =
+      sort === "price-asc" || sort === "price-desc"
+        ? leftVariant.priceRub - rightVariant.priceRub
+        : leftVariant.stock - rightVariant.stock;
+
+    if (metric !== 0) {
+      return sort === "price-desc" || sort === "stock-desc" ? -metric : metric;
+    }
+
+    return compareArticles(leftVariant.article, rightVariant.article);
+  });
+}
+
+function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string, filters: PartnerCatalogFilters, sort: PartnerCatalogSortKey) {
   const categoryFilteredProducts =
     filterId === PARTNER_CATALOG_ALL_FILTER_ID ? products : products.filter((product) => product.sectionId === filterId);
 
-  if (filters.priceFrom === undefined && filters.priceTo === undefined && filters.stockFrom === undefined) {
-    return categoryFilteredProducts;
-  }
+  const filteredProducts =
+    filters.priceFrom === undefined && filters.priceTo === undefined && filters.stockFrom === undefined
+      ? categoryFilteredProducts
+      : categoryFilteredProducts.filter((product) => product.variants.some((variant) => matchesPartnerCatalogVariantFilters(variant, filters)));
 
-  return categoryFilteredProducts.filter((product) => product.variants.some((variant) => matchesPartnerCatalogVariantFilters(variant, filters)));
+  return sortPartnerCatalogProducts(filteredProducts, filters, sort);
 }
 
 const getPartnerCatalogDataset = cache((): PartnerCatalogDataset => {
@@ -356,9 +387,15 @@ export const getPartnerCatalogData = cache((): PartnerCatalogData => {
 });
 
 export const getPartnerCatalogProductsPage = cache(
-  (filterId: string, offset: number, limit: number, filters: PartnerCatalogFilters = {}): PartnerCatalogPageSlice => {
+  (
+    filterId: string,
+    offset: number,
+    limit: number,
+    filters: PartnerCatalogFilters = {},
+    sort: PartnerCatalogSortKey = PARTNER_CATALOG_DEFAULT_SORT,
+  ): PartnerCatalogPageSlice => {
     const { products } = getPartnerCatalogDataset();
-    const filteredProducts = getFilteredProducts(products, filterId, filters);
+    const filteredProducts = getFilteredProducts(products, filterId, filters, sort);
     const safeOffset = Math.max(0, offset);
     const safeLimit = Math.max(1, limit);
 
@@ -373,6 +410,7 @@ export const getPartnerCatalogInitialData = cache((limit: number, query: Partner
   const { categories } = getPartnerCatalogDataset();
   const selection = resolvePartnerCatalogSelection(categories, query, PARTNER_CATALOG_ALL_FILTER_ID);
   const filters = normalizePartnerCatalogFilters(query);
+  const sort = normalizePartnerCatalogSort(query.sort);
 
   return {
     categories,
@@ -383,7 +421,8 @@ export const getPartnerCatalogInitialData = cache((limit: number, query: Partner
       subcategory: selection.subcategorySlug,
     },
     initialFilters: getPartnerCatalogFilterInputValues(filters),
-    initialSlice: getPartnerCatalogProductsPage(selection.filterId, 0, limit, filters),
+    initialSort: sort,
+    initialSlice: getPartnerCatalogProductsPage(selection.filterId, 0, limit, filters, sort),
   };
 });
 

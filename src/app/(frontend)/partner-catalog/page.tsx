@@ -10,6 +10,7 @@ import {
   PARTNER_CATALOG_QUERY_PRICE_TO_KEY,
   PARTNER_CATALOG_QUERY_CATEGORY_KEY,
   PARTNER_CATALOG_QUERY_PRODUCT_KEY,
+  PARTNER_CATALOG_QUERY_SORT_KEY,
   PARTNER_CATALOG_QUERY_STOCK_FROM_KEY,
   PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY,
   getPartnerCatalogPathForFilter,
@@ -29,6 +30,7 @@ type PartnerCatalogPageSearchParams = Promise<{
   [PARTNER_CATALOG_QUERY_PRICE_FROM_KEY]?: string;
   [PARTNER_CATALOG_QUERY_PRICE_TO_KEY]?: string;
   [PARTNER_CATALOG_QUERY_STOCK_FROM_KEY]?: string;
+  [PARTNER_CATALOG_QUERY_SORT_KEY]?: string;
 }>;
 
 export default async function Page({ searchParams }: { searchParams: PartnerCatalogPageSearchParams }) {
@@ -39,6 +41,7 @@ export default async function Page({ searchParams }: { searchParams: PartnerCata
     priceFrom: resolvedSearchParams.priceFrom,
     priceTo: resolvedSearchParams.priceTo,
     stockFrom: resolvedSearchParams.stockFrom,
+    sort: resolvedSearchParams.sort,
   });
   const productId = resolvedSearchParams.product?.trim();
 
