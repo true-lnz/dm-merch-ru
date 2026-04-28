@@ -16,16 +16,19 @@ function buildRoute(pathname: string, searchParams: URLSearchParams) {
   return `${pathname}${query ? `?${query}` : ""}`;
 }
 
+function buildAbsoluteUrl(route: string) {
+  return new URL(route, window.location.origin).toString();
+}
+
 export function YandexMetrikaContainer() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { hit } = useYandexMetrika(YANDEX_METRIKA_ID);
-  const hasTrackedInitialRoute = useRef(false);
   const previousUrlRef = useRef<string | null>(null);
 
-  const trackPageView = useEffectEvent((nextUrl: string) => {
+  const trackPageView = useEffectEvent((nextUrl: string, referer: string | undefined) => {
     hit(nextUrl, {
-      referer: previousUrlRef.current ?? document.referrer,
+      referer,
       title: document.title,
     });
 
@@ -37,15 +40,9 @@ export function YandexMetrikaContainer() {
       return;
     }
 
-    const nextUrl = buildRoute(pathname, searchParams);
-
-    if (!hasTrackedInitialRoute.current) {
-      hasTrackedInitialRoute.current = true;
-      previousUrlRef.current = nextUrl;
-      return;
-    }
-
-    trackPageView(nextUrl);
+    const nextUrl = buildAbsoluteUrl(buildRoute(pathname, searchParams));
+    const referer = previousUrlRef.current ?? (document.referrer || undefined);
+    trackPageView(nextUrl, referer);
   }, [pathname, searchParams]);
 
   if (!YANDEX_METRIKA_ENABLED) {

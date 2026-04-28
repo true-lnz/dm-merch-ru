@@ -3,6 +3,7 @@ export const YANDEX_METRIKA_ID = 108741987;
 export const YANDEX_METRIKA_ENABLED = process.env.NODE_ENV === "production";
 
 export const YANDEX_METRIKA_INIT_SCRIPT = `{
+  defer:true,
   ssr:true,
   webvisor:true,
   clickmap:true,
