@@ -17,6 +17,11 @@ export const siteNavigation: NavigationItem[] = [
     label: "Каталог",
     children: [
       {
+        href: "/catalog-products",
+        label: "Каталог продукции",
+        description: "Посадочная страница с подборками, статьями и переходами в живые разделы.",
+      },
+      {
         href: "/catalog",
         label: "Весь каталог",
         description: "Все категории мерча и базовые подборки.",

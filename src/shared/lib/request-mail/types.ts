@@ -7,6 +7,7 @@ export type RequestSource =
   | "home-digest-card"
   | "home-hero"
   | "catalog-hero"
+  | "catalog-products-hero"
   | "home-results"
   | "home-services"
   | "home-urgent-order"

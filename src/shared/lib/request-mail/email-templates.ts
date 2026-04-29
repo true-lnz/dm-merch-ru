@@ -54,6 +54,7 @@ const sourceLabels: Record<RequestSource, string> = {
   "home-digest-card": "Карточка подборки",
   "home-hero": "Главный экран",
   "catalog-hero": "Hero каталога",
+  "catalog-products-hero": "Hero каталога продукции",
   "home-results": "Блок результатов",
   "home-services": "Блок услуг",
   "home-urgent-order": "Срочный заказ",
