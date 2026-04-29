@@ -272,110 +272,196 @@ function getPortobelloColorLabel(product, fallbackCode) {
   return labels.join(", ") || fallbackCode;
 }
 
-function buildCategoryIndex(config) {
+function buildCategoryIndex(project111Tree, config) {
   const categories = [];
   const rootById = new Map();
   const childById = new Map();
-  const matchers = [];
 
-  for (const root of config.categories) {
+  for (const rootPage of project111Tree.topLevelPages) {
     const nextRoot = {
-      id: root.id,
-      name: root.name,
+      id: rootPage.id,
+      name: rootPage.name,
       children: [],
     };
 
-    rootById.set(root.id, nextRoot);
     categories.push(nextRoot);
+    rootById.set(nextRoot.id, nextRoot);
 
-    for (const child of root.children) {
+    for (const childPage of project111Tree.childPagesByRootId.get(rootPage.id) ?? []) {
       const nextChild = {
-        id: child.id,
-        name: child.name,
-        rootId: root.id,
-        rootName: root.name,
+        id: childPage.id,
+        name: childPage.name,
+        rootId: nextRoot.id,
+        rootName: nextRoot.name,
       };
 
       nextRoot.children.push(nextChild);
-      childById.set(child.id, nextChild);
-      matchers.push({
-        ...nextChild,
-        portobelloSectionIds: new Set(child.portobelloSectionIds ?? []),
-        project111PageIds: new Set(child.project111PageIds ?? []),
-        portobelloAliases: (child.portobelloAliases ?? []).map(normalizeText),
-        portobelloRootAliases: (child.portobelloRootAliases ?? []).map(normalizeText),
-        project111Aliases: (child.project111Aliases ?? []).map(normalizeText),
-        project111RootAliases: (child.project111RootAliases ?? []).map(normalizeText),
-      });
+      childById.set(nextChild.id, nextChild);
     }
   }
 
-  const fallbackRoot = {
-    id: config.fallbackRoot.id,
-    name: config.fallbackRoot.name,
-    children: [],
-  };
-  const fallbackChild = {
-    id: config.fallbackChild.id,
-    name: config.fallbackChild.name,
-    rootId: fallbackRoot.id,
-    rootName: fallbackRoot.name,
-  };
+  for (const customChild of config.customChildren ?? []) {
+    const root = rootById.get(customChild.rootId);
 
-  fallbackRoot.children.push(fallbackChild);
-  categories.push(fallbackRoot);
-  rootById.set(fallbackRoot.id, fallbackRoot);
-  childById.set(fallbackChild.id, fallbackChild);
+    if (!root) {
+      throw new Error(`Не найден root ${customChild.rootId} для custom child ${customChild.id}`);
+    }
+
+    const nextChild = {
+      id: customChild.id,
+      name: customChild.name,
+      rootId: root.id,
+      rootName: root.name,
+    };
+
+    root.children.push(nextChild);
+    childById.set(nextChild.id, nextChild);
+  }
 
   return {
     categories,
     rootById,
     childById,
-    matchers,
-    fallbackRoot,
-    fallbackChild,
   };
 }
 
-function includesAlias(normalizedValue, aliases) {
-  return aliases.some((alias) => normalizedValue.includes(alias));
-}
+function getCategoryByChildId(index, childId, context) {
+  const child = index.childById.get(childId);
 
-function matchUnifiedCategory(index, source, category) {
-  const normalizedRootName = normalizeText(category.rootName ?? "");
-  const normalizedChildName = normalizeText(category.childName ?? "");
-
-  for (const matcher of index.matchers) {
-    if (source === "portobello") {
-      if (category.childId && matcher.portobelloSectionIds.has(category.childId)) {
-        return matcher;
-      }
-
-      if (normalizedChildName && includesAlias(normalizedChildName, matcher.portobelloAliases)) {
-        return matcher;
-      }
-
-      if (normalizedRootName && includesAlias(normalizedRootName, matcher.portobelloRootAliases)) {
-        return matcher;
-      }
-
-      continue;
-    }
-
-    if (category.childId && matcher.project111PageIds.has(category.childId)) {
-      return matcher;
-    }
-
-    if (normalizedChildName && includesAlias(normalizedChildName, matcher.project111Aliases)) {
-      return matcher;
-    }
-
-    if (normalizedRootName && includesAlias(normalizedRootName, matcher.project111RootAliases)) {
-      return matcher;
-    }
+  if (!child) {
+    throw new Error(`Не найдена категория ${childId} (${context})`);
   }
 
-  return index.fallbackChild;
+  return child;
+}
+
+function formatMappingErrors(errors, source) {
+  return [...errors.entries()]
+    .map(([name, details]) => `- ${name}: ${details.count} тов. (${details.message})`)
+    .join("\n");
+}
+
+function getPortobelloMappedChildByResolver(index, resolver, product) {
+  const normalizedTitle = normalizeText(product.name ?? "");
+
+  switch (resolver) {
+    case "boneChina":
+      if (normalizedTitle.includes("кружк")) {
+        return getCategoryByChildId(index, "1105730", "Костяной фарфор -> Кружки");
+      }
+
+      if (normalizedTitle.includes("чайн") || normalizedTitle.includes("чайная пара")) {
+        return getCategoryByChildId(index, "1107414", "Костяной фарфор -> Чайные наборы");
+      }
+
+      break;
+    case "glassware":
+      if (normalizedTitle.includes("стакан")) {
+        return getCategoryByChildId(index, "1108474", "Посуда из стекла -> Стаканы");
+      }
+
+      if (normalizedTitle.includes("бокал")) {
+        return getCategoryByChildId(index, "1108859", "Посуда из стекла -> Бокалы");
+      }
+
+      if (normalizedTitle.includes("кружк")) {
+        return getCategoryByChildId(index, "1105730", "Посуда из стекла -> Кружки");
+      }
+
+      if (normalizedTitle.includes("чайн") || normalizedTitle.includes("чайная пара")) {
+        return getCategoryByChildId(index, "1107414", "Посуда из стекла -> Чайные наборы");
+      }
+
+      if (normalizedTitle.includes("декантер")) {
+        return getCategoryByChildId(index, "1109691", "Посуда из стекла -> Барные аксессуары");
+      }
+
+      break;
+    case "thermoses":
+      if (normalizedTitle.includes("для еды") || normalizedTitle.includes("бенто")) {
+        return getCategoryByChildId(index, "1110074", "Термосы -> Для еды");
+      }
+
+      if (normalizedTitle.includes("термокруж")) {
+        return getCategoryByChildId(index, "1106906", "Термосы -> Термокружки");
+      }
+
+      return getCategoryByChildId(index, "1107498", "Термосы -> Термосы");
+    case "bagsAndCrossBody":
+      if (normalizedTitle.includes("поясн")) {
+        return getCategoryByChildId(index, "1109473", "Поясные сумки");
+      }
+
+      if (normalizedTitle.includes("через плечо") || normalizedTitle.includes("cross body")) {
+        return getCategoryByChildId(index, "1105742", "Сумки для документов");
+      }
+
+      return getCategoryByChildId(index, "1109473", "Сумки по умолчанию");
+    case "thermoDrinkware":
+      if (normalizedTitle.includes("бутылк")) {
+        return getCategoryByChildId(index, "1107466", "Термопродукция -> Бутылки");
+      }
+
+      if (normalizedTitle.includes("термос")) {
+        return getCategoryByChildId(index, "1107498", "Термопродукция -> Термосы");
+      }
+
+      return getCategoryByChildId(index, "1106906", "Термопродукция -> Термокружки");
+    case "backpacks":
+      if (normalizedTitle.includes("коробк")) {
+        return getCategoryByChildId(index, "1105995", "Рюкзаки -> Упаковка");
+      }
+
+      return getCategoryByChildId(index, "1105743", "Рюкзаки");
+    default:
+      throw new Error(`Неизвестный resolver ${resolver}`);
+  }
+
+  throw new Error(`Не удалось определить target child по resolver ${resolver}`);
+}
+
+function resolvePortobelloCategory(index, config, product) {
+  const mapping = config.portobelloSectionMappings?.[product.sectionId];
+
+  if (!mapping) {
+    throw new Error(`Нет маппинга для sectionId ${product.sectionId}`);
+  }
+
+  if (mapping.targetChildId) {
+    return getCategoryByChildId(index, mapping.targetChildId, `Portobello section ${product.sectionId}`);
+  }
+
+  if (mapping.resolver) {
+    return getPortobelloMappedChildByResolver(index, mapping.resolver, product);
+  }
+
+  throw new Error(`Некорректный маппинг для sectionId ${product.sectionId}`);
+}
+
+function resolveProject111CategoryByName(index, productName, groupName) {
+  const normalized = normalizeText(`${groupName ?? ""} ${productName ?? ""}`);
+
+  if (normalized.includes("футболк") || normalized.includes("майк")) {
+    return index.childById.get("1104128") ?? null;
+  }
+
+  if (normalized.includes("толстов") || normalized.includes("худи") || normalized.includes("свитшот")) {
+    return index.childById.get("1105701") ?? null;
+  }
+
+  if (normalized.includes("ветровк") || normalized.includes("дождевик") || normalized.includes("куртк")) {
+    return index.childById.get("1105702") ?? null;
+  }
+
+  if (normalized.includes("рюкзак")) {
+    return index.childById.get("1105743") ?? null;
+  }
+
+  if (normalized.includes("ручк")) {
+    return index.childById.get("1105735") ?? null;
+  }
+
+  return null;
 }
 
 function buildCategoryStats(index, products) {
@@ -394,6 +480,7 @@ function buildCategoryStats(index, products) {
           productCount: productCountByChildId.get(child.id) ?? 0,
         }))
         .filter((child) => child.productCount > 0);
+      children.sort((left, right) => compareRu(left.name, right.name));
 
       const productCount = children.reduce((sum, child) => sum + child.productCount, 0);
 
@@ -428,15 +515,19 @@ function parsePortobelloDataset(index) {
   for (const product of catalog.products) {
     const sourceChild = sectionById.get(product.sectionId);
     const sourceRoot = sourceChild?.parentId ? sectionById.get(sourceChild.parentId) : null;
-    const matchedChild = matchUnifiedCategory(index, "portobello", {
-      rootName: sourceRoot?.name ?? sourceChild?.name ?? "Portobello",
-      childName: sourceChild?.name ?? sourceRoot?.name ?? "Portobello",
-      childId: sourceChild?.id ?? null,
-    });
+    let matchedChild;
 
-    if (matchedChild.id === index.fallbackChild.id) {
-      const fallbackKey = `${sourceRoot?.name ?? "Без корня"} / ${sourceChild?.name ?? "Без раздела"}`;
-      unmappedCategories.set(fallbackKey, (unmappedCategories.get(fallbackKey) ?? 0) + 1);
+    try {
+      matchedChild = resolvePortobelloCategory(index, MERGED_CATALOG_CONFIG, product);
+    } catch (error) {
+      const fallbackKey = `${sourceRoot?.name ?? "Без корня"} / ${sourceChild?.name ?? "Без раздела"} / ${product.sectionId}`;
+      const current = unmappedCategories.get(fallbackKey) ?? {
+        count: 0,
+        message: error instanceof Error ? error.message : "Неизвестная ошибка маппинга",
+      };
+      current.count += 1;
+      unmappedCategories.set(fallbackKey, current);
+      continue;
     }
 
     const groupId = `${matchedChild.id}:${product.sectionId}:${getPortobelloBaseArticle(product.article)}`;
@@ -535,6 +626,10 @@ function parsePortobelloDataset(index) {
     .filter(Boolean)
     .sort((left, right) => compareRu(left.title, right.title));
 
+  if (unmappedCategories.size > 0) {
+    throw new Error(`Не замаплены разделы Portobello:\n${formatMappingErrors(unmappedCategories, "portobello")}`);
+  }
+
   return {
     products,
     stats: {
@@ -564,12 +659,16 @@ function parseProject111Tree() {
   const topLevelPages = pages.filter((page) => page.parentId === "1");
   const childPages = pages.filter((page) => page.parentId && page.parentId !== "1");
   const rootByChildId = new Map();
+  const childPagesByRootId = new Map();
 
   for (const childPage of childPages) {
     const rootPage = pageById.get(childPage.parentId);
 
     if (rootPage) {
       rootByChildId.set(childPage.id, rootPage);
+      const current = childPagesByRootId.get(rootPage.id) ?? [];
+      current.push(childPage);
+      childPagesByRootId.set(rootPage.id, current);
     }
   }
 
@@ -586,6 +685,7 @@ function parseProject111Tree() {
   return {
     pageById,
     topLevelPages,
+    childPagesByRootId,
     rootByChildId,
     pageIdsByProductId,
   };
@@ -697,8 +797,8 @@ function parseProject111Stock() {
   return stockByProductId;
 }
 
-function parseProject111Dataset(index) {
-  const { pageById, rootByChildId, pageIdsByProductId } = parseProject111Tree();
+function parseProject111Dataset(index, project111Tree) {
+  const { pageById, rootByChildId, pageIdsByProductId } = project111Tree;
   const stockByProductId = parseProject111Stock();
   const catalogueXml = readText(join(process.cwd(), "public", "project111", "catalogue.xml"));
   const topLevelProducts = extractNestedBlocks(catalogueXml, "product");
@@ -717,23 +817,6 @@ function parseProject111Dataset(index) {
       continue;
     }
 
-    const pageIds = pageIdsByProductId.get(topProductId) ?? [];
-    const resolvedPage =
-      pageIds
-        .map((pageId) => pageById.get(pageId))
-        .find((page) => page && rootByChildId.has(page.id)) ?? null;
-    const resolvedRoot = resolvedPage ? rootByChildId.get(resolvedPage.id) ?? null : null;
-    const matchedChild = matchUnifiedCategory(index, "project111", {
-      rootName: resolvedRoot?.name ?? "Project111",
-      childName: resolvedPage?.name ?? resolvedRoot?.name ?? "Project111",
-      childId: resolvedPage?.id ?? null,
-    });
-
-    if (matchedChild.id === index.fallbackChild.id) {
-      const fallbackKey = `${resolvedRoot?.name ?? "Без корня"} / ${resolvedPage?.name ?? "Без раздела"}`;
-      unmappedCategories.set(fallbackKey, (unmappedCategories.get(fallbackKey) ?? 0) + 1);
-    }
-
     const variantBlocks = getChildProductBlocks(block);
     const nestedVariants = variantBlocks.map((variantBlock) => ({
       productId: getTagValue(variantBlock, "product_id"),
@@ -742,6 +825,30 @@ function parseProject111Dataset(index) {
       sizeCode: getTagValue(variantBlock, "size_code"),
       priceRub: parseNumber(getTagValue(variantBlock, "price")),
     }));
+    const pageIds = [
+      ...(pageIdsByProductId.get(topProductId) ?? []),
+      ...nestedVariants.flatMap((variant) => (variant.productId ? pageIdsByProductId.get(variant.productId) ?? [] : [])),
+    ];
+    const resolvedPage =
+      pageIds
+        .map((pageId) => pageById.get(pageId))
+        .find((page) => page && rootByChildId.has(page.id)) ?? null;
+    const resolvedRoot = resolvedPage ? rootByChildId.get(resolvedPage.id) ?? null : null;
+    const matchedChild = resolvedPage
+      ? index.childById.get(resolvedPage.id) ?? null
+      : resolveProject111CategoryByName(index, productName, groupName);
+    const matchedRoot = resolvedRoot ?? (matchedChild ? index.rootById.get(matchedChild.rootId) ?? null : null);
+
+    if (!matchedChild || !matchedRoot) {
+      const fallbackKey = `${matchedRoot?.name ?? "Без корня"} / ${resolvedPage?.name ?? "Без раздела"} / ${topProductId}`;
+      const current = unmappedCategories.get(fallbackKey) ?? {
+        count: 0,
+        message: "Не удалось сопоставить товар Project 111 с child category",
+      };
+      current.count += 1;
+      unmappedCategories.set(fallbackKey, current);
+      continue;
+    }
 
     const topProduct = {
       productId: topProductId,
@@ -785,10 +892,10 @@ function parseProject111Dataset(index) {
       source: "project111",
       sourceGroupId: topProduct.groupId,
       sourceCategory: {
-        rootId: resolvedRoot?.id ?? null,
-        rootName: resolvedRoot?.name ?? "Project111",
+        rootId: resolvedRoot?.id ?? matchedRoot.id,
+        rootName: resolvedRoot?.name ?? matchedRoot.name,
         childId: resolvedPage?.id ?? null,
-        childName: resolvedPage?.name ?? "Project111",
+        childName: resolvedPage?.name ?? matchedChild.name,
       },
       unifiedCategory: {
         rootId: matchedChild.rootId,
@@ -873,6 +980,10 @@ function parseProject111Dataset(index) {
     .filter(Boolean)
     .sort((left, right) => compareRu(left.title, right.title));
 
+  if (unmappedCategories.size > 0) {
+    throw new Error(`Не замаплены разделы Project 111:\n${formatMappingErrors(unmappedCategories, "project111")}`);
+  }
+
   return {
     products,
     stats: {
@@ -885,11 +996,11 @@ function parseProject111Dataset(index) {
 }
 
 function buildMergedCatalog() {
-  const categoryIndex = buildCategoryIndex(MERGED_CATALOG_CONFIG);
+  const project111Tree = parseProject111Tree();
+  const categoryIndex = buildCategoryIndex(project111Tree, MERGED_CATALOG_CONFIG);
   const portobello = parsePortobelloDataset(categoryIndex);
-  const project111 = parseProject111Dataset(categoryIndex);
+  const project111 = parseProject111Dataset(categoryIndex, project111Tree);
   const products = [...portobello.products, ...project111.products]
-    .filter((product) => product.sectionId !== categoryIndex.fallbackChild.id)
     .sort((left, right) => {
     if (left.rootSectionId !== right.rootSectionId) {
       return compareRu(left.unifiedCategory.rootName, right.unifiedCategory.rootName);

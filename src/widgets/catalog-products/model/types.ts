@@ -7,6 +7,7 @@ export type CatalogProductsLandingArticle = {
   id: string;
   title: string;
   href: string;
+  variant?: "article" | "all-articles";
   image: {
     src: string;
     alt: string;
