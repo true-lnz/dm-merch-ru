@@ -1,5 +1,6 @@
 import type { CatalogProductsLandingPortrait } from "@/widgets/catalog-products/model/types";
 import Image from "next/image";
+import { CatalogProductsHeroCenterSvg } from "./catalog-products-hero-center-svg";
 
 type CatalogProductsHeroProps = {
   backgroundImageUrl: string;
@@ -8,7 +9,6 @@ type CatalogProductsHeroProps = {
 
 export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogProductsHeroProps) {
   const leftPortraits = portraits.slice(0, 3);
-  const centerPortrait = portraits[3];
   const rightPortraits = portraits.slice(4, 7);
 
   return (
@@ -37,28 +37,14 @@ export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogPr
                   key={`${portrait.src}-${index}`}
                   className="relative aspect-[3/4] w-[clamp(84px,8.1vw,156px)] shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
                 >
-                  <Image
-                    src={portrait.src}
-                    alt={portrait.alt}
-                    fill
-                    sizes="(max-width: 1279px) 12vw, 156px"
-                    className="object-cover"
-                  />
+                  <Image src={portrait.src} alt={portrait.alt} fill sizes="(max-width: 1279px) 12vw, 156px" className="object-cover" />
                 </div>
               ))}
             </div>
 
-            {centerPortrait ? (
-              <div className="relative aspect-square w-[clamp(112px,10.5vw,208px)] shrink-0 overflow-hidden rounded-[22px] border border-[rgba(42,42,42,0.08)]">
-                <Image
-                  src={centerPortrait.src}
-                  alt={centerPortrait.alt}
-                  fill
-                  sizes="(max-width: 1279px) 15vw, 208px"
-                  className="object-cover"
-                />
-              </div>
-            ) : null}
+            <div className="relative aspect-square w-[clamp(112px,10.5vw,208px)] xl:w-[188px] shrink-0 overflow-hidden rounded-[22px] border border-[rgba(42,42,42,0.08)] [&_svg]:h-full [&_svg]:w-full">
+              <CatalogProductsHeroCenterSvg />
+            </div>
 
             <div className="flex items-end gap-[clamp(8px,1.2vw,20px)]">
               {rightPortraits.map((portrait, index) => (
@@ -66,13 +52,7 @@ export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogPr
                   key={`${portrait.src}-${index + 4}`}
                   className="relative aspect-[3/4] w-[clamp(84px,8.1vw,156px)] shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
                 >
-                  <Image
-                    src={portrait.src}
-                    alt={portrait.alt}
-                    fill
-                    sizes="(max-width: 1279px) 12vw, 156px"
-                    className="object-cover"
-                  />
+                  <Image src={portrait.src} alt={portrait.alt} fill sizes="(max-width: 1279px) 12vw, 156px" className="object-cover" />
                 </div>
               ))}
             </div>
