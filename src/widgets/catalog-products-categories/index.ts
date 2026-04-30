@@ -1,1 +1,1 @@
-export { CatalogProductsCategories } from "./catalog-products-categories";
+export { CatalogCategoryIcon, CatalogProductsCategories } from "./catalog-products-categories";

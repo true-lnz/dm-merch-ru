@@ -19,6 +19,8 @@ import { WishlistDialog } from "./wishlist-dialog";
 export function Header() {
   const pathname = usePathname();
   const isPartnerCatalogPage = pathname.startsWith("/partner-catalog");
+  const isCatalogProductsPage = pathname.startsWith("/catalog-products");
+  const shouldMountWishlistDialog = isPartnerCatalogPage || isCatalogProductsPage;
   const isScrolled = useScrolledHeader();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
@@ -52,6 +54,7 @@ export function Header() {
       <header
         className={cn(
           desktopHeaderClassName,
+          isCatalogProductsPage && "!static",
           isScrolled ? "shadow-[0_12px_30px_rgba(42,42,42,0.05)]" : "shadow-none",
         )}
       >
@@ -93,7 +96,7 @@ export function Header() {
         onOpenWishlist={openWishlist}
       />
 
-      {isPartnerCatalogPage ? <WishlistDialog open={isWishlistOpen} onOpenChange={setIsWishlistOpen} /> : null}
+      {shouldMountWishlistDialog ? <WishlistDialog open={isWishlistOpen} onOpenChange={setIsWishlistOpen} /> : null}
     </>
   );
 }

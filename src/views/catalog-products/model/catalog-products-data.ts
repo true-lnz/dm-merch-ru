@@ -4,13 +4,13 @@ import { PARTNER_CATALOG_ALL_FILTER_ID, getPartnerCatalogData } from "@/views/pa
 import { getPartnerCatalogPathForFilter } from "@/views/partner-catalog/model/partner-catalog-query";
 
 const HERO_PORTRAITS: CatalogProductsLandingPortrait[] = [
-  { src: "/catalog/cases/img_art_kvadrat_tall.webp", alt: "Мерч-проект Арт-Квадрат" },
-  { src: "/catalog/cases/img_agromig_tall.webp", alt: "Мерч-проект Агромиг" },
-  { src: "/catalog/cases/img_dark_tall.webp", alt: "Мерч-проект DARK" },
-  { src: "/catalog/cases/img_kolchuga_tall.jpg", alt: "Мерч-проект Кольчуга" },
-  { src: "/catalog/cases/img_ldgr_tall.webp", alt: "Мерч-проект LDGR" },
-  { src: "/catalog/cases/img_magadan_tall.webp", alt: "Мерч-проект Магадан" },
-  { src: "/catalog/cases/img_ufanet_tall.webp", alt: "Мерч-проект Уфанет" },
+  { src: "/catalog-products/1.png", alt: "Изображение каталога продукции 1" },
+  { src: "/catalog-products/2.png", alt: "Изображение каталога продукции 2" },
+  { src: "/catalog-products/3.png", alt: "Изображение каталога продукции 3" },
+  { src: "/catalog-products/4.svg", alt: "Центральное изображение каталога продукции" },
+  { src: "/catalog-products/5.png", alt: "Изображение каталога продукции 5" },
+  { src: "/catalog-products/6.png", alt: "Изображение каталога продукции 6" },
+  { src: "/catalog-products/7.png", alt: "Изображение каталога продукции 7" },
 ] as const;
 
 const CATEGORY_ICON_BY_ROOT_NAME: Record<string, string> = {
@@ -83,7 +83,7 @@ export function getCatalogProductsLandingData(): CatalogProductsLandingData {
       title: "Каталог\nпродукции",
       description:
         "Собрали в одном входе категории, статьи и реальные разделы каталога, чтобы ориентироваться в мерче было проще и быстрее.",
-      backgroundImageUrl: "/home/img_card_cover_home_features_v2.svg",
+      backgroundImageUrl: "/catalog-products/img_hero_catalog_cover.svg",
     },
     portraits: [...HERO_PORTRAITS],
     articles,

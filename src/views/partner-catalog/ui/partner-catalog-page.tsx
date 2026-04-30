@@ -11,6 +11,7 @@ import { PageHeading } from "@/shared/ui/page-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Spinner } from "@/shared/ui/spinner";
 import { WidowFix } from "@/shared/ui/widow-fix";
+import { CatalogCategoryIcon } from "@/widgets/catalog-products-categories";
 import { CheckIcon, ChevronDownIcon, FunnelIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,11 +51,35 @@ const PAGE_SIZE_OPTIONS = [24, 50, 80] as const;
 const CATALOG_API_ROUTE = "/api/partner-catalog";
 const loadedCatalogImageKeys = new Set<string>();
 const SORT_OPTIONS: { value: PartnerCatalogSortKey; label: string }[] = [
+  { value: "none", label: "Без сортировки" },
   { value: "price-asc", label: "По возрастанию цены" },
   { value: "price-desc", label: "По убыванию цены" },
   { value: "stock-asc", label: "По возрастанию количества" },
   { value: "stock-desc", label: "По убыванию количества" },
 ];
+const CATEGORY_ICON_BY_ROOT_NAME: Record<string, string> = {
+  "Корпоративная одежда с логотипом": "cloth",
+  "Дом": "home",
+  "Отдых": "compas",
+  "Посуда": "cup",
+  "Ежедневники и блокноты": "note",
+  "Ручки с логотипом": "pen",
+  "Сумки": "bag",
+  "Зонты с логотипом": "umbrella",
+  "Электроника и гаджеты": "electronics",
+  "Корпоративные подарки": "promo",
+  "Наградная продукция": "awards",
+  "Корпоративные подарки на Новый год": "tree",
+  "Сувениры на заказ": "unikum",
+  "Сувениры к праздникам": "holiday",
+  "Упаковка": "box",
+  "Подарочные наборы": "set",
+  "Коллекции с принтами": "cloth",
+  "Съедобные корпоративные подарки с логотипом": "eat",
+  "Спортивные товары с логотипом": "sport",
+  "Элементы брендирования и кастомизации": "label",
+  "Личные аксессуары из натуральной и искусственной кожи": "bag",
+};
 
 const rubFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -142,6 +167,10 @@ function getRepresentativeVariantForSort(product: PartnerCatalogProduct, filters
 }
 
 function sortPartnerCatalogProductsForClient(products: PartnerCatalogProduct[], filters: PartnerCatalogFilters, sort: PartnerCatalogSortKey) {
+  if (sort === PARTNER_CATALOG_DEFAULT_SORT) {
+    return [...products];
+  }
+
   return [...products].sort((left, right) => {
     const leftVariant = getRepresentativeVariantForSort(left, filters);
     const rightVariant = getRepresentativeVariantForSort(right, filters);
@@ -747,7 +776,7 @@ function CatalogSortSelect({ value, onChange }: { value: PartnerCatalogSortKey; 
       </button>
 
       {isOpen ? (
-        <div className="absolute top-[calc(100%+8px)] right-0 z-30 min-w-[280px] rounded-[16px] border border-black/10 bg-white p-2 shadow-[0_18px_40px_rgba(42,42,42,0.16)]">
+        <div className="absolute top-[calc(100%+8px)] left-0 z-30 min-w-[280px] rounded-[16px] border border-black/10 bg-white p-2 shadow-[0_18px_40px_rgba(42,42,42,0.16)]">
           {SORT_OPTIONS.map((option) => {
             const isActive = option.value === value;
 
@@ -781,6 +810,7 @@ function CategoryFilterList({
   onExpandedRootChange,
   onAllProductsClick,
   onChildCategoryClick,
+  showIcons = false,
 }: {
   categories: PartnerCatalogRootSection[];
   activeFilterId: string;
@@ -788,6 +818,7 @@ function CategoryFilterList({
   onExpandedRootChange: (rootId: string | null) => void;
   onAllProductsClick: () => void;
   onChildCategoryClick: (rootCategoryId: string, childCategoryId: string) => void;
+  showIcons?: boolean;
 }) {
   return (
     <div className="rounded-[18px] bg-white p-4 md:rounded-[22.5px] md:p-5">
@@ -806,9 +837,22 @@ function CategoryFilterList({
         {categories.map((category) => (
           <div key={category.id} className="border-b border-black/10 py-1">
             <Collapsible open={expandedRootId === category.id} onOpenChange={(open) => onExpandedRootChange(open ? category.id : null)}>
-              <CollapsibleTrigger className="py-2 text-sm font-medium text-[#404040]">{category.name}</CollapsibleTrigger>
+              <CollapsibleTrigger className="py-2 text-sm font-medium text-[#404040]">
+                {showIcons ? (
+                  <span className="flex items-center gap-3">
+                    <CatalogCategoryIcon
+                      iconId={CATEGORY_ICON_BY_ROOT_NAME[category.name] ?? "set"}
+                      monochrome
+                      className="h-6 w-8 text-[var(--accent)] md:h-6 md:w-8"
+                    />
+                    <span>{category.name}</span>
+                  </span>
+                ) : (
+                  category.name
+                )}
+              </CollapsibleTrigger>
               <CollapsibleContent className="pb-2">
-                <div className="mt-1 space-y-1 pl-3">
+                <div className={cn("mt-1 space-y-1", showIcons ? "pl-[44px]" : "pl-3")}>
                   {category.children.map((childCategory) => {
                     const isActive = activeFilterId === childCategory.id;
 
@@ -1255,14 +1299,6 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
         <div className="md:grid md:grid-cols-[245px_minmax(0,1fr)] md:items-start md:gap-8 xl:gap-[63px]">
           <aside className="hidden md:block">
             <div className="space-y-4">
-              <CategoryFilterList
-                categories={initialData.categories}
-                activeFilterId={activeFilterId}
-                expandedRootId={expandedRootId}
-                onExpandedRootChange={setExpandedRootId}
-                onAllProductsClick={handleAllProductsClick}
-                onChildCategoryClick={handleChildCategoryClick}
-              />
               <div className="relative">
                 <CatalogNumericFilters values={draftFilterInputs} onChange={handleFilterInputChange} onReset={handleResetFilters} />
                 {shouldShowFilterApplyPopover ? (
@@ -1275,6 +1311,14 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
                   />
                 ) : null}
               </div>
+              <CategoryFilterList
+                categories={initialData.categories}
+                activeFilterId={activeFilterId}
+                expandedRootId={expandedRootId}
+                onExpandedRootChange={setExpandedRootId}
+                onAllProductsClick={handleAllProductsClick}
+                onChildCategoryClick={handleChildCategoryClick}
+              />
             </div>
           </aside>
 
@@ -1338,6 +1382,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
               activeFilterId={activeFilterId}
               expandedRootId={expandedRootId}
               onExpandedRootChange={setExpandedRootId}
+              showIcons
               onAllProductsClick={() => {
                 handleAllProductsClick();
                 setIsMobileCategoryDialogOpen(false);

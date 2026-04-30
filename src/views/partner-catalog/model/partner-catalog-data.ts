@@ -251,6 +251,10 @@ function getProductRepresentativeVariant(product: PartnerCatalogProduct, filters
 }
 
 function sortPartnerCatalogProducts(products: PartnerCatalogProduct[], filters: PartnerCatalogFilters, sort: PartnerCatalogSortKey) {
+  if (sort === PARTNER_CATALOG_DEFAULT_SORT) {
+    return [...products];
+  }
+
   return [...products].sort((left, right) => {
     const leftVariant = getProductRepresentativeVariant(left, filters);
     const rightVariant = getProductRepresentativeVariant(right, filters);

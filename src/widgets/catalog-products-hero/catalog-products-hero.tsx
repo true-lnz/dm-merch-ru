@@ -6,13 +6,14 @@ type CatalogProductsHeroProps = {
   portraits: CatalogProductsLandingPortrait[];
 };
 
-export function CatalogProductsHero({
-  backgroundImageUrl,
-    portraits,
-}: CatalogProductsHeroProps) {
+export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogProductsHeroProps) {
+  const leftPortraits = portraits.slice(0, 3);
+  const centerPortrait = portraits[3];
+  const rightPortraits = portraits.slice(4, 7);
+
   return (
-    <section className="relative">
-      <div className="relative left-[calc(var(--layout-side-padding)*-1)] w-[calc(100%+var(--layout-side-padding)*2)] overflow-hidden bg-transparent px-[calc(var(--layout-side-padding)+16px)] pb-4 pt-6 md:px-[calc(var(--layout-side-padding)+24px)] md:pb-6 md:pt-8 xl:px-[calc(var(--layout-side-padding)+32px)] xl:pb-8">
+    <section className="relative hidden md:block">
+      <div className="relative left-[calc(var(--layout-side-padding)*-1)] w-[calc(100%+var(--layout-side-padding)*2)] overflow-hidden bg-transparent px-[calc(var(--layout-side-padding)+16px)] pb-4 pt-6 md:px-[calc(var(--layout-side-padding)+24px)] md:pb-6 md:pt-8 xl:flex xl:min-h-[20vw] xl:items-center xl:px-[calc(var(--layout-side-padding)+32px)] xl:pb-8">
         <div
           className="pointer-events-none absolute inset-0 opacity-90"
           aria-hidden="true"
@@ -28,22 +29,53 @@ export function CatalogProductsHero({
           aria-hidden="true"
         />
 
-        <div className="relative z-10 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex min-w-max items-stretch justify-start gap-3 px-1 md:gap-4 xl:min-w-0 xl:justify-center">
-            {portraits.map((portrait, index) => (
-              <div
-                key={`${portrait.src}-${index}`}
-                className="relative h-[220px] w-[132px] shrink-0 overflow-hidden rounded-[18px] md:h-[280px] md:w-[168px] xl:h-[320px] xl:w-[182px]"
-              >
+        <div className="relative z-10 w-full pb-1">
+          <div className="flex w-full items-end justify-center gap-[clamp(8px,1.2vw,20px)] px-1">
+            <div className="flex items-end gap-[clamp(8px,1.2vw,20px)]">
+              {leftPortraits.map((portrait, index) => (
+                <div
+                  key={`${portrait.src}-${index}`}
+                  className="relative aspect-[3/4] w-[clamp(84px,8.1vw,156px)] shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
+                >
+                  <Image
+                    src={portrait.src}
+                    alt={portrait.alt}
+                    fill
+                    sizes="(max-width: 1279px) 12vw, 156px"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {centerPortrait ? (
+              <div className="relative aspect-square w-[clamp(112px,10.5vw,208px)] shrink-0 overflow-hidden rounded-[22px] border border-[rgba(42,42,42,0.08)]">
                 <Image
-                  src={portrait.src}
-                  alt={portrait.alt}
+                  src={centerPortrait.src}
+                  alt={centerPortrait.alt}
                   fill
-                  sizes="(max-width: 767px) 132px, (max-width: 1279px) 168px, 182px"
+                  sizes="(max-width: 1279px) 15vw, 208px"
                   className="object-cover"
                 />
               </div>
-            ))}
+            ) : null}
+
+            <div className="flex items-end gap-[clamp(8px,1.2vw,20px)]">
+              {rightPortraits.map((portrait, index) => (
+                <div
+                  key={`${portrait.src}-${index + 4}`}
+                  className="relative aspect-[3/4] w-[clamp(84px,8.1vw,156px)] shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
+                >
+                  <Image
+                    src={portrait.src}
+                    alt={portrait.alt}
+                    fill
+                    sizes="(max-width: 1279px) 12vw, 156px"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

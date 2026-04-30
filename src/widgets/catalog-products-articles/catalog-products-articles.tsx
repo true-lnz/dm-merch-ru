@@ -12,20 +12,29 @@ type CatalogProductsArticlesProps = {
 };
 
 function CatalogProductsArticlesNextButton() {
-  const { scrollNext, canScrollNext } = useCarousel();
+  const { api, scrollNext, canScrollNext } = useCarousel();
+
+  const handleClick = () => {
+    if (canScrollNext) {
+      scrollNext();
+      return;
+    }
+
+    api?.scrollTo(0);
+  };
 
   return (
     <button
       type="button"
-      onClick={scrollNext}
-      disabled={!canScrollNext}
+      onClick={handleClick}
+      disabled={!api}
       aria-label="Следующая статья"
       className={cn(
-        "absolute right-[max(12px,calc(var(--layout-side-padding)-10px))] top-1/2 z-20 inline-flex size-[52px] -translate-y-1/2 items-center justify-center rounded-full bg-white text-[var(--heading)] shadow-[0_10px_24px_rgba(42,42,42,0.12)] transition-opacity duration-200",
-        canScrollNext ? "cursor-pointer opacity-100" : "cursor-default opacity-45",
+        "absolute right-4 top-1/2 z-20 inline-flex size-[44px] -translate-y-1/2 items-center justify-center rounded-[12px] border-[9px] border-white bg-white text-[var(--heading)] shadow-[0_10px_24px_rgba(42,42,42,0.12)] transition-opacity duration-200 md:right-5",
+        api ? "cursor-pointer opacity-70 hover:opacity-100" : "cursor-default opacity-45",
       )}
     >
-      <ChevronRightIcon className="size-5" strokeWidth={1.7} />
+      <ChevronRightIcon className="size-4" strokeWidth={1.7} />
     </button>
   );
 }
@@ -38,51 +47,58 @@ export function CatalogProductsArticles({ items }: CatalogProductsArticlesProps)
   return (
     <section className="mb-[35px] md:mb-[45px]">
       <div className="relative left-[calc(var(--layout-side-padding)*-1)] w-[calc(100%+var(--layout-side-padding)*2)] overflow-hidden bg-[var(--surface-header)] px-[var(--layout-side-padding)]">
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-[var(--layout-side-padding)] bg-[rgba(236,235,230,0.9)] opacity-100 backdrop-blur-[8px] md:block"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-[var(--layout-side-padding)] bg-[rgba(236,235,230,0.9)] opacity-100 backdrop-blur-[8px] md:block"
+          aria-hidden="true"
+        />
         <Carousel
-          className="relative"
+          className="relative -mx-[var(--layout-side-padding)]"
           opts={{
             align: "start",
+            containScroll: "trimSnaps",
             loop: false,
           }}
         >
-          <CarouselContent className="-ml-0">
+          <CarouselContent className="-ml-0 px-[var(--layout-side-padding)]">
             {items.map((item) => (
-              <CarouselItem key={item.id} className="basis-[88%] pl-0 sm:basis-[78%] md:basis-[52%] xl:basis-[38%] 2xl:basis-[32%]">
+              <CarouselItem key={item.id} className="basis-[88%] pl-0 sm:basis-[78%] md:basis-[52%] xl:basis-[25%] 2xl:basis-[25%]">
                 <Link
                   href={item.href}
                   className={cn(
-                    "group block h-full border border-[rgba(42,42,42,0.08)] px-4 py-4 transition-colors duration-200 hover:bg-white md:px-5 md:py-5",
-                    item.variant === "all-articles" && "flex flex-col justify-between bg-white",
+                    "group block h-full border-l border-[rgba(42,42,42,0.08)] px-4 py-3 transition-colors duration-200 hover:bg-white md:px-5 md:py-4",
+                    item.variant === "all-articles" && "flex flex-col justify-between bg-[var(--accent)] hover:bg-[var(--accent-hover)] ",
                   )}
                 >
-                  <div className="pb-4 pt-2">
-                    <h3 className="font-heading whitespace-pre-line text-xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)] md:text-2xl xl:text-3xl">
+                  <div className="pb-3 pt-1">
+                    <h3
+                      className={cn(
+                        "font-heading whitespace-pre-line text-2xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)]",
+                        item.variant === "all-articles" && "text-white",
+                      )}
+                    >
                       {item.title}
                     </h3>
                   </div>
-                  <div
-                    className={cn(
-                      "relative aspect-[1740/400] overflow-hidden rounded-[12px] border border-[rgba(42,42,42,0.08)] bg-[var(--surface)] md:rounded-[14px]",
-                      item.variant === "all-articles" && "bg-[var(--card-bg)]",
-                    )}
-                  >
-                    <Image
-                      src={item.image.src}
-                      alt={item.image.alt}
-                      fill
-                      sizes="(max-width: 767px) 88vw, (max-width: 1279px) 52vw, 38vw"
-                      className="object-cover object-center"
-                    />
-                  </div>
+                  {item.variant === "all-articles" ? null : (
+                    <div className="relative aspect-[1740/340] overflow-hidden rounded-[12px] border border-[rgba(42,42,42,0.08)] bg-[var(--surface)] md:rounded-[14px]">
+                      <Image
+                        src={item.image.src}
+                        alt={item.image.alt}
+                        fill
+                        sizes="(max-width: 767px) 88vw, (max-width: 1279px) 52vw, 25vw"
+                        className="object-cover object-center"
+                      />
+                    </div>
+                  )}
                 </Link>
               </CarouselItem>
             ))}
+            <div className="shrink-0 grow-0 basis-[var(--layout-side-padding)]" aria-hidden="true" />
           </CarouselContent>
-
-          <div
-            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-[linear-gradient(270deg,var(--surface-header)_18%,rgba(236,235,230,0.84)_48%,rgba(236,235,230,0)_100%)] backdrop-blur-[8px] md:w-32"
-            aria-hidden="true"
-          />
           <CatalogProductsArticlesNextButton />
         </Carousel>
       </div>

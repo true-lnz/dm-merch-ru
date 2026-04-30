@@ -5,7 +5,7 @@ export const PARTNER_CATALOG_QUERY_PRICE_FROM_KEY = "priceFrom";
 export const PARTNER_CATALOG_QUERY_PRICE_TO_KEY = "priceTo";
 export const PARTNER_CATALOG_QUERY_STOCK_FROM_KEY = "stockFrom";
 export const PARTNER_CATALOG_QUERY_SORT_KEY = "sort";
-export const PARTNER_CATALOG_DEFAULT_SORT = "price-asc";
+export const PARTNER_CATALOG_DEFAULT_SORT = "none";
 
 export type PartnerCatalogQueryParams = {
   category?: string;
@@ -29,7 +29,7 @@ export type PartnerCatalogFilterInputValues = {
   stockFrom: string;
 };
 
-export type PartnerCatalogSortKey = "price-asc" | "price-desc" | "stock-asc" | "stock-desc";
+export type PartnerCatalogSortKey = "none" | "price-asc" | "price-desc" | "stock-asc" | "stock-desc";
 
 export type PartnerCatalogQueryChildSection = {
   id: string;
@@ -134,11 +134,13 @@ export function hasActivePartnerCatalogFilters(filters: PartnerCatalogFilters) {
 
 export function normalizePartnerCatalogSort(sort: string | undefined): PartnerCatalogSortKey {
   switch (sort) {
+    case "none":
+      return sort;
     case "price-desc":
     case "stock-asc":
     case "stock-desc":
-      return sort;
     case "price-asc":
+      return sort;
     default:
       return PARTNER_CATALOG_DEFAULT_SORT;
   }
