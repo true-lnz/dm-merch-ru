@@ -1,4 +1,5 @@
 import { Button } from "@/shared/ui/button";
+import { cn } from "@/shared/lib/cn";
 import { useWishlist, type WishlistItem } from "@/shared/lib/wishlist";
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { RequestForm } from "@/shared/ui/request-form";
@@ -89,12 +90,16 @@ export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
   const { items, updateQuantity, increaseQuantity, decreaseQuantity, removeItem, clear } = useWishlist();
 
   const totalRub = useMemo(() => items.reduce((sum, item) => sum + item.unitPriceRub * item.quantity, 0), [items]);
+  const shouldDesktopScrollItems = items.length > 4;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="flex h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none flex-col overflow-hidden rounded-none bg-[#f5f4ef] bg-[url('/img_wishlist_card_cover.svg')] bg-cover bg-center bg-no-repeat p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:max-w-none lg:h-auto lg:max-h-[calc(100vh-2rem)] lg:max-h-[calc(100dvh-2rem)] lg:w-[min(1120px,calc(100vw-2rem))] lg:max-w-none lg:rounded-[18px] lg:p-8 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
+        className={cn(
+          "flex h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-none flex-col overflow-y-auto rounded-none bg-[#f5f4ef] bg-[url('/img_wishlist_card_cover.svg')] bg-cover bg-center bg-no-repeat p-[27px] pt-[max(27px,env(safe-area-inset-top))] pb-[max(27px,env(safe-area-inset-bottom))] top-0 left-0 translate-x-0 translate-y-0 sm:max-w-none lg:w-[min(1120px,calc(100vw-2rem))] lg:max-w-none lg:overflow-hidden lg:rounded-[18px] lg:p-8 lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2",
+          items.length > 0 ? "lg:h-[calc(100dvh-5rem)] lg:max-h-[calc(100dvh-5rem)]" : "lg:h-auto lg:max-h-none",
+        )}
       >
         <div className="flex shrink-0 items-start justify-between gap-4">
           <DialogTitle className="font-heading text-4xl leading-[0.95] tracking-[0.015em] uppercase text-[var(--heading)]">Вишлист</DialogTitle>
@@ -114,7 +119,7 @@ export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
             </p>
           </div>
         ) : (
-          <div className="mt-5 flex min-h-0 flex-1 flex-col gap-3">
+          <div className="mt-5 flex min-h-0 flex-1 flex-col gap-3 lg:grid lg:grid-rows-[auto_minmax(0,1fr)_auto] lg:overflow-hidden">
             <div className="flex shrink-0 items-center justify-between gap-3">
               <p className="text-sm font-medium leading-[1.3] tracking-[-0.03em] text-[#5a5a5a]">Товары в вишлисте: {items.length}</p>
               <button
@@ -126,9 +131,16 @@ export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
               </button>
             </div>
 
-            <div className="grid min-h-0 flex-1 gap-6 overflow-hidden lg:grid-cols-5 lg:items-start">
-              <section aria-label="Товары в вишлисте" className="flex min-h-0 flex-col gap-3 overflow-hidden lg:col-span-2">
-                <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+            <div className="grid gap-6 lg:min-h-0 lg:overflow-hidden lg:grid-cols-5 lg:items-start">
+              <section aria-label="Товары в вишлисте" className="flex flex-col gap-3 lg:min-h-0 lg:overflow-hidden lg:col-span-2">
+                <div
+                  className={cn(
+                    "pr-1 lg:min-h-0 lg:flex-1",
+                    shouldDesktopScrollItems
+                      ? "lg:max-h-[calc(100dvh-24rem)] lg:overflow-y-auto"
+                      : "lg:max-h-none lg:overflow-y-visible",
+                  )}
+                >
                   <div className="grid gap-3">
                     {items.map((item) => (
                       <WishlistProductCard

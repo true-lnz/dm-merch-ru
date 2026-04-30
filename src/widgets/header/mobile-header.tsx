@@ -222,7 +222,7 @@ export function MobileHeaderBar({
   return (
     <div className="relative z-10 flex min-h-[80px] items-center justify-between gap-5 py-3 lg:hidden">
       <TransitionLink href="/" source="header" className="inline-flex items-center" aria-label="На главную страницу">
-        <Image src="/logo-dm.svg" alt="Держи Марку" width={273} height={37} className="h-auto w-[147px] md:w-[178px]" />
+        <Image src="/logo-dm.svg" alt="Держи Марку" width={273} height={37} className="h-auto w-[178px]" />
       </TransitionLink>
 
       <MobileHeaderActions onOpenMenu={onOpenMenu} onOpenWishlist={onOpenWishlist} showWishlist={showWishlist} wishlistCount={wishlistCount} />

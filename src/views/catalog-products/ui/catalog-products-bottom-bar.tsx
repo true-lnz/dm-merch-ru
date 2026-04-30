@@ -140,7 +140,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
               <button
                 type="button"
                 onClick={handleCategoryTriggerClick}
-                className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-[10px] border border-[rgba(42,42,42,0.08)] bg-white px-3 text-base font-medium leading-none tracking-[-0.03em] text-[#404040] transition-colors hover:bg-[#f4f3ee]"
+                className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-[6px] md:rounded-[9px] border border-[rgba(42,42,42,0.08)] bg-white px-3 text-base font-medium leading-none tracking-[-0.03em] text-[#404040] transition-colors hover:bg-[#f4f3ee]"
                 aria-expanded={isDesktopCategoryMenuOpen || isMobileCategoryDialogOpen}
                 aria-haspopup="menu"
                 aria-label="Открыть категории"
@@ -171,7 +171,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                               onMouseEnter={() => setActiveDesktopCategoryId(category.id)}
                               onFocus={() => setActiveDesktopCategoryId(category.id)}
                               className={cn(
-                                "flex w-full cursor-pointer items-center gap-2 rounded-[10px] px-2.5 py-2 text-left transition-colors",
+                                "flex w-full cursor-pointer items-center gap-2 rounded-[6px] md:rounded-[9px] px-2.5 py-2 text-left transition-colors",
                                 isActive ? "bg-[var(--card-bg)]" : "hover:bg-[var(--card-bg)]/55",
                               )}
                             >
@@ -197,7 +197,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                             href={subcategory.href}
                             source="menu"
                             onClick={handleNavigateFromOverlay}
-                            className="cursor-pointer rounded-[10px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)] hover:text-[var(--accent)]"
+                            className="cursor-pointer rounded-[6px] md:rounded-[9px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)] hover:text-[var(--accent)]"
                           >
                             {subcategory.title}
                           </TransitionLink>
@@ -221,13 +221,13 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                   onChange={handleSearchChange}
                   onFocus={() => setIsSearchFocused(true)}
                   placeholder="Поиск"
-                  className="h-10 w-full rounded-[10px] border border-[rgba(42,42,42,0.08)] bg-[#f7f6f2] pl-9 pr-3 text-base font-medium leading-none tracking-[-0.03em] text-[#404040] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
+                  className="h-10 w-full rounded-[6px] md:rounded-[9px] border border-[rgba(42,42,42,0.08)] bg-[#f7f6f2] pl-9 pr-3 text-base font-medium leading-none tracking-[-0.03em] text-[#404040] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
                   aria-label="Поиск по подкатегориям"
                 />
               </label>
 
               {isSearchResultsOpen ? (
-                <div className="absolute left-[calc(var(--layout-side-padding)*-1-48px)] right-[calc(var(--layout-side-padding)*-1)] top-[calc(100%+24px)] z-40 overflow-hidden rounded-[16px] border border-[rgba(42,42,42,0.08)] bg-white shadow-[0_20px_50px_rgba(42,42,42,0.16)] md:left-0 md:right-auto md:top-[calc(100%+22.5px)] w-[86vw] md:w-full">
+                <div className="absolute left-[calc(var(--layout-side-padding)*-1-48px)] right-[calc(var(--layout-side-padding)*-1)] top-[calc(100%+24px)] z-40 w-[86vw] overflow-hidden rounded-[9px] md:rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white shadow-[0_20px_50px_rgba(42,42,42,0.16)] md:left-0 md:right-auto md:top-[calc(100%+22.5px)] md:w-full">
                   {filteredResults.length > 0 ? (
                     <div className="max-h-[min(60vh,420px)] overflow-y-auto p-2">
                       {filteredResults.map((item) => (
@@ -251,7 +251,13 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
               ) : null}
             </div>
 
-            <WishlistTrigger count={wishlistCount} variant="desktop" onClick={openWishlistDialog} className="h-10 whitespace-nowrap px-3" />
+            <WishlistTrigger count={wishlistCount} variant="mobile-header" onClick={openWishlistDialog} className="h-10 w-10 md:hidden" />
+            <WishlistTrigger
+              count={wishlistCount}
+              variant="desktop"
+              onClick={openWishlistDialog}
+              className="hidden h-10 whitespace-nowrap px-3 md:inline-flex"
+            />
           </div>
         </div>
       </section>

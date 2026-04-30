@@ -69,14 +69,14 @@ export function CatalogProductsArticles({ items }: CatalogProductsArticlesProps)
                 <Link
                   href={item.href}
                   className={cn(
-                    "group block h-full border-l border-[rgba(42,42,42,0.08)] px-4 py-3 transition-colors duration-200 hover:bg-white md:px-5 md:py-4",
+                    "group flex flex-col h-full border-l border-[rgba(42,42,42,0.08)] px-4 py-3 transition-colors duration-200 hover:bg-white md:px-5 md:py-4",
                     item.variant === "all-articles" && "flex flex-col justify-between bg-[var(--accent)] hover:bg-[var(--accent-hover)] ",
                   )}
                 >
                   <div className="pb-3 pt-1">
                     <h3
                       className={cn(
-                        "font-heading whitespace-pre-line text-2xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)]",
+                        "font-heading md:whitespace-pre-line text-xl md:2xl uppercase leading-[0.95] tracking-[0.015em] text-[var(--heading)]",
                         item.variant === "all-articles" && "text-white",
                       )}
                     >
@@ -84,7 +84,7 @@ export function CatalogProductsArticles({ items }: CatalogProductsArticlesProps)
                     </h3>
                   </div>
                   {item.variant === "all-articles" ? null : (
-                    <div className="relative aspect-[1740/340] overflow-hidden rounded-[12px] border border-[rgba(42,42,42,0.08)] bg-[var(--surface)] md:rounded-[14px]">
+                    <div className="relative aspect-[1740/340] mt-auto overflow-hidden rounded-[12px] border border-[rgba(42,42,42,0.08)] bg-[var(--surface)] md:rounded-[14px]">
                       <Image
                         src={item.image.src}
                         alt={item.image.alt}
