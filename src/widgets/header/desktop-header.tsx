@@ -1,27 +1,27 @@
 ﻿import { headerNavigation } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
 import {
-	NavigationMenu,
-	NavigationMenuContent,
-	NavigationMenuItem,
-	NavigationMenuLink,
-	NavigationMenuList,
-	NavigationMenuTrigger,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
+import { TransitionLink } from "@/shared/ui/page-transition";
 import { SiteContacts } from "@/shared/ui/site-contacts";
+import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
-import { TransitionLink } from "@/shared/ui/page-transition";
 import {
-	HeaderIconLink,
-	catalogMenuLinkClassName,
-	catalogTriggerClassName,
-	getEmailHref,
-	getPhoneHref,
-	isActiveRoute,
-	navLinkClassName,
+  HeaderIconLink,
+  catalogMenuLinkClassName,
+  catalogTriggerClassName,
+  getEmailHref,
+  getPhoneHref,
+  isActiveRoute,
+  navLinkClassName,
 } from "./header.shared";
-import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
 
 function DesktopNavigation({ pathname }: { pathname: string | null }) {
   return (
@@ -55,10 +55,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
                           key={child.href}
                           render={<TransitionLink href={child.href} source="header" />}
                           closeOnClick
-                          className={cn(
-                            catalogMenuLinkClassName,
-                            child.label === "Каталог продукции" && "font-semibold text-[#404040]",
-                          )}
+                          className={cn(catalogMenuLinkClassName, child.label === "Каталог продукции" && "font-semibold text-[#404040]")}
                         >
                           <span>{child.label}</span>
                           <ChevronRightIcon
@@ -96,18 +93,8 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
 function TabletHeaderActions() {
   return (
     <div className="hidden items-center gap-2 lg:flex xl:hidden">
-      <HeaderIconLink
-        href={getPhoneHref()}
-        ariaLabel="Позвонить"
-        iconSrc="/icons/ic_contact_pill_phone.png"
-        size={36}
-      />
-      <HeaderIconLink
-        href={getEmailHref()}
-        ariaLabel="Написать на email"
-        iconSrc="/icons/ic_contact_pill_mail.png"
-        size={36}
-      />
+      <HeaderIconLink href={getPhoneHref()} ariaLabel="Позвонить" iconSrc="/icons/ic_contact_pill_phone.png" size={36} />
+      <HeaderIconLink href={getEmailHref()} ariaLabel="Написать на email" iconSrc="/icons/ic_contact_pill_mail.png" size={36} />
     </div>
   );
 }
@@ -125,15 +112,9 @@ export function DesktopHeader({
 }) {
   return (
     <div className="relative z-10 hidden min-h-[84px] items-center justify-between gap-5 py-3 lg:flex lg:min-h-[88px] xl:min-h-[93px]">
-      <div className="flex min-w-0 items-center gap-8 xl:gap-[6.85rem]">
+      <div className="flex min-w-0 items-center gap-8 2xl:gap-[6.85rem]">
         <TransitionLink href="/" source="header" className="inline-flex items-center" aria-label="На главную страницу">
-          <Image
-            src="/logo-dm.svg"
-            alt="Держи Марку"
-            width={273}
-            height={37}
-            className="h-auto w-[178px] lg:w-[204px] xl:w-[273px]"
-          />
+          <Image src="/logo-dm.svg" alt="Держи Марку" width={273} height={37} className="h-auto w-[178px] lg:w-[204px] xl:w-[273px]" />
         </TransitionLink>
 
         <DesktopNavigation pathname={pathname} />
@@ -142,12 +123,7 @@ export function DesktopHeader({
       <TabletHeaderActions />
       <div className="hidden xl:flex items-center gap-2">
         {showWishlist ? <WishlistTrigger count={wishlistCount} variant="desktop" onClick={onOpenWishlist} /> : null}
-        <div className="2xl:hidden">
-          <SiteContacts className="!flex" showSocials={false} />
-        </div>
-        <div className="hidden 2xl:block">
-          <SiteContacts className="!flex" />
-        </div>
+        <SiteContacts className="!flex" />
       </div>
     </div>
   );
