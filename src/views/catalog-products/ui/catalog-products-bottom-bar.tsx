@@ -8,7 +8,7 @@ import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
 import { CatalogCategoryIcon } from "@/widgets/catalog-products-categories";
 import type { CatalogProductsLandingCategory } from "@/widgets/catalog-products/model/types";
 import { ChevronDownIcon, ChevronRightIcon, LayoutGridIcon, SearchIcon, XIcon } from "lucide-react";
-import { type ChangeEvent, type RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { type ChangeEvent, type RefObject, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 type CatalogProductsBottomBarProps = {
   categories: CatalogProductsLandingCategory[];
@@ -51,8 +51,11 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
   const [expandedMobileCategoryId, setExpandedMobileCategoryId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isTwoColumnSubcategoryMenu, setIsTwoColumnSubcategoryMenu] = useState(false);
   const categoryMenuRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLDivElement | null>(null);
+  const desktopCategoryPanelRef = useRef<HTMLDivElement | null>(null);
+  const desktopSubcategorySingleColumnMeasureRef = useRef<HTMLDivElement | null>(null);
 
   const normalizedQuery = searchQuery.trim().toLocaleLowerCase("ru");
   const searchResults = useMemo<SearchResultItem[]>(() => {
@@ -84,6 +87,31 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
 
   useOutsideClick(categoryMenuRef, () => setIsDesktopCategoryMenuOpen(false), isDesktopCategoryMenuOpen);
   useOutsideClick(searchRef, () => setIsSearchFocused(false), isSearchResultsOpen);
+
+  useLayoutEffect(() => {
+    if (!isDesktopCategoryMenuOpen || !activeDesktopCategory) {
+      return;
+    }
+
+    function updateSubcategoryColumns() {
+      const categoryPanel = desktopCategoryPanelRef.current;
+      const singleColumnMeasure = desktopSubcategorySingleColumnMeasureRef.current;
+
+      if (!categoryPanel || !singleColumnMeasure) {
+        return;
+      }
+
+      const shouldUseTwoColumns = singleColumnMeasure.scrollHeight > categoryPanel.clientHeight;
+      setIsTwoColumnSubcategoryMenu((current) => (current === shouldUseTwoColumns ? current : shouldUseTwoColumns));
+    }
+
+    updateSubcategoryColumns();
+    window.addEventListener("resize", updateSubcategoryColumns);
+
+    return () => {
+      window.removeEventListener("resize", updateSubcategoryColumns);
+    };
+  }, [activeDesktopCategory, isDesktopCategoryMenuOpen]);
 
   useEffect(() => {
     function handleResize() {
@@ -158,8 +186,11 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
 
               {isDesktopCategoryMenuOpen && activeDesktopCategory ? (
                 <div className="absolute left-0 top-[calc(100%+24px)] z-40 hidden md:block">
-                  <div className="relative flex">
-                    <div className="w-[520px] overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white p-2 shadow-[0_20px_50px_rgba(42,42,42,0.16)]">
+                  <div className="relative">
+                    <div
+                      ref={desktopCategoryPanelRef}
+                      className="w-[520px] overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white p-2 shadow-[0_20px_50px_rgba(42,42,42,0.16)]"
+                    >
                       <div className="grid grid-cols-2 gap-1">
                         {categories.map((category) => {
                           const isActive = category.id === activeDesktopCategory.id;
@@ -186,22 +217,45 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                       </div>
                     </div>
 
-                    <div className="ml-2 w-[520px] overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white p-2 shadow-[0_20px_50px_rgba(42,42,42,0.16)]">
+                    <div
+                      className={cn(
+                        "absolute left-[calc(100%+8px)] top-0 h-full overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white p-2 shadow-[0_20px_50px_rgba(42,42,42,0.16)]",
+                        isTwoColumnSubcategoryMenu ? "w-[520px]" : "w-max",
+                      )}
+                    >
                       <div className="px-2.5 py-1.5">
                         <p className="text-sm font-semibold tracking-[-0.03em] text-[var(--heading)]">{activeDesktopCategory.title}</p>
                       </div>
-                      <div className="grid grid-cols-2 gap-1">
+                      <div className={cn("grid gap-1", isTwoColumnSubcategoryMenu ? "grid-cols-2" : "grid-cols-1 justify-items-start")}>
                         {activeDesktopCategory.subcategories.map((subcategory) => (
                           <TransitionLink
                             key={subcategory.id}
                             href={subcategory.href}
                             source="menu"
                             onClick={handleNavigateFromOverlay}
-                            className="cursor-pointer rounded-[6px] md:rounded-[9px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)] hover:text-[var(--accent)]"
+                            className={cn(
+                              "cursor-pointer rounded-[6px] md:rounded-[9px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)] hover:text-[var(--accent)]",
+                              !isTwoColumnSubcategoryMenu && "inline-flex w-auto max-w-full",
+                            )}
                           >
                             {subcategory.title}
                           </TransitionLink>
                         ))}
+                      </div>
+                    </div>
+
+                    <div className="pointer-events-none absolute left-[-9999px] top-0 -z-10 opacity-0" aria-hidden="true">
+                      <div ref={desktopSubcategorySingleColumnMeasureRef} className="h-auto w-max overflow-visible rounded-[18px] border p-2">
+                        <div className="px-2.5 py-1.5">
+                          <p className="text-sm font-semibold tracking-[-0.03em]">{activeDesktopCategory.title}</p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-1 justify-items-start">
+                          {activeDesktopCategory.subcategories.map((subcategory) => (
+                            <div key={subcategory.id} className="inline-flex w-auto max-w-full rounded-[6px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em]">
+                              {subcategory.title}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
