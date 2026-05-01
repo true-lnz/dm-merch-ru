@@ -7,7 +7,7 @@ type CatalogProductsHeroProps = {
   portraits: CatalogProductsLandingPortrait[];
 };
 
-const HERO_CARD_HEIGHT = "clamp(112px, 10.5vw, 208px)";
+const HERO_CARD_HEIGHT = "calc(clamp(112px, 10.5vw, 208px) * 1.1556)";
 const HERO_PORTRAIT_WIDTH = `calc(${HERO_CARD_HEIGHT} * 0.75)`;
 
 export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogProductsHeroProps) {

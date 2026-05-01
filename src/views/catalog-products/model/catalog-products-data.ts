@@ -5,13 +5,13 @@ import { PARTNER_CATALOG_ALL_FILTER_ID, getPartnerCatalogData } from "@/views/pa
 import { getPartnerCatalogPathForFilter } from "@/views/partner-catalog/model/partner-catalog-query";
 
 const HERO_PORTRAITS: CatalogProductsLandingPortrait[] = [
-  { src: "/catalog-products/1.png", alt: "Изображение каталога продукции 1" },
-  { src: "/catalog-products/2.png", alt: "Изображение каталога продукции 2" },
-  { src: "/catalog-products/3.png", alt: "Изображение каталога продукции 3" },
+  { src: "/catalog-products/1.webp", alt: "Изображение каталога продукции 1" },
+  { src: "/catalog-products/2.webp", alt: "Изображение каталога продукции 2" },
+  { src: "/catalog-products/3.webp", alt: "Изображение каталога продукции 3" },
   { src: "/catalog-products/4.svg", alt: "Центральное изображение каталога продукции" },
-  { src: "/catalog-products/5.png", alt: "Изображение каталога продукции 5" },
-  { src: "/catalog-products/6.png", alt: "Изображение каталога продукции 6" },
-  { src: "/catalog-products/7.png", alt: "Изображение каталога продукции 7" },
+  { src: "/catalog-products/5.webp", alt: "Изображение каталога продукции 5" },
+  { src: "/catalog-products/6.webp", alt: "Изображение каталога продукции 6" },
+  { src: "/catalog-products/7.webp", alt: "Изображение каталога продукции 7" },
 ] as const;
 
 export async function getCatalogProductsLandingData(): Promise<CatalogProductsLandingData> {
