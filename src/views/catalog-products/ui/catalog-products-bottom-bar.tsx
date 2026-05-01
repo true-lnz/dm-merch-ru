@@ -47,7 +47,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
   const { count: wishlistCount } = useWishlist();
   const [isDesktopCategoryMenuOpen, setIsDesktopCategoryMenuOpen] = useState(false);
   const [isMobileCategoryDialogOpen, setIsMobileCategoryDialogOpen] = useState(false);
-  const [activeDesktopCategoryId, setActiveDesktopCategoryId] = useState(categories[0]?.id ?? "");
+  const [activeDesktopCategoryId, setActiveDesktopCategoryId] = useState<string | null>(null);
   const [expandedMobileCategoryId, setExpandedMobileCategoryId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -78,12 +78,13 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
   }, [normalizedQuery, searchResults]);
 
   const isSearchResultsOpen = isSearchFocused && normalizedQuery.length > 0;
-  const resolvedActiveDesktopCategoryId = categories.some((category) => category.id === activeDesktopCategoryId)
-    ? activeDesktopCategoryId
-    : (categories[0]?.id ?? "");
+  const resolvedActiveDesktopCategoryId =
+    activeDesktopCategoryId && categories.some((category) => category.id === activeDesktopCategoryId) ? activeDesktopCategoryId : null;
   const resolvedExpandedMobileCategoryId =
     expandedMobileCategoryId && categories.some((category) => category.id === expandedMobileCategoryId) ? expandedMobileCategoryId : null;
-  const activeDesktopCategory = categories.find((category) => category.id === resolvedActiveDesktopCategoryId) ?? categories[0] ?? null;
+  const activeDesktopCategory = resolvedActiveDesktopCategoryId
+    ? categories.find((category) => category.id === resolvedActiveDesktopCategoryId) ?? null
+    : null;
 
   useOutsideClick(categoryMenuRef, () => setIsDesktopCategoryMenuOpen(false), isDesktopCategoryMenuOpen);
   useOutsideClick(searchRef, () => setIsSearchFocused(false), isSearchResultsOpen);
@@ -148,15 +149,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
       return;
     }
 
-    setIsDesktopCategoryMenuOpen((open) => {
-      const nextOpen = !open;
-
-      if (nextOpen && categories[0]) {
-        setActiveDesktopCategoryId((current) => current || categories[0].id);
-      }
-
-      return nextOpen;
-    });
+    setIsDesktopCategoryMenuOpen((open) => !open);
   }
 
   return (
@@ -184,27 +177,27 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                 />
               </button>
 
-              {isDesktopCategoryMenuOpen && activeDesktopCategory ? (
+              {isDesktopCategoryMenuOpen ? (
                 <div className="absolute left-0 top-[calc(100%+24px)] z-40 hidden md:block">
                   <div className="relative">
                     <div
                       ref={desktopCategoryPanelRef}
                       className="w-[520px] overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white p-2 shadow-[0_20px_50px_rgba(42,42,42,0.16)]"
                     >
-                      <div className="grid grid-cols-2 gap-1">
+                        <div className="grid grid-cols-2 gap-1">
                         {categories.map((category) => {
-                          const isActive = category.id === activeDesktopCategory.id;
+                          const isActive = category.id === resolvedActiveDesktopCategoryId;
 
                           return (
                             <button
                               key={category.id}
                               type="button"
-                              onMouseEnter={() => setActiveDesktopCategoryId(category.id)}
-                              onFocus={() => setActiveDesktopCategoryId(category.id)}
+                              onClick={() => setActiveDesktopCategoryId(category.id)}
                               className={cn(
                                 "flex w-full cursor-pointer items-center gap-2 rounded-[6px] md:rounded-[9px] px-2.5 py-2 text-left transition-colors",
                                 isActive ? "bg-[var(--card-bg)]" : "hover:bg-[var(--card-bg)]/55",
                               )}
+                              aria-expanded={isActive}
                             >
                               <CatalogCategoryIcon iconId={category.iconId} monochrome className="h-6 w-8 text-[var(--accent)] md:h-6 md:w-8" />
                               <span className="min-w-0 flex-1 text-sm font-medium leading-[1.25] tracking-[-0.03em] text-[var(--heading)]">
@@ -217,47 +210,54 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                       </div>
                     </div>
 
-                    <div
-                      className={cn(
-                        "absolute left-[calc(100%+8px)] top-0 h-full overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white p-2 shadow-[0_20px_50px_rgba(42,42,42,0.16)]",
-                        isTwoColumnSubcategoryMenu ? "w-[520px]" : "w-max",
-                      )}
-                    >
-                      <div className="px-2.5 py-1.5">
-                        <p className="text-sm font-semibold tracking-[-0.03em] text-[var(--heading)]">{activeDesktopCategory.title}</p>
-                      </div>
-                      <div className={cn("grid gap-1", isTwoColumnSubcategoryMenu ? "grid-cols-2" : "grid-cols-1 justify-items-start")}>
-                        {activeDesktopCategory.subcategories.map((subcategory) => (
-                          <TransitionLink
-                            key={subcategory.id}
-                            href={subcategory.href}
-                            source="menu"
-                            onClick={handleNavigateFromOverlay}
-                            className={cn(
-                              "cursor-pointer rounded-[6px] md:rounded-[9px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)] hover:text-[var(--accent)]",
-                              !isTwoColumnSubcategoryMenu && "inline-flex w-auto max-w-full",
-                            )}
-                          >
-                            {subcategory.title}
-                          </TransitionLink>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="pointer-events-none absolute left-[-9999px] top-0 -z-10 opacity-0" aria-hidden="true">
-                      <div ref={desktopSubcategorySingleColumnMeasureRef} className="h-auto w-max overflow-visible rounded-[18px] border p-2">
+                    {activeDesktopCategory ? (
+                      <div
+                        className={cn(
+                          "absolute left-[calc(100%+8px)] top-0 h-full overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white p-2 shadow-[0_20px_50px_rgba(42,42,42,0.16)]",
+                          isTwoColumnSubcategoryMenu ? "w-[520px]" : "w-max",
+                        )}
+                      >
                         <div className="px-2.5 py-1.5">
-                          <p className="text-sm font-semibold tracking-[-0.03em]">{activeDesktopCategory.title}</p>
+                          <p className="text-sm font-semibold tracking-[-0.03em] text-[var(--heading)]">{activeDesktopCategory.title}</p>
                         </div>
-                        <div className="grid grid-cols-1 gap-1 justify-items-start">
+                        <div className={cn("grid gap-1", isTwoColumnSubcategoryMenu ? "grid-cols-2" : "grid-cols-1 justify-items-start")}>
                           {activeDesktopCategory.subcategories.map((subcategory) => (
-                            <div key={subcategory.id} className="inline-flex w-auto max-w-full rounded-[6px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em]">
+                            <TransitionLink
+                              key={subcategory.id}
+                              href={subcategory.href}
+                              source="menu"
+                              onClick={handleNavigateFromOverlay}
+                              className={cn(
+                                "cursor-pointer rounded-[6px] md:rounded-[9px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)] hover:text-[var(--accent)]",
+                                !isTwoColumnSubcategoryMenu && "inline-flex w-auto max-w-full",
+                              )}
+                            >
                               {subcategory.title}
-                            </div>
+                            </TransitionLink>
                           ))}
                         </div>
                       </div>
-                    </div>
+                    ) : null}
+
+                    {activeDesktopCategory ? (
+                      <div className="pointer-events-none absolute left-[-9999px] top-0 -z-10 opacity-0" aria-hidden="true">
+                        <div ref={desktopSubcategorySingleColumnMeasureRef} className="h-auto w-max overflow-visible rounded-[18px] border p-2">
+                          <div className="px-2.5 py-1.5">
+                            <p className="text-sm font-semibold tracking-[-0.03em]">{activeDesktopCategory.title}</p>
+                          </div>
+                          <div className="grid grid-cols-1 gap-1 justify-items-start">
+                            {activeDesktopCategory.subcategories.map((subcategory) => (
+                              <div
+                                key={subcategory.id}
+                                className="inline-flex w-auto max-w-full rounded-[6px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em]"
+                              >
+                                {subcategory.title}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               ) : null}
