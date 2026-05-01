@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   });
   const sort = normalizePartnerCatalogSort(searchParams.get("sort") ?? undefined);
 
-  const slice = getPartnerCatalogProductsPage(
+  const slice = await getPartnerCatalogProductsPage(
     filterId,
     Number.isFinite(offset) ? offset : 0,
     Number.isFinite(limit) ? Math.min(Math.max(limit, 1), MAX_LIMIT) : DEFAULT_LIMIT,

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build:merged-catalog": "node scripts/build-merged-catalog.mjs"
+    "sync:merged-catalog-taxonomy": "node --experimental-strip-types scripts/sync-merged-catalog-taxonomy.ts",
+    "build:merged-catalog": "node scripts/build-merged-catalog.mjs && node --experimental-strip-types scripts/sync-merged-catalog-taxonomy.ts"
   },
   "browserslist": {
     "production": [

@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
-  const data = getCatalogProductsLandingData();
+export default async function Page() {
+  const data = await getCatalogProductsLandingData();
 
   return <CatalogProductsPage data={data} />;
 }

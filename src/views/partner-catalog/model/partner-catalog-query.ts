@@ -5,7 +5,7 @@ export const PARTNER_CATALOG_QUERY_PRICE_FROM_KEY = "priceFrom";
 export const PARTNER_CATALOG_QUERY_PRICE_TO_KEY = "priceTo";
 export const PARTNER_CATALOG_QUERY_STOCK_FROM_KEY = "stockFrom";
 export const PARTNER_CATALOG_QUERY_SORT_KEY = "sort";
-export const PARTNER_CATALOG_DEFAULT_SORT = "none";
+export const PARTNER_CATALOG_DEFAULT_SORT = "price-asc";
 
 export type PartnerCatalogQueryParams = {
   category?: string;
@@ -29,16 +29,18 @@ export type PartnerCatalogFilterInputValues = {
   stockFrom: string;
 };
 
-export type PartnerCatalogSortKey = "none" | "price-asc" | "price-desc" | "stock-asc" | "stock-desc";
+export type PartnerCatalogSortKey = "price-asc" | "price-desc" | "stock-asc" | "stock-desc";
 
 export type PartnerCatalogQueryChildSection = {
   id: string;
   name: string;
+  sourceName?: string;
 };
 
 export type PartnerCatalogQueryRootSection = {
   id: string;
   name: string;
+  sourceName?: string;
   children: PartnerCatalogQueryChildSection[];
 };
 
@@ -134,8 +136,6 @@ export function hasActivePartnerCatalogFilters(filters: PartnerCatalogFilters) {
 
 export function normalizePartnerCatalogSort(sort: string | undefined): PartnerCatalogSortKey {
   switch (sort) {
-    case "none":
-      return sort;
     case "price-desc":
     case "stock-asc":
     case "stock-desc":
@@ -165,11 +165,11 @@ export function buildPartnerCatalogQueryIndex(categories: PartnerCatalogQueryRoo
   const childById = new Map<string, IndexedChildSection>();
   const roots = categories.map((rootCategory) => {
     const usedChildSlugs = new Set<string>();
-    const rootSlug = makeStableSlug(rootCategory.name, rootCategory.id, usedRootSlugs);
+    const rootSlug = makeStableSlug(rootCategory.sourceName ?? rootCategory.name, rootCategory.id, usedRootSlugs);
     const children = rootCategory.children.map((childCategory) => ({
       ...childCategory,
       rootId: rootCategory.id,
-      slug: makeStableSlug(childCategory.name, childCategory.id, usedChildSlugs),
+      slug: makeStableSlug(childCategory.sourceName ?? childCategory.name, childCategory.id, usedChildSlugs),
     }));
     const indexedRoot = {
       ...rootCategory,

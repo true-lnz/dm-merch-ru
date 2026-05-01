@@ -3,6 +3,7 @@ import "server-only";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
+import { getMergedCatalogTaxonomyOverrides } from "@/shared/lib/payload/merged-catalog-taxonomy";
 import {
   PARTNER_CATALOG_DEFAULT_SORT,
   getPartnerCatalogFilterInputValues,
@@ -133,12 +134,14 @@ export type PartnerCatalogProduct = {
 export type PartnerCatalogChildSection = {
   id: string;
   name: string;
+  sourceName: string;
   productCount: number;
 };
 
 export type PartnerCatalogRootSection = {
   id: string;
   name: string;
+  sourceName: string;
   productCount: number;
   children: PartnerCatalogChildSection[];
 };
@@ -216,6 +219,18 @@ function normalizePartnerCatalogImageUrl(value: string) {
   return value;
 }
 
+function getRootTaxonomyKey(rootId: string) {
+  return `root:${rootId}`;
+}
+
+function getChildTaxonomyKey(childId: string) {
+  return `child:${childId}`;
+}
+
+function resolveDisplayName(sourceName: string, override: string | undefined) {
+  return override?.trim() || sourceName;
+}
+
 function mapVariant(source: MergedCatalogVariant): PartnerCatalogVariant {
   return {
     id: source.id,
@@ -251,10 +266,6 @@ function getProductRepresentativeVariant(product: PartnerCatalogProduct, filters
 }
 
 function sortPartnerCatalogProducts(products: PartnerCatalogProduct[], filters: PartnerCatalogFilters, sort: PartnerCatalogSortKey) {
-  if (sort === PARTNER_CATALOG_DEFAULT_SORT) {
-    return [...products];
-  }
-
   return [...products].sort((left, right) => {
     const leftVariant = getProductRepresentativeVariant(left, filters);
     const rightVariant = getProductRepresentativeVariant(right, filters);
@@ -288,19 +299,22 @@ function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string
   return sortPartnerCatalogProducts(filteredProducts, filters, sort);
 }
 
-const getPartnerCatalogDataset = cache((): PartnerCatalogDataset => {
+const getPartnerCatalogDataset = cache(async (): Promise<PartnerCatalogDataset> => {
   const mergedCatalog = readJsonFile<MergedCatalogDataset>("merged-catalog.json");
+  const taxonomyOverrides = await getMergedCatalogTaxonomyOverrides();
   const categories = mergedCatalog.categories
     .map(
       (rootCategory): PartnerCatalogRootSection => ({
         id: rootCategory.id,
-        name: rootCategory.name,
+        name: resolveDisplayName(rootCategory.name, taxonomyOverrides.get(getRootTaxonomyKey(rootCategory.id))),
+        sourceName: rootCategory.name,
         productCount: rootCategory.productCount,
         children: rootCategory.children
           .map(
             (childCategory): PartnerCatalogChildSection => ({
               id: childCategory.id,
-              name: childCategory.name,
+              name: resolveDisplayName(childCategory.name, taxonomyOverrides.get(getChildTaxonomyKey(childCategory.id))),
+              sourceName: childCategory.name,
               productCount: childCategory.productCount,
             }),
           ),
@@ -311,9 +325,11 @@ const getPartnerCatalogDataset = cache((): PartnerCatalogDataset => {
   const categoryQuerySource = categories.map((rootCategory) => ({
     id: rootCategory.id,
     name: rootCategory.name,
+    sourceName: rootCategory.sourceName,
     children: rootCategory.children.map((childCategory) => ({
       id: childCategory.id,
       name: childCategory.name,
+      sourceName: childCategory.sourceName,
     })),
   }));
 
@@ -381,8 +397,8 @@ const getPartnerCatalogDataset = cache((): PartnerCatalogDataset => {
   };
 });
 
-export const getPartnerCatalogData = cache((): PartnerCatalogData => {
-  const dataset = getPartnerCatalogDataset();
+export const getPartnerCatalogData = cache(async (): Promise<PartnerCatalogData> => {
+  const dataset = await getPartnerCatalogDataset();
 
   return {
     categories: dataset.categories,
@@ -391,14 +407,14 @@ export const getPartnerCatalogData = cache((): PartnerCatalogData => {
 });
 
 export const getPartnerCatalogProductsPage = cache(
-  (
+  async (
     filterId: string,
     offset: number,
     limit: number,
     filters: PartnerCatalogFilters = {},
     sort: PartnerCatalogSortKey = PARTNER_CATALOG_DEFAULT_SORT,
-  ): PartnerCatalogPageSlice => {
-    const { products } = getPartnerCatalogDataset();
+  ): Promise<PartnerCatalogPageSlice> => {
+    const { products } = await getPartnerCatalogDataset();
     const filteredProducts = getFilteredProducts(products, filterId, filters, sort);
     const safeOffset = Math.max(0, offset);
     const safeLimit = Math.max(1, limit);
@@ -410,8 +426,8 @@ export const getPartnerCatalogProductsPage = cache(
   },
 );
 
-export const getPartnerCatalogInitialData = cache((limit: number, query: PartnerCatalogQueryParams = {}): PartnerCatalogInitialData => {
-  const { categories } = getPartnerCatalogDataset();
+export const getPartnerCatalogInitialData = cache(async (limit: number, query: PartnerCatalogQueryParams = {}): Promise<PartnerCatalogInitialData> => {
+  const { categories } = await getPartnerCatalogDataset();
   const selection = resolvePartnerCatalogSelection(categories, query, PARTNER_CATALOG_ALL_FILTER_ID);
   const filters = normalizePartnerCatalogFilters(query);
   const sort = normalizePartnerCatalogSort(query.sort);
@@ -426,12 +442,12 @@ export const getPartnerCatalogInitialData = cache((limit: number, query: Partner
     },
     initialFilters: getPartnerCatalogFilterInputValues(filters),
     initialSort: sort,
-    initialSlice: getPartnerCatalogProductsPage(selection.filterId, 0, limit, filters, sort),
+    initialSlice: await getPartnerCatalogProductsPage(selection.filterId, 0, limit, filters, sort),
   };
 });
 
-export const getPartnerCatalogProductDetailByVariantId = cache((variantId: string): PartnerCatalogProductDetail | null => {
-  const { categories, detailSourceByVariantId } = getPartnerCatalogDataset();
+export const getPartnerCatalogProductDetailByVariantId = cache(async (variantId: string): Promise<PartnerCatalogProductDetail | null> => {
+  const { categories, detailSourceByVariantId } = await getPartnerCatalogDataset();
   const detailSource = detailSourceByVariantId.get(variantId);
 
   if (!detailSource) {

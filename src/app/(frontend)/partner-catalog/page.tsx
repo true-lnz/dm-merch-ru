@@ -35,7 +35,7 @@ type PartnerCatalogPageSearchParams = Promise<{
 
 export default async function Page({ searchParams }: { searchParams: PartnerCatalogPageSearchParams }) {
   const resolvedSearchParams = await searchParams;
-  const initialData = getPartnerCatalogInitialData(16, {
+  const initialData = await getPartnerCatalogInitialData(16, {
     category: resolvedSearchParams.category,
     subcategory: resolvedSearchParams.subcategory,
     priceFrom: resolvedSearchParams.priceFrom,
@@ -46,7 +46,7 @@ export default async function Page({ searchParams }: { searchParams: PartnerCata
   const productId = resolvedSearchParams.product?.trim();
 
   if (productId) {
-    const detail = getPartnerCatalogProductDetailByVariantId(productId);
+    const detail = await getPartnerCatalogProductDetailByVariantId(productId);
 
     if (!detail) {
       notFound();

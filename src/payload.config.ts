@@ -9,9 +9,24 @@ import sharp from "sharp";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
+import { MergedCatalogTaxonomy } from "./collections/MergedCatalogTaxonomy";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+const DEFAULT_PAYLOAD_SECRET = "dm-merch-local-secret";
+const DEFAULT_DATABASE_URL = `file:${path.resolve(dirname, "..", "dm-merch.db")}`;
+const ruAdmin = {
+  ...ru,
+  translations: {
+    ...ru.translations,
+    general: {
+      ...ru.translations.general,
+      true: "Да",
+      false: "Нет",
+      noLabel: "Не задано",
+    },
+  },
+};
 
 export default buildConfig({
   admin: {
@@ -33,20 +48,21 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, MergedCatalogTaxonomy],
   editor: lexicalEditor(),
   i18n: {
     fallbackLanguage: "ru",
-    supportedLanguages: { ru, en },
+    supportedLanguages: { ru: ruAdmin, en },
   },
-  secret: process.env.PAYLOAD_SECRET || "",
+  secret: process.env.PAYLOAD_SECRET || DEFAULT_PAYLOAD_SECRET,
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URL || "",
+      url: process.env.DATABASE_URL || DEFAULT_DATABASE_URL,
     },
+    push: false,
   }),
   sharp,
   plugins: [],
