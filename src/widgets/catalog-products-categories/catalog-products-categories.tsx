@@ -314,7 +314,7 @@ export function CatalogProductsCategories({ items }: CatalogProductsCategoriesPr
     <section className="mt-[35px] md:mt-[45px] md:mb-[45px]">
       <PageSubheading title="Мерч и корпоративные подарки" />
 
-      <div className="mt-8 grid grid-cols-1 items-stretch gap-1 md:mt-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="mt-6 grid grid-cols-1 auto-rows-fr items-stretch md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6">
         {items.map((category) => (
           <div key={category.id} className="group relative z-0 h-full overflow-visible md:hover:z-28">
             <div aria-hidden="true" className="pointer-events-none hidden md:block md:invisible">

@@ -28,7 +28,7 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
     <NavigationMenu
       aria-label="Основная навигация"
       className="hidden lg:flex max-w-none"
-      positionerClassName="z-20 transition-none"
+      positionerClassName="z-35 transition-none"
       popupClassName="overflow-hidden rounded-b-[14px] rounded-t-none bg-white shadow-[0px_10px_22px_0px_rgba(0,0,0,0.08)] ring-0"
     >
       <NavigationMenuList className="gap-1 xl:gap-2">

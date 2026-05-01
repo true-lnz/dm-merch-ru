@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
 import { siteInfo } from "@/shared/config/site-info";
 import { formatPhoneHref } from "@/shared/lib/phone";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export const navLinkClassName =
   "inline-flex items-center justify-center !bg-transparent px-4 py-2 font-medium tracking-[-0.02em] text-[#404040] transition-colors hover:!bg-transparent hover:text-[var(--text-muted)] focus:!bg-transparent focus-visible:!bg-transparent data-active:!bg-transparent";
@@ -24,7 +24,7 @@ const headerIconLinkClassName =
   "inline-flex items-center justify-center rounded-[6px] bg-[var(--accent)] transition-colors hover:bg-[var(--accent-hover)]";
 
 export const desktopHeaderClassName =
-  "sticky top-0 z-30 overflow-hidden px-[var(--layout-side-padding)] backdrop-blur-md transition-shadow duration-300";
+  "sticky top-0 z-99 overflow-hidden px-[var(--layout-side-padding)] backdrop-blur-md transition-shadow duration-300";
 
 export const desktopBackgroundClassName =
   "pointer-events-none absolute inset-0 border-b lg:border-[var(--border)] lg:bg-[var(--surface-header)]/95 lg:opacity-100";
@@ -34,11 +34,7 @@ export function scaleFigma(value: number) {
 }
 
 function getScrollTop() {
-  return Math.max(
-    window.scrollY,
-    document.documentElement.scrollTop,
-    document.body.scrollTop,
-  );
+  return Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop);
 }
 
 export function isActiveRoute(pathname: string | null, href: string) {
@@ -114,24 +110,9 @@ export function useEscapeToClose(isEnabled: boolean, onClose: () => void) {
   }, [isEnabled, onClose]);
 }
 
-export function HeaderIconLink({
-  href,
-  ariaLabel,
-  iconSrc,
-  size,
-}: {
-  href: string;
-  ariaLabel: string;
-  iconSrc: string;
-  size: number;
-}) {
+export function HeaderIconLink({ href, ariaLabel, iconSrc, size }: { href: string; ariaLabel: string; iconSrc: string; size: number }) {
   return (
-    <a
-      href={href}
-      aria-label={ariaLabel}
-      className={headerIconLinkClassName}
-      style={{ width: `${size}px`, height: `${size}px` }}
-    >
+    <a href={href} aria-label={ariaLabel} className={headerIconLinkClassName} style={{ width: `${size}px`, height: `${size}px` }}>
       <Image src={iconSrc} alt="" width={20} height={20} className="size-[55%]" aria-hidden="true" />
     </a>
   );
