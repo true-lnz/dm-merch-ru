@@ -7,6 +7,9 @@ type CatalogProductsHeroProps = {
   portraits: CatalogProductsLandingPortrait[];
 };
 
+const HERO_CARD_HEIGHT = "clamp(112px, 10.5vw, 208px)";
+const HERO_PORTRAIT_WIDTH = `calc(${HERO_CARD_HEIGHT} * 0.75)`;
+
 export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogProductsHeroProps) {
   const leftPortraits = portraits.slice(0, 3);
   const rightPortraits = portraits.slice(4, 7);
@@ -35,14 +38,18 @@ export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogPr
               {leftPortraits.map((portrait, index) => (
                 <div
                   key={`${portrait.src}-${index}`}
-                  className="relative aspect-[3/4] w-[clamp(84px,8.1vw,156px)] shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
+                  className="relative shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
+                  style={{ height: HERO_CARD_HEIGHT, width: HERO_PORTRAIT_WIDTH }}
                 >
                   <Image src={portrait.src} alt={portrait.alt} fill sizes="(max-width: 1279px) 12vw, 156px" className="object-cover" />
                 </div>
               ))}
             </div>
 
-            <div className="relative aspect-square w-[clamp(112px,10.5vw,208px)] xl:w-[188px] shrink-0 overflow-hidden rounded-[22px] border border-[rgba(42,42,42,0.08)] [&_svg]:h-full [&_svg]:w-full">
+            <div
+              className="relative shrink-0 overflow-hidden rounded-[22px] border border-[rgba(42,42,42,0.08)] [&_svg]:h-full [&_svg]:w-full"
+              style={{ height: HERO_CARD_HEIGHT, width: HERO_CARD_HEIGHT }}
+            >
               <CatalogProductsHeroCenterSvg />
             </div>
 
@@ -50,7 +57,8 @@ export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogPr
               {rightPortraits.map((portrait, index) => (
                 <div
                   key={`${portrait.src}-${index + 4}`}
-                  className="relative aspect-[3/4] w-[clamp(84px,8.1vw,156px)] shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
+                  className="relative shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
+                  style={{ height: HERO_CARD_HEIGHT, width: HERO_PORTRAIT_WIDTH }}
                 >
                   <Image src={portrait.src} alt={portrait.alt} fill sizes="(max-width: 1279px) 12vw, 156px" className="object-cover" />
                 </div>
