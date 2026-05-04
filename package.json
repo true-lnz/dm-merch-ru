@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "download:project111:catalog": "bash scripts/download-project111-catalog.sh",
+    "download:project111:images": "bash scripts/download-project111-images.sh",
+    "download:project111": "bash scripts/download-project111-catalog.sh && bash scripts/download-project111-images.sh",
     "sync:merged-catalog-taxonomy": "node --experimental-strip-types scripts/sync-merged-catalog-taxonomy.ts",
     "build:merged-catalog": "node scripts/build-merged-catalog.mjs && node --experimental-strip-types scripts/sync-merged-catalog-taxonomy.ts"
   },

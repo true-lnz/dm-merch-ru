@@ -1,94 +1,73 @@
 #!/bin/bash
 
-LOGIN="90742_xmlexport"
-PASS="AlmazUralDM"
-BASE="https://api2.gifts.ru/export/v2/catalogue"
-WAIT="0.5"
-OUTPUT_DIR="/var/www/gifts_export"
+set -euo pipefail
 
-set -u
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./project111-export-common.sh
+source "$SCRIPT_DIR/project111-export-common.sh"
 
-mkdir -p "$OUTPUT_DIR"
-cd "$OUTPUT_DIR" || exit 1
+PRODUCT_XML_PATH="$PROJECT111_CATALOG_DIR/product.xml"
 
-echo "========================================="
-echo "Скачивание картинок Project 111"
-echo "========================================="
+project111_require_downloader
+mkdir -p "$PROJECT111_IMAGE_DIR"
 
-download_image() {
-    local url="$1"
-    local output="$2"
+project111_print_header "Скачивание изображений Project 111"
 
-    if [[ "$output" =~ \.(mp4|avi|mov|mkv|webm|flv|mp3|wav)$ ]]; then
-        echo "Пропускаю видео/аудио: $output"
-        return 0
-    fi
-
-    if [ -f "$output" ]; then
-        echo "Файл уже есть: $output"
-        return 0
-    fi
-
-    echo "Скачиваю: $output"
-    wget --wait="$WAIT" \
-         --user="$LOGIN" \
-         --password="$PASS" \
-         "$url" \
-         -O "$output" \
-         --no-check-certificate \
-         --quiet
-
-    if [ $? -ne 0 ]; then
-        echo "Ошибка загрузки: $url"
-        rm -f "$output"
-    fi
-
-    sleep "$WAIT"
-}
-
-if [ ! -f "product.xml" ]; then
-    echo "Сначала скачиваю product.xml..."
-    wget --wait="$WAIT" \
-         --user="$LOGIN" \
-         --password="$PASS" \
-         "$BASE/product.xml" \
-         -O "product.xml" \
-         --no-check-certificate
-    sleep "$WAIT"
+if [ ! -f "$PRODUCT_XML_PATH" ]; then
+  echo "Не найден $PRODUCT_XML_PATH, сначала скачиваю product.xml..."
+  BUILD_MERGED_CATALOG=0 "$SCRIPT_DIR/download-project111-catalog.sh" "product.xml"
 fi
 
 echo "Извлекаю пути к изображениям из product.xml..."
 
-{
-    grep -oE '<(small_image|big_image|super_big_image)[^>]*src="[^"]+"' product.xml \
-        | grep -oE 'src="[^"]+"' \
-        | cut -d'"' -f2
+node - "$PRODUCT_XML_PATH" <<'NODE' | while IFS= read -r asset_path; do
+const fs = require("node:fs");
 
-    grep -oE '<image>[^<]+</image>' product.xml \
-        | sed -E 's#<image>([^<]+)</image>#\1#'
-} | sort -u | while read -r img_path; do
+const xmlPath = process.argv[2];
+const xml = fs.readFileSync(xmlPath, "utf8");
+const assetPaths = new Set();
 
-    if [ -z "$img_path" ]; then
-        continue
-    fi
+for (const match of xml.matchAll(/<(small_image|big_image|super_big_image)[^>]*\ssrc="([^"]+)"/g)) {
+  const assetPath = match[2]?.trim();
+  if (assetPath) {
+    assetPaths.add(assetPath);
+  }
+}
 
-    if [[ "$img_path" =~ \.(mp4|avi|mov|mkv|webm|flv|mp3|wav)$ ]]; then
-        echo "Пропускаю видео/аудио: $img_path"
-        continue
-    fi
+for (const match of xml.matchAll(/<image>([^<]+)<\/image>/g)) {
+  const assetPath = match[1]?.trim();
+  if (assetPath) {
+    assetPaths.add(assetPath);
+  }
+}
 
-    url="$BASE/$img_path"
-    local_file="${img_path#/}"
+for (const match of xml.matchAll(/<product_attachment>([\s\S]*?)<\/product_attachment>/g)) {
+  const block = match[1];
+  const meaning = block.match(/<meaning>([^<]+)<\/meaning>/)?.[1]?.trim();
+  const imagePath = block.match(/<image>([^<]+)<\/image>/)?.[1]?.trim();
 
-    local_dir=$(dirname "$local_file")
-    if [ "$local_dir" != "." ] && [ "$local_dir" != "/" ]; then
-        mkdir -p "$local_dir"
-    fi
+  if (meaning === "1" && imagePath) {
+    assetPaths.add(imagePath);
+  }
+}
 
-    download_image "$url" "$local_file"
+const sortedAssetPaths = [...assetPaths].filter(Boolean).sort((left, right) => left.localeCompare(right));
+process.stdout.write(sortedAssetPaths.join("\n"));
+NODE
+  if [ -z "$asset_path" ]; then
+    continue
+  fi
+
+  if [[ "$asset_path" =~ \.(mp4|avi|mov|mkv|webm|flv|mp3|wav)$ ]]; then
+    echo "Пропускаю видео/аудио: $asset_path"
+    continue
+  fi
+
+  local_file="${asset_path#/}"
+  target_path="$PROJECT111_IMAGE_DIR/$local_file"
+
+  project111_download_relative_path "$asset_path" "$target_path" "skip-existing"
 done
 
 echo ""
-echo "========================================="
-echo "Готово! Картинки сохранены в: $OUTPUT_DIR"
-echo "========================================="
+project111_print_header "Готово! Изображения сохранены в $PROJECT111_IMAGE_DIR"
