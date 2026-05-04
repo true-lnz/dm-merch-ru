@@ -101,7 +101,7 @@ export function MobileMenu({
 
       <div
         id="mobile-header-menu"
-        className="fixed inset-0 z-50 overflow-y-auto bg-[var(--bg)] lg:hidden"
+        className="fixed inset-0 z-1001 overflow-y-auto bg-[var(--bg)] lg:hidden"
         role="dialog"
         aria-modal="true"
         aria-label="Мобильное меню"
