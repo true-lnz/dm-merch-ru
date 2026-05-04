@@ -24,6 +24,7 @@ export type CatalogProductsLandingSubcategory = {
 export type CatalogProductsLandingCategory = {
   id: string;
   title: string;
+  href: string;
   productCount: number;
   iconId?: string;
   subcategories: CatalogProductsLandingSubcategory[];

@@ -333,22 +333,24 @@ export function CatalogProductsCategories({ items }: CatalogProductsCategoriesPr
               <div className="relative flex h-full min-h-0 flex-col rounded-[22px] bg-transparent px-0 py-0 transition-[background-color,box-shadow,height,width] duration-200 md:min-w-full md:px-5 md:py-5 xl:px-6 xl:py-6 md:group-hover:h-auto md:group-hover:min-h-full md:group-hover:bg-white md:group-hover:shadow-[0_24px_60px_rgba(42,42,42,0.16)]">
                 <input id={`catalog-category-${category.id}`} type="checkbox" className="peer sr-only md:hidden" />
 
-                <label htmlFor={`catalog-category-${category.id}`} className="flex cursor-pointer items-center justify-between gap-3 py-2 md:hidden">
+                <div className="flex items-center justify-between gap-3 py-2 md:hidden">
                   <div className="flex min-w-0 items-center gap-3">
                     <div className="relative shrink-0">
                       <CatalogCategoryIcon iconId={category.iconId} />
                     </div>
 
                     <h3 className="overflow-hidden text-base font-medium leading-[1.25] tracking-[-0.03em] text-[var(--heading)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1] md:text-xl md:leading-[1.15]">
-                      {category.title}
+                      <Link href={category.href} className="transition-colors hover:text-[var(--accent)]">
+                        {category.title}
+                      </Link>
                     </h3>
                   </div>
 
-                  <span className="relative mt-0.5 block h-4 w-4 shrink-0 text-[var(--field-border)]">
+                  <label htmlFor={`catalog-category-${category.id}`} className="relative mt-0.5 block h-4 w-4 shrink-0 cursor-pointer text-[var(--field-border)]">
                     <span className="absolute left-0 top-1/2 h-[1.5px] w-4 -translate-y-1/2 rounded-full bg-current" />
                     <span className="absolute left-1/2 top-0 h-4 w-[1.5px] -translate-x-1/2 rounded-full bg-current transition-transform duration-200 peer-checked:scale-y-0" />
-                  </span>
-                </label>
+                  </label>
+                </div>
 
                 <div className="hidden md:block">
                   <div className="relative shrink-0">
@@ -356,7 +358,9 @@ export function CatalogProductsCategories({ items }: CatalogProductsCategoriesPr
                   </div>
 
                   <h3 className="mt-4 overflow-hidden text-xl font-medium leading-[1.15] tracking-[-0.03em] text-[var(--heading)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1] md:group-hover:block md:group-hover:overflow-visible md:group-hover:[-webkit-line-clamp:unset]">
-                    {category.title}
+                    <Link href={category.href} className="transition-colors hover:text-[var(--accent)]">
+                      {category.title}
+                    </Link>
                   </h3>
                 </div>
 

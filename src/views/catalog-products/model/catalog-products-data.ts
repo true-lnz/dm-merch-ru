@@ -41,6 +41,11 @@ export async function getCatalogProductsLandingData(): Promise<CatalogProductsLa
   const categories = partnerCatalogCategories.map((category) => ({
     id: category.id,
     title: category.name,
+    href: getPartnerCatalogPathForFilter(
+      partnerCatalogCategories,
+      category.id,
+      PARTNER_CATALOG_ALL_FILTER_ID,
+    ),
     productCount: category.productCount,
     iconId: getCatalogRootIconId(category.id),
     subcategories: category.children.map((subcategory) => ({

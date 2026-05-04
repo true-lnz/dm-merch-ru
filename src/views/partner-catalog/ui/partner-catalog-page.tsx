@@ -781,6 +781,7 @@ function CategoryFilterList({
   expandedRootId,
   onExpandedRootChange,
   onAllProductsClick,
+  onRootCategoryClick,
   onChildCategoryClick,
   showIcons = false,
 }: {
@@ -789,6 +790,7 @@ function CategoryFilterList({
   expandedRootId: string | null;
   onExpandedRootChange: (rootId: string | null) => void;
   onAllProductsClick: () => void;
+  onRootCategoryClick: (rootCategoryId: string) => void;
   onChildCategoryClick: (rootCategoryId: string, childCategoryId: string) => void;
   showIcons?: boolean;
 }) {
@@ -825,6 +827,16 @@ function CategoryFilterList({
               </CollapsibleTrigger>
               <CollapsibleContent className="pb-2">
                 <div className={cn("mt-1 space-y-1", showIcons ? "pl-[44px]" : "pl-3")}>
+                  <button
+                    type="button"
+                    onClick={() => onRootCategoryClick(category.id)}
+                    className={cn(
+                      "w-full cursor-pointer py-1.5 text-left text-sm leading-[1.3] transition-colors",
+                      activeFilterId === category.id ? "font-medium text-[var(--accent)]" : "text-[#6f6f6f] hover:text-black",
+                    )}
+                  >
+                    Все товары
+                  </button>
                   {category.children.map((childCategory) => {
                     const isActive = activeFilterId === childCategory.id;
 
@@ -890,7 +902,9 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     () =>
       activeFilterId === ALL_FILTER_ID
         ? undefined
-        : initialData.categories.find((category) => category.children.some((childCategory) => childCategory.id === activeFilterId)),
+        : initialData.categories.find(
+            (category) => category.id === activeFilterId || category.children.some((childCategory) => childCategory.id === activeFilterId),
+          ),
     [activeFilterId, initialData.categories],
   );
   const activeChildCategory = useMemo(
@@ -898,7 +912,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     [activeFilterId, activeRootCategory],
   );
   const nextCursor = products.length < totalCount ? products.length : null;
-  const activeCategoryLabel = activeChildCategory?.name ?? "Все товары";
+  const activeCategoryLabel = activeChildCategory?.name ?? activeRootCategory?.name ?? "Все товары";
   const hasPendingFilterChanges = !areFilterInputValuesEqual(normalizedDraftFilterInputs, appliedFilterInputs);
   const shouldShowFilterApplyPopover = hasPendingFilterChanges && !isFilterApplyPopoverDismissed;
   const displayedProducts = useMemo(
@@ -1116,6 +1130,11 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     handleFilterChange(childCategoryId);
   }
 
+  function handleRootCategoryClick(rootCategoryId: string) {
+    setExpandedRootId(rootCategoryId);
+    handleFilterChange(rootCategoryId);
+  }
+
   function handlePageSizeChange(nextPageSize: (typeof PAGE_SIZE_OPTIONS)[number]) {
     if (nextPageSize === pageSize || isFetchingProducts) {
       return;
@@ -1149,6 +1168,11 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
   function handleMobileChildCategoryClick(rootCategoryId: string, childCategoryId: string) {
     handleChildCategoryClick(rootCategoryId, childCategoryId);
+    setIsMobileCategoryDialogOpen(false);
+  }
+
+  function handleMobileRootCategoryClick(rootCategoryId: string) {
+    handleRootCategoryClick(rootCategoryId);
     setIsMobileCategoryDialogOpen(false);
   }
 
@@ -1289,6 +1313,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
                 expandedRootId={expandedRootId}
                 onExpandedRootChange={setExpandedRootId}
                 onAllProductsClick={handleAllProductsClick}
+                onRootCategoryClick={handleRootCategoryClick}
                 onChildCategoryClick={handleChildCategoryClick}
               />
             </div>
@@ -1359,6 +1384,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
                 handleAllProductsClick();
                 setIsMobileCategoryDialogOpen(false);
               }}
+              onRootCategoryClick={handleMobileRootCategoryClick}
               onChildCategoryClick={handleMobileChildCategoryClick}
             />
           </div>

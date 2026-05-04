@@ -73,6 +73,7 @@ type IndexedRootSection = Omit<PartnerCatalogQueryRootSection, "children"> & {
 type PartnerCatalogQueryIndex = {
   roots: IndexedRootSection[];
   rootById: Map<string, IndexedRootSection>;
+  rootBySlug: Map<string, IndexedRootSection>;
   childById: Map<string, IndexedChildSection>;
 };
 
@@ -162,6 +163,7 @@ function makeStableSlug(name: string, id: string, usedSlugs: Set<string>) {
 export function buildPartnerCatalogQueryIndex(categories: PartnerCatalogQueryRootSection[]): PartnerCatalogQueryIndex {
   const usedRootSlugs = new Set<string>();
   const rootById = new Map<string, IndexedRootSection>();
+  const rootBySlug = new Map<string, IndexedRootSection>();
   const childById = new Map<string, IndexedChildSection>();
   const roots = categories.map((rootCategory) => {
     const usedChildSlugs = new Set<string>();
@@ -182,12 +184,14 @@ export function buildPartnerCatalogQueryIndex(categories: PartnerCatalogQueryRoo
     }
 
     rootById.set(indexedRoot.id, indexedRoot);
+    rootBySlug.set(indexedRoot.slug, indexedRoot);
     return indexedRoot;
   });
 
   return {
     roots,
     rootById,
+    rootBySlug,
     childById,
   };
 }
@@ -224,7 +228,7 @@ export function resolvePartnerCatalogSelection(
   const categorySlug = query.category?.trim();
   const subcategorySlug = query.subcategory?.trim();
 
-  if (!categorySlug || !subcategorySlug) {
+  if (!categorySlug) {
     return {
       filterId: allFilterId,
       expandedRootId: null,
@@ -232,10 +236,26 @@ export function resolvePartnerCatalogSelection(
   }
 
   const index = buildPartnerCatalogQueryIndex(categories);
-  const activeRoot = index.roots.find((rootCategory) => rootCategory.slug === categorySlug);
-  const activeChild = activeRoot?.children.find((childCategory) => childCategory.slug === subcategorySlug);
+  const activeRoot = index.rootBySlug.get(categorySlug);
 
-  if (!activeRoot || !activeChild) {
+  if (!activeRoot) {
+    return {
+      filterId: allFilterId,
+      expandedRootId: null,
+    };
+  }
+
+  if (!subcategorySlug) {
+    return {
+      filterId: activeRoot.id,
+      expandedRootId: activeRoot.id,
+      categorySlug: activeRoot.slug,
+    };
+  }
+
+  const activeChild = activeRoot.children.find((childCategory) => childCategory.slug === subcategorySlug);
+
+  if (!activeChild) {
     return {
       filterId: allFilterId,
       expandedRootId: null,
@@ -260,6 +280,14 @@ export function getPartnerCatalogQueryForFilter(
   }
 
   const index = buildPartnerCatalogQueryIndex(categories);
+
+  const activeRoot = index.rootById.get(filterId);
+
+  if (activeRoot) {
+    return {
+      category: activeRoot.slug,
+    };
+  }
 
   for (const rootCategory of index.roots) {
     const activeChild = rootCategory.children.find((childCategory) => childCategory.id === filterId);

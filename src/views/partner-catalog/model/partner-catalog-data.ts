@@ -128,6 +128,7 @@ export type PartnerCatalogVariant = {
 export type PartnerCatalogProduct = {
   id: string;
   sectionId: string;
+  rootSectionId: string;
   variants: PartnerCatalogVariant[];
 };
 
@@ -289,7 +290,9 @@ function sortPartnerCatalogProducts(products: PartnerCatalogProduct[], filters: 
 
 function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string, filters: PartnerCatalogFilters, sort: PartnerCatalogSortKey) {
   const categoryFilteredProducts =
-    filterId === PARTNER_CATALOG_ALL_FILTER_ID ? products : products.filter((product) => product.sectionId === filterId);
+    filterId === PARTNER_CATALOG_ALL_FILTER_ID
+      ? products
+      : products.filter((product) => product.sectionId === filterId || product.rootSectionId === filterId);
 
   const filteredProducts =
     filters.priceFrom === undefined && filters.priceTo === undefined && filters.stockFrom === undefined
@@ -390,6 +393,7 @@ const getPartnerCatalogDataset = cache(async (): Promise<PartnerCatalogDataset> 
       (product): PartnerCatalogProduct => ({
         id: product.id,
         sectionId: product.sectionId,
+        rootSectionId: product.detail.rootSectionId,
         variants: product.variants.map((variant) => variant.variant),
       }),
     ),

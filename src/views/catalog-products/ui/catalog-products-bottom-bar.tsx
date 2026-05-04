@@ -8,6 +8,7 @@ import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
 import { CatalogCategoryIcon } from "@/widgets/catalog-products-categories";
 import type { CatalogProductsLandingCategory } from "@/widgets/catalog-products/model/types";
 import { ChevronDownIcon, ChevronRightIcon, LayoutGridIcon, SearchIcon, XIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { type ChangeEvent, type RefObject, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 type CatalogProductsBottomBarProps = {
@@ -17,8 +18,9 @@ type CatalogProductsBottomBarProps = {
 type SearchResultItem = {
   id: string;
   href: string;
-  categoryTitle: string;
-  subcategoryTitle: string;
+  title: string;
+  subtitle?: string;
+  type: "category" | "subcategory";
 };
 
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
@@ -44,6 +46,7 @@ function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => vo
 }
 
 export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBarProps) {
+  const router = useRouter();
   const { count: wishlistCount } = useWishlist();
   const [isDesktopCategoryMenuOpen, setIsDesktopCategoryMenuOpen] = useState(false);
   const [isMobileCategoryDialogOpen, setIsMobileCategoryDialogOpen] = useState(false);
@@ -59,14 +62,23 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
 
   const normalizedQuery = searchQuery.trim().toLocaleLowerCase("ru");
   const searchResults = useMemo<SearchResultItem[]>(() => {
-    return categories.flatMap((category) =>
+    const categoryResults = categories.map((category) => ({
+      id: category.id,
+      href: category.href,
+      title: category.title,
+      type: "category" as const,
+    }));
+    const subcategoryResults = categories.flatMap((category) =>
       category.subcategories.map((subcategory) => ({
         id: subcategory.id,
         href: subcategory.href,
-        categoryTitle: category.title,
-        subcategoryTitle: subcategory.title,
+        title: subcategory.title,
+        subtitle: category.title,
+        type: "subcategory" as const,
       })),
     );
+
+    return [...categoryResults, ...subcategoryResults];
   }, [categories]);
 
   const filteredResults = useMemo(() => {
@@ -74,7 +86,10 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
       return [];
     }
 
-    return searchResults.filter((item) => item.subcategoryTitle.toLocaleLowerCase("ru").includes(normalizedQuery));
+    return searchResults.filter((item) => {
+      const haystack = `${item.subtitle ? `${item.subtitle} ` : ""}${item.title}`.toLocaleLowerCase("ru");
+      return haystack.includes(normalizedQuery);
+    });
   }, [normalizedQuery, searchResults]);
 
   const isSearchResultsOpen = isSearchFocused && normalizedQuery.length > 0;
@@ -135,6 +150,17 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
   function handleSearchChange(event: ChangeEvent<HTMLInputElement>) {
     setSearchQuery(event.target.value);
     setIsSearchFocused(true);
+  }
+
+  function handleSearchSubmit() {
+    const firstResult = filteredResults[0];
+
+    if (!firstResult) {
+      return;
+    }
+
+    handleNavigateFromOverlay();
+    router.push(firstResult.href);
   }
 
   function handleNavigateFromOverlay() {
@@ -218,7 +244,14 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                         )}
                       >
                         <div className="px-2.5 py-1.5">
-                          <p className="text-sm font-semibold tracking-[-0.03em] text-[var(--heading)]">{activeDesktopCategory.title}</p>
+                          <TransitionLink
+                            href={activeDesktopCategory.href}
+                            source="menu"
+                            onClick={handleNavigateFromOverlay}
+                            className="inline-flex rounded-[6px] text-sm font-semibold tracking-[-0.03em] text-[var(--heading)] transition-colors hover:text-[var(--accent)]"
+                          >
+                            {activeDesktopCategory.title}
+                          </TransitionLink>
                         </div>
                         <div className={cn("grid gap-1", isTwoColumnSubcategoryMenu ? "grid-cols-2" : "grid-cols-1 justify-items-start")}>
                           {activeDesktopCategory.subcategories.map((subcategory) => (
@@ -274,9 +307,17 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                   value={searchQuery}
                   onChange={handleSearchChange}
                   onFocus={() => setIsSearchFocused(true)}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Enter") {
+                      return;
+                    }
+
+                    event.preventDefault();
+                    handleSearchSubmit();
+                  }}
                   placeholder="Поиск"
                   className="h-10 w-full rounded-[6px] md:rounded-[9px] border border-[rgba(42,42,42,0.08)] bg-[#f7f6f2] pl-9 pr-3 text-base font-medium leading-none tracking-[-0.03em] text-[#404040] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
-                  aria-label="Поиск по подкатегориям"
+                  aria-label="Поиск по категориям и подкатегориям"
                 />
               </label>
 
@@ -286,15 +327,25 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                     <div className="max-h-[min(60vh,420px)] overflow-y-auto p-2">
                       {filteredResults.map((item) => (
                         <TransitionLink
-                          key={item.id}
+                          key={`${item.type}-${item.id}`}
                           href={item.href}
                           source="menu"
                           onClick={handleNavigateFromOverlay}
-                          className="block rounded-[10px] px-3 py-2 text-sm leading-[1.35] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)]"
+                          className="group flex items-center justify-between gap-3 rounded-[10px] px-3 py-2 text-sm leading-[1.35] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)]"
                         >
-                          <span className="text-[var(--text-muted)]">{item.categoryTitle}</span>
-                          <span className="text-[var(--text-muted)]"> / </span>
-                          <span>{item.subcategoryTitle}</span>
+                          <span className="min-w-0 flex-1">
+                            {item.subtitle ? (
+                              <>
+                                <span className="text-[var(--text-muted)]">{item.subtitle}</span>
+                                <span className="text-[var(--text-muted)]"> / </span>
+                              </>
+                            ) : null}
+                            <span>{item.title}</span>
+                          </span>
+                          <ChevronRightIcon
+                            strokeWidth={1.5}
+                            className="size-4 shrink-0 translate-x-[-6px] opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
+                          />
                         </TransitionLink>
                       ))}
                     </div>
@@ -359,6 +410,14 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                   >
                     <div className="overflow-hidden">
                       <div className="space-y-1 pl-[45px] pb-2">
+                        <TransitionLink
+                          href={category.href}
+                          source="menu"
+                          onClick={handleNavigateFromOverlay}
+                          className="block cursor-pointer py-1.5 text-sm font-medium leading-[1.3] tracking-[-0.03em] text-[#404040] transition-colors hover:text-black"
+                        >
+                          Все товары
+                        </TransitionLink>
                         {category.subcategories.map((subcategory) => (
                           <TransitionLink
                             key={subcategory.id}
