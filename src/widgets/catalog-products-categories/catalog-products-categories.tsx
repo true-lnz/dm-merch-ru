@@ -1,8 +1,10 @@
+"use client";
+
 import { cn } from "@/shared/lib/cn";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import type { CatalogProductsLandingCategory } from "@/widgets/catalog-products/model/types";
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import { type CSSProperties, useState } from "react";
 
 type CatalogProductsCategoriesProps = {
   items: CatalogProductsLandingCategory[];
@@ -306,6 +308,8 @@ export function CatalogCategoryIcon({ iconId, className, monochrome = false }: {
 }
 
 export function CatalogProductsCategories({ items }: CatalogProductsCategoriesProps) {
+  const [expandedMobileCategoryIds, setExpandedMobileCategoryIds] = useState<string[]>([]);
+
   if (items.length === 0) {
     return null;
   }
@@ -314,83 +318,108 @@ export function CatalogProductsCategories({ items }: CatalogProductsCategoriesPr
     <section className="mt-[35px] md:mt-[45px] md:mb-[45px]">
       <PageSubheading title="Мерч и корпоративные подарки" />
 
-      <div className="mt-6 grid grid-cols-1 auto-rows-fr items-stretch md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6">
-        {items.map((category) => (
-          <div key={category.id} className="group relative z-0 h-full overflow-visible md:hover:z-28">
-            <div aria-hidden="true" className="pointer-events-none hidden md:block md:invisible">
-              <div className="px-5 py-5 xl:px-6 xl:py-6">
-                <div className="h-[54px] w-[108px]" />
-                <div className="mt-4 h-[52px] w-full max-w-[160px]" />
-                <div className="mt-5 space-y-2">
-                  <div className="h-7 w-full rounded-[9px]" />
-                  <div className="h-7 w-[88%] rounded-[9px]" />
-                  <div className="h-7 w-[76%] rounded-[9px]" />
+      <div className="mt-6 grid grid-cols-1 items-stretch md:auto-rows-fr md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6">
+        {items.map((category) => {
+          const isExpandedMobile = expandedMobileCategoryIds.includes(category.id);
+
+          return (
+            <div key={category.id} className="group relative z-0 h-full overflow-visible md:hover:z-28">
+              <div aria-hidden="true" className="pointer-events-none hidden md:block md:invisible">
+                <div className="px-5 py-5 xl:px-6 xl:py-6">
+                  <div className="h-[54px] w-[108px]" />
+                  <div className="mt-4 h-[52px] w-full max-w-[160px]" />
+                  <div className="mt-5 space-y-2">
+                    <div className="h-7 w-full rounded-[9px]" />
+                    <div className="h-7 w-[88%] rounded-[9px]" />
+                    <div className="h-7 w-[76%] rounded-[9px]" />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <article className="flex flex-col transition-[width,transform] duration-200 md:absolute md:left-0 md:top-0 md:h-full md:w-full md:overflow-visible md:group-hover:z-20 md:group-hover:h-auto md:group-hover:w-max">
-              <div className="relative flex h-full min-h-0 flex-col rounded-[22px] bg-transparent px-0 py-0 transition-[background-color,box-shadow,height,width] duration-200 md:min-w-full md:px-5 md:py-5 xl:px-6 xl:py-6 md:group-hover:h-auto md:group-hover:min-h-full md:group-hover:bg-white md:group-hover:shadow-[0_24px_60px_rgba(42,42,42,0.16)]">
-                <input id={`catalog-category-${category.id}`} type="checkbox" className="peer sr-only md:hidden" />
+              <article className="flex flex-col transition-[width,transform] duration-200 md:absolute md:left-0 md:top-0 md:h-full md:w-full md:overflow-visible md:group-hover:z-20 md:group-hover:h-auto md:group-hover:w-max">
+                <div className="relative flex h-full min-h-0 flex-col rounded-[22px] bg-transparent px-0 py-0 transition-[background-color,box-shadow,height,width] duration-200 md:min-w-full md:px-5 md:py-5 xl:px-6 xl:py-6 md:group-hover:h-auto md:group-hover:min-h-full md:group-hover:bg-white md:group-hover:shadow-[0_24px_60px_rgba(42,42,42,0.16)]">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setExpandedMobileCategoryIds((currentIds) =>
+                        currentIds.includes(category.id) ? currentIds.filter((id) => id !== category.id) : [...currentIds, category.id],
+                      )
+                    }
+                    className="flex w-full items-center justify-between gap-3 py-2 text-left md:hidden"
+                    aria-expanded={isExpandedMobile}
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="relative shrink-0">
+                        <CatalogCategoryIcon iconId={category.iconId} />
+                      </div>
 
-                <div className="flex items-center justify-between gap-3 py-2 md:hidden">
-                  <div className="flex min-w-0 items-center gap-3">
+                      <h3 className="overflow-hidden text-base font-medium leading-[1.25] tracking-[-0.03em] text-[var(--heading)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1] md:text-xl md:leading-[1.15]">
+                        <Link
+                          href={category.href}
+                          className="transition-colors hover:text-[var(--accent)]"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
+                        >
+                          {category.title}
+                        </Link>
+                      </h3>
+                    </div>
+
+                    <span className="relative mt-0.5 block h-4 w-4 shrink-0 text-[var(--field-border)]">
+                      <span className="absolute left-0 top-1/2 h-[1.5px] w-4 -translate-y-1/2 rounded-full bg-current" />
+                      <span
+                        className="absolute left-1/2 top-0 h-4 w-[1.5px] -translate-x-1/2 rounded-full bg-current transition-transform duration-200"
+                        style={{ transform: `translateX(-50%) scaleY(${isExpandedMobile ? 0 : 1})` }}
+                      />
+                    </span>
+                  </button>
+
+                  <div className="hidden md:block">
                     <div className="relative shrink-0">
                       <CatalogCategoryIcon iconId={category.iconId} />
                     </div>
 
-                    <h3 className="overflow-hidden text-base font-medium leading-[1.25] tracking-[-0.03em] text-[var(--heading)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1] md:text-xl md:leading-[1.15]">
+                    <h3 className="mt-4 overflow-hidden text-xl font-medium leading-[1.15] tracking-[-0.03em] text-[var(--heading)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1] md:group-hover:block md:group-hover:overflow-visible md:group-hover:[-webkit-line-clamp:unset]">
                       <Link href={category.href} className="transition-colors hover:text-[var(--accent)]">
                         {category.title}
                       </Link>
                     </h3>
                   </div>
 
-                  <label htmlFor={`catalog-category-${category.id}`} className="relative mt-0.5 block h-4 w-4 shrink-0 cursor-pointer text-[var(--field-border)]">
-                    <span className="absolute left-0 top-1/2 h-[1.5px] w-4 -translate-y-1/2 rounded-full bg-current" />
-                    <span className="absolute left-1/2 top-0 h-4 w-[1.5px] -translate-x-1/2 rounded-full bg-current transition-transform duration-200 peer-checked:scale-y-0" />
-                  </label>
-                </div>
-
-                <div className="hidden md:block">
-                  <div className="relative shrink-0">
-                    <CatalogCategoryIcon iconId={category.iconId} />
+                  <div
+                    className={[
+                      "-ml-3 flex-col items-start gap-2 md:mt-5 md:mb-0 md:flex md:max-h-none md:overflow-visible md:opacity-100",
+                      isExpandedMobile ? "mt-4 mb-4 flex" : "hidden",
+                    ].join(" ")}
+                  >
+                    {category.subcategories.map((subcategory, index) => (
+                      <Link
+                        key={subcategory.id}
+                        href={subcategory.href}
+                        className={[
+                          "max-w-full rounded-[9px] px-3 py-[7px] text-base leading-[1.25] tracking-[-0.03em] text-[var(--heading)] transition-[background-color,color,box-shadow,max-width] duration-150 md:group-hover:max-w-none",
+                          "hover:bg-[var(--card-bg)]",
+                          index >= 3 ? "inline-flex md:hidden md:group-hover:inline-flex" : "inline-flex",
+                        ].join(" ")}
+                        title={subcategory.title}
+                      >
+                        <span className="truncate md:group-hover:whitespace-normal md:group-hover:overflow-visible md:group-hover:text-clip">
+                          {subcategory.title}
+                        </span>
+                      </Link>
+                    ))}
                   </div>
 
-                  <h3 className="mt-4 overflow-hidden text-xl font-medium leading-[1.15] tracking-[-0.03em] text-[var(--heading)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1] md:group-hover:block md:group-hover:overflow-visible md:group-hover:[-webkit-line-clamp:unset]">
-                    <Link href={category.href} className="transition-colors hover:text-[var(--accent)]">
-                      {category.title}
-                    </Link>
-                  </h3>
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-28 rounded-b-[22px] bg-linear-to-b from-transparent from-[0%] via-[rgba(245,244,239,1)] via-[30%] to-[rgba(245,244,239,0.5)] to-[100%] opacity-100 transition-opacity duration-200 md:block md:group-hover:opacity-0"
+                  />
                 </div>
-
-                <div className="-ml-3 hidden flex-col items-start gap-2 peer-checked:mt-4 peer-checked:mb-4 peer-checked:flex md:mt-5 md:mb-0 md:flex md:max-h-none md:overflow-visible md:opacity-100">
-                  {category.subcategories.map((subcategory, index) => (
-                    <Link
-                      key={subcategory.id}
-                      href={subcategory.href}
-                      className={[
-                        "max-w-full rounded-[9px] px-3 py-[7px] text-base leading-[1.25] tracking-[-0.03em] text-[var(--heading)] transition-[background-color,color,box-shadow,max-width] duration-150 md:group-hover:max-w-none",
-                        "hover:bg-[var(--card-bg)]",
-                        index >= 3 ? "inline-flex md:hidden md:group-hover:inline-flex" : "inline-flex",
-                      ].join(" ")}
-                      title={subcategory.title}
-                    >
-                      <span className="truncate md:group-hover:whitespace-normal md:group-hover:overflow-visible md:group-hover:text-clip">
-                        {subcategory.title}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-28 rounded-b-[22px] bg-linear-to-b from-transparent from-[0%] via-[rgba(245,244,239,1)] via-[30%] to-[rgba(245,244,239,0.5)] to-[100%] opacity-100 transition-opacity duration-200 md:block md:group-hover:opacity-0"
-                />
-              </div>
-            </article>
-          </div>
-        ))}
+              </article>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
