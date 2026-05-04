@@ -139,7 +139,11 @@ function getChildProductBlocks(block) {
   const outerOpenTag = "<product>";
   const outerCloseTag = "</product>";
   const inner = block.slice(outerOpenTag.length, block.length - outerCloseTag.length);
-  return extractNestedBlocks(inner, "product");
+  return extractNestedBlocks(inner, "product").filter((childBlock) => /<product_id>([\s\S]*?)<\/product_id>/.test(childBlock));
+}
+
+function extractCatalogueProductBlocks(text) {
+  return extractNestedBlocks(text, "product").filter((block) => /<product_id>([\s\S]*?)<\/product_id>/.test(block));
 }
 
 function removeNestedProductBlocks(block) {
@@ -801,7 +805,7 @@ function parseProject111Dataset(index, project111Tree) {
   const { pageById, rootByChildId, pageIdsByProductId } = project111Tree;
   const stockByProductId = parseProject111Stock();
   const catalogueXml = readText(join(process.cwd(), "public", "project111", "catalogue.xml"));
-  const topLevelProducts = extractNestedBlocks(catalogueXml, "product");
+  const topLevelProducts = extractCatalogueProductBlocks(catalogueXml);
   const groupedProducts = new Map();
   const unmappedCategories = new Map();
 
@@ -818,13 +822,15 @@ function parseProject111Dataset(index, project111Tree) {
     }
 
     const variantBlocks = getChildProductBlocks(block);
-    const nestedVariants = variantBlocks.map((variantBlock) => ({
-      productId: getTagValue(variantBlock, "product_id"),
-      article: getTagValue(variantBlock, "code"),
-      title: getTagValue(variantBlock, "name"),
-      sizeCode: getTagValue(variantBlock, "size_code"),
-      priceRub: parseNumber(getTagValue(variantBlock, "price")),
-    }));
+    const nestedVariants = variantBlocks
+      .map((variantBlock) => ({
+        productId: getTagValue(variantBlock, "product_id"),
+        article: getTagValue(variantBlock, "code"),
+        title: getTagValue(variantBlock, "name"),
+        sizeCode: getTagValue(variantBlock, "size_code"),
+        priceRub: parseNumber(getTagValue(variantBlock, "price")),
+      }))
+      .filter((variant) => Boolean(variant.productId));
     const pageIds = [
       ...(pageIdsByProductId.get(topProductId) ?? []),
       ...nestedVariants.flatMap((variant) => (variant.productId ? pageIdsByProductId.get(variant.productId) ?? [] : [])),
