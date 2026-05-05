@@ -484,7 +484,6 @@ function buildCategoryStats(index, products) {
           productCount: productCountByChildId.get(child.id) ?? 0,
         }))
         .filter((child) => child.productCount > 0);
-      children.sort((left, right) => compareRu(left.name, right.name));
 
       const productCount = children.reduce((sum, child) => sum + child.productCount, 0);
 
