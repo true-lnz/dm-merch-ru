@@ -20,13 +20,6 @@ import {
 
 export const PARTNER_CATALOG_ALL_FILTER_ID = "all";
 
-type PartnerCatalogDetailRouteContext = {
-  rootName: string;
-  rootSlug: string;
-  childName: string;
-  childSlug: string;
-};
-
 type MergedCatalogVariant = {
   id: string;
   article: string;
@@ -102,7 +95,6 @@ type PartnerCatalogVariantDetailSource = {
 type PartnerCatalogProductDetailSource = {
   id: string;
   sectionId: string;
-  routeContext: PartnerCatalogDetailRouteContext;
   detail: MergedCatalogProduct;
   variants: PartnerCatalogVariantDetailSource[];
 };
@@ -194,12 +186,6 @@ export type PartnerCatalogProductDetail = {
   tuning: string[];
   attributes: PartnerCatalogProductAttribute[];
   variants: PartnerCatalogProductDetailVariant[];
-  breadcrumb: {
-    rootName: string;
-    rootSlug: string;
-    childName: string;
-    childSlug: string;
-  };
 };
 
 function readJsonFile<T>(fileName: string): T {
@@ -369,12 +355,6 @@ const getPartnerCatalogDataset = cache(async (): Promise<PartnerCatalogDataset> 
             imageUrls: variant.imageUrls?.map(normalizePartnerCatalogImageUrl),
           })),
         },
-        routeContext: {
-          rootName: routeContext.rootName,
-          rootSlug: routeContext.rootSlug,
-          childName: routeContext.childName,
-          childSlug: routeContext.childSlug,
-        },
         variants,
       };
     })
@@ -486,11 +466,5 @@ export const getPartnerCatalogProductDetailByVariantId = cache(async (variantId:
         variant.variant.id,
       ),
     })),
-    breadcrumb: {
-      rootName: detailSource.product.routeContext.rootName,
-      rootSlug: detailSource.product.routeContext.rootSlug,
-      childName: detailSource.product.routeContext.childName,
-      childSlug: detailSource.product.routeContext.childSlug,
-    },
   };
 });

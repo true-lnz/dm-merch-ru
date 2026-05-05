@@ -28,6 +28,7 @@ import {
 } from "../model/partner-catalog-data";
 import {
   getPartnerCatalogFilterInputValues,
+  getPartnerCatalogListingBreadcrumb,
   getPartnerCatalogPathForFilter,
   getPartnerCatalogProductPath,
   hasActivePartnerCatalogFilters,
@@ -913,6 +914,10 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   );
   const nextCursor = products.length < totalCount ? products.length : null;
   const activeCategoryLabel = activeChildCategory?.name ?? activeRootCategory?.name ?? "Все товары";
+  const breadcrumb = useMemo(
+    () => getPartnerCatalogListingBreadcrumb(initialData.categories, activeFilterId, ALL_FILTER_ID),
+    [activeFilterId, initialData.categories],
+  );
   const hasPendingFilterChanges = !areFilterInputValuesEqual(normalizedDraftFilterInputs, appliedFilterInputs);
   const shouldShowFilterApplyPopover = hasPendingFilterChanges && !isFilterApplyPopoverDismissed;
   const displayedProducts = useMemo(
@@ -1228,11 +1233,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       <WidowFix />
       <PageHeading
         title="Каталог продукции"
-        breadcrumb={{
-          labelFrom: "Главная",
-          labelTo: "Каталог продукции",
-          href: "/",
-        }}
+        breadcrumb={breadcrumb}
       />
 
       <section className="mt-[28.8px] mb-[35px] md:mb-[45px]">

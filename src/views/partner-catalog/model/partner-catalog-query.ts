@@ -51,6 +51,14 @@ export type PartnerCatalogResolvedSelection = {
   subcategorySlug?: string;
 };
 
+export type PartnerCatalogBreadcrumbData = {
+  items: {
+    label: string;
+    href: string;
+  }[];
+  currentLabel: string;
+};
+
 export type PartnerCatalogResolvedSection = {
   rootId: string;
   rootName: string;
@@ -368,4 +376,93 @@ export function getPartnerCatalogProductPath(
   });
 
   return `${pathnameBase}?${params.toString()}`;
+}
+
+function getPartnerCatalogBreadcrumbBaseItems() {
+  return [
+    { label: "Главная", href: "/" },
+    { label: "Каталог продукции", href: "/catalog-products" },
+  ];
+}
+
+export function getPartnerCatalogListingBreadcrumb(
+  categories: PartnerCatalogQueryRootSection[],
+  filterId: string,
+  allFilterId: string,
+): PartnerCatalogBreadcrumbData {
+  const baseItems = getPartnerCatalogBreadcrumbBaseItems();
+
+  if (filterId === allFilterId) {
+    return {
+      items: baseItems,
+      currentLabel: "Все товары",
+    };
+  }
+
+  const index = buildPartnerCatalogQueryIndex(categories);
+  const activeRoot = index.rootById.get(filterId);
+
+  if (activeRoot) {
+    return {
+      items: baseItems,
+      currentLabel: activeRoot.name,
+    };
+  }
+
+  const activeChild = index.childById.get(filterId);
+
+  if (!activeChild) {
+    return {
+      items: baseItems,
+      currentLabel: "Все товары",
+    };
+  }
+
+  const rootCategory = index.rootById.get(activeChild.rootId);
+
+  if (!rootCategory) {
+    return {
+      items: baseItems,
+      currentLabel: "Все товары",
+    };
+  }
+
+  return {
+    items: [
+      ...baseItems,
+      {
+        label: rootCategory.name,
+        href: getPartnerCatalogPathForFilter(categories, rootCategory.id, allFilterId),
+      },
+    ],
+    currentLabel: activeChild.name,
+  };
+}
+
+export function getPartnerCatalogProductBreadcrumb(
+  categories: PartnerCatalogQueryRootSection[],
+  childSectionId: string,
+  productTitle: string,
+  allFilterId: string,
+): PartnerCatalogBreadcrumbData | null {
+  const sectionContext = getPartnerCatalogSectionContext(categories, childSectionId);
+
+  if (!sectionContext) {
+    return null;
+  }
+
+  return {
+    items: [
+      ...getPartnerCatalogBreadcrumbBaseItems(),
+      {
+        label: sectionContext.rootName,
+        href: getPartnerCatalogPathForFilter(categories, sectionContext.rootId, allFilterId),
+      },
+      {
+        label: sectionContext.childName,
+        href: getPartnerCatalogPathForFilter(categories, sectionContext.childId, allFilterId),
+      },
+    ],
+    currentLabel: productTitle,
+  };
 }

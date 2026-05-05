@@ -356,6 +356,8 @@ export function CatalogProductsCategories({ items }: CatalogProductsCategoriesPr
                       <h3 className="overflow-hidden text-base font-medium leading-[1.25] tracking-[-0.03em] text-[var(--heading)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1] md:text-xl md:leading-[1.15]">
                         <Link
                           href={category.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="transition-colors hover:text-[var(--accent)]"
                           onClick={(event) => {
                             event.stopPropagation();
@@ -381,7 +383,7 @@ export function CatalogProductsCategories({ items }: CatalogProductsCategoriesPr
                     </div>
 
                     <h3 className="mt-4 overflow-hidden text-xl font-medium leading-[1.15] tracking-[-0.03em] text-[var(--heading)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1] md:group-hover:block md:group-hover:overflow-visible md:group-hover:[-webkit-line-clamp:unset]">
-                      <Link href={category.href} className="transition-colors hover:text-[var(--accent)]">
+                      <Link href={category.href} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--accent)]">
                         {category.title}
                       </Link>
                     </h3>
@@ -397,6 +399,8 @@ export function CatalogProductsCategories({ items }: CatalogProductsCategoriesPr
                       <Link
                         key={subcategory.id}
                         href={subcategory.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className={[
                           "max-w-full rounded-[9px] px-3 py-[7px] text-base leading-[1.25] tracking-[-0.03em] text-[var(--heading)] transition-[background-color,color,box-shadow,max-width] duration-150 md:group-hover:max-w-none",
                           "hover:bg-[var(--card-bg)]",

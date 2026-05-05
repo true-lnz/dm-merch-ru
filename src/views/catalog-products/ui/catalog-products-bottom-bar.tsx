@@ -244,12 +244,14 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                         )}
                       >
                         <div className="px-2.5 py-1.5">
-                          <TransitionLink
-                            href={activeDesktopCategory.href}
-                            source="menu"
-                            onClick={handleNavigateFromOverlay}
-                            className="inline-flex rounded-[6px] text-sm font-semibold tracking-[-0.03em] text-[var(--heading)] transition-colors hover:text-[var(--accent)]"
-                          >
+                        <TransitionLink
+                          href={activeDesktopCategory.href}
+                          source="menu"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={handleNavigateFromOverlay}
+                          className="inline-flex rounded-[6px] text-sm font-semibold tracking-[-0.03em] text-[var(--heading)] transition-colors hover:text-[var(--accent)]"
+                        >
                             {activeDesktopCategory.title}
                           </TransitionLink>
                         </div>
@@ -259,6 +261,8 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                               key={subcategory.id}
                               href={subcategory.href}
                               source="menu"
+                              target="_blank"
+                              rel="noopener noreferrer"
                               onClick={handleNavigateFromOverlay}
                               className={cn(
                                 "cursor-pointer rounded-[6px] md:rounded-[9px] px-2.5 py-2 text-sm leading-[1.3] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)] hover:text-[var(--accent)]",
@@ -330,6 +334,8 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                           key={`${item.type}-${item.id}`}
                           href={item.href}
                           source="menu"
+                          target="_blank"
+                          rel="noopener noreferrer"
                           onClick={handleNavigateFromOverlay}
                           className="group flex items-center justify-between gap-3 rounded-[10px] px-3 py-2 text-sm leading-[1.35] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)]"
                         >
@@ -413,6 +419,8 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                         <TransitionLink
                           href={category.href}
                           source="menu"
+                          target="_blank"
+                          rel="noopener noreferrer"
                           onClick={handleNavigateFromOverlay}
                           className="block cursor-pointer py-1.5 text-sm font-medium leading-[1.3] tracking-[-0.03em] text-[#404040] transition-colors hover:text-black"
                         >
@@ -423,6 +431,8 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                             key={subcategory.id}
                             href={subcategory.href}
                             source="menu"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             onClick={handleNavigateFromOverlay}
                             className="block cursor-pointer py-1.5 text-sm leading-[1.3] tracking-[-0.03em] text-[#6f6f6f] transition-colors hover:text-black"
                           >

@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type ComponentProps, type PointerEvent, type RefObject } from "react";
 import { toast } from "sonner";
 import type { PartnerCatalogProductDetail } from "../model/partner-catalog-data";
+import type { PartnerCatalogBreadcrumbData } from "../model/partner-catalog-query";
 
 const loadedDetailImageKeys = new Set<string>();
 
@@ -58,7 +59,7 @@ function shouldBypassNextImageOptimizer(src: ComponentProps<typeof Image>["src"]
 
 type PartnerCatalogProductPageProps = {
   detail: PartnerCatalogProductDetail;
-  listingHref: string;
+  breadcrumb: PartnerCatalogBreadcrumbData;
 };
 
 type DescriptionContentBlock = {
@@ -332,7 +333,7 @@ function DetailImageWithSkeleton({
   );
 }
 
-export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalogProductPageProps) {
+export function PartnerCatalogProductPage({ detail, breadcrumb }: PartnerCatalogProductPageProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isImageZoomed, setIsImageZoomed] = useState(false);
   const [isDesktopViewport, setIsDesktopViewport] = useState(false);
@@ -459,12 +460,10 @@ export function PartnerCatalogProductPage({ detail, listingHref }: PartnerCatalo
       <section className="mb-[35px] md:mb-[45px]">
         <PageBreadcrumb
           className="mb-4 mt-8 md:mb-5 md:mt-12 xl:mb-[42px] xl:mt-[39px]"
-          items={[
-            { label: "Главная", href: "/" },
-            { label: "Каталог продукции", href: "/partner-catalog" },
-            { label: detail.breadcrumb.rootName, href: listingHref },
-          ]}
-          currentLabel={detail.breadcrumb.childName}
+          items={breadcrumb.items}
+          currentLabel={breadcrumb.currentLabel}
+          currentLabelClassName="block max-w-[180px] truncate align-bottom md:max-w-[320px] xl:max-w-[420px]"
+          currentLabelTitle={breadcrumb.currentLabel}
         />
 
         <div className="grid min-w-0 gap-8 xl:grid-cols-[minmax(0,0.98fr)_minmax(0,0.88fr)] xl:gap-[62px]">
