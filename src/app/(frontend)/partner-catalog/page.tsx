@@ -13,7 +13,7 @@ import {
   PARTNER_CATALOG_QUERY_SORT_KEY,
   PARTNER_CATALOG_QUERY_STOCK_FROM_KEY,
   PARTNER_CATALOG_QUERY_SUBCATEGORY_KEY,
-  getPartnerCatalogPathForFilter,
+  getPartnerCatalogProductBreadcrumb,
   resolvePartnerCatalogSelection,
 } from "@/views/partner-catalog/model/partner-catalog-query";
 import { PartnerCatalogProductPage } from "@/views/partner-catalog/ui/partner-catalog-product-page";
@@ -69,7 +69,20 @@ export default async function Page({ searchParams }: { searchParams: PartnerCata
       <PartnerCatalogProductPage
         key={detail.productId}
         detail={detail}
-        listingHref={getPartnerCatalogPathForFilter(initialData.categories, detail.sectionId, PARTNER_CATALOG_ALL_FILTER_ID)}
+        breadcrumb={
+          getPartnerCatalogProductBreadcrumb(
+            initialData.categories,
+            detail.sectionId,
+            detail.title,
+            PARTNER_CATALOG_ALL_FILTER_ID,
+          ) ?? {
+            items: [
+              { label: "Главная", href: "/" },
+              { label: "Каталог продукции", href: "/catalog-products" },
+            ],
+            currentLabel: detail.title,
+          }
+        }
       />
     );
   }

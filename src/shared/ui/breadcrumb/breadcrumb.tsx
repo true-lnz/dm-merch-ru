@@ -17,6 +17,8 @@ type PageBreadcrumbProps = {
   item?: LegacyBreadcrumbItem;
   items?: BreadcrumbLinkItem[];
   currentLabel?: string;
+  currentLabelClassName?: string;
+  currentLabelTitle?: string;
   className?: string;
 };
 
@@ -79,7 +81,7 @@ export function BreadcrumbSeparator({ className, children = "/", ...props }: Com
   );
 }
 
-export function PageBreadcrumb({ item, items, currentLabel, className }: PageBreadcrumbProps) {
+export function PageBreadcrumb({ item, items, currentLabel, currentLabelClassName, currentLabelTitle, className }: PageBreadcrumbProps) {
   const normalized = normalizeBreadcrumbs({ item, items, currentLabel });
 
   if (!normalized.items.length || !normalized.currentLabel) {
@@ -96,7 +98,9 @@ export function PageBreadcrumb({ item, items, currentLabel, className }: PageBre
           </BreadcrumbItem>
         ))}
         <BreadcrumbItem>
-          <BreadcrumbPage>{normalized.currentLabel}</BreadcrumbPage>
+          <BreadcrumbPage className={currentLabelClassName} title={currentLabelTitle}>
+            {normalized.currentLabel}
+          </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

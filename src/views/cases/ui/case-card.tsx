@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
-import type { CaseGalleryImage, CaseImageFit, CaseItem } from "../model/cases-data";
+import type { CaseGalleryImage, CaseImageFit, CaseItem } from "../model/cases-types";
 
 type CaseCardProps = {
   item: CaseItem;

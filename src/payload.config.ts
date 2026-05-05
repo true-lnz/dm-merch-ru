@@ -7,9 +7,11 @@ import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 
-import { Users } from "./collections/Users";
-import { Media } from "./collections/Media";
-import { MergedCatalogTaxonomy } from "./collections/MergedCatalogTaxonomy";
+import { CaseCategories } from "./collections/CaseCategories.ts";
+import { Cases } from "./collections/Cases.ts";
+import { Media } from "./collections/Media.ts";
+import { MergedCatalogTaxonomy } from "./collections/MergedCatalogTaxonomy.ts";
+import { Users } from "./collections/Users.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -48,7 +50,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, MergedCatalogTaxonomy],
+  collections: [Users, Media, CaseCategories, Cases, MergedCatalogTaxonomy],
   editor: lexicalEditor(),
   i18n: {
     fallbackLanguage: "ru",
@@ -62,7 +64,7 @@ export default buildConfig({
     client: {
       url: process.env.DATABASE_URL || DEFAULT_DATABASE_URL,
     },
-    push: false,
+    push: process.env.PAYLOAD_PUSH_SCHEMA === "true",
   }),
   sharp,
   plugins: [],

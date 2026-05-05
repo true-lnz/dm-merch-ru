@@ -10,6 +10,7 @@
     "download:project111:catalog": "bash scripts/download-project111-catalog.sh",
     "download:project111:images": "bash scripts/download-project111-images.sh",
     "download:project111": "bash scripts/download-project111-catalog.sh && bash scripts/download-project111-images.sh",
+    "import:cases": "node --experimental-strip-types scripts/import-cases-to-payload.ts",
     "sync:merged-catalog-taxonomy": "node --experimental-strip-types scripts/sync-merged-catalog-taxonomy.ts",
     "build:merged-catalog": "node scripts/build-merged-catalog.mjs && node --experimental-strip-types scripts/sync-merged-catalog-taxonomy.ts"
   },
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
+    "@nouance/payload-better-fields-plugin": "^2.0.2",
     "@payloadcms/db-sqlite": "^3.82.0",
     "@payloadcms/next": "^3.82.0",
     "@payloadcms/richtext-lexical": "^3.82.0",
