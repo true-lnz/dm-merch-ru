@@ -7,8 +7,8 @@ export const MergedCatalogTaxonomy: CollectionConfig = {
     defaultColumns: ["nodeType", "sourceRootName", "sourceName", "displayNameOverride", "isActive"],
   },
   labels: {
-    singular: "Категории каталога продукции",
-    plural: "Категории каталога продукции",
+    singular: "Каталог продукции: категория",
+    plural: "Каталог продукции: категории",
   },
   access: {
     read: ({ req }) => Boolean(req.user),
@@ -91,9 +91,6 @@ export const MergedCatalogTaxonomy: CollectionConfig = {
       label: "Активно",
       required: true,
       defaultValue: true,
-      admin: {
-        readOnly: true,
-      },
     },
   ],
 };

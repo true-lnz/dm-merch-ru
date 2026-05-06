@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
-import { siteInfo } from "@/shared/config/site-info";
+import { useSiteInfo } from "@/shared/config/site-info/site-info-provider";
 
 declare global {
   interface Window {
@@ -36,10 +36,7 @@ type YandexMapInstance = {
 
 type YandexGeoObject = Record<string, unknown>;
 
-const OFFICE_COORDINATES: [number, number] = [54.756355, 56.023118];
-const DEFAULT_ZOOM = 16;
 const MARKER_COLOR = "#0252c5";
-const YANDEX_MAPS_API_KEY = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
 const REMOVED_CONTROLS = [
   "searchControl",
   "trafficControl",
@@ -48,6 +45,10 @@ const REMOVED_CONTROLS = [
 ] as const;
 
 export function YandexMapCard() {
+  const siteInfo = useSiteInfo();
+  const officeCoordinates = siteInfo.officeCoordinates;
+  const defaultZoom = siteInfo.defaultZoom;
+  const yandexMapsApiKey = siteInfo.yandexMapsApiKey;
   const mapRef = useRef<HTMLDivElement | null>(null);
   const instanceRef = useRef<YandexMapInstance | null>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -68,8 +69,8 @@ export function YandexMapCard() {
       const map = new ymaps.Map(
         mapRef.current,
         {
-          center: OFFICE_COORDINATES,
-          zoom: DEFAULT_ZOOM,
+          center: officeCoordinates,
+          zoom: defaultZoom,
         },
         {
           suppressMapOpenBlock: true,
@@ -79,7 +80,7 @@ export function YandexMapCard() {
       REMOVED_CONTROLS.forEach((control) => map.controls.remove(control));
       map.geoObjects.add(
         new ymaps.Placemark(
-          OFFICE_COORDINATES,
+          officeCoordinates,
           {
             hintContent: siteInfo.brandName,
             balloonContent: siteInfo.address,
@@ -110,12 +111,12 @@ export function YandexMapCard() {
       instanceRef.current?.destroy();
       instanceRef.current = null;
     };
-  }, [scriptLoaded]);
+  }, [defaultZoom, officeCoordinates, scriptLoaded, siteInfo.address, siteInfo.brandName]);
 
-  if (!YANDEX_MAPS_API_KEY) {
+  if (!yandexMapsApiKey) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-[#f6f6f6] px-4 text-center text-sm text-[#666]">
-        Не задан ключ Яндекс Карт. Добавьте NEXT_PUBLIC_YANDEX_MAPS_API_KEY в .env.
+        Не задан ключ Яндекс Карт в настройках сайта.
       </div>
     );
   }
@@ -123,7 +124,7 @@ export function YandexMapCard() {
   return (
     <>
       <Script
-        src={`https://api-maps.yandex.ru/2.1/?apikey=${encodeURIComponent(YANDEX_MAPS_API_KEY)}&lang=ru_RU`}
+        src={`https://api-maps.yandex.ru/2.1/?apikey=${encodeURIComponent(yandexMapsApiKey)}&lang=ru_RU`}
         strategy="lazyOnload"
         onLoad={() => setScriptLoaded(true)}
       />

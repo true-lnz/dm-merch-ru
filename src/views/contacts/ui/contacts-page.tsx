@@ -1,20 +1,9 @@
 import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
-import { siteInfo } from "@/shared/config/site-info";
+import { getSiteInfo } from "@/shared/config/site-info/get-site-info";
 import { formatPhoneHref } from "@/shared/lib/phone";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import Image from "next/image";
 import { YandexMapCard } from "./yandex-map-card";
-
-const contactLinks = [
-  {
-    href: formatPhoneHref(siteInfo.phone),
-    label: siteInfo.phone,
-  },
-  {
-    href: `mailto:${siteInfo.email}`,
-    label: siteInfo.email,
-  },
-] as const;
 
 function ContactLeadLink({ href, label }: { href: string; label: string }) {
   return (
@@ -27,7 +16,9 @@ function ContactLeadLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-function ContactsMapCard() {
+async function ContactsMapCard() {
+  const siteInfo = await getSiteInfo();
+
   return (
     <div>
       <p className="my-4 text-sm md:text-lg xl:text-xl tracking-[-0.04em] text-[#404040] xl:my-[18px]">{siteInfo.address}</p>
@@ -47,7 +38,19 @@ function DiscussionCta() {
   );
 }
 
-function MobileContactsHero() {
+async function MobileContactsHero() {
+  const siteInfo = await getSiteInfo();
+  const contactLinks = [
+    {
+      href: formatPhoneHref(siteInfo.phone),
+      label: siteInfo.phone,
+    },
+    {
+      href: `mailto:${siteInfo.email}`,
+      label: siteInfo.email,
+    },
+  ] as const;
+
   return (
     <div className="mb-[70px] xl:hidden">
       <div className="overflow-hidden rounded-[18px] md:rounded-[22.5px] md:mx-auto md:max-w-[760px]">
@@ -84,7 +87,19 @@ function MobileContactsHero() {
   );
 }
 
-function DesktopContactsHero() {
+async function DesktopContactsHero() {
+  const siteInfo = await getSiteInfo();
+  const contactLinks = [
+    {
+      href: formatPhoneHref(siteInfo.phone),
+      label: siteInfo.phone,
+    },
+    {
+      href: `mailto:${siteInfo.email}`,
+      label: siteInfo.email,
+    },
+  ] as const;
+
   return (
     <div className="relative hidden h-[720px] xl:block">
       <div className="absolute inset-y-0 right-[calc(var(--layout-side-padding)*-1)] w-[68%]">
@@ -120,7 +135,7 @@ function DesktopContactsHero() {
   );
 }
 
-export function ContactsPage() {
+export async function ContactsPage() {
   return (
     <>
       <PageBreadcrumb

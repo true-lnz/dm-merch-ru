@@ -1,5 +1,6 @@
 import { siteNavigation } from "@/shared/config/navigation";
-import { siteInfo } from "@/shared/config/site-info";
+import { getSiteInfo } from "@/shared/config/site-info/get-site-info";
+import { SITE_PRIVACY_HREF, SITE_PRIVACY_LABEL } from "@/shared/config/site-info";
 import { SocialLinks } from "@/shared/ui/social-links";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +8,9 @@ import Link from "next/link";
 const footerNavigation = siteNavigation.filter((item) => item.href !== "/");
 const footerDescription = "Создаём корпоративный мерч и подарки, которые носят, помнят и связывают с брендом.";
 
-export function Footer() {
+export async function Footer() {
+  const siteInfo = await getSiteInfo();
+
   return (
     <footer className="relative mt-auto overflow-hidden bg-[var(--accent)] px-[var(--layout-side-padding)] pt-10 pb-5 text-white md:pt-14 md:pb-7 xl:pt-[67px] xl:pb-[28.8px]">
       <div className="relative z-10">
@@ -42,12 +45,12 @@ export function Footer() {
         <div className="mt-12 flex flex-col gap-4 text-white/50 md:mt-14 xl:mt-[66px] xl:flex-row xl:items-start xl:justify-between">
           <p className="text-sm leading-normal md:text-base xl:tracking-[-0.02em]">{siteInfo.copyright}</p>
           <Link
-            href={siteInfo.privacyHref}
+            href={SITE_PRIVACY_HREF}
             target="_blank"
             rel="noopener noreferrer"
             className="w-fit text-sm leading-normal transition-opacity hover:opacity-80 md:text-base pt-[2px]"
           >
-            {siteInfo.privacyLabel}
+            {SITE_PRIVACY_LABEL}
           </Link>
         </div>
       </div>

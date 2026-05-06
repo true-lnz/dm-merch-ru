@@ -1,4 +1,4 @@
-﻿import { headerNavigation } from "@/shared/config/navigation";
+import { headerNavigation } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
 import {
   NavigationMenu,
@@ -17,10 +17,10 @@ import {
   HeaderIconLink,
   catalogMenuLinkClassName,
   catalogTriggerClassName,
-  getEmailHref,
-  getPhoneHref,
   isActiveRoute,
   navLinkClassName,
+  useEmailHref,
+  usePhoneHref,
 } from "./header.shared";
 
 function DesktopNavigation({ pathname }: { pathname: string | null }) {
@@ -91,10 +91,13 @@ function DesktopNavigation({ pathname }: { pathname: string | null }) {
 }
 
 function TabletHeaderActions() {
+  const phoneHref = usePhoneHref();
+  const emailHref = useEmailHref();
+
   return (
     <div className="hidden items-center gap-2 lg:flex xl:hidden">
-      <HeaderIconLink href={getPhoneHref()} ariaLabel="Позвонить" iconSrc="/icons/ic_contact_pill_phone.png" size={36} />
-      <HeaderIconLink href={getEmailHref()} ariaLabel="Написать на email" iconSrc="/icons/ic_contact_pill_mail.png" size={36} />
+      <HeaderIconLink href={phoneHref} ariaLabel="Позвонить" iconSrc="/icons/ic_contact_pill_phone.png" size={36} />
+      <HeaderIconLink href={emailHref} ariaLabel="Написать на email" iconSrc="/icons/ic_contact_pill_mail.png" size={36} />
     </div>
   );
 }

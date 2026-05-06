@@ -1,4 +1,6 @@
-import { siteInfo } from "@/shared/config/site-info";
+"use client";
+
+import { useSiteInfo } from "@/shared/config/site-info/site-info-provider";
 import { cn } from "@/shared/lib/cn";
 import { ContactPills } from "@/shared/ui/contact-pills";
 import { SocialLinks } from "@/shared/ui/social-links";
@@ -16,6 +18,7 @@ export function SiteContacts({
   showSocials = true,
   socialVariant = "default",
 }: SiteContactsProps) {
+  const siteInfo = useSiteInfo();
   const isColumn = direction === "column";
 
   return (

@@ -7,8 +7,14 @@ import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 
-import { CaseCategories } from "./collections/CaseCategories.ts";
-import { Cases } from "./collections/Cases.ts";
+import { BlogPage } from "./collections/BlogPage.ts";
+import { CaseCards } from "./collections/CaseCards.ts";
+import { CaseFilters } from "./collections/CaseFilters.ts";
+import { CasesPage } from "./collections/CasesPage.ts";
+import { CatalogPage } from "./collections/CatalogPage.ts";
+import { CatalogProductsPage } from "./collections/CatalogProductsPage.ts";
+import { HomePage } from "./collections/HomePage.ts";
+import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
 import { Media } from "./collections/Media.ts";
 import { MergedCatalogTaxonomy } from "./collections/MergedCatalogTaxonomy.ts";
 import { Users } from "./collections/Users.ts";
@@ -50,7 +56,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, CaseCategories, Cases, MergedCatalogTaxonomy],
+  collections: [Users, Media, HomePage, CatalogPage, CatalogProductsPage, CasesPage, CaseFilters, CaseCards, BlogPage, MergedCatalogTaxonomy],
+  globals: [SiteInfoGlobal],
   editor: lexicalEditor(),
   i18n: {
     fallbackLanguage: "ru",

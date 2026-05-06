@@ -1,5 +1,5 @@
-﻿import type { HeaderNavigationItem } from "@/shared/config/navigation";
-import { siteInfo } from "@/shared/config/site-info";
+import type { HeaderNavigationItem } from "@/shared/config/navigation";
+import { useSiteInfo } from "@/shared/config/site-info/site-info-provider";
 import { cn } from "@/shared/lib/cn";
 import { ContactPills } from "@/shared/ui/contact-pills";
 import { TransitionLink } from "@/shared/ui/page-transition";
@@ -9,12 +9,12 @@ import { ChevronDownIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import {
   HeaderIconLink,
-  getEmailHref,
-  getPhoneHref,
   isActiveRoute,
   mobileMenuLinkClassName,
   mobilePrimaryLinkClassName,
   scaleFigma,
+  useEmailHref,
+  usePhoneHref,
 } from "./header.shared";
 
 function MobileHeaderActions({
@@ -28,6 +28,8 @@ function MobileHeaderActions({
   showWishlist: boolean;
   wishlistCount: number;
 }) {
+  const phoneHref = usePhoneHref();
+  const emailHref = useEmailHref();
   const actionSize = scaleFigma(28);
   const burgerWidth = scaleFigma(50);
   const burgerHeight = scaleFigma(28);
@@ -43,8 +45,8 @@ function MobileHeaderActions({
         />
       ) : null}
       <div className="hidden min-[360px]:flex items-center gap-2">
-        <HeaderIconLink href={getPhoneHref()} ariaLabel="Позвонить" iconSrc="/icons/ic_contact_pill_phone.png" size={actionSize} />
-        <HeaderIconLink href={getEmailHref()} ariaLabel="Написать на email" iconSrc="/icons/ic_contact_pill_mail.png" size={actionSize} />
+        <HeaderIconLink href={phoneHref} ariaLabel="Позвонить" iconSrc="/icons/ic_contact_pill_phone.png" size={actionSize} />
+        <HeaderIconLink href={emailHref} ariaLabel="Написать на email" iconSrc="/icons/ic_contact_pill_mail.png" size={actionSize} />
       </div>
       <button
         type="button"
@@ -89,6 +91,8 @@ export function MobileMenu({
   onCloseMenu: () => void;
   onOpenWishlist: () => void;
 }) {
+  const siteInfo = useSiteInfo();
+
   if (!isOpen) {
     return null;
   }

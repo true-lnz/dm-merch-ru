@@ -1,3 +1,5 @@
+import { getSiteInfo } from "@/shared/config/site-info/get-site-info";
+import { SiteInfoProvider } from "@/shared/config/site-info/site-info-provider";
 import { WishlistProvider } from "@/shared/lib/wishlist";
 import { YandexMetrikaContainer } from "@/shared/lib/yandex-metrika";
 import { ClientRuntimeMonitor } from "@/shared/ui/client-runtime-monitor";
@@ -55,11 +57,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteInfo = await getSiteInfo();
+
   return (
     <html lang="ru" className="text-base">
       <body>
@@ -68,16 +72,18 @@ export default function RootLayout({
         </Suspense>
         <ClientRuntimeMonitor />
         <Suspense fallback={null}>
-          <PageTransitionProvider>
-            <WishlistProvider>
-              <div className="site-shell">
-                <Header />
-                <main className="site-main">{children}</main>
-                <Footer />
-                <CookieWarning />
-              </div>
-            </WishlistProvider>
-          </PageTransitionProvider>
+          <SiteInfoProvider value={siteInfo}>
+            <PageTransitionProvider>
+              <WishlistProvider>
+                <div className="site-shell">
+                  <Header />
+                  <main className="site-main">{children}</main>
+                  <Footer />
+                  <CookieWarning />
+                </div>
+              </WishlistProvider>
+            </PageTransitionProvider>
+          </SiteInfoProvider>
         </Suspense>
         <Toaster />
       </body>

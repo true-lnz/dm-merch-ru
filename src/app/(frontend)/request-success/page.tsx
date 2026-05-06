@@ -1,4 +1,4 @@
-import { siteInfo } from "@/shared/config/site-info";
+import { getSiteInfo } from "@/shared/config/site-info/get-site-info";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
 import { PageHeading } from "@/shared/ui/page-heading";
@@ -34,6 +34,7 @@ function resolveName(name: string | string[] | undefined): string {
 
 export default async function RequestSuccessPage({ searchParams }: RequestSuccessPageProps) {
   const resolvedSearchParams = await searchParams;
+  const siteInfo = await getSiteInfo();
   const maxSocialHref = siteInfo.socials.find((social) => social.icon === "max")?.href ?? "#";
   const tgSocialHref = siteInfo.socials.find((social) => social.icon === "tg")?.href ?? "#";
   const heading = HEADING_TEMPLATE.replace("ТУТ_ИМЯ", resolveName(resolvedSearchParams?.name));

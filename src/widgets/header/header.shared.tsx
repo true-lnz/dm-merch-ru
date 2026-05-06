@@ -1,6 +1,6 @@
 "use client";
 
-import { siteInfo } from "@/shared/config/site-info";
+import { useSiteInfo } from "@/shared/config/site-info/site-info-provider";
 import { formatPhoneHref } from "@/shared/lib/phone";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -118,10 +118,14 @@ export function HeaderIconLink({ href, ariaLabel, iconSrc, size }: { href: strin
   );
 }
 
-export function getPhoneHref() {
+export function usePhoneHref() {
+  const siteInfo = useSiteInfo();
+
   return formatPhoneHref(siteInfo.phone);
 }
 
-export function getEmailHref() {
+export function useEmailHref() {
+  const siteInfo = useSiteInfo();
+
   return `mailto:${siteInfo.email}`;
 }

@@ -1,5 +1,6 @@
 import { blogArticlesMock } from "@/entities/blog-post/model/mock";
 import { getCatalogRootIconId } from "@/shared/config/catalog-root-icons";
+import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
 import type { CatalogProductsLandingArticle, CatalogProductsLandingData, CatalogProductsLandingPortrait } from "@/widgets/catalog-products/model/types";
 import { PARTNER_CATALOG_ALL_FILTER_ID, getPartnerCatalogData } from "@/views/partner-catalog/model/partner-catalog-data";
 import { getPartnerCatalogPathForFilter } from "@/views/partner-catalog/model/partner-catalog-query";
@@ -14,8 +15,23 @@ const HERO_PORTRAITS: CatalogProductsLandingPortrait[] = [
   { src: "/catalog-products/7.webp", alt: "Изображение каталога продукции 7" },
 ] as const;
 
+const DEFAULT_HERO = {
+  title: "Каталог\nпродукции",
+  description:
+    "Собрали в одном входе категории, статьи и реальные разделы каталога, чтобы ориентироваться в мерче было проще и быстрее.",
+  backgroundImageUrl: "/catalog-products/img_hero_catalog_cover.svg",
+} as const;
+
 export async function getCatalogProductsLandingData(): Promise<CatalogProductsLandingData> {
   const partnerCatalogCategories = (await getPartnerCatalogData()).categories;
+  const payload = (await getPayloadClient()) as any;
+  const catalogProductsPage = await payload.find({
+    collection: "catalog-products-page",
+    depth: 0,
+    limit: 1,
+    pagination: false,
+  });
+  const heroSource = catalogProductsPage.docs[0]?.hero;
   const articles: CatalogProductsLandingArticle[] = blogArticlesMock.slice(0, 5).map((article) => ({
     id: article.id,
     title: article.pageTitle,
@@ -62,10 +78,13 @@ export async function getCatalogProductsLandingData(): Promise<CatalogProductsLa
 
   return {
     hero: {
-      title: "Каталог\nпродукции",
+      title: typeof heroSource?.title === "string" && heroSource.title ? heroSource.title : DEFAULT_HERO.title,
       description:
-        "Собрали в одном входе категории, статьи и реальные разделы каталога, чтобы ориентироваться в мерче было проще и быстрее.",
-      backgroundImageUrl: "/catalog-products/img_hero_catalog_cover.svg",
+        typeof heroSource?.description === "string" && heroSource.description ? heroSource.description : DEFAULT_HERO.description,
+      backgroundImageUrl:
+        typeof heroSource?.backgroundImageUrl === "string" && heroSource.backgroundImageUrl
+          ? heroSource.backgroundImageUrl
+          : DEFAULT_HERO.backgroundImageUrl,
     },
     portraits: [...HERO_PORTRAITS],
     articles,

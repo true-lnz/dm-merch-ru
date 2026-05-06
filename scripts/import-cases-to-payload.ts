@@ -1,23 +1,10 @@
-import path from "node:path";
 import fs from "node:fs";
+import path from "node:path";
 import { createRequire } from "node:module";
 
+import { buildCaseCardSlug, slugify } from "../src/collections/cases-slug.ts";
 import { caseThemes, casesPageItems } from "../src/views/cases/model/cases-data.ts";
 import { getPayload } from "payload";
-
-type ThemeSeed = {
-  slug: string;
-  title: string;
-  sortOrder: number;
-};
-
-const themeSeeds: ThemeSeed[] = caseThemes
-  .filter((theme) => theme !== "Все кейсы")
-  .map((title, index) => ({
-    title,
-    slug: mapThemeToSlug(title),
-    sortOrder: index,
-  }));
 
 type SQLiteStatement = {
   all: () => unknown[];
@@ -29,22 +16,9 @@ type SQLiteDatabase = {
   prepare: (sql: string) => SQLiteStatement;
 };
 
-function mapThemeToSlug(theme: string) {
-  switch (theme) {
-    case "Рестораны":
-      return "restaurants";
-    case "Магазины":
-      return "shops";
-    case "Производство":
-      return "manufacturing";
-    case "IT сферы":
-      return "it";
-    case "Общественные проекты":
-      return "public-projects";
-    default:
-      throw new Error(`Неизвестная категория кейсов: ${theme}`);
-  }
-}
+type TableInfoRow = {
+  name?: unknown;
+};
 
 function loadDatabaseCtor() {
   const require = createRequire(import.meta.url);
@@ -60,45 +34,113 @@ function loadDatabaseCtor() {
   return require(path.join(pnpmDir, libsqlPackageDir.name, "node_modules", "libsql")) as new (filePath: string) => SQLiteDatabase;
 }
 
-function dropConflictingPayloadIndexes() {
+function ensureColumn(db: SQLiteDatabase, tableName: string, columnName: string, sqlType = "integer") {
+  const columns = db.prepare(`PRAGMA table_info("${tableName}")`).all() as TableInfoRow[];
+  const hasColumn = columns.some((column) => column.name === columnName);
+
+  if (!hasColumn) {
+    db.prepare(`ALTER TABLE "${tableName}" ADD COLUMN "${columnName}" ${sqlType}`).run();
+  }
+}
+
+function ensureCasesSchema() {
   const Database = loadDatabaseCtor();
   const db = new Database(path.resolve(process.cwd(), "dm-merch.db"));
 
   try {
-    const rows = db
-      .prepare(`
-        SELECT name
-        FROM sqlite_master
-        WHERE type = 'index'
-          AND tbl_name = 'payload_locked_documents_rels'
-      `)
-      .all() as Array<{ name?: unknown }>;
+    const statements = [
+      `CREATE TABLE IF NOT EXISTS "cases_page" (
+        "id" integer PRIMARY KEY NOT NULL,
+        "admin_title" text NOT NULL,
+        "seo_meta_title" text,
+        "seo_meta_description" text,
+        "updated_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+        "created_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL
+      )`,
+      `CREATE INDEX IF NOT EXISTS "cases_page_created_at_idx" ON "cases_page" ("created_at")`,
+      `CREATE INDEX IF NOT EXISTS "cases_page_updated_at_idx" ON "cases_page" ("updated_at")`,
+      `CREATE TABLE IF NOT EXISTS "case_filters" (
+        "id" integer PRIMARY KEY NOT NULL,
+        "label" text NOT NULL,
+        "slug" text NOT NULL,
+        "sort_order" numeric DEFAULT 100 NOT NULL,
+        "is_active" integer DEFAULT true NOT NULL,
+        "updated_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+        "created_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL
+      )`,
+      `CREATE UNIQUE INDEX IF NOT EXISTS "case_filters_slug_idx" ON "case_filters" ("slug")`,
+      `CREATE INDEX IF NOT EXISTS "case_filters_created_at_idx" ON "case_filters" ("created_at")`,
+      `CREATE INDEX IF NOT EXISTS "case_filters_updated_at_idx" ON "case_filters" ("updated_at")`,
+      `CREATE TABLE IF NOT EXISTS "case_cards" (
+        "id" integer PRIMARY KEY NOT NULL,
+        "slug" text NOT NULL,
+        "company" text NOT NULL,
+        "teaser" text NOT NULL,
+        "theme_id" integer NOT NULL,
+        "sort_order" numeric DEFAULT 100 NOT NULL,
+        "is_active" integer DEFAULT true NOT NULL,
+        "intro" text NOT NULL,
+        "task" text NOT NULL,
+        "solution" text NOT NULL,
+        "result" text NOT NULL,
+        "updated_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+        "created_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+        FOREIGN KEY ("theme_id") REFERENCES "case_filters"("id") ON UPDATE no action ON DELETE restrict
+      )`,
+      `CREATE UNIQUE INDEX IF NOT EXISTS "case_cards_slug_idx" ON "case_cards" ("slug")`,
+      `CREATE INDEX IF NOT EXISTS "case_cards_theme_idx" ON "case_cards" ("theme_id")`,
+      `CREATE INDEX IF NOT EXISTS "case_cards_created_at_idx" ON "case_cards" ("created_at")`,
+      `CREATE INDEX IF NOT EXISTS "case_cards_updated_at_idx" ON "case_cards" ("updated_at")`,
+      `CREATE TABLE IF NOT EXISTS "case_cards_gallery" (
+        "_order" integer NOT NULL,
+        "_parent_id" integer NOT NULL,
+        "id" text PRIMARY KEY NOT NULL,
+        "image_id" integer NOT NULL,
+        "fit" text DEFAULT 'cover',
+        "x" numeric,
+        "y" numeric,
+        FOREIGN KEY ("image_id") REFERENCES "media"("id") ON UPDATE no action ON DELETE set null,
+        FOREIGN KEY ("_parent_id") REFERENCES "case_cards"("id") ON UPDATE no action ON DELETE cascade
+      )`,
+      `CREATE INDEX IF NOT EXISTS "case_cards_gallery_image_idx" ON "case_cards_gallery" ("image_id")`,
+      `CREATE INDEX IF NOT EXISTS "case_cards_gallery_order_idx" ON "case_cards_gallery" ("_order")`,
+      `CREATE INDEX IF NOT EXISTS "case_cards_gallery_parent_id_idx" ON "case_cards_gallery" ("_parent_id")`,
+    ];
 
-    for (const row of rows) {
-      const name = typeof row.name === "string" ? row.name : null;
-
-      if (!name) {
-        continue;
-      }
-
-      db.prepare(`DROP INDEX IF EXISTS "${name}"`).run();
+    for (const sql of statements) {
+      db.prepare(sql).run();
     }
+
+    ensureColumn(db, "cases_page", "seo_meta_title", "text");
+    ensureColumn(db, "cases_page", "seo_meta_description", "text");
+    ensureColumn(db, "payload_locked_documents_rels", "cases_page_id");
+    ensureColumn(db, "payload_locked_documents_rels", "case_filters_id");
+    ensureColumn(db, "payload_locked_documents_rels", "case_cards_id");
+    ensureColumn(db, "payload_preferences_rels", "cases_page_id");
+    ensureColumn(db, "payload_preferences_rels", "case_filters_id");
+    ensureColumn(db, "payload_preferences_rels", "case_cards_id");
+
+    db.prepare(`CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_cases_page_id_idx" ON "payload_locked_documents_rels" ("cases_page_id")`).run();
+    db.prepare(`CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_case_filters_id_idx" ON "payload_locked_documents_rels" ("case_filters_id")`).run();
+    db.prepare(`CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_case_cards_id_idx" ON "payload_locked_documents_rels" ("case_cards_id")`).run();
+    db.prepare(`CREATE INDEX IF NOT EXISTS "payload_preferences_rels_cases_page_id_idx" ON "payload_preferences_rels" ("cases_page_id")`).run();
+    db.prepare(`CREATE INDEX IF NOT EXISTS "payload_preferences_rels_case_filters_id_idx" ON "payload_preferences_rels" ("case_filters_id")`).run();
+    db.prepare(`CREATE INDEX IF NOT EXISTS "payload_preferences_rels_case_cards_id_idx" ON "payload_preferences_rels" ("case_cards_id")`).run();
   } finally {
     db.close();
   }
 }
 
-async function findOneBySlug(payload: any, collection: "case-categories" | "cases", slug: string) {
+function mapThemeToSlug(theme: string) {
+  return slugify(theme);
+}
+
+async function findCasesPage(payload: any) {
   const result = await payload.find({
-    collection,
+    collection: "cases-page",
     depth: 0,
     limit: 1,
     pagination: false,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
   });
 
   return result.docs[0] ?? null;
@@ -120,31 +162,36 @@ async function findMediaByFilename(payload: any, filename: string) {
   return result.docs[0] ?? null;
 }
 
-async function upsertCategory(payload: any, theme: ThemeSeed) {
-  const existing = await findOneBySlug(payload, "case-categories", theme.slug);
-
-  if (existing) {
-    return payload.update({
-      collection: "case-categories",
-      id: existing.id,
-      data: {
-        title: theme.title,
-        slug: theme.slug,
-        sortOrder: theme.sortOrder,
-        isActive: true,
+async function findFilterBySlug(payload: any, slug: string) {
+  const result = await payload.find({
+    collection: "case-filters",
+    depth: 0,
+    limit: 1,
+    pagination: false,
+    where: {
+      slug: {
+        equals: slug,
       },
-    });
-  }
-
-  return payload.create({
-    collection: "case-categories",
-    data: {
-      title: theme.title,
-      slug: theme.slug,
-      sortOrder: theme.sortOrder,
-      isActive: true,
     },
   });
+
+  return result.docs[0] ?? null;
+}
+
+async function findCardBySlug(payload: any, slug: string) {
+  const result = await payload.find({
+    collection: "case-cards",
+    depth: 0,
+    limit: 1,
+    pagination: false,
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+  });
+
+  return result.docs[0] ?? null;
 }
 
 async function upsertMedia(payload: any, image: { src: string; alt: string }) {
@@ -176,7 +223,32 @@ async function upsertMedia(payload: any, image: { src: string; alt: string }) {
   });
 }
 
-async function upsertCase(
+async function upsertCaseFilter(payload: any, input: { slug: string; label: string; sortOrder: number }) {
+  const existing = await findFilterBySlug(payload, input.slug);
+
+  if (existing) {
+    return payload.update({
+      collection: "case-filters",
+      id: existing.id,
+      data: {
+        label: input.label,
+        sortOrder: input.sortOrder,
+        isActive: true,
+      },
+    });
+  }
+
+  return payload.create({
+    collection: "case-filters",
+    data: {
+      label: input.label,
+      sortOrder: input.sortOrder,
+      isActive: true,
+    },
+  });
+}
+
+async function upsertCaseCard(
   payload: any,
   input: {
     slug: string;
@@ -186,26 +258,25 @@ async function upsertCase(
     task: string;
     solution: string;
     result: string;
-    categoryId: string;
+    theme: number | string;
     sortOrder: number;
     gallery: Array<{
-      image: string;
-      fit?: "cover" | "contain";
+      image: number | string;
+      fit?: string;
       x?: number;
       y?: number;
     }>;
   },
 ) {
-  const existing = await findOneBySlug(payload, "cases", input.slug);
+  const existing = await findCardBySlug(payload, input.slug);
   const data = {
     company: input.company,
-    slug: input.slug,
     teaser: input.teaser,
     intro: input.intro,
     task: input.task,
     solution: input.solution,
     result: input.result,
-    category: input.categoryId,
+    theme: input.theme,
     sortOrder: input.sortOrder,
     isActive: true,
     gallery: input.gallery,
@@ -213,80 +284,118 @@ async function upsertCase(
 
   if (existing) {
     return payload.update({
-      collection: "cases",
+      collection: "case-cards",
       id: existing.id,
       data,
     });
   }
 
   return payload.create({
-    collection: "cases",
+    collection: "case-cards",
     data,
   });
 }
 
 async function main() {
-  process.env.PAYLOAD_PUSH_SCHEMA = "true";
-  dropConflictingPayloadIndexes();
+  process.env.PAYLOAD_PUSH_SCHEMA = "false";
+  ensureCasesSchema();
 
   const { default: config } = await import("../src/payload.config.ts");
   const payload = (await getPayload({ config })) as any;
-  const categoryIdByLabel = new Map<string, string>();
 
-  for (const theme of themeSeeds) {
-    const category = await upsertCategory(payload, theme);
-    categoryIdByLabel.set(theme.title, category.id);
-  }
+  try {
+    const themeDocs = new Map<string, any>();
 
-  let importedMedia = 0;
-  let importedCases = 0;
+    for (const [index, theme] of caseThemes.filter((item) => item !== "Все кейсы").entries()) {
+      const slug = mapThemeToSlug(theme);
+      const themeDoc = await upsertCaseFilter(payload, {
+        slug,
+        label: theme,
+        sortOrder: index + 1,
+      });
 
-  for (const [index, item] of casesPageItems.entries()) {
-    const categoryId = categoryIdByLabel.get(item.theme);
-
-    if (!categoryId) {
-      throw new Error(`Не найдена категория для кейса "${item.id}"`);
+      themeDocs.set(slug, themeDoc);
     }
 
-    const gallery = [];
+    let processedMedia = 0;
 
-    for (const image of item.gallery) {
-      const media = await upsertMedia(payload, image);
-      importedMedia += 1;
-      gallery.push({
-        image: media.id,
-        fit: image.fit,
-        x: image.x,
-        y: image.y,
+    for (const [index, item] of casesPageItems.entries()) {
+      const gallery = [];
+
+      for (const image of item.gallery) {
+        const media = await upsertMedia(payload, image);
+        processedMedia += 1;
+        gallery.push({
+          image: media.id,
+          fit: image.fit,
+          x: image.x,
+          y: image.y,
+        });
+      }
+
+      const themeSlug = mapThemeToSlug(item.theme);
+      const themeDoc = themeDocs.get(themeSlug);
+
+      if (!themeDoc) {
+        throw new Error(`Не найден фильтр кейсов для slug "${themeSlug}"`);
+      }
+
+      await upsertCaseCard(payload, {
+        slug: buildCaseCardSlug(item),
+        company: item.company,
+        teaser: item.teaser,
+        intro: item.intro,
+        task: item.task,
+        solution: item.solution,
+        result: item.result,
+        theme: themeDoc.id,
+        sortOrder: index + 1,
+        gallery,
       });
     }
 
-    await upsertCase(payload, {
-      slug: item.id,
-      company: item.company,
-      teaser: item.teaser,
-      intro: item.intro,
-      task: item.task,
-      solution: item.solution,
-      result: item.result,
-      categoryId,
-      sortOrder: index,
-      gallery,
-    });
-    importedCases += 1;
-  }
-
-  console.log(
-    JSON.stringify(
-      {
-        categories: themeSeeds.length,
-        cases: importedCases,
-        mediaProcessed: importedMedia,
+    const pageData = {
+      seo: {
+        metaTitle: "Кейсы",
+        metaDescription: "Кейсы Держи Марку! по корпоративному мерчу и сувенирной продукции.",
       },
-      null,
-      2,
-    ),
-  );
+    };
+    const existingPage = await findCasesPage(payload);
+
+    if (existingPage) {
+      await payload.update({
+        collection: "cases-page",
+        id: existingPage.id,
+        data: pageData,
+      });
+    } else {
+      await payload.create({
+        collection: "cases-page",
+        data: pageData,
+      });
+    }
+
+    console.log(
+      JSON.stringify(
+        {
+          collection: "cases-page",
+          filters: themeDocs.size,
+          items: casesPageItems.length,
+          mediaProcessed: processedMedia,
+        },
+        null,
+        2,
+      ),
+    );
+  } finally {
+    await payload.destroy();
+  }
 }
 
-await main();
+try {
+  await main();
+  process.exit(0);
+} catch (error) {
+  console.error(error);
+  process.exit(1);
+}

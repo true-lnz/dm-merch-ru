@@ -1,15 +1,34 @@
+export type SocialIcon = "tg" | "vk" | "max";
+
 export type SocialLink = {
-  icon: "tg" | "vk" | "max";
+  icon: SocialIcon;
   label: string;
   href: string;
 };
 
-export const siteInfo = {
+export type SiteInfo = {
+  brandName: string;
+  email: string;
+  phone: string;
+  address: string;
+  officeCoordinates: [number, number];
+  defaultZoom: number;
+  yandexMapsApiKey: string;
+  socials: SocialLink[];
+  copyright: string;
+};
+
+export const SITE_PRIVACY_HREF = "/privacy";
+export const SITE_PRIVACY_LABEL = "Политика конфиденциальности";
+
+export const defaultSiteInfo: SiteInfo = {
   brandName: "Держи Марку!",
-  legalName: "DM Merch",
   email: "zakaz@dm-merch.ru",
   phone: "+7 (931) 107-77-75",
   address: "г. Уфа, ул. Энтузиастов, д. 6",
+  officeCoordinates: [54.756355, 56.023118],
+  defaultZoom: 16,
+  yandexMapsApiKey: "120f734b-f91c-4c91-ab98-3b5561794961",
   socials: [
     {
       icon: "tg",
@@ -27,7 +46,5 @@ export const siteInfo = {
       href: "https://max.ru/join/E11Gq-pvtQdlstRI7bYES_M64Flg9ocThjJga6bHJA0",
     },
   ] satisfies SocialLink[],
-  privacyHref: "/privacy",
-  privacyLabel: "Политика конфиденциальности",
-  copyright: `© «Держи Марку!», ${new Date().getFullYear()}`,
+  copyright: "© «Держи Марку!», 2026",
 };

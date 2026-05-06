@@ -1,4 +1,6 @@
-import { siteInfo } from "@/shared/config/site-info";
+"use client";
+
+import { useSiteInfo } from "@/shared/config/site-info/site-info-provider";
 import { cn } from "@/shared/lib/cn";
 
 const TG_ICON_PATH =
@@ -39,6 +41,7 @@ type SocialLinksProps = {
 };
 
 export function SocialLinks({ className, variant = "default", ariaLabel = "Социальные сети", size = "default" }: SocialLinksProps) {
+  const siteInfo = useSiteInfo();
   const iconColor = variant === "white" || variant === "footer" ? "#0252C5" : "#FFFFFF";
   const itemSizeClassName = size === "menu" ? "size-9" : "size-[37px]";
   const itemRadiusClassName = size === "menu" ? "rounded-[9px]" : "rounded-[10px]";

@@ -1,9 +1,13 @@
-import { siteInfo } from "@/shared/config/site-info";
+"use client";
+
+import { useSiteInfo } from "@/shared/config/site-info/site-info-provider";
 import { ContactPills } from "@/shared/ui/contact-pills";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import { RequestForm } from "@/shared/ui/request-form";
 
 export function RequestCta() {
+  const siteInfo = useSiteInfo();
+
   return (
     <section className="relative mt-[35px] md:mt-[45px]" aria-label="Форма заявки">
       <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-[auto_1fr]">

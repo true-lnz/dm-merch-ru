@@ -55,11 +55,12 @@ export async function getCasesPageData(): Promise<{
   themes: CaseThemeFilter[];
 }> {
   const payload = (await getPayloadClient()) as any;
-  const [categoriesResult, casesResult] = await Promise.all([
+  const [filtersResult, cardsResult] = await Promise.all([
     payload.find({
-      collection: "case-categories",
+      collection: "case-filters",
       depth: 0,
       limit: 100,
+      pagination: false,
       sort: "sortOrder",
       where: {
         isActive: {
@@ -68,9 +69,10 @@ export async function getCasesPageData(): Promise<{
       },
     }),
     payload.find({
-      collection: "cases",
+      collection: "case-cards",
       depth: 2,
       limit: 100,
+      pagination: false,
       sort: "sortOrder",
       where: {
         isActive: {
@@ -79,37 +81,60 @@ export async function getCasesPageData(): Promise<{
       },
     }),
   ]);
+  const themes = Array.isArray(filtersResult?.docs)
+    ? filtersResult.docs
+        .map((theme: any): CaseThemeFilter | null => {
+          if (typeof theme?.slug !== "string" || typeof theme?.label !== "string") {
+            return null;
+          }
 
-  const themes = categoriesResult.docs.map((category: any) => ({
-    slug: category.slug,
-    label: category.title,
-  }));
+          return {
+            slug: theme.slug,
+            label: theme.label,
+          };
+        })
+        .filter((theme: CaseThemeFilter | null): theme is CaseThemeFilter => theme !== null)
+    : [];
   const activeCategorySlugs = new Set(themes.map((theme: CaseThemeFilter) => theme.slug));
 
-  const items = casesResult.docs
-    .map((doc: any): CaseItem | null => {
-      const category = typeof doc.category === "object" && doc.category !== null ? doc.category : null;
-      const gallery = Array.isArray(doc.gallery)
-        ? doc.gallery.map(mapGalleryItem).filter((item: CaseGalleryImage | null): item is CaseGalleryImage => item !== null)
-        : [];
+  const items = Array.isArray(cardsResult?.docs)
+    ? cardsResult.docs
+        .map((doc: any): CaseItem | null => {
+          const gallery = Array.isArray(doc.gallery)
+            ? doc.gallery.map(mapGalleryItem).filter((item: CaseGalleryImage | null): item is CaseGalleryImage => item !== null)
+            : [];
+          const themeSlug =
+            typeof doc.theme === "object" && doc.theme !== null && typeof doc.theme.slug === "string" ? doc.theme.slug : null;
 
-      if (!category?.slug || !activeCategorySlugs.has(category.slug) || gallery.length === 0) {
-        return null;
-      }
+          if (
+            typeof doc.slug !== "string" ||
+            typeof doc.company !== "string" ||
+            typeof doc.teaser !== "string" ||
+            typeof doc.intro !== "string" ||
+            typeof doc.task !== "string" ||
+            typeof doc.solution !== "string" ||
+            typeof doc.result !== "string" ||
+            !themeSlug ||
+            !activeCategorySlugs.has(themeSlug) ||
+            gallery.length === 0
+          ) {
+            return null;
+          }
 
-      return {
-        id: doc.slug,
-        company: doc.company,
-        teaser: doc.teaser,
-        intro: doc.intro,
-        task: doc.task,
-        solution: doc.solution,
-        result: doc.result,
-        themeSlug: category.slug,
-        gallery,
-      };
-    })
-    .filter((item: CaseItem | null): item is CaseItem => item !== null);
+          return {
+            id: doc.slug,
+            company: doc.company,
+            teaser: doc.teaser,
+            intro: doc.intro,
+            task: doc.task,
+            solution: doc.solution,
+            result: doc.result,
+            themeSlug,
+            gallery,
+          };
+        })
+        .filter((item: CaseItem | null): item is CaseItem => item !== null)
+    : [];
 
   return { items, themes };
 }
