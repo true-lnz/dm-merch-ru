@@ -4,17 +4,21 @@ import { PageHeading } from "@/shared/ui/page-heading";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { BlogFeed } from "@/widgets/blog-feed";
 
-export async function BlogPage() {
+type BlogPageProps = {
+  title?: string;
+};
+
+export async function BlogPage({ title = "Блог" }: BlogPageProps) {
   const posts = await getBlogPosts();
 
   return (
     <>
       <WidowFix />
       <PageHeading
-        title="Блог"
+        title={title}
         breadcrumb={{
           labelFrom: "Главная",
-          labelTo: "Блог",
+          labelTo: title,
           href: "/",
         }}
       />

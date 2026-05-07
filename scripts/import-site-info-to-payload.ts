@@ -57,37 +57,9 @@ function dropConflictingPayloadIndexes() {
   }
 }
 
-type TableInfoRow = {
-  name?: unknown;
-};
-
-function ensureSiteInfoSchema() {
-  const Database = loadDatabaseCtor();
-  const db = new Database(path.resolve(process.cwd(), "dm-merch.db"));
-
-  try {
-    const ensureColumn = (columnName: string, sqlType: "numeric" | "text") => {
-      const columns = db.prepare(`PRAGMA table_info("site_info")`).all() as TableInfoRow[];
-      const hasColumn = columns.some((column) => column.name === columnName);
-
-      if (!hasColumn) {
-        db.prepare(`ALTER TABLE "site_info" ADD COLUMN "${columnName}" ${sqlType}`).run();
-      }
-    };
-
-    ensureColumn("office_latitude", "numeric");
-    ensureColumn("office_longitude", "numeric");
-    ensureColumn("default_zoom", "numeric");
-    ensureColumn("yandex_maps_api_key", "text");
-  } finally {
-    db.close();
-  }
-}
-
 async function main() {
   process.env.PAYLOAD_PUSH_SCHEMA = "false";
   dropConflictingPayloadIndexes();
-  ensureSiteInfoSchema();
 
   const { default: config } = await import("../src/payload.config.ts");
   const payload = (await getPayload({ config })) as any;
@@ -96,8 +68,6 @@ async function main() {
       slug: "site-info",
       data: {
         ...defaultSiteInfo,
-        officeLatitude: defaultSiteInfo.officeCoordinates[0],
-        officeLongitude: defaultSiteInfo.officeCoordinates[1],
       },
     });
 

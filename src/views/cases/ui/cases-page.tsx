@@ -12,11 +12,12 @@ import { CaseCard } from "./case-card";
 type CasesPageProps = {
   items: CaseItem[];
   themes: CaseThemeFilter[];
+  title?: string;
 };
 
 const ALL_CASES_THEME = "all";
 
-export function CasesPage({ items, themes }: CasesPageProps) {
+export function CasesPage({ items, themes, title = "Кейсы" }: CasesPageProps) {
   const [activeTheme, setActiveTheme] = useState<string>(ALL_CASES_THEME);
   const listStartRef = useRef<HTMLDivElement | null>(null);
 
@@ -49,10 +50,10 @@ export function CasesPage({ items, themes }: CasesPageProps) {
     <>
       <WidowFix />
       <PageHeading
-        title="Кейсы"
+        title={title}
         breadcrumb={{
           labelFrom: "Главная",
-          labelTo: "Кейсы",
+          labelTo: title,
           href: "/",
         }}
       />

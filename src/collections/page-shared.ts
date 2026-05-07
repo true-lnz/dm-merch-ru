@@ -1,38 +1,24 @@
 import type { CollectionConfig, Field } from "payload";
 
-export function createPageSeoFields(): Field[] {
-  return [
-    {
-      name: "seo",
-      type: "group",
-      label: "SEO",
-      fields: [
-        {
-          name: "metaTitle",
-          type: "text",
-          label: "Meta title",
-        },
-        {
-          name: "metaDescription",
-          type: "textarea",
-          label: "Meta description",
-        },
-      ],
-    },
-  ];
-}
+import { buildPreviewURL } from "../payload/preview.ts";
 
-export function createSingletonPageCollection(args: {
+export function createSettingsPageCollection(args: {
   slug: string;
   singular: string;
   plural: string;
+  adminGroup: string;
+  previewPath: string;
   extraFields?: Field[];
 }): CollectionConfig {
   return {
     slug: args.slug,
     admin: {
-      useAsTitle: "documentTitle",
-      defaultColumns: ["documentTitle", "updatedAt"],
+      group: args.adminGroup,
+      defaultColumns: ["heroTitle", "updatedAt"],
+      preview: () => buildPreviewURL(args.previewPath),
+      livePreview: {
+        url: () => buildPreviewURL(args.previewPath),
+      },
     },
     labels: {
       singular: args.singular,
@@ -44,33 +30,35 @@ export function createSingletonPageCollection(args: {
       update: ({ req }) => Boolean(req.user),
       delete: ({ req }) => Boolean(req.user),
     },
-    hooks: {
-      beforeValidate: [
-        ({ data }) => {
-          if (!data || typeof data !== "object") {
-            return data;
-          }
-
-          return {
-            ...data,
-            documentTitle: args.singular,
-          };
-        },
-      ],
-    },
     fields: [
       {
-        name: "documentTitle",
+        name: "heroTitle",
         type: "text",
-        label: "Служебное название",
+        label: "Hero-заголовок",
         required: true,
-        defaultValue: args.singular,
-        admin: {
-          hidden: true,
-        },
       },
-      ...createPageSeoFields(),
       ...(args.extraFields ?? []),
     ],
+  };
+}
+
+export function createPlaceholderSingletonCollection(args: { slug: string; singular: string; plural: string; adminGroup: string }): CollectionConfig {
+  return {
+    slug: args.slug,
+    admin: {
+      group: args.adminGroup,
+      defaultColumns: ["updatedAt"],
+    },
+    labels: {
+      singular: args.singular,
+      plural: args.plural,
+    },
+    access: {
+      read: () => true,
+      create: ({ req }) => Boolean(req.user),
+      update: ({ req }) => Boolean(req.user),
+      delete: ({ req }) => Boolean(req.user),
+    },
+    fields: [],
   };
 }

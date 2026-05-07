@@ -48,6 +48,16 @@ function backupDatabase(): string | null {
   return backupPath;
 }
 
+function resolveRestoreSourcePath(latestBackupPath: string | null): string | null {
+  const overridePath = process.env.PAYLOAD_RESTORE_BACKUP_PATH?.trim();
+
+  if (overridePath) {
+    return path.resolve(projectRoot, overridePath);
+  }
+
+  return latestBackupPath;
+}
+
 async function initializeSchema() {
   process.env.PAYLOAD_PUSH_SCHEMA = "true";
 
@@ -59,12 +69,17 @@ async function initializeSchema() {
 
 async function main() {
   const backupPath = backupDatabase();
+  const restoreSourcePath = resolveRestoreSourcePath(backupPath);
 
   if (fs.existsSync(dbPath)) {
     fs.rmSync(dbPath, { force: true });
   }
 
   await initializeSchema();
+
+  if (restoreSourcePath) {
+    runStep("node", ["--experimental-strip-types", "scripts/restore-users-and-media.ts", restoreSourcePath]);
+  }
 
   runStep("node", ["--experimental-strip-types", "scripts/import-site-info-to-payload.ts"]);
   runStep("node", ["--experimental-strip-types", "scripts/import-cases-to-payload.ts"]);
@@ -75,6 +90,10 @@ async function main() {
     console.log(`Backup created: ${backupPath}`);
   } else {
     console.log("Backup skipped: source database not found");
+  }
+
+  if (restoreSourcePath && restoreSourcePath !== backupPath) {
+    console.log(`Restore source: ${restoreSourcePath}`);
   }
 
   console.log(`Database rebuilt: ${dbPath}`);

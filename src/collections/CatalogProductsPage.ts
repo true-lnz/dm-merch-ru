@@ -1,9 +1,11 @@
-import { createSingletonPageCollection } from "./page-shared.ts";
+import { createSettingsPageCollection } from "./page-shared.ts";
 
-export const CatalogProductsPage = createSingletonPageCollection({
+export const CatalogProductsPage = createSettingsPageCollection({
   slug: "catalog-products-page",
-  singular: "Каталог продукции",
-  plural: "Каталог продукции",
+  singular: "Каталог продукции: настройки",
+  plural: "Каталог продукции: настройки",
+  adminGroup: "Страница Каталог продукции",
+  previewPath: "/catalog-products",
   extraFields: [
     {
       name: "hero",

@@ -3,6 +3,7 @@ import type { CollectionConfig } from "payload";
 export const MergedCatalogTaxonomy: CollectionConfig = {
   slug: "merged-catalog-taxonomy",
   admin: {
+    group: "Страница Каталог продукции",
     useAsTitle: "sourceName",
     defaultColumns: ["nodeType", "sourceRootName", "sourceName", "displayNameOverride", "isActive"],
   },

@@ -46,30 +46,12 @@ export const getSiteInfo = cache(async (): Promise<SiteInfo> => {
       slug: "site-info",
       depth: 0,
     });
-    const officeLatitude =
-      typeof global.officeLatitude === "number" && Number.isFinite(global.officeLatitude)
-        ? global.officeLatitude
-        : defaultSiteInfo.officeCoordinates[0];
-    const officeLongitude =
-      typeof global.officeLongitude === "number" && Number.isFinite(global.officeLongitude)
-        ? global.officeLongitude
-        : defaultSiteInfo.officeCoordinates[1];
-    const defaultZoom =
-      typeof global.defaultZoom === "number" && Number.isFinite(global.defaultZoom)
-        ? global.defaultZoom
-        : defaultSiteInfo.defaultZoom;
 
     return {
       brandName: typeof global.brandName === "string" && global.brandName ? global.brandName : defaultSiteInfo.brandName,
       email: typeof global.email === "string" && global.email ? global.email : defaultSiteInfo.email,
       phone: typeof global.phone === "string" && global.phone ? global.phone : defaultSiteInfo.phone,
       address: typeof global.address === "string" && global.address ? global.address : defaultSiteInfo.address,
-      officeCoordinates: [officeLatitude, officeLongitude],
-      defaultZoom,
-      yandexMapsApiKey:
-        typeof global.yandexMapsApiKey === "string" && global.yandexMapsApiKey
-          ? global.yandexMapsApiKey
-          : defaultSiteInfo.yandexMapsApiKey,
       socials: mapSocials(global.socials),
       copyright: typeof global.copyright === "string" && global.copyright ? global.copyright : defaultSiteInfo.copyright,
     };

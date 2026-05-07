@@ -6,15 +6,15 @@ import { getLivePreviewURLForCollection, getPreviewURLForCollection } from "../p
 export const Posts: CollectionConfig = {
   slug: "posts",
   admin: {
-    group: "Контент",
+    group: "Страница Блог",
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "updatedAt", "publishedAt"],
     preview: getPreviewURLForCollection("posts"),
     livePreview: getLivePreviewURLForCollection("posts"),
   },
   labels: {
-    singular: "Пост",
-    plural: "Посты",
+    singular: "Блог: статья",
+    plural: "Блог: статьи",
   },
   access: {
     read: () => true,

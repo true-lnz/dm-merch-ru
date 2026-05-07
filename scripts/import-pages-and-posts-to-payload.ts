@@ -5,6 +5,13 @@ import { getPayload } from "payload";
 import { blogArticlesMock } from "../src/entities/blog-post/model/mock.ts";
 import type { BlogArticleSection, CmsImage } from "../src/entities/blog-post/model/types.ts";
 
+const DEFAULT_CONTACTS_MAP_SETTINGS = {
+  officeLatitude: 54.756355,
+  officeLongitude: 56.023118,
+  defaultZoom: 16,
+  yandexMapsApiKey: "120f734b-f91c-4c91-ab98-3b5561794961",
+} as const;
+
 type FindResult<TDoc> = {
   docs?: TDoc[];
 };
@@ -19,6 +26,8 @@ type PayloadInstance = Awaited<ReturnType<typeof getPayload>> & {
   find: (args: object) => Promise<FindResult<IdentifiableDocument>>;
   destroy: () => Promise<void>;
 };
+
+type SingletonCollection = "home-page" | "catalog-page" | "blog-page" | "catalog-products-page" | "contacts-page" | "home-marquiz";
 
 type PageSeed = {
   slug: "blog" | "catalog" | "catalog-products" | "cases" | "home";
@@ -244,6 +253,84 @@ async function upsertPages(payload: PayloadInstance) {
   }
 }
 
+async function upsertSingletonPage(
+  payload: PayloadInstance,
+  collection: SingletonCollection,
+  data: Record<string, unknown>,
+) {
+  const result = await payload.find({
+    collection,
+    depth: 0,
+    limit: 1,
+    pagination: false,
+    overrideAccess: true,
+  });
+  const existing = Array.isArray(result?.docs) ? result.docs[0] : null;
+
+  if (existing?.id) {
+    await payload.update({
+      collection,
+      id: existing.id,
+      data,
+      overrideAccess: true,
+    });
+    return;
+  }
+
+  await payload.create({
+    collection,
+    data,
+    overrideAccess: true,
+  });
+}
+
+async function upsertSingletonPages(payload: PayloadInstance) {
+  await upsertSingletonPage(payload, "home-page", {
+    heroTitle: "Главная",
+    meta: {
+      title: "Главная",
+      description: "Производство мерча и сувенирной продукции с логотипом для бизнеса. От 50 000₽, цена 25% от рынка, 1571+ проект. Образцы перед поставкой, договор.",
+    },
+  });
+
+  await upsertSingletonPage(payload, "catalog-page", {
+    heroTitle: "Каталог",
+    meta: {
+      title: "Каталог",
+    },
+  });
+
+  await upsertSingletonPage(payload, "blog-page", {
+    heroTitle: "Блог",
+    meta: {
+      title: "Блог",
+    },
+  });
+
+  await upsertSingletonPage(payload, "catalog-products-page", {
+    heroTitle: "Каталог продукции",
+    meta: {
+      title: "Каталог продукции",
+      description: "Посадочная страница каталога продукции: статьи, категории и подкатегории мерча и корпоративных подарков.",
+    },
+    hero: {
+      title: "Каталог\nпродукции",
+      description: "Собрали в одном входе категории, статьи и реальные разделы каталога, чтобы ориентироваться в мерче было проще и быстрее.",
+      backgroundImageUrl: "/catalog-products/img_hero_catalog_cover.svg",
+    },
+  });
+
+  await upsertSingletonPage(payload, "contacts-page", {
+    heroTitle: "Контакты",
+    ...DEFAULT_CONTACTS_MAP_SETTINGS,
+    meta: {
+      title: "Контакты",
+    },
+  });
+
+  await upsertSingletonPage(payload, "home-marquiz", {});
+}
+
 async function upsertPosts(payload: PayloadInstance) {
   for (const article of blogArticlesMock) {
     const existing = await findExistingDoc(payload, "posts", "slug", article.slug);
@@ -290,6 +377,7 @@ async function main() {
 
   try {
     await upsertPages(payload);
+    await upsertSingletonPages(payload);
     await upsertPosts(payload);
   } finally {
     await payload.destroy();

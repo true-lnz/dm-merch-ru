@@ -11,9 +11,6 @@ export type SiteInfo = {
   email: string;
   phone: string;
   address: string;
-  officeCoordinates: [number, number];
-  defaultZoom: number;
-  yandexMapsApiKey: string;
   socials: SocialLink[];
   copyright: string;
 };
@@ -26,9 +23,6 @@ export const defaultSiteInfo: SiteInfo = {
   email: "zakaz@dm-merch.ru",
   phone: "+7 (931) 107-77-75",
   address: "г. Уфа, ул. Энтузиастов, д. 6",
-  officeCoordinates: [54.756355, 56.023118],
-  defaultZoom: 16,
-  yandexMapsApiKey: "120f734b-f91c-4c91-ab98-3b5561794961",
   socials: [
     {
       icon: "tg",

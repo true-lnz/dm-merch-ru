@@ -51,9 +51,22 @@ function ensureCasesSchema() {
     const statements = [
       `CREATE TABLE IF NOT EXISTS "cases_page" (
         "id" integer PRIMARY KEY NOT NULL,
-        "admin_title" text NOT NULL,
-        "seo_meta_title" text,
-        "seo_meta_description" text,
+        "hero_title" text,
+        "meta_title" text,
+        "meta_description" text,
+        "meta_image_id" integer,
+        "meta_keywords" text,
+        "meta_canonical_url" text,
+        "meta_robots_no_index" integer,
+        "meta_robots_no_follow" integer,
+        "meta_open_graph_title" text,
+        "meta_open_graph_description" text,
+        "meta_open_graph_type" text,
+        "meta_open_graph_image_alt" text,
+        "meta_twitter_card" text,
+        "meta_twitter_title" text,
+        "meta_twitter_description" text,
+        "meta_twitter_image_alt" text,
         "updated_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
         "created_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL
       )`,
@@ -111,8 +124,22 @@ function ensureCasesSchema() {
       db.prepare(sql).run();
     }
 
-    ensureColumn(db, "cases_page", "seo_meta_title", "text");
-    ensureColumn(db, "cases_page", "seo_meta_description", "text");
+    ensureColumn(db, "cases_page", "hero_title", "text");
+    ensureColumn(db, "cases_page", "meta_title", "text");
+    ensureColumn(db, "cases_page", "meta_description", "text");
+    ensureColumn(db, "cases_page", "meta_image_id");
+    ensureColumn(db, "cases_page", "meta_keywords", "text");
+    ensureColumn(db, "cases_page", "meta_canonical_url", "text");
+    ensureColumn(db, "cases_page", "meta_robots_no_index");
+    ensureColumn(db, "cases_page", "meta_robots_no_follow");
+    ensureColumn(db, "cases_page", "meta_open_graph_title", "text");
+    ensureColumn(db, "cases_page", "meta_open_graph_description", "text");
+    ensureColumn(db, "cases_page", "meta_open_graph_type", "text");
+    ensureColumn(db, "cases_page", "meta_open_graph_image_alt", "text");
+    ensureColumn(db, "cases_page", "meta_twitter_card", "text");
+    ensureColumn(db, "cases_page", "meta_twitter_title", "text");
+    ensureColumn(db, "cases_page", "meta_twitter_description", "text");
+    ensureColumn(db, "cases_page", "meta_twitter_image_alt", "text");
     ensureColumn(db, "payload_locked_documents_rels", "cases_page_id");
     ensureColumn(db, "payload_locked_documents_rels", "case_filters_id");
     ensureColumn(db, "payload_locked_documents_rels", "case_cards_id");
@@ -355,9 +382,10 @@ async function main() {
     }
 
     const pageData = {
-      seo: {
-        metaTitle: "Кейсы",
-        metaDescription: "Кейсы Держи Марку! по корпоративному мерчу и сувенирной продукции.",
+      heroTitle: "Кейсы",
+      meta: {
+        title: "Кейсы",
+        description: "Кейсы Держи Марку! по корпоративному мерчу и сувенирной продукции.",
       },
     };
     const existingPage = await findCasesPage(payload);

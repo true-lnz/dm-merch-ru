@@ -7,7 +7,11 @@ function trimText(value: string | null | undefined): string {
 }
 
 export function generateSEOTitle(args: { doc: Record<string, unknown> }): string {
-  return trimText((args.doc.metaTitle as string | undefined) || (args.doc.title as string | undefined));
+  return trimText(
+    (args.doc.metaTitle as string | undefined) ||
+      (args.doc.title as string | undefined) ||
+      (args.doc.heroTitle as string | undefined),
+  );
 }
 
 export function generateSEODescription(args: { doc: Record<string, unknown> }): string {
@@ -34,7 +38,11 @@ export function generateSEOURL(args: {
   req: PayloadRequest;
 }): string {
   const path =
-    args.collectionSlug === "pages" || args.collectionSlug === "posts"
+    args.collectionSlug === "pages" ||
+    args.collectionSlug === "posts" ||
+    args.collectionSlug === "blog-page" ||
+    args.collectionSlug === "catalog-products-page" ||
+    args.collectionSlug === "cases-page"
       ? resolveDocumentPath(args.collectionSlug, args.doc)
       : null;
 

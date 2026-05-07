@@ -1,7 +1,9 @@
-import { createSingletonPageCollection } from "./page-shared.ts";
+import { createSettingsPageCollection } from "./page-shared.ts";
 
-export const BlogPage = createSingletonPageCollection({
+export const BlogPage = createSettingsPageCollection({
   slug: "blog-page",
-  singular: "Блог",
-  plural: "Блог",
+  singular: "Блог: настройки",
+  plural: "Блог: настройки",
+  adminGroup: "Страница Блог",
+  previewPath: "/blog",
 });

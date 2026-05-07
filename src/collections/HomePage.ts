@@ -1,7 +1,9 @@
-import { createSingletonPageCollection } from "./page-shared.ts";
+import { createSettingsPageCollection } from "./page-shared.ts";
 
-export const HomePage = createSingletonPageCollection({
+export const HomePage = createSettingsPageCollection({
   slug: "home-page",
-  singular: "Главная страница",
-  plural: "Главная страница",
+  singular: "Главная: настройки",
+  plural: "Главная: настройки",
+  adminGroup: "Страница Главная",
+  previewPath: "/",
 });

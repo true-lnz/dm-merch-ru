@@ -5,7 +5,7 @@ import { slugify } from "./cases-slug.ts";
 export const CaseFilters: CollectionConfig = {
   slug: "case-filters",
   admin: {
-    group: "Кейсы",
+    group: "Страница Кейсы",
     useAsTitle: "label",
     defaultColumns: ["label", "slug", "sortOrder", "isActive", "updatedAt"],
   },

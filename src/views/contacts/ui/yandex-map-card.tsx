@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
-import { useSiteInfo } from "@/shared/config/site-info/site-info-provider";
+import type { ContactsMapSettings } from "@/shared/lib/payload/contacts-page";
 
 declare global {
   interface Window {
@@ -44,11 +44,12 @@ const REMOVED_CONTROLS = [
   "rulerControl",
 ] as const;
 
-export function YandexMapCard() {
-  const siteInfo = useSiteInfo();
-  const officeCoordinates = siteInfo.officeCoordinates;
-  const defaultZoom = siteInfo.defaultZoom;
-  const yandexMapsApiKey = siteInfo.yandexMapsApiKey;
+type YandexMapCardProps = ContactsMapSettings & {
+  address: string;
+  brandName: string;
+};
+
+export function YandexMapCard({ address, brandName, defaultZoom, officeCoordinates, yandexMapsApiKey }: YandexMapCardProps) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const instanceRef = useRef<YandexMapInstance | null>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -82,8 +83,8 @@ export function YandexMapCard() {
         new ymaps.Placemark(
           officeCoordinates,
           {
-            hintContent: siteInfo.brandName,
-            balloonContent: siteInfo.address,
+            hintContent: brandName,
+            balloonContent: address,
           },
           {
             preset: "islands#dotIcon",
@@ -111,12 +112,12 @@ export function YandexMapCard() {
       instanceRef.current?.destroy();
       instanceRef.current = null;
     };
-  }, [defaultZoom, officeCoordinates, scriptLoaded, siteInfo.address, siteInfo.brandName]);
+  }, [address, brandName, defaultZoom, officeCoordinates, scriptLoaded]);
 
   if (!yandexMapsApiKey) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-[#f6f6f6] px-4 text-center text-sm text-[#666]">
-        Не задан ключ Яндекс Карт в настройках сайта.
+        Не задан ключ Яндекс Карт в настройках страницы контактов.
       </div>
     );
   }

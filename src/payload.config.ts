@@ -12,9 +12,12 @@ import { BlogPage } from "./collections/BlogPage.ts";
 import { CaseCards } from "./collections/CaseCards.ts";
 import { CaseFilters } from "./collections/CaseFilters.ts";
 import { CasesPage } from "./collections/CasesPage.ts";
+import { CatalogCategories } from "./collections/CatalogCategories.ts";
 import { CatalogPage } from "./collections/CatalogPage.ts";
 import { CatalogProductsPage } from "./collections/CatalogProductsPage.ts";
+import { ContactsPage } from "./collections/ContactsPage.ts";
 import { HomePage } from "./collections/HomePage.ts";
+import { HomeMarquiz } from "./collections/HomeMarquiz.ts";
 import { Pages } from "./collections/Pages.ts";
 import { Posts } from "./collections/Posts.ts";
 import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
@@ -66,7 +69,23 @@ export default buildConfig({
       breakpoints: LIVE_PREVIEW_BREAKPOINTS,
     },
   },
-  collections: [Users, Media, Pages, Posts, HomePage, CatalogPage, CatalogProductsPage, CasesPage, CaseFilters, CaseCards, BlogPage, MergedCatalogTaxonomy],
+  collections: [
+    Users,
+    Media,
+    Pages,
+    HomePage,
+    HomeMarquiz,
+    CatalogPage,
+    CatalogCategories,
+    CatalogProductsPage,
+    MergedCatalogTaxonomy,
+    CasesPage,
+    CaseFilters,
+    CaseCards,
+    BlogPage,
+    Posts,
+    ContactsPage,
+  ],
   globals: [SiteInfoGlobal],
   editor: lexicalEditor({
     features: ({ rootFeatures }) => [...rootFeatures, FixedToolbarFeature()],
@@ -88,7 +107,7 @@ export default buildConfig({
   sharp,
   plugins: [
     seoPlugin({
-      collections: ["pages", "posts"],
+      collections: ["pages", "posts", "home-page", "catalog-page", "blog-page", "catalog-products-page", "contacts-page", "cases-page"],
       fields: ({ defaultFields }) => extendSEOFields(defaultFields),
       uploadsCollection: "media",
       tabbedUI: true,

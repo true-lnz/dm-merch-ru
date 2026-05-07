@@ -1,6 +1,14 @@
 import type { CollectionConfig, PayloadRequest } from "payload";
 
-type PreviewableCollection = "pages" | "posts";
+type PreviewableCollection = "pages" | "posts" | "blog-page" | "catalog-products-page" | "cases-page";
+type AdminCollectionSlug =
+  | "pages"
+  | "posts"
+  | "home-page"
+  | "catalog-page"
+  | "catalog-products-page"
+  | "cases-page"
+  | "blog-page";
 
 export const DEFAULT_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
@@ -59,6 +67,18 @@ export function resolveDocumentPath(collection: PreviewableCollection, doc: Reco
     return resolvePagePath(doc.slug);
   }
 
+  if (collection === "blog-page") {
+    return "/blog";
+  }
+
+  if (collection === "catalog-products-page") {
+    return "/catalog-products";
+  }
+
+  if (collection === "cases-page") {
+    return "/cases";
+  }
+
   if (collection === "posts" && typeof doc.slug === "string" && doc.slug.length > 0) {
     return `/blog/${doc.slug}`;
   }
@@ -111,6 +131,6 @@ export function getAbsolutePreviewURL(path: string | null | undefined, req?: Pay
   return new URL(previewURL, getServerURLFromRequest(req)).toString();
 }
 
-export function getDocumentAdminPath(collection: PreviewableCollection, id: number | string): string {
+export function getDocumentAdminPath(collection: AdminCollectionSlug, id: number | string): string {
   return `/admin/collections/${collection}/${id}`;
 }

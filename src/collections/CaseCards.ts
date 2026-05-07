@@ -5,7 +5,7 @@ import { buildCaseCardSlug } from "./cases-slug.ts";
 export const CaseCards: CollectionConfig = {
   slug: "case-cards",
   admin: {
-    group: "Кейсы",
+    group: "Страница Кейсы",
     useAsTitle: "company",
     defaultColumns: ["company", "teaser", "theme", "sortOrder", "isActive", "updatedAt"],
   },
