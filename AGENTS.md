@@ -10,3 +10,7 @@
 - Before writing, prefer patch-style edits that change only required lines; avoid full-file rewrite when not necessary.
 - Never run bulk search/replace over files that may contain Cyrillic unless the user explicitly requests it.
 - Do not convert line endings or add/remove BOM unless explicitly requested.
+
+# Other
+
+- Payload LLMS in llms.txt
