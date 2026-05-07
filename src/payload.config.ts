@@ -1,5 +1,6 @@
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { seoPlugin } from "@payloadcms/plugin-seo";
+import { FixedToolbarFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import { ru } from "payload/i18n/ru";
 import { en } from "payload/i18n/en";
@@ -14,10 +15,15 @@ import { CasesPage } from "./collections/CasesPage.ts";
 import { CatalogPage } from "./collections/CatalogPage.ts";
 import { CatalogProductsPage } from "./collections/CatalogProductsPage.ts";
 import { HomePage } from "./collections/HomePage.ts";
+import { Pages } from "./collections/Pages.ts";
+import { Posts } from "./collections/Posts.ts";
 import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
 import { Media } from "./collections/Media.ts";
 import { MergedCatalogTaxonomy } from "./collections/MergedCatalogTaxonomy.ts";
 import { Users } from "./collections/Users.ts";
+import { LIVE_PREVIEW_BREAKPOINTS } from "./payload/preview.ts";
+import { extendSEOFields } from "./payload/seo-fields.ts";
+import { generateSEODescription, generateSEOImage, generateSEOTitle, generateSEOURL } from "./payload/seo.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -47,6 +53,7 @@ export default buildConfig({
       titleSuffix: "— Держи Марку!",
     },
     components: {
+      beforeDashboard: ["./payload/admin/BeforeDashboard.tsx"],
       graphics: {
         Icon: "./payload/graphics/AdminIcon.tsx",
         Logo: "./payload/graphics/AdminLogo.tsx",
@@ -55,10 +62,15 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    livePreview: {
+      breakpoints: LIVE_PREVIEW_BREAKPOINTS,
+    },
   },
-  collections: [Users, Media, HomePage, CatalogPage, CatalogProductsPage, CasesPage, CaseFilters, CaseCards, BlogPage, MergedCatalogTaxonomy],
+  collections: [Users, Media, Pages, Posts, HomePage, CatalogPage, CatalogProductsPage, CasesPage, CaseFilters, CaseCards, BlogPage, MergedCatalogTaxonomy],
   globals: [SiteInfoGlobal],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ rootFeatures }) => [...rootFeatures, FixedToolbarFeature()],
+  }),
   i18n: {
     fallbackLanguage: "ru",
     supportedLanguages: { ru: ruAdmin, en },
@@ -74,5 +86,21 @@ export default buildConfig({
     push: process.env.PAYLOAD_PUSH_SCHEMA === "true",
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    seoPlugin({
+      collections: ["pages", "posts"],
+      fields: ({ defaultFields }) => extendSEOFields(defaultFields),
+      uploadsCollection: "media",
+      tabbedUI: true,
+      generateTitle: ({ doc }) => generateSEOTitle({ doc: doc as Record<string, unknown> }),
+      generateDescription: ({ doc }) => generateSEODescription({ doc: doc as Record<string, unknown> }),
+      generateImage: ({ doc }) => generateSEOImage({ doc: doc as Record<string, unknown> }),
+      generateURL: ({ collectionConfig, doc, req }) =>
+        generateSEOURL({
+          collectionSlug: collectionConfig?.slug,
+          doc: doc as Record<string, unknown>,
+          req,
+        }),
+    }),
+  ],
 });

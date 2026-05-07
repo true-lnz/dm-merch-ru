@@ -4,7 +4,9 @@ import { PageHeading } from "@/shared/ui/page-heading";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { BlogFeed } from "@/widgets/blog-feed";
 
-export function BlogPage() {
+export async function BlogPage() {
+  const posts = await getBlogPosts();
+
   return (
     <>
       <WidowFix />
@@ -16,7 +18,7 @@ export function BlogPage() {
           href: "/",
         }}
       />
-      <BlogFeed posts={getBlogPosts()} />
+      <BlogFeed posts={posts} />
       <RequestCta />
     </>
   );

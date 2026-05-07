@@ -56,7 +56,7 @@ async function MobileContactsHero() {
       <div className="overflow-hidden rounded-[18px] md:rounded-[22.5px] md:mx-auto md:max-w-[760px]">
         <div className="relative aspect-[340/256] overflow-hidden  md:aspect-[16/11]">
           <Image
-            src="/contacts/img_contacts_cover.png"
+            src="/contacts/img_contacts_cover.webp"
             alt="Команда в фирменном мерче"
             fill
             preload={true}

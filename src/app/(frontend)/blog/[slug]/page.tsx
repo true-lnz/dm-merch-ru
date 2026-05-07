@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
 import { getBlogPostBySlug, getBlogPostSlugs } from "@/entities/blog-post";
+import { getDocumentAdminPath } from "@/payload/preview";
+import { buildSEOMetadata } from "@/shared/lib/payload/seo-metadata";
+import { isDraftModeEnabled } from "@/shared/lib/payload/page-docs";
+import { AdminBar } from "@/shared/ui/admin-bar";
 import { BlogArticlePage } from "@/views/blog";
 
 type BlogArticleRouteProps = {
@@ -10,14 +15,14 @@ type BlogArticleRouteProps = {
 };
 
 export async function generateStaticParams() {
-  return getBlogPostSlugs().map((slug) => ({ slug }));
+  return (await getBlogPostSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: BlogArticleRouteProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getBlogPostBySlug(slug);
+  const article = await getBlogPostBySlug(slug);
 
   if (!article) {
     return {
@@ -26,17 +31,32 @@ export async function generateMetadata({
   }
 
   return {
-    title: article.seoTitle,
+    ...buildSEOMetadata({
+      fallbackDescription: article.excerpt || undefined,
+      fallbackImage: article.heroImage,
+      fallbackTitle: article.seoTitle,
+      meta: article.meta,
+      pathname: `/blog/${article.slug}`,
+      socialType: "article",
+    }),
   };
 }
 
 export default async function Page({ params }: BlogArticleRouteProps) {
   const { slug } = await params;
-  const article = getBlogPostBySlug(slug);
+  const article = await getBlogPostBySlug(slug);
+  const isDraft = await isDraftModeEnabled();
 
   if (!article) {
     notFound();
   }
 
-  return <BlogArticlePage article={article} />;
+  return (
+    <>
+      {isDraft ? (
+        <AdminBar currentPath={`/blog/${article.slug}`} editHref={getDocumentAdminPath("posts", article.id)} title={article.cardTitle} />
+      ) : null}
+      <BlogArticlePage article={article} />
+    </>
+  );
 }

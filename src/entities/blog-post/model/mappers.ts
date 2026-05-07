@@ -1,4 +1,4 @@
-import type { BlogArticle, BlogArticleDto, BlogPost, BlogPostDto } from "./types";
+import type { BlogArticle, BlogArticleDto, BlogPost, BlogPostDto } from "./types.ts";
 
 export function mapBlogPostFromDto(dto: BlogPostDto): BlogPost {
   return {

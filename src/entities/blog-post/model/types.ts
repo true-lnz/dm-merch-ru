@@ -308,6 +308,29 @@ export type BlogArticleSection =
   | BlogArticleTextSplitSection;
 
 export type BlogArticle = BlogPost & {
+  meta?: {
+    canonicalUrl?: string | null;
+    description?: string | null;
+    image?: CmsImage | null;
+    keywords?: string | null;
+    openGraph?: {
+      description?: string | null;
+      imageAlt?: string | null;
+      title?: string | null;
+      type?: "article" | "website" | null;
+    } | null;
+    robots?: {
+      noFollow?: boolean | null;
+      noIndex?: boolean | null;
+    } | null;
+    title?: string | null;
+    twitter?: {
+      card?: "summary" | "summary_large_image" | null;
+      description?: string | null;
+      imageAlt?: string | null;
+      title?: string | null;
+    } | null;
+  } | null;
   pageTitle: string;
   seoTitle: string;
   breadcrumbCurrentLabel: string;

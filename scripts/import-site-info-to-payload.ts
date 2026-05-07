@@ -94,7 +94,11 @@ async function main() {
   try {
     const result = await payload.updateGlobal({
       slug: "site-info",
-      data: defaultSiteInfo,
+      data: {
+        ...defaultSiteInfo,
+        officeLatitude: defaultSiteInfo.officeCoordinates[0],
+        officeLongitude: defaultSiteInfo.officeCoordinates[1],
+      },
     });
 
     console.log(

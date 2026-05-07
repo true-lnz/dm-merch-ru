@@ -45,7 +45,5 @@ export { mapBlogArticleFromDto, mapBlogPostFromDto } from "./model/mappers";
 export {
   blogArticlesMock,
   blogPostsMock,
-  getBlogPostBySlug,
-  getBlogPosts,
-  getBlogPostSlugs,
 } from "./model/mock";
+export { getBlogPostBySlug, getBlogPosts, getBlogPostSlugs } from "./model/payload";

@@ -1,34 +1,21 @@
-﻿import type { Metadata } from "next";
 import { HomePage } from "@/views/home";
+import { getDocumentAdminPath } from "@/payload/preview";
+import { getManagedPageBySlug, isDraftModeEnabled } from "@/shared/lib/payload/page-docs";
+import { getManagedPageMetadata } from "@/shared/lib/payload/page-seo";
+import { AdminBar } from "@/shared/ui/admin-bar";
 
-export const metadata: Metadata = {
-  title: "Одежда и сувенирка с логотипом на заказ Держи Марку!",
-  description:
-    "Производство мерча и сувенирной продукции с логотипом для бизнеса. От 50 000₽, цена 25% от рынка, 1571+ проект. Образцы перед поставкой, договор.",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "Мерч и сувенирная продукция от команды с 1571+ проектами",
-    description:
-      "3 дизайн-концепции и правки макета - бесплатно. Производство корпоративного мерча и сувенирной продукции с логотипом от 50 000₽. Срок 14 дней, образцы, договор.",
-    url: "/",
-    images: [
-      {
-        url: "/home/img_lead_cta_cover.webp",
-        alt: "Мерч и сувенирная продукция от команды Держи Марку!",
-      },
-    ],
-  },
-  twitter: {
-    title: "Мерч и сувенирная продукция от команды с 1571+ проектами",
-    description:
-      "3 дизайн-концепции и правки макета - бесплатно. Производство корпоративного мерча и сувенирной продукции с логотипом от 50 000₽. Срок 14 дней, образцы, договор.",
-    images: ["/home/img_lead_cta_cover.webp"],
-  },
-};
-
-export default function Page() {
-  return <HomePage />;
+export async function generateMetadata() {
+  return getManagedPageMetadata("home");
 }
 
+export default async function Page() {
+  const isDraft = await isDraftModeEnabled();
+  const page = await getManagedPageBySlug("home");
+
+  return (
+    <>
+      {isDraft && page ? <AdminBar currentPath="/" editHref={getDocumentAdminPath("pages", page.id)} title={page.title} /> : null}
+      <HomePage />
+    </>
+  );
+}

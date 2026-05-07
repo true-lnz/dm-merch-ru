@@ -1,5 +1,5 @@
-import { mapBlogArticleFromDto, mapBlogPostFromDto } from "./mappers";
-import type { BlogArticle, BlogArticleDto, BlogPost } from "./types";
+import { mapBlogArticleFromDto, mapBlogPostFromDto } from "./mappers.ts";
+import type { BlogArticle, BlogArticleDto, BlogPost } from "./types.ts";
 
 const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
   {

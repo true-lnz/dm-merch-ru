@@ -3,8 +3,8 @@ import { SiteInfoProvider } from "@/shared/config/site-info/site-info-provider";
 import { WishlistProvider } from "@/shared/lib/wishlist";
 import { YandexMetrikaContainer } from "@/shared/lib/yandex-metrika";
 import { ClientRuntimeMonitor } from "@/shared/ui/client-runtime-monitor";
-import { Toaster } from "@/shared/ui/sonner";
 import { PageTransitionProvider } from "@/shared/ui/page-transition";
+import { Toaster } from "@/shared/ui/sonner";
 import { CookieWarning } from "@/widgets/cookie-warning";
 import { Footer } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
@@ -20,14 +20,16 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://dm-merch.ru"),
   title: {
-    default: "Держи Марку!",
+    default: "Одежда и сувенирка с логотипом на заказ Держи Марку!",
     template: "%s — Держи Марку!",
   },
   verification: {
     yandex: "884bd85350dbdd33",
   },
-  description: "Производство мерча и сувенирной продукции с логотипом для бизнеса. От 50 000₽, цена 25% от рынка, 1571+ проект. Образцы перед поставкой, договор.",
-  keywords: "Купить мерч, производство мерча, сувернирка, сувенирная продукция, сделать принт, изготовить футболки, толстовки, мерч для бизнеса, корпоративный мерч",
+  description:
+    "Производство мерча и сувенирной продукции с логотипом для бизнеса. От 50 000₽, цена 25% от рынка, 1571+ проект. Образцы перед поставкой, договор.",
+  keywords:
+    "Купить мерч, производство мерча, сувернирка, сувенирная продукция, сделать принт, изготовить футболки, толстовки, мерч для бизнеса, корпоративный мерч",
   openGraph: {
     type: "website",
     locale: "ru_RU",
