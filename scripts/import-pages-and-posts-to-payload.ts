@@ -12,6 +12,13 @@ const DEFAULT_CONTACTS_MAP_SETTINGS = {
   yandexMapsApiKey: "120f734b-f91c-4c91-ab98-3b5561794961",
 } as const;
 
+const DEFAULT_CONTACTS_HERO_IMAGE: CmsImage = {
+  url: "/contacts/img_contacts_cover.webp",
+  alt: "Команда в фирменном мерче",
+  width: 1600,
+  height: 1200,
+};
+
 type FindResult<TDoc> = {
   docs?: TDoc[];
 };
@@ -322,6 +329,7 @@ async function upsertSingletonPages(payload: PayloadInstance) {
 
   await upsertSingletonPage(payload, "contacts-page", {
     heroTitle: "Контакты",
+    heroImage: await ensureMedia(payload, DEFAULT_CONTACTS_HERO_IMAGE),
     ...DEFAULT_CONTACTS_MAP_SETTINGS,
     meta: {
       title: "Контакты",

@@ -1,10 +1,26 @@
 import { RequestDialog, RequestDialogButton } from "@/features/request-dialog";
 import { getSiteInfo } from "@/shared/config/site-info/get-site-info";
-import { getContactsMapSettings } from "@/shared/lib/payload/contacts-page";
+import { getContactsPageData, type ContactsMapSettings } from "@/shared/lib/payload/contacts-page";
 import { formatPhoneHref } from "@/shared/lib/phone";
 import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import Image from "next/image";
 import { YandexMapCard } from "./yandex-map-card";
+
+type ContactLinks = ReadonlyArray<{
+  href: string;
+  label: string;
+}>;
+
+type ContactsHeroProps = {
+  address: string;
+  brandName: string;
+  contactLinks: ContactLinks;
+  heroImage: {
+    alt: string;
+    url: string;
+  };
+  mapSettings: ContactsMapSettings;
+};
 
 function ContactLeadLink({ href, label }: { href: string; label: string }) {
   return (
@@ -17,15 +33,13 @@ function ContactLeadLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-async function ContactsMapCard() {
-  const [siteInfo, mapSettings] = await Promise.all([getSiteInfo(), getContactsMapSettings()]);
-
+function ContactsMapCard({ address, brandName, mapSettings }: Pick<ContactsHeroProps, "address" | "brandName" | "mapSettings">) {
   return (
     <div>
-      <p className="my-4 text-sm md:text-lg xl:text-xl tracking-[-0.04em] text-[#404040] xl:my-[18px]">{siteInfo.address}</p>
+      <p className="my-4 text-sm md:text-lg xl:text-xl tracking-[-0.04em] text-[#404040] xl:my-[18px]">{address}</p>
 
       <div className="relative aspect-square overflow-hidden rounded-[12px] border-[5px] border-[var(--accent)] bg-white md:h-[360px] md:aspect-auto xl:h-[225px] xl:min-w-[450px] xl:w-full xl:max-w-full rounded-[18px] md:rounded-[22.5px] xl:border-[6px]">
-        <YandexMapCard address={siteInfo.address} brandName={siteInfo.brandName} {...mapSettings} />
+        <YandexMapCard address={address} brandName={brandName} {...mapSettings} />
       </div>
     </div>
   );
@@ -39,26 +53,14 @@ function DiscussionCta() {
   );
 }
 
-async function MobileContactsHero() {
-  const siteInfo = await getSiteInfo();
-  const contactLinks = [
-    {
-      href: formatPhoneHref(siteInfo.phone),
-      label: siteInfo.phone,
-    },
-    {
-      href: `mailto:${siteInfo.email}`,
-      label: siteInfo.email,
-    },
-  ] as const;
-
+function MobileContactsHero({ address, brandName, contactLinks, heroImage, mapSettings }: ContactsHeroProps) {
   return (
     <div className="mb-[70px] xl:hidden">
       <div className="overflow-hidden rounded-[18px] md:rounded-[22.5px] md:mx-auto md:max-w-[760px]">
         <div className="relative aspect-[340/256] overflow-hidden  md:aspect-[16/11]">
           <Image
-            src="/contacts/img_contacts_cover.webp"
-            alt="Команда в фирменном мерче"
+            src={heroImage.url}
+            alt={heroImage.alt}
             fill
             preload={true}
             sizes="(max-width: 767px) 340px, 760px"
@@ -77,7 +79,7 @@ async function MobileContactsHero() {
         </div>
 
         <div className="mt-8 md:mt-10">
-          <ContactsMapCard />
+          <ContactsMapCard address={address} brandName={brandName} mapSettings={mapSettings} />
         </div>
 
         <div className="mt-6 md:mt-8">
@@ -88,25 +90,13 @@ async function MobileContactsHero() {
   );
 }
 
-async function DesktopContactsHero() {
-  const siteInfo = await getSiteInfo();
-  const contactLinks = [
-    {
-      href: formatPhoneHref(siteInfo.phone),
-      label: siteInfo.phone,
-    },
-    {
-      href: `mailto:${siteInfo.email}`,
-      label: siteInfo.email,
-    },
-  ] as const;
-
+function DesktopContactsHero({ address, brandName, contactLinks, heroImage, mapSettings }: ContactsHeroProps) {
   return (
     <div className="relative hidden h-[720px] xl:block">
       <div className="absolute inset-y-0 right-[calc(var(--layout-side-padding)*-1)] w-[68%]">
         <Image
-          src="/contacts/img_contacts_cover.webp"
-          alt="Команда в фирменном мерче"
+          src={heroImage.url}
+          alt={heroImage.alt}
           fill
           preload={true}
           sizes="68vw"
@@ -126,7 +116,7 @@ async function DesktopContactsHero() {
         </div>
 
         <div>
-          <ContactsMapCard />
+          <ContactsMapCard address={address} brandName={brandName} mapSettings={mapSettings} />
           <div className="mt-[44px]">
             <DiscussionCta />
           </div>
@@ -137,6 +127,18 @@ async function DesktopContactsHero() {
 }
 
 export async function ContactsPage() {
+  const [siteInfo, contactsPageData] = await Promise.all([getSiteInfo(), getContactsPageData()]);
+  const contactLinks = [
+    {
+      href: formatPhoneHref(siteInfo.phone),
+      label: siteInfo.phone,
+    },
+    {
+      href: `mailto:${siteInfo.email}`,
+      label: siteInfo.email,
+    },
+  ] as const;
+
   return (
     <>
       <PageBreadcrumb
@@ -148,8 +150,20 @@ export async function ContactsPage() {
         }}
       />
 
-      <MobileContactsHero />
-      <DesktopContactsHero />
+      <MobileContactsHero
+        address={siteInfo.address}
+        brandName={siteInfo.brandName}
+        contactLinks={contactLinks}
+        heroImage={contactsPageData.heroImage}
+        mapSettings={contactsPageData.mapSettings}
+      />
+      <DesktopContactsHero
+        address={siteInfo.address}
+        brandName={siteInfo.brandName}
+        contactLinks={contactLinks}
+        heroImage={contactsPageData.heroImage}
+        mapSettings={contactsPageData.mapSettings}
+      />
     </>
   );
 }

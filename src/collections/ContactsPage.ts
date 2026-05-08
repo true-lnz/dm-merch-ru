@@ -8,6 +8,13 @@ export const ContactsPage = createSettingsPageCollection({
   previewPath: "/contacts",
   extraFields: [
     {
+      name: "heroImage",
+      type: "upload",
+      relationTo: "media",
+      label: "Обложка",
+      required: true,
+    },
+    {
       type: "row",
       fields: [
         {

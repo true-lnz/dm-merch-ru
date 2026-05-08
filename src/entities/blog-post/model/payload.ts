@@ -5,14 +5,7 @@ import { mapCmsImage } from "@/shared/lib/payload/media";
 import { isDraftModeEnabled } from "@/shared/lib/payload/page-docs";
 
 import { blogArticlesMock, blogPostsMock } from "./mock";
-import type {
-  BlogArticle,
-  BlogArticleChecklistItem,
-  BlogArticleMiniCard,
-  BlogArticleParagraph,
-  BlogArticleSection,
-  BlogPost,
-} from "./types";
+import type { BlogArticle, BlogArticleChecklistItem, BlogArticleMiniCard, BlogArticleParagraph, BlogArticleSection, BlogPost } from "./types";
 
 type TextRow = {
   text?: null | string;
@@ -126,12 +119,7 @@ function mapMiniCards(value: unknown): BlogArticleMiniCard[] {
 
   return value
     .map((item): BlogArticleMiniCard | null => {
-      if (
-        typeof item !== "object" ||
-        item === null ||
-        typeof item.title !== "string" ||
-        typeof item.text !== "string"
-      ) {
+      if (typeof item !== "object" || item === null || typeof item.title !== "string" || typeof item.text !== "string") {
         return null;
       }
 
@@ -150,12 +138,7 @@ function mapChecklistItems(value: unknown): BlogArticleChecklistItem[] {
 
   return value
     .map((item): BlogArticleChecklistItem | null => {
-      if (
-        typeof item !== "object" ||
-        item === null ||
-        typeof item.number !== "string" ||
-        typeof item.text !== "string"
-      ) {
+      if (typeof item !== "object" || item === null || typeof item.number !== "string" || typeof item.text !== "string") {
         return null;
       }
 
@@ -239,11 +222,15 @@ function mapLayoutBlock(block: Record<string, unknown>): BlogArticleSection | nu
                   image,
                 };
               })
-              .filter((item: { excerpt: string; image: NonNullable<ReturnType<typeof mapCmsImage>>; title: string } | null): item is {
-                excerpt: string;
-                image: NonNullable<ReturnType<typeof mapCmsImage>>;
-                title: string;
-              } => item !== null)
+              .filter(
+                (
+                  item: { excerpt: string; image: NonNullable<ReturnType<typeof mapCmsImage>>; title: string } | null,
+                ): item is {
+                  excerpt: string;
+                  image: NonNullable<ReturnType<typeof mapCmsImage>>;
+                  title: string;
+                } => item !== null,
+              )
           : [],
       };
     case "checklist":
@@ -346,7 +333,7 @@ function mapPostDocToArticle(doc: PayloadPostDocument): BlogArticle | null {
   const title = getString(doc.title);
   const slug = getString(doc.slug);
   const cardImage = mapCmsImage(doc.cardImage, title || "Карточка");
-  const heroImage = mapCmsImage(doc.heroImage, title || "Hero image");
+  const heroImage = mapCmsImage(doc.heroImage, title || "Обложка");
 
   if (!cardImage || !heroImage || !title || !slug) {
     return null;
@@ -357,12 +344,8 @@ function mapPostDocToArticle(doc: PayloadPostDocument): BlogArticle | null {
     slug,
     cardTitle: title,
     pageTitle: getString(doc.pageTitle) || title,
-    seoTitle:
-      typeof doc.meta?.title === "string" && doc.meta.title
-        ? doc.meta.title
-        : getString(doc.pageTitle) || title,
-    breadcrumbCurrentLabel:
-      getString(doc.breadcrumbCurrentLabel) || "Статьи",
+    seoTitle: typeof doc.meta?.title === "string" && doc.meta.title ? doc.meta.title : getString(doc.pageTitle) || title,
+    breadcrumbCurrentLabel: getString(doc.breadcrumbCurrentLabel) || "Статьи",
     excerpt: getString(doc.excerpt) || null,
     cardImage,
     heroImage,
@@ -432,15 +415,17 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   const posts = docs
     .map(mapPostDocToArticle)
     .filter((item: BlogArticle | null): item is BlogArticle => item !== null)
-    .map((article: BlogArticle): BlogPost => ({
-      id: article.id,
-      slug: article.slug,
-      cardTitle: article.cardTitle,
-      excerpt: article.excerpt,
-      cardImage: article.cardImage,
-      heroImage: article.heroImage,
-      href: article.href,
-    }));
+    .map(
+      (article: BlogArticle): BlogPost => ({
+        id: article.id,
+        slug: article.slug,
+        cardTitle: article.cardTitle,
+        excerpt: article.excerpt,
+        cardImage: article.cardImage,
+        heroImage: article.heroImage,
+        href: article.href,
+      }),
+    );
 
   return posts.length > 0 ? posts : blogPostsMock;
 }
