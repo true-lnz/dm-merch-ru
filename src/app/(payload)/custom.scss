@@ -24,3 +24,36 @@
   --style-radius-m: 12px;
   --style-radius-l: 24px;
 }
+
+.nav-group__toggle {
+  background: var(--theme-elevation-50);
+  border-radius: 9px;
+  padding: 9px;
+  color: #000;
+}
+
+.nav-group__content {
+  padding-left: 9px;
+}
+
+.collections__wrap {
+  display: grid;
+  grid-column: 2; /* это для позиционирования внутри родительской сетки */
+  grid-template-columns: repeat(2, 1fr); /* 2 колонки равной ширины */
+  gap: 50px; /* отступы между колонками */
+}
+
+.collections {
+  --cols: 2;
+  margin-bottom: 90px;
+}
+
+/* Для маленьких экранов (например, до 768px) */
+@media (max-width: 768px) {
+  .collections {
+    --cols: 4;
+  }
+  .collections__wrap {
+    grid-template-columns: 1fr; /* 1 колонка */
+  }
+}
