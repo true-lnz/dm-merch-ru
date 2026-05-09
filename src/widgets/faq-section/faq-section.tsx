@@ -11,7 +11,7 @@ type FaqItem = {
 };
 
 const FAQ_DESKTOP_IMAGE = {
-  src: "/faq/img_faq_cover_desktop.jpg",
+  src: "/faq/img_faq_cover_desktop.webp",
   alt: "Фото фирменных бутылок Арт-Квадрат",
 };
 

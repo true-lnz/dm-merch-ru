@@ -2,11 +2,11 @@ import { sqliteAdapter } from "@payloadcms/db-sqlite";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { FixedToolbarFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
-import { ru } from "payload/i18n/ru";
-import { en } from "payload/i18n/en";
 import { buildConfig } from "payload";
-import { fileURLToPath } from "url";
+import { en } from "payload/i18n/en";
+import { ru } from "payload/i18n/ru";
 import sharp from "sharp";
+import { fileURLToPath } from "url";
 
 import { BlogPage } from "./collections/BlogPage.ts";
 import { CaseCards } from "./collections/CaseCards.ts";
@@ -16,14 +16,14 @@ import { CatalogCategories } from "./collections/CatalogCategories.ts";
 import { CatalogPage } from "./collections/CatalogPage.ts";
 import { CatalogProductsPage } from "./collections/CatalogProductsPage.ts";
 import { ContactsPage } from "./collections/ContactsPage.ts";
-import { HomePage } from "./collections/HomePage.ts";
 import { HomeMarquiz } from "./collections/HomeMarquiz.ts";
-import { Pages } from "./collections/Pages.ts";
-import { Posts } from "./collections/Posts.ts";
-import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
+import { HomePage } from "./collections/HomePage.ts";
 import { Media } from "./collections/Media.ts";
 import { MergedCatalogTaxonomy } from "./collections/MergedCatalogTaxonomy.ts";
+import { Pages } from "./collections/Pages.ts";
+import { Posts } from "./collections/Posts.ts";
 import { Users } from "./collections/Users.ts";
+import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
 import { LIVE_PREVIEW_BREAKPOINTS } from "./payload/preview.ts";
 import { extendSEOFields } from "./payload/seo-fields.ts";
 import { generateSEODescription, generateSEOImage, generateSEOTitle, generateSEOURL } from "./payload/seo.ts";
@@ -48,6 +48,7 @@ const ruAdmin = {
 export default buildConfig({
   admin: {
     user: Users.slug,
+    dateFormat: "dd.MM.yyyy / HH:mm",
     meta: {
       icons: {
         icon: "/favicon/favicon.ico",
@@ -68,6 +69,9 @@ export default buildConfig({
     livePreview: {
       breakpoints: LIVE_PREVIEW_BREAKPOINTS,
     },
+  },
+  folders: {
+    browseByFolder: false,
   },
   collections: [
     Users,
