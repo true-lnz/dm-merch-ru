@@ -1,1 +1,1 @@
-export { FaqSection } from "./faq-section";
+export { FaqSection } from "./ui/faq-section";

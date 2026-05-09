@@ -3,7 +3,6 @@
 import { RequestCta } from "@/features/request-cta";
 import { cn } from "@/shared/lib/cn";
 import { WidowFix } from "@/shared/ui/widow-fix";
-import { FaqSection } from "@/widgets/faq-section";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { PageHeading } from "../../../shared/ui/page-heading";
 import type { CaseItem, CaseThemeFilter } from "../model/cases-types";
@@ -91,8 +90,6 @@ export function CasesPage({ items, themes, title = "Кейсы" }: CasesPageProp
           )}
         </div>
       </section>
-
-      <FaqSection />
       <RequestCta />
     </>
   );

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 
+import { defaultFaqSection } from "../src/shared/config/faq/faq.ts";
 import { defaultSiteInfo } from "../src/shared/config/site-info/site-info.ts";
 import { getPayload } from "payload";
 
@@ -15,6 +16,49 @@ type SQLiteDatabase = {
   prepare: (sql: string) => SQLiteStatement;
 };
 
+type PayloadInstance = {
+  create: (args: {
+    collection: "media";
+    data: {
+      alt: string;
+    };
+    filePath: string;
+    overrideAccess: boolean;
+  }) => Promise<{ id: number | string }>;
+  find: (args: {
+    collection: "media";
+    depth: 0;
+    limit: 1;
+    pagination: false;
+    where: {
+      filename: {
+        equals: string;
+      };
+    };
+  }) => Promise<{ docs?: Array<{ id?: number | string }> }>;
+  updateGlobal: (args: {
+    slug: "site-info" | "faq";
+    data: Record<string, unknown>;
+  }) => Promise<Record<string, unknown>>;
+  destroy: () => Promise<void>;
+};
+
+const FAQ_IMAGE = {
+  alt: "Фото фирменных бутылок Арт-Квадрат",
+  publicPath: "/faq/img_faq_cover_desktop.webp",
+} as const;
+
+function hasColumn(db: SQLiteDatabase, tableName: string, columnName: string) {
+  const columns = db.prepare(`PRAGMA table_info("${tableName}")`).all() as Array<{ name?: unknown }>;
+  return columns.some((column) => column.name === columnName);
+}
+
+function ensureColumn(db: SQLiteDatabase, tableName: string, columnName: string, columnSqlType: string) {
+  if (!hasColumn(db, tableName, columnName)) {
+    db.prepare(`ALTER TABLE "${tableName}" ADD COLUMN "${columnName}" ${columnSqlType}`).run();
+  }
+}
+
 function loadDatabaseCtor() {
   const require = createRequire(import.meta.url);
   const pnpmDir = path.resolve(process.cwd(), "node_modules", ".pnpm");
@@ -27,6 +71,46 @@ function loadDatabaseCtor() {
   }
 
   return require(path.join(pnpmDir, libsqlPackageDir.name, "node_modules", "libsql")) as new (filePath: string) => SQLiteDatabase;
+}
+
+function toPublicFilePath(publicPath: string) {
+  return path.resolve(process.cwd(), "public", publicPath.replace(/^\//, ""));
+}
+
+async function findMediaByFilename(payload: PayloadInstance, filename: string) {
+  const result = await payload.find({
+    collection: "media",
+    depth: 0,
+    limit: 1,
+    pagination: false,
+    where: {
+      filename: {
+        equals: filename,
+      },
+    },
+  });
+
+  return Array.isArray(result.docs) ? result.docs[0] : null;
+}
+
+async function ensureMedia(payload: PayloadInstance, image: { alt: string; publicPath: string }) {
+  const filename = path.basename(image.publicPath);
+  const existing = await findMediaByFilename(payload, filename);
+
+  if (existing?.id) {
+    return existing.id;
+  }
+
+  const created = await payload.create({
+    collection: "media",
+    data: {
+      alt: image.alt,
+    },
+    filePath: toPublicFilePath(image.publicPath),
+    overrideAccess: true,
+  });
+
+  return created.id;
 }
 
 function dropConflictingPayloadIndexes() {
@@ -52,22 +136,33 @@ function dropConflictingPayloadIndexes() {
 
       db.prepare(`DROP INDEX IF EXISTS "${name}"`).run();
     }
+
+    ensureColumn(db, "faq", "image_id", "INTEGER");
   } finally {
     db.close();
   }
 }
 
 async function main() {
-  process.env.PAYLOAD_PUSH_SCHEMA = "false";
+  process.env.PAYLOAD_PUSH_SCHEMA ??= "false";
   dropConflictingPayloadIndexes();
 
   const { default: config } = await import("../src/payload.config.ts");
-  const payload = (await getPayload({ config })) as any;
+  const payload = (await getPayload({ config })) as PayloadInstance;
   try {
-    const result = await payload.updateGlobal({
+    const faqImageId = await ensureMedia(payload, FAQ_IMAGE);
+    const siteInfoResult = await payload.updateGlobal({
       slug: "site-info",
       data: {
         ...defaultSiteInfo,
+      },
+    });
+    const faqResult = await payload.updateGlobal({
+      slug: "faq",
+      data: {
+        image: faqImageId,
+        title: defaultFaqSection.title,
+        items: defaultFaqSection.items,
       },
     });
 
@@ -75,8 +170,14 @@ async function main() {
       JSON.stringify(
         {
           slug: "site-info",
-          brandName: result.brandName,
-          socials: Array.isArray(result.socials) ? result.socials.length : 0,
+          brandName: siteInfoResult.brandName,
+          socials: Array.isArray(siteInfoResult.socials) ? siteInfoResult.socials.length : 0,
+          faq: {
+            slug: "faq",
+            title: faqResult.title,
+            items: Array.isArray(faqResult.items) ? faqResult.items.length : 0,
+            image: faqResult.image ?? null,
+          },
         },
         null,
         2,

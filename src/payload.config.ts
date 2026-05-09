@@ -22,6 +22,7 @@ import { Media } from "./collections/Media.ts";
 import { MergedCatalogTaxonomy } from "./collections/MergedCatalogTaxonomy.ts";
 import { Pages } from "./collections/Pages.ts";
 import { Posts } from "./collections/Posts.ts";
+import { FaqGlobal } from "./globals/Faq.ts";
 import { Users } from "./collections/Users.ts";
 import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
 import { LIVE_PREVIEW_BREAKPOINTS } from "./payload/preview.ts";
@@ -90,7 +91,7 @@ export default buildConfig({
     Posts,
     ContactsPage,
   ],
-  globals: [SiteInfoGlobal],
+  globals: [SiteInfoGlobal, FaqGlobal],
   editor: lexicalEditor({
     features: ({ rootFeatures }) => [...rootFeatures, FixedToolbarFeature()],
   }),

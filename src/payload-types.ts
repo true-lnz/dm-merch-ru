@@ -69,26 +69,64 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    pages: Page;
+    'home-page': HomePage;
+    'home-marquiz': HomeMarquiz;
+    'catalog-page': CatalogPage;
+    'catalog-categories': CatalogCategory;
+    'catalog-products-page': CatalogProductsPage;
+    'merged-catalog-taxonomy': MergedCatalogTaxonomy;
+    'cases-page': CasesPage;
+    'case-filters': CaseFilter;
+    'case-cards': CaseCard;
+    'blog-page': BlogPage;
+    posts: Post;
+    'contacts-page': ContactsPage;
     'payload-kv': PayloadKv;
+    'payload-folders': FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    'payload-folders': {
+      documentsAndFolders: 'payload-folders' | 'media';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'home-marquiz': HomeMarquizSelect<false> | HomeMarquizSelect<true>;
+    'catalog-page': CatalogPageSelect<false> | CatalogPageSelect<true>;
+    'catalog-categories': CatalogCategoriesSelect<false> | CatalogCategoriesSelect<true>;
+    'catalog-products-page': CatalogProductsPageSelect<false> | CatalogProductsPageSelect<true>;
+    'merged-catalog-taxonomy': MergedCatalogTaxonomySelect<false> | MergedCatalogTaxonomySelect<true>;
+    'cases-page': CasesPageSelect<false> | CasesPageSelect<true>;
+    'case-filters': CaseFiltersSelect<false> | CaseFiltersSelect<true>;
+    'case-cards': CaseCardsSelect<false> | CaseCardsSelect<true>;
+    'blog-page': BlogPageSelect<false> | BlogPageSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    'contacts-page': ContactsPageSelect<false> | ContactsPageSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-info': SiteInfo;
+    faq: Faq;
+  };
+  globalsSelect: {
+    'site-info': SiteInfoSelect<false> | SiteInfoSelect<true>;
+    faq: FaqSelect<false> | FaqSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -122,7 +160,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -147,8 +185,9 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -163,10 +202,604 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-folders".
+ */
+export interface FolderInterface {
+  id: number;
+  name: string;
+  folder?: (number | null) | FolderInterface;
+  documentsAndFolders?: {
+    docs?: (
+      | {
+          relationTo?: 'payload-folders';
+          value: number | FolderInterface;
+        }
+      | {
+          relationTo?: 'media';
+          value: number | Media;
+        }
+    )[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  folderType?: 'media'[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  slug: 'home' | 'catalog' | 'catalog-products' | 'cases' | 'blog';
+  heroTitle?: string | null;
+  intro?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    canonicalUrl?: string | null;
+    robots?: {
+      noIndex?: boolean | null;
+      noFollow?: boolean | null;
+    };
+    openGraph?: {
+      title?: string | null;
+      description?: string | null;
+      type?: ('website' | 'article') | null;
+      imageAlt?: string | null;
+    };
+    twitter?: {
+      card?: ('summary_large_image' | 'summary') | null;
+      title?: string | null;
+      description?: string | null;
+      imageAlt?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: number;
+  heroTitle: string;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    canonicalUrl?: string | null;
+    robots?: {
+      noIndex?: boolean | null;
+      noFollow?: boolean | null;
+    };
+    openGraph?: {
+      title?: string | null;
+      description?: string | null;
+      type?: ('website' | 'article') | null;
+      imageAlt?: string | null;
+    };
+    twitter?: {
+      card?: ('summary_large_image' | 'summary') | null;
+      title?: string | null;
+      description?: string | null;
+      imageAlt?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-marquiz".
+ */
+export interface HomeMarquiz {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-page".
+ */
+export interface CatalogPage {
+  id: number;
+  heroTitle: string;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    canonicalUrl?: string | null;
+    robots?: {
+      noIndex?: boolean | null;
+      noFollow?: boolean | null;
+    };
+    openGraph?: {
+      title?: string | null;
+      description?: string | null;
+      type?: ('website' | 'article') | null;
+      imageAlt?: string | null;
+    };
+    twitter?: {
+      card?: ('summary_large_image' | 'summary') | null;
+      title?: string | null;
+      description?: string | null;
+      imageAlt?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-categories".
+ */
+export interface CatalogCategory {
+  id: number;
+  title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-products-page".
+ */
+export interface CatalogProductsPage {
+  id: number;
+  heroTitle: string;
+  hero: {
+    title: string;
+    description: string;
+    backgroundImageUrl: string;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    canonicalUrl?: string | null;
+    robots?: {
+      noIndex?: boolean | null;
+      noFollow?: boolean | null;
+    };
+    openGraph?: {
+      title?: string | null;
+      description?: string | null;
+      type?: ('website' | 'article') | null;
+      imageAlt?: string | null;
+    };
+    twitter?: {
+      card?: ('summary_large_image' | 'summary') | null;
+      title?: string | null;
+      description?: string | null;
+      imageAlt?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "merged-catalog-taxonomy".
+ */
+export interface MergedCatalogTaxonomy {
+  id: number;
+  key: string;
+  nodeType: 'root' | 'child';
+  nodeId: string;
+  rootId: string;
+  sourceRootName?: string | null;
+  sourceName: string;
+  displayNameOverride?: string | null;
+  isActive: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cases-page".
+ */
+export interface CasesPage {
+  id: number;
+  heroTitle: string;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    canonicalUrl?: string | null;
+    robots?: {
+      noIndex?: boolean | null;
+      noFollow?: boolean | null;
+    };
+    openGraph?: {
+      title?: string | null;
+      description?: string | null;
+      type?: ('website' | 'article') | null;
+      imageAlt?: string | null;
+    };
+    twitter?: {
+      card?: ('summary_large_image' | 'summary') | null;
+      title?: string | null;
+      description?: string | null;
+      imageAlt?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-filters".
+ */
+export interface CaseFilter {
+  id: number;
+  label: string;
+  /**
+   * Формируется автоматически из названия фильтра.
+   */
+  slug: string;
+  /**
+   * Меньшее число показывается раньше.
+   */
+  sortOrder: number;
+  isActive: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-cards".
+ */
+export interface CaseCard {
+  id: number;
+  /**
+   * Формируется автоматически из компании и короткого текста.
+   */
+  slug: string;
+  company: string;
+  teaser: string;
+  theme: number | CaseFilter;
+  /**
+   * Меньшее число показывается раньше.
+   */
+  sortOrder: number;
+  isActive: boolean;
+  intro: string;
+  task: string;
+  solution: string;
+  result: string;
+  /**
+   * Первое изображение используется как превью карточки кейса.
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        fit?: ('cover' | 'contain') | null;
+        x?: number | null;
+        y?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-page".
+ */
+export interface BlogPage {
+  id: number;
+  heroTitle: string;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    canonicalUrl?: string | null;
+    robots?: {
+      noIndex?: boolean | null;
+      noFollow?: boolean | null;
+    };
+    openGraph?: {
+      title?: string | null;
+      description?: string | null;
+      type?: ('website' | 'article') | null;
+      imageAlt?: string | null;
+    };
+    twitter?: {
+      card?: ('summary_large_image' | 'summary') | null;
+      title?: string | null;
+      description?: string | null;
+      imageAlt?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  slug: string;
+  pageTitle?: string | null;
+  excerpt?: string | null;
+  cardImage: number | Media;
+  heroImage: number | Media;
+  breadcrumbCurrentLabel?: string | null;
+  publishedAt?: string | null;
+  layout: (
+    | {
+        title?: string | null;
+        hideColumnTitles?: boolean | null;
+        columns: {
+          title?: string | null;
+          paragraphs: {
+            text: string;
+            id?: string | null;
+          }[];
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'text-columns';
+      }
+    | {
+        title: string;
+        backgroundAssetUrl?: string | null;
+        cards: {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'accent-mini-cards';
+      }
+    | {
+        title: string;
+        description?: string | null;
+        descriptionLayout?: ('two-columns' | 'three-columns-middle') | null;
+        cards: {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[];
+        conclusion?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'text-mini-cards';
+      }
+    | {
+        title: string;
+        cards: {
+          title: string;
+          excerpt: string;
+          image: number | Media;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'merch-types';
+      }
+    | {
+        title: string;
+        backgroundAssetUrl?: string | null;
+        items: {
+          number: string;
+          text: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'checklist';
+      }
+    | {
+        title: string;
+        description: string;
+        label?: string | null;
+        columns?: ('2' | '3') | null;
+        backgroundAssetUrl?: string | null;
+        cards: {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[];
+        note?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'task-goals';
+      }
+    | {
+        title: string;
+        paragraphs: {
+          text: string;
+          variant?: ('default' | 'highlighted') | null;
+          id?: string | null;
+        }[];
+        image: number | Media;
+        variant?: ('default' | 'accent') | null;
+        imageAspectRatio?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'text-image';
+      }
+    | {
+        title: string;
+        description?: string | null;
+        descriptionLayout?: ('two-columns' | 'three-columns-middle') | null;
+        descriptionPlacement?: ('side' | 'bottom') | null;
+        variant?: ('accent' | 'light') | null;
+        items: {
+          number: string;
+          text: string;
+          id?: string | null;
+        }[];
+        note?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'numbered-mini-cards';
+      }
+    | {
+        title: string;
+        description: string;
+        items: {
+          number: string;
+          text: string;
+          id?: string | null;
+        }[];
+        image: number | Media;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'budget-optimization';
+      }
+    | {
+        columns: {
+          title?: string | null;
+          paragraphs: {
+            text: string;
+            id?: string | null;
+          }[];
+          id?: string | null;
+        }[];
+        image: number | Media;
+        imageAspectRatio?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'text-columns-image';
+      }
+    | {
+        title: string;
+        leftParagraphs: {
+          text: string;
+          id?: string | null;
+        }[];
+        rightParagraphs: {
+          text: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'text-split';
+      }
+    | {
+        title: string;
+        paragraphs: {
+          text: string;
+          id?: string | null;
+        }[];
+        image: number | Media;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'summary';
+      }
+  )[];
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    canonicalUrl?: string | null;
+    robots?: {
+      noIndex?: boolean | null;
+      noFollow?: boolean | null;
+    };
+    openGraph?: {
+      title?: string | null;
+      description?: string | null;
+      type?: ('website' | 'article') | null;
+      imageAlt?: string | null;
+    };
+    twitter?: {
+      card?: ('summary_large_image' | 'summary') | null;
+      title?: string | null;
+      description?: string | null;
+      imageAlt?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contacts-page".
+ */
+export interface ContactsPage {
+  id: number;
+  heroTitle: string;
+  heroImage: number | Media;
+  officeLatitude: number;
+  officeLongitude: number;
+  defaultZoom: number;
+  yandexMapsApiKey: string;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    keywords?: string | null;
+    canonicalUrl?: string | null;
+    robots?: {
+      noIndex?: boolean | null;
+      noFollow?: boolean | null;
+    };
+    openGraph?: {
+      title?: string | null;
+      description?: string | null;
+      type?: ('website' | 'article') | null;
+      imageAlt?: string | null;
+    };
+    twitter?: {
+      card?: ('summary_large_image' | 'summary') | null;
+      title?: string | null;
+      description?: string | null;
+      imageAlt?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,20 +816,76 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'home-page';
+        value: number | HomePage;
+      } | null)
+    | ({
+        relationTo: 'home-marquiz';
+        value: number | HomeMarquiz;
+      } | null)
+    | ({
+        relationTo: 'catalog-page';
+        value: number | CatalogPage;
+      } | null)
+    | ({
+        relationTo: 'catalog-categories';
+        value: number | CatalogCategory;
+      } | null)
+    | ({
+        relationTo: 'catalog-products-page';
+        value: number | CatalogProductsPage;
+      } | null)
+    | ({
+        relationTo: 'merged-catalog-taxonomy';
+        value: number | MergedCatalogTaxonomy;
+      } | null)
+    | ({
+        relationTo: 'cases-page';
+        value: number | CasesPage;
+      } | null)
+    | ({
+        relationTo: 'case-filters';
+        value: number | CaseFilter;
+      } | null)
+    | ({
+        relationTo: 'case-cards';
+        value: number | CaseCard;
+      } | null)
+    | ({
+        relationTo: 'blog-page';
+        value: number | BlogPage;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'contacts-page';
+        value: number | ContactsPage;
+      } | null)
+    | ({
+        relationTo: 'payload-folders';
+        value: number | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -206,10 +895,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -229,7 +918,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -263,6 +952,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  folder?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -277,11 +967,649 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  heroTitle?: T;
+  intro?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        canonicalUrl?: T;
+        robots?:
+          | T
+          | {
+              noIndex?: T;
+              noFollow?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              type?: T;
+              imageAlt?: T;
+            };
+        twitter?:
+          | T
+          | {
+              card?: T;
+              title?: T;
+              description?: T;
+              imageAlt?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        canonicalUrl?: T;
+        robots?:
+          | T
+          | {
+              noIndex?: T;
+              noFollow?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              type?: T;
+              imageAlt?: T;
+            };
+        twitter?:
+          | T
+          | {
+              card?: T;
+              title?: T;
+              description?: T;
+              imageAlt?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-marquiz_select".
+ */
+export interface HomeMarquizSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-page_select".
+ */
+export interface CatalogPageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        canonicalUrl?: T;
+        robots?:
+          | T
+          | {
+              noIndex?: T;
+              noFollow?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              type?: T;
+              imageAlt?: T;
+            };
+        twitter?:
+          | T
+          | {
+              card?: T;
+              title?: T;
+              description?: T;
+              imageAlt?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-categories_select".
+ */
+export interface CatalogCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-products-page_select".
+ */
+export interface CatalogProductsPageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  hero?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        backgroundImageUrl?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        canonicalUrl?: T;
+        robots?:
+          | T
+          | {
+              noIndex?: T;
+              noFollow?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              type?: T;
+              imageAlt?: T;
+            };
+        twitter?:
+          | T
+          | {
+              card?: T;
+              title?: T;
+              description?: T;
+              imageAlt?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "merged-catalog-taxonomy_select".
+ */
+export interface MergedCatalogTaxonomySelect<T extends boolean = true> {
+  key?: T;
+  nodeType?: T;
+  nodeId?: T;
+  rootId?: T;
+  sourceRootName?: T;
+  sourceName?: T;
+  displayNameOverride?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cases-page_select".
+ */
+export interface CasesPageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        canonicalUrl?: T;
+        robots?:
+          | T
+          | {
+              noIndex?: T;
+              noFollow?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              type?: T;
+              imageAlt?: T;
+            };
+        twitter?:
+          | T
+          | {
+              card?: T;
+              title?: T;
+              description?: T;
+              imageAlt?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-filters_select".
+ */
+export interface CaseFiltersSelect<T extends boolean = true> {
+  label?: T;
+  slug?: T;
+  sortOrder?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-cards_select".
+ */
+export interface CaseCardsSelect<T extends boolean = true> {
+  slug?: T;
+  company?: T;
+  teaser?: T;
+  theme?: T;
+  sortOrder?: T;
+  isActive?: T;
+  intro?: T;
+  task?: T;
+  solution?: T;
+  result?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        fit?: T;
+        x?: T;
+        y?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-page_select".
+ */
+export interface BlogPageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        canonicalUrl?: T;
+        robots?:
+          | T
+          | {
+              noIndex?: T;
+              noFollow?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              type?: T;
+              imageAlt?: T;
+            };
+        twitter?:
+          | T
+          | {
+              card?: T;
+              title?: T;
+              description?: T;
+              imageAlt?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  pageTitle?: T;
+  excerpt?: T;
+  cardImage?: T;
+  heroImage?: T;
+  breadcrumbCurrentLabel?: T;
+  publishedAt?: T;
+  layout?:
+    | T
+    | {
+        'text-columns'?:
+          | T
+          | {
+              title?: T;
+              hideColumnTitles?: T;
+              columns?:
+                | T
+                | {
+                    title?: T;
+                    paragraphs?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'accent-mini-cards'?:
+          | T
+          | {
+              title?: T;
+              backgroundAssetUrl?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'text-mini-cards'?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              descriptionLayout?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              conclusion?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'merch-types'?:
+          | T
+          | {
+              title?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    excerpt?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        checklist?:
+          | T
+          | {
+              title?: T;
+              backgroundAssetUrl?: T;
+              items?:
+                | T
+                | {
+                    number?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'task-goals'?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              label?: T;
+              columns?: T;
+              backgroundAssetUrl?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              note?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'text-image'?:
+          | T
+          | {
+              title?: T;
+              paragraphs?:
+                | T
+                | {
+                    text?: T;
+                    variant?: T;
+                    id?: T;
+                  };
+              image?: T;
+              variant?: T;
+              imageAspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'numbered-mini-cards'?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              descriptionLayout?: T;
+              descriptionPlacement?: T;
+              variant?: T;
+              items?:
+                | T
+                | {
+                    number?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              note?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'budget-optimization'?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              items?:
+                | T
+                | {
+                    number?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'text-columns-image'?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    title?: T;
+                    paragraphs?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              image?: T;
+              imageAspectRatio?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'text-split'?:
+          | T
+          | {
+              title?: T;
+              leftParagraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              rightParagraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        summary?:
+          | T
+          | {
+              title?: T;
+              paragraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        canonicalUrl?: T;
+        robots?:
+          | T
+          | {
+              noIndex?: T;
+              noFollow?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              type?: T;
+              imageAlt?: T;
+            };
+        twitter?:
+          | T
+          | {
+              card?: T;
+              title?: T;
+              description?: T;
+              imageAlt?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contacts-page_select".
+ */
+export interface ContactsPageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroImage?: T;
+  officeLatitude?: T;
+  officeLongitude?: T;
+  defaultZoom?: T;
+  yandexMapsApiKey?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        keywords?: T;
+        canonicalUrl?: T;
+        robots?:
+          | T
+          | {
+              noIndex?: T;
+              noFollow?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              type?: T;
+              imageAlt?: T;
+            };
+        twitter?:
+          | T
+          | {
+              card?: T;
+              title?: T;
+              description?: T;
+              imageAlt?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-folders_select".
+ */
+export interface PayloadFoldersSelect<T extends boolean = true> {
+  name?: T;
+  folder?: T;
+  documentsAndFolders?: T;
+  folderType?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -314,6 +1642,87 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-info".
+ */
+export interface SiteInfo {
+  id: number;
+  brandName: string;
+  email: string;
+  phone: string;
+  address: string;
+  socials: {
+    icon: 'tg' | 'vk' | 'max';
+    label: string;
+    href: string;
+    id?: string | null;
+  }[];
+  copyright: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq".
+ */
+export interface Faq {
+  id: number;
+  title?: string | null;
+  image?: (number | null) | Media;
+  items?:
+    | {
+        question: string;
+        /**
+         * Можно вводить ответ в несколько строк. Переносы будут показаны на сайте.
+         */
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-info_select".
+ */
+export interface SiteInfoSelect<T extends boolean = true> {
+  brandName?: T;
+  email?: T;
+  phone?: T;
+  address?: T;
+  socials?:
+    | T
+    | {
+        icon?: T;
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  copyright?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq_select".
+ */
+export interface FaqSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  items?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
