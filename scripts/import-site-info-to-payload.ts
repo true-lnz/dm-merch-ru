@@ -1,8 +1,9 @@
 import fs from "node:fs";
-import path from "node:path";
 import { createRequire } from "node:module";
+import path from "node:path";
 
 import { defaultFaqSection } from "../src/shared/config/faq/faq.ts";
+import { defaultRequestCtaContent } from "../src/shared/config/request-cta/request-cta.ts";
 import { defaultSiteInfo } from "../src/shared/config/site-info/site-info.ts";
 import { getPayload } from "payload";
 
@@ -37,7 +38,7 @@ type PayloadInstance = {
     };
   }) => Promise<{ docs?: Array<{ id?: number | string }> }>;
   updateGlobal: (args: {
-    slug: "site-info" | "faq";
+    slug: "site-info" | "request-cta" | "faq";
     data: Record<string, unknown>;
   }) => Promise<Record<string, unknown>>;
   destroy: () => Promise<void>;
@@ -138,6 +139,15 @@ function dropConflictingPayloadIndexes() {
     }
 
     ensureColumn(db, "faq", "image_id", "INTEGER");
+    db.prepare(`
+      CREATE TABLE IF NOT EXISTS "request_cta" (
+        "id" integer PRIMARY KEY NOT NULL,
+        "title" text NOT NULL,
+        "description" text NOT NULL,
+        "updated_at" text,
+        "created_at" text
+      )
+    `).run();
   } finally {
     db.close();
   }
@@ -157,6 +167,12 @@ async function main() {
         ...defaultSiteInfo,
       },
     });
+    const requestCtaResult = await payload.updateGlobal({
+      slug: "request-cta",
+      data: {
+        ...defaultRequestCtaContent,
+      },
+    });
     const faqResult = await payload.updateGlobal({
       slug: "faq",
       data: {
@@ -172,6 +188,10 @@ async function main() {
           slug: "site-info",
           brandName: siteInfoResult.brandName,
           socials: Array.isArray(siteInfoResult.socials) ? siteInfoResult.socials.length : 0,
+          requestCta: {
+            slug: "request-cta",
+            title: requestCtaResult.title,
+          },
           faq: {
             slug: "faq",
             title: faqResult.title,

@@ -5,6 +5,10 @@ import { cache } from "react";
 
 import { defaultSiteInfo, type SiteInfo, type SocialIcon, type SocialLink } from "./site-info";
 
+function pickString(value: unknown, fallback: string) {
+  return typeof value === "string" && value ? value : fallback;
+}
+
 function normalizeSocialIcon(value: unknown): SocialIcon | null {
   if (value === "tg" || value === "vk" || value === "max") {
     return value;
@@ -48,12 +52,12 @@ export const getSiteInfo = cache(async (): Promise<SiteInfo> => {
     });
 
     return {
-      brandName: typeof global.brandName === "string" && global.brandName ? global.brandName : defaultSiteInfo.brandName,
-      email: typeof global.email === "string" && global.email ? global.email : defaultSiteInfo.email,
-      phone: typeof global.phone === "string" && global.phone ? global.phone : defaultSiteInfo.phone,
-      address: typeof global.address === "string" && global.address ? global.address : defaultSiteInfo.address,
+      brandName: pickString(global.brandName, defaultSiteInfo.brandName),
+      email: pickString(global.email, defaultSiteInfo.email),
+      phone: pickString(global.phone, defaultSiteInfo.phone),
+      address: pickString(global.address, defaultSiteInfo.address),
       socials: mapSocials(global.socials),
-      copyright: typeof global.copyright === "string" && global.copyright ? global.copyright : defaultSiteInfo.copyright,
+      copyright: pickString(global.copyright, defaultSiteInfo.copyright),
     };
   } catch {
     return defaultSiteInfo;

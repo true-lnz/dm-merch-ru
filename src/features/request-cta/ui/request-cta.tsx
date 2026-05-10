@@ -1,12 +1,24 @@
 "use client";
 
+import { useRequestCta } from "@/shared/config/request-cta/request-cta-provider";
 import { useSiteInfo } from "@/shared/config/site-info/site-info-provider";
 import { ContactPills } from "@/shared/ui/contact-pills";
 import { PageSubheading } from "@/shared/ui/page-subheading";
 import { RequestForm } from "@/shared/ui/request-form";
+import { Fragment } from "react";
+
+function renderTitleWithBreaks(title: string) {
+  return title.split("\n").map((line, index, lines) => (
+    <Fragment key={`${line}-${index}`}>
+      {line}
+      {index < lines.length - 1 ? <br /> : null}
+    </Fragment>
+  ));
+}
 
 export function RequestCta() {
   const siteInfo = useSiteInfo();
+  const requestCta = useRequestCta();
 
   return (
     <section className="relative mt-[35px] md:mt-[45px]" aria-label="Форма заявки">
@@ -20,16 +32,9 @@ export function RequestCta() {
           />
 
           <div className="order-1 relative z-10 space-y-5 pb-3 lg:pb-10">
-            <PageSubheading
-              title={
-                <>
-                  Обсудим задачу
-                  <br />и рассчитаем проект
-                </>
-              }
-            />
+            <PageSubheading title={<>{renderTitleWithBreaks(requestCta.title)}</>} />
             <p className="max-w-[800px] text-sm sm:text-base tracking-[0.0354] text-[var(--text)] md:text-2xl">
-              Ответим в течение 30 минут. Подскажем формат, сроки и бюджет.
+              {requestCta.description}
             </p>
           </div>
 

@@ -2,7 +2,7 @@ import type { GlobalConfig } from "payload";
 
 export const FaqGlobal: GlobalConfig = {
   slug: "faq",
-  label: "FAQ",
+  label: "FAQ-блок",
   access: {
     read: () => true,
     update: ({ req }) => Boolean(req.user),

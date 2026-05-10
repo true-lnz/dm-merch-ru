@@ -1,3 +1,5 @@
+import { getRequestCta } from "@/shared/config/request-cta/get-request-cta";
+import { RequestCtaProvider } from "@/shared/config/request-cta/request-cta-provider";
 import { getSiteInfo } from "@/shared/config/site-info/get-site-info";
 import { SiteInfoProvider } from "@/shared/config/site-info/site-info-provider";
 import { WishlistProvider } from "@/shared/lib/wishlist";
@@ -64,7 +66,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteInfo = await getSiteInfo();
+  const [siteInfo, requestCta] = await Promise.all([getSiteInfo(), getRequestCta()]);
 
   return (
     <html lang="ru" className="text-base">
@@ -75,16 +77,18 @@ export default async function RootLayout({
         <ClientRuntimeMonitor />
         <Suspense fallback={null}>
           <SiteInfoProvider value={siteInfo}>
-            <PageTransitionProvider>
-              <WishlistProvider>
-                <div className="site-shell">
-                  <Header />
-                  <main className="site-main">{children}</main>
-                  <Footer />
-                  <CookieWarning />
-                </div>
-              </WishlistProvider>
-            </PageTransitionProvider>
+            <RequestCtaProvider value={requestCta}>
+              <PageTransitionProvider>
+                <WishlistProvider>
+                  <div className="site-shell">
+                    <Header />
+                    <main className="site-main">{children}</main>
+                    <Footer />
+                    <CookieWarning />
+                  </div>
+                </WishlistProvider>
+              </PageTransitionProvider>
+            </RequestCtaProvider>
           </SiteInfoProvider>
         </Suspense>
         <Toaster />
