@@ -2,6 +2,9 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { MERGED_CATALOG_CONFIG } from "./catalog-merge-config.mjs";
 
+loadEnvFile(join(process.cwd(), ".env"));
+loadEnvFile(join(process.cwd(), ".env.local"));
+
 const PORTOBELLO_IMAGE_FALLBACK = "/catalog/img_card_cover_main.svg";
 const PROJECT111_IMAGE_BASE = resolveProject111ImageBase();
 const OUTPUT_FILE = join(process.cwd(), "public", "_temp", "merged-catalog.json");
@@ -19,8 +22,51 @@ function writeJson(filePath, value) {
   writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
+function loadEnvFile(filePath) {
+  try {
+    const contents = readFileSync(filePath, "utf8");
+
+    for (const rawLine of contents.split(/\r?\n/u)) {
+      const line = rawLine.trim();
+
+      if (!line || line.startsWith("#")) {
+        continue;
+      }
+
+      const separatorIndex = line.indexOf("=");
+
+      if (separatorIndex <= 0) {
+        continue;
+      }
+
+      const key = line.slice(0, separatorIndex).trim();
+
+      if (!key || process.env[key] !== undefined) {
+        continue;
+      }
+
+      let value = line.slice(separatorIndex + 1).trim();
+
+      if (
+        value.length >= 2 &&
+        ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))
+      ) {
+        value = value.slice(1, -1);
+      }
+
+      process.env[key] = value;
+    }
+  } catch (error) {
+    if (error && typeof error === "object" && "code" in error && error.code === "ENOENT") {
+      return;
+    }
+
+    throw error;
+  }
+}
+
 function resolveProject111ImageBase() {
-  const rawValue = process.env.PROJECT111_IMAGE_BASE_URL?.trim();
+  const rawValue = process.env.PROJECT111_IMAGE_BASE_URL?.trim() || process.env.S3_PUBLIC_BASE_URL?.trim() || "https://cdn.dm-merch.ru";
 
   if (!rawValue) {
     return "/images/";
@@ -172,10 +218,6 @@ function ensureAbsoluteUrl(url) {
 
   if (url.startsWith("/gifts_export/")) {
     return url.replace("/gifts_export/", "/images/");
-  }
-
-  if (url.startsWith("/images/")) {
-    return url;
   }
 
   const normalizedPath = url.replace(/^\/+/, "");
