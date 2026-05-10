@@ -1,5 +1,16 @@
 import type { Block, Field } from "payload";
 
+function blockThumbnail(filename: string, alt: string): NonNullable<Block["admin"]> {
+  return {
+    images: {
+      thumbnail: {
+        url: `/blog/section-thumbnails/${filename}`,
+        alt,
+      },
+    },
+  };
+}
+
 function textField(name: string, label: string): Field {
   return {
     name,
@@ -56,7 +67,7 @@ function paragraphItemsField(name = "paragraphs", label = "Параграфы"):
         label: "Вариант",
         options: [
           { label: "Обычный", value: "default" },
-          { label: "Акцент", value: "highlighted" },
+          { label: "Акцентный (серая подложка)", value: "highlighted" },
         ],
       },
     ],
@@ -88,10 +99,7 @@ function textColumnsField(): Field {
     label: "Колонки",
     required: true,
     minRows: 1,
-    fields: [
-      optionalTextField("title", "Заголовок"),
-      textParagraphsField(),
-    ],
+    fields: [optionalTextField("title", "Заголовок"), textParagraphsField()],
   };
 }
 
@@ -124,11 +132,7 @@ function merchCardsField(): Field {
     label: "Карточки",
     required: true,
     minRows: 1,
-    fields: [
-      textField("title", "Заголовок"),
-      textareaField("excerpt", "Описание"),
-      imageField("image", "Изображение"),
-    ],
+    fields: [textField("title", "Заголовок"), textareaField("excerpt", "Описание"), imageField("image", "Изображение")],
   };
 }
 
@@ -136,6 +140,7 @@ export const blogPostBlocks: Block[] = [
   {
     slug: "text-columns",
     labels: { singular: "Текст в колонках", plural: "Текст в колонках" },
+    admin: blockThumbnail("text-columns.jpg", "Текст в колонках"),
     fields: [
       optionalTextField("title", "Заголовок"),
       {
@@ -149,15 +154,13 @@ export const blogPostBlocks: Block[] = [
   {
     slug: "accent-mini-cards",
     labels: { singular: "Акцентные мини-карточки", plural: "Акцентные мини-карточки" },
-    fields: [
-      textField("title", "Заголовок"),
-      optionalTextField("backgroundAssetUrl", "Фон (URL)"),
-      miniCardsField(),
-    ],
+    admin: blockThumbnail("accent-mini-cards.jpg", "Акцентные мини-карточки"),
+    fields: [textField("title", "Заголовок"), optionalTextField("backgroundAssetUrl", "Фон (URL)"), miniCardsField()],
   },
   {
     slug: "text-mini-cards",
     labels: { singular: "Текст + мини-карточки", plural: "Текст + мини-карточки" },
+    admin: blockThumbnail("text-mini-cards.jpg", "Текст + мини-карточки"),
     fields: [
       textField("title", "Заголовок"),
       {
@@ -170,8 +173,8 @@ export const blogPostBlocks: Block[] = [
         type: "select",
         label: "Лэйаут описания",
         options: [
-          { label: "Two columns", value: "two-columns" },
-          { label: "Three columns middle", value: "three-columns-middle" },
+          { label: "Две колонки", value: "two-columns" },
+          { label: "Три колонки", value: "three-columns-middle" },
         ],
       },
       miniCardsField(),
@@ -184,21 +187,20 @@ export const blogPostBlocks: Block[] = [
   },
   {
     slug: "merch-types",
-    labels: { singular: "Типы мерча", plural: "Типы мерча" },
+    labels: { singular: "Заголовок + три карточки", plural: "Заголовок + тТри карточки" },
+    admin: blockThumbnail("merch-types.jpg", "Заголовок + три карточки"),
     fields: [textField("title", "Заголовок"), merchCardsField()],
   },
   {
     slug: "checklist",
     labels: { singular: "Чек-лист", plural: "Чек-листы" },
-    fields: [
-      textField("title", "Заголовок"),
-      optionalTextField("backgroundAssetUrl", "Фон (URL)"),
-      checklistItemsField(),
-    ],
+    admin: blockThumbnail("checklist.jpg", "Чек-лист"),
+    fields: [textField("title", "Заголовок"), optionalTextField("backgroundAssetUrl", "Фон (URL)"), checklistItemsField()],
   },
   {
     slug: "task-goals",
     labels: { singular: "Цели и задачи", plural: "Цели и задачи" },
+    admin: blockThumbnail("task-goals.jpg", "Цели и задачи"),
     fields: [
       textField("title", "Заголовок"),
       textareaField("description", "Описание"),
@@ -212,18 +214,18 @@ export const blogPostBlocks: Block[] = [
           { label: "3", value: "3" },
         ],
       },
-      optionalTextField("backgroundAssetUrl", "Фон (URL)"),
       miniCardsField(),
       {
         name: "note",
         type: "textarea",
-        label: "Примечание",
+        label: "Примечание (текст снизу)",
       },
     ],
   },
   {
     slug: "text-image",
     labels: { singular: "Текст + изображение", plural: "Текст + изображение" },
+    admin: blockThumbnail("text-image.jpg", "Текст + изображение"),
     fields: [
       textField("title", "Заголовок"),
       paragraphItemsField(),
@@ -233,16 +235,16 @@ export const blogPostBlocks: Block[] = [
         type: "select",
         label: "Вариант",
         options: [
-          { label: "Default", value: "default" },
-          { label: "Accent", value: "accent" },
+          { label: "Обычный", value: "default" },
+          { label: "Акцентный (синий фон)", value: "accent" },
         ],
       },
-      optionalTextField("imageAspectRatio", "Aspect ratio"),
     ],
   },
   {
     slug: "numbered-mini-cards",
     labels: { singular: "Нумерованные карточки", plural: "Нумерованные карточки" },
+    admin: blockThumbnail("numbered-mini-cards.jpg", "Нумерованные карточки"),
     fields: [
       textField("title", "Заголовок"),
       {
@@ -255,8 +257,8 @@ export const blogPostBlocks: Block[] = [
         type: "select",
         label: "Лэйаут описания",
         options: [
-          { label: "Two columns", value: "two-columns" },
-          { label: "Three columns middle", value: "three-columns-middle" },
+          { label: "Две колонки", value: "two-columns" },
+          { label: "Три колонки", value: "three-columns-middle" },
         ],
       },
       {
@@ -264,8 +266,8 @@ export const blogPostBlocks: Block[] = [
         type: "select",
         label: "Положение описания",
         options: [
-          { label: "Side", value: "side" },
-          { label: "Bottom", value: "bottom" },
+          { label: "Сбоку", value: "side" },
+          { label: "Снизу", value: "bottom" },
         ],
       },
       {
@@ -273,36 +275,34 @@ export const blogPostBlocks: Block[] = [
         type: "select",
         label: "Вариант",
         options: [
-          { label: "Accent", value: "accent" },
-          { label: "Light", value: "light" },
+          { label: "Акцентный (синий фон)", value: "accent" },
+          { label: "Светлый (белый фон)", value: "light" },
         ],
       },
       checklistItemsField(),
       {
         name: "note",
         type: "textarea",
-        label: "Примечание",
+        label: "Примечание (текст снизу)",
       },
     ],
   },
   {
     slug: "budget-optimization",
-    labels: { singular: "Оптимизация бюджета", plural: "Оптимизация бюджета" },
-    fields: [
-      textField("title", "Заголовок"),
-      textareaField("description", "Описание"),
-      checklistItemsField(),
-      imageField("image", "Изображение"),
-    ],
+    labels: { singular: "Нумерованный список + изображение", plural: "Нумерованный список + изображение" },
+    admin: blockThumbnail("budget-optimization.jpg", "Нумерованный список + изображение"),
+    fields: [textField("title", "Заголовок"), textareaField("description", "Описание"), checklistItemsField(), imageField("image", "Изображение")],
   },
   {
     slug: "text-columns-image",
     labels: { singular: "Колонки + широкое изображение", plural: "Колонки + широкое изображение" },
-    fields: [textColumnsField(), imageField("image", "Изображение"), optionalTextField("imageAspectRatio", "Aspect ratio")],
+    admin: blockThumbnail("text-columns-image.jpg", "Колонки + широкое изображение"),
+    fields: [textColumnsField(), imageField("image", "Изображение")],
   },
   {
     slug: "text-split",
-    labels: { singular: "Текст 50/50", plural: "Текст 50/50" },
+    labels: { singular: "Заголовок + текст 50/50", plural: "Заголовок + текст 50/50" },
+    admin: blockThumbnail("text-split.jpg", "Заголовок + текст 50/50"),
     fields: [
       textField("title", "Заголовок"),
       {
@@ -326,6 +326,7 @@ export const blogPostBlocks: Block[] = [
   {
     slug: "summary",
     labels: { singular: "Итог", plural: "Итоги" },
+    admin: blockThumbnail("summary.jpg", "Итог"),
     fields: [textField("title", "Заголовок"), textParagraphsField(), imageField("image", "Изображение")],
   },
 ];

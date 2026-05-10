@@ -165,7 +165,6 @@ async function mapSection(payload: PayloadInstance, section: BlogArticleSection)
         cards: section.cards,
         note: section.note,
         columns: section.columns ? String(section.columns) : undefined,
-        backgroundAssetUrl: section.backgroundAssetUrl,
       };
     case "text-image":
       return {
@@ -181,7 +180,6 @@ async function mapSection(payload: PayloadInstance, section: BlogArticleSection)
         ),
         image: await ensureMedia(payload, section.image),
         variant: section.variant,
-        imageAspectRatio: section.imageAspectRatio,
       };
     case "numbered-mini-cards":
       return {
@@ -210,7 +208,6 @@ async function mapSection(payload: PayloadInstance, section: BlogArticleSection)
           paragraphs: column.paragraphs.map((text) => ({ text })),
         })),
         image: await ensureMedia(payload, section.image),
-        imageAspectRatio: section.imageAspectRatio,
       };
     case "text-split":
       return {

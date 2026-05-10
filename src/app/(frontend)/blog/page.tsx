@@ -6,6 +6,8 @@ import { isDraftModeEnabled } from "@/shared/lib/payload/page-docs";
 import { AdminBar } from "@/shared/ui/admin-bar";
 import { BlogPage } from "@/views/blog";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   return getBlogPageMetadata();
 }

@@ -11,7 +11,7 @@ export const ContactsPage = createSettingsPageCollection({
       name: "heroImage",
       type: "upload",
       relationTo: "media",
-      label: "Обложка",
+      label: "Обложка блока",
       required: true,
     },
     {

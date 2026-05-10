@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getBlogPostBySlug, getBlogPostSlugs } from "@/entities/blog-post";
+import { getBlogPostBySlug } from "@/entities/blog-post";
 import { getDocumentAdminPath } from "@/payload/preview";
 import { buildSEOMetadata } from "@/shared/lib/payload/seo-metadata";
 import { isDraftModeEnabled } from "@/shared/lib/payload/page-docs";
 import { AdminBar } from "@/shared/ui/admin-bar";
 import { BlogArticlePage } from "@/views/blog";
 
+export const dynamic = "force-dynamic";
+
 type BlogArticleRouteProps = {
   params: Promise<{
     slug: string;
   }>;
 };
-
-export async function generateStaticParams() {
-  return (await getBlogPostSlugs()).map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({
   params,

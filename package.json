@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "postinstall": "node --experimental-strip-types scripts/patch-better-fields-slug.ts",
+    "db:ensure-posts-slug-lock": "node --experimental-strip-types scripts/ensure-posts-slug-lock.ts",
     "db:reset-payload": "node --experimental-strip-types scripts/reset-payload-db.ts",
     "download:project111:catalog": "bash scripts/download-project111-catalog.sh",
     "download:project111:images": "bash scripts/download-project111-images.sh",

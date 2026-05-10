@@ -9,6 +9,7 @@ export type BlogPostDto = {
   id: string;
   slug: string;
   cardTitle: string;
+  pageTitle?: string;
   excerpt?: string | null;
   cardImage: CmsImage;
   heroImage: CmsImage;
@@ -18,6 +19,7 @@ export type BlogPost = {
   id: string;
   slug: string;
   cardTitle: string;
+  pageTitle?: string;
   excerpt?: string | null;
   cardImage: CmsImage;
   heroImage: CmsImage;
@@ -96,7 +98,6 @@ export type BlogArticleTaskGoalsSectionDto = {
   cards: BlogArticleMiniCardDto[];
   note?: string;
   columns?: 2 | 3;
-  backgroundAssetUrl?: string;
 };
 
 export type BlogArticleParagraphDto =
@@ -112,7 +113,6 @@ export type BlogArticleTextImageSectionDto = {
   paragraphs: BlogArticleParagraphDto[];
   image: CmsImage;
   variant?: "default" | "accent";
-  imageAspectRatio?: string;
 };
 
 export type BlogArticleNumberedMiniCardsSectionDto = {
@@ -138,7 +138,6 @@ export type BlogArticleTextColumnsImageSectionDto = {
   type: "text-columns-image";
   columns: BlogArticleTextColumnDto[];
   image: CmsImage;
-  imageAspectRatio?: string;
 };
 
 export type BlogArticleTextSplitSectionDto = {
@@ -241,7 +240,6 @@ export type BlogArticleTaskGoalsSection = {
   cards: BlogArticleMiniCard[];
   note?: string;
   columns?: 2 | 3;
-  backgroundAssetUrl?: string;
 };
 
 export type BlogArticleParagraph =
@@ -257,7 +255,6 @@ export type BlogArticleTextImageSection = {
   paragraphs: BlogArticleParagraph[];
   image: CmsImage;
   variant?: "default" | "accent";
-  imageAspectRatio?: string;
 };
 
 export type BlogArticleNumberedMiniCardsSection = {
@@ -283,7 +280,6 @@ export type BlogArticleTextColumnsImageSection = {
   type: "text-columns-image";
   columns: BlogArticleTextColumn[];
   image: CmsImage;
-  imageAspectRatio?: string;
 };
 
 export type BlogArticleTextSplitSection = {

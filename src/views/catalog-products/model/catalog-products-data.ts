@@ -1,4 +1,4 @@
-import { blogArticlesMock } from "@/entities/blog-post/model/mock";
+import { getBlogPosts } from "@/entities/blog-post";
 import { getCatalogRootIconId } from "@/shared/config/catalog-root-icons";
 import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
 import type { CatalogProductsLandingArticle, CatalogProductsLandingData, CatalogProductsLandingPortrait } from "@/widgets/catalog-products/model/types";
@@ -24,6 +24,7 @@ const DEFAULT_HERO = {
 
 export async function getCatalogProductsLandingData(): Promise<CatalogProductsLandingData> {
   const partnerCatalogCategories = (await getPartnerCatalogData()).categories;
+  const blogPosts = await getBlogPosts();
   const payload = (await getPayloadClient()) as any;
   const catalogProductsPage = await payload.find({
     collection: "catalog-products-page",
@@ -32,9 +33,9 @@ export async function getCatalogProductsLandingData(): Promise<CatalogProductsLa
     pagination: false,
   });
   const heroSource = catalogProductsPage.docs[0]?.hero;
-  const articles: CatalogProductsLandingArticle[] = blogArticlesMock.slice(0, 5).map((article) => ({
+  const articles: CatalogProductsLandingArticle[] = blogPosts.slice(0, 5).map((article) => ({
     id: article.id,
-    title: article.pageTitle,
+    title: article.pageTitle || article.cardTitle,
     href: article.href,
     variant: "article" as const,
     image: {

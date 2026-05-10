@@ -16,7 +16,7 @@ export function ArticleTaskGoalsSection({ section }: ArticleTaskGoalsSectionProp
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[length:auto_100%] bg-[position:right_center] bg-no-repeat opacity-70"
-          style={{ backgroundImage: `url('${section.backgroundAssetUrl ?? "/blog/img_conclusion_card_cover.svg"}')` }}
+          style={{ backgroundImage: "url('/blog/img_conclusion_card_cover.svg')" }}
         />
 
         <div className="relative z-10 flex flex-col gap-8 md:gap-10">

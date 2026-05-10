@@ -50,6 +50,7 @@ type PayloadPostDocument = Record<string, unknown> & {
     };
   };
   pageTitle?: string;
+  sortOrder?: number;
   slug?: string;
   title?: string;
 };
@@ -63,11 +64,7 @@ type PostsPayloadClient = {
     overrideAccess?: boolean;
     pagination: boolean;
     sort?: string;
-    where?: {
-      slug: {
-        equals: string;
-      };
-    };
+    where?: Record<string, unknown>;
   }) => Promise<PayloadFindResult<PayloadPostDocument>>;
 };
 
@@ -77,6 +74,10 @@ function getString(value: unknown): string | undefined {
 
 function getEnumValue<TValue extends string>(value: unknown, values: readonly TValue[]): TValue | undefined {
   return typeof value === "string" && values.includes(value as TValue) ? (value as TValue) : undefined;
+}
+
+function getNumber(value: unknown): number | undefined {
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
 function mapTextRows(value: unknown): string[] {
@@ -249,7 +250,6 @@ function mapLayoutBlock(block: Record<string, unknown>): BlogArticleSection | nu
         cards: mapMiniCards(block.cards),
         note: getString(block.note),
         columns: block.columns === "2" ? 2 : block.columns === "3" ? 3 : undefined,
-        backgroundAssetUrl: getString(block.backgroundAssetUrl),
       };
     case "text-image": {
       const image = mapCmsImage(block.image, getString(block.title) || "Изображение");
@@ -263,7 +263,6 @@ function mapLayoutBlock(block: Record<string, unknown>): BlogArticleSection | nu
         paragraphs: mapParagraphRows(block.paragraphs),
         image,
         variant: getEnumValue(block.variant, ["default", "accent"] as const),
-        imageAspectRatio: getString(block.imageAspectRatio),
       };
     }
     case "numbered-mini-cards":
@@ -301,7 +300,6 @@ function mapLayoutBlock(block: Record<string, unknown>): BlogArticleSection | nu
         type: "text-columns-image",
         columns: mapColumns(block.columns),
         image,
-        imageAspectRatio: getString(block.imageAspectRatio),
       };
     }
     case "text-split":
@@ -399,10 +397,27 @@ async function getPostDocs(options?: { draft?: boolean }) {
       limit: 100,
       overrideAccess: options?.draft,
       pagination: false,
-      sort: "-publishedAt",
+      where: options?.draft
+        ? undefined
+        : {
+            _status: {
+              equals: "published",
+            },
+          },
     });
 
-    return Array.isArray(result?.docs) ? result.docs : [];
+    const docs = Array.isArray(result?.docs) ? result.docs : [];
+
+    return docs.sort((left, right) => {
+      const leftOrder = getNumber(left.sortOrder) ?? Number.MAX_SAFE_INTEGER;
+      const rightOrder = getNumber(right.sortOrder) ?? Number.MAX_SAFE_INTEGER;
+
+      if (leftOrder !== rightOrder) {
+        return leftOrder - rightOrder;
+      }
+
+      return 0;
+    });
   } catch {
     return [];
   }
@@ -420,6 +435,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
         id: article.id,
         slug: article.slug,
         cardTitle: article.cardTitle,
+        pageTitle: article.pageTitle,
         excerpt: article.excerpt,
         cardImage: article.cardImage,
         heroImage: article.heroImage,
@@ -427,7 +443,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
       }),
     );
 
-  return posts.length > 0 ? posts : blogPostsMock;
+  return posts;
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogArticle | undefined> {
@@ -445,13 +461,20 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogArticle | und
         slug: {
           equals: slug,
         },
+        ...(isDraft
+          ? {}
+          : {
+              _status: {
+                equals: "published",
+              },
+            }),
       },
     });
 
     const doc = Array.isArray(result?.docs) ? result.docs[0] : null;
     const article = doc ? mapPostDocToArticle(doc) : null;
 
-    return article || blogArticlesMock.find((item) => item.slug === slug);
+    return article || undefined;
   } catch {
     return blogArticlesMock.find((item) => item.slug === slug);
   }
@@ -463,5 +486,5 @@ export async function getBlogPostSlugs(): Promise<string[]> {
     .map((doc: PayloadPostDocument) => (typeof doc.slug === "string" ? doc.slug : null))
     .filter((item: string | null): item is string => item !== null);
 
-  return slugs.length > 0 ? slugs : blogArticlesMock.map((item) => item.slug);
+  return slugs.length > 0 ? slugs : [];
 }

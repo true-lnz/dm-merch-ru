@@ -55,7 +55,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           height: 444,
         },
         variant: "accent",
-        imageAspectRatio: "542 / 444",
       },
       {
         type: "text-image",
@@ -71,7 +70,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           width: 669,
           height: 444,
         },
-        imageAspectRatio: "669 / 444",
       },
       {
         type: "text-columns-image",
@@ -99,7 +97,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           width: 1740,
           height: 290,
         },
-        imageAspectRatio: "1740 / 290",
       },
       {
         type: "text-image",
@@ -115,7 +112,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           width: 669,
           height: 420,
         },
-        imageAspectRatio: "669 / 420",
       },
       {
         type: "text-image",
@@ -132,7 +128,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           height: 420,
         },
         variant: "accent",
-        imageAspectRatio: "542 / 420",
       },
       {
         type: "text-image",
@@ -151,7 +146,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           width: 669,
           height: 484,
         },
-        imageAspectRatio: "669 / 484",
       },
       {
         type: "summary",
@@ -222,7 +216,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           height: 682,
         },
         variant: "accent",
-        imageAspectRatio: "542 / 324",
       },
       {
         type: "numbered-mini-cards",
@@ -253,7 +246,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
         description:
           "Чтобы ускорить процесс, важно чётко понимать последовательность этапов. Даже в экспресс-формате они остаются неизменными, но проходят быстрее за счёт параллельной работы.",
         columns: 3,
-        backgroundAssetUrl: "/blog/img_conclusion_card_cover.svg",
         cards: [
           {
             title: "Постановка задачи",
@@ -303,7 +295,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           height: 814,
         },
         variant: "accent",
-        imageAspectRatio: "542 / 396",
       },
       {
         type: "text-image",
@@ -320,7 +311,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
           width: 611,
           height: 916,
         },
-        imageAspectRatio: "669 / 406",
       },
       {
         type: "summary",
@@ -382,7 +372,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
         description:
           "Цена на брендированный мерч формируется из нескольких ключевых факторов. Каждый из них напрямую влияет на итоговую стоимость проекта.",
         columns: 3,
-        backgroundAssetUrl: "/blog/img_conclusion_card_cover.svg",
         cards: [
           {
             title: "Тип продукции",
@@ -542,7 +531,6 @@ const BLOG_ARTICLE_DTO_MOCK: BlogArticleDto[] = [
         description:
           "Первый шаг это понять, какую функцию должен выполнять мерч для компании. Без этого даже качественный и дорогой брендированный мерч может не принести результата.",
         label: "Основные бизнес-задачи:",
-        backgroundAssetUrl: "/blog/img_conclusion_card_cover.svg",
         cards: [
           {
             title: "Мерч для сотрудников",
