@@ -5,6 +5,7 @@ import { getLivePreviewURLForCollection, getPreviewURLForCollection } from "../p
 export const Pages: CollectionConfig = {
   slug: "pages",
   admin: {
+    group: false,
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "updatedAt"],
     preview: getPreviewURLForCollection("pages"),

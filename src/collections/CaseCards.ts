@@ -19,6 +19,9 @@ export const CaseCards: CollectionConfig = {
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
   },
+  versions: {
+    drafts: true,
+  },
   hooks: {
     beforeValidate: [
       ({ data }) => {

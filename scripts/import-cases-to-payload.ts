@@ -7,7 +7,7 @@ import { caseThemes, casesPageItems } from "../src/views/cases/model/cases-data.
 import { getPayload } from "payload";
 
 type SQLiteStatement = {
-  all: () => unknown[];
+  all: (...params: unknown[]) => unknown[];
   run: (...params: unknown[]) => unknown;
 };
 
@@ -18,6 +18,36 @@ type SQLiteDatabase = {
 
 type TableInfoRow = {
   name?: unknown;
+};
+
+type CountRow = {
+  count?: number | string;
+};
+
+type CaseCardRow = {
+  id?: number | string;
+  slug?: string;
+  company?: string;
+  teaser?: string;
+  theme_id?: number | string | null;
+  sort_order?: number | string | null;
+  is_active?: number | boolean | null;
+  intro?: string;
+  task?: string;
+  solution?: string;
+  result?: string;
+  updated_at?: string | null;
+  created_at?: string | null;
+  _status?: string | null;
+};
+
+type CaseCardGalleryRow = {
+  _order?: number | string;
+  id?: string;
+  image_id?: number | string | null;
+  fit?: string | null;
+  x?: number | string | null;
+  y?: number | string | null;
 };
 
 function loadDatabaseCtor() {
@@ -40,6 +70,163 @@ function ensureColumn(db: SQLiteDatabase, tableName: string, columnName: string,
 
   if (!hasColumn) {
     db.prepare(`ALTER TABLE "${tableName}" ADD COLUMN "${columnName}" ${sqlType}`).run();
+  }
+}
+
+function publishRowsWithoutStatus(db: SQLiteDatabase, tableName: string) {
+  db.prepare(`UPDATE "${tableName}" SET "_status" = 'published' WHERE "_status" IS NULL OR "_status" = ''`).run();
+}
+
+function toNumber(value: unknown, fallback = 0): number {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    const parsed = Number(value);
+
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
+  }
+
+  return fallback;
+}
+
+function seedCaseCardVersions(db: SQLiteDatabase) {
+  const rows = db.prepare(`
+    SELECT
+      c.id,
+      c.slug,
+      c.company,
+      c.teaser,
+      c.theme_id,
+      c.sort_order,
+      c.is_active,
+      c.intro,
+      c.task,
+      c.solution,
+      c.result,
+      c.updated_at,
+      c.created_at,
+      c._status
+    FROM "case_cards" c
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM "_case_cards_v" v
+      WHERE v.parent_id = c.id
+        AND v.latest = 1
+    )
+    ORDER BY c.id
+  `).all() as CaseCardRow[];
+
+  if (rows.length === 0) {
+    return;
+  }
+
+  db.prepare(`
+    UPDATE "case_cards"
+    SET "_status" = 'published'
+    WHERE id IN (
+      SELECT c.id
+      FROM "case_cards" c
+      WHERE NOT EXISTS (
+        SELECT 1
+        FROM "_case_cards_v" v
+        WHERE v.parent_id = c.id
+          AND v.latest = 1
+      )
+    )
+  `).run();
+
+  let nextVersionId = toNumber((db.prepare(`SELECT COALESCE(MAX(id), 0) AS count FROM "_case_cards_v"`).all() as CountRow[])[0]?.count);
+  let nextGalleryVersionId = toNumber(
+    (db.prepare(`SELECT COALESCE(MAX(id), 0) AS count FROM "_case_cards_v_version_gallery"`).all() as CountRow[])[0]?.count,
+  );
+
+  for (const row of rows) {
+    const parentId = toNumber(row.id);
+    const sortOrder = row.sort_order == null ? null : toNumber(row.sort_order);
+    const isActive =
+      typeof row.is_active === "boolean" ? Number(row.is_active) : row.is_active == null ? null : toNumber(row.is_active);
+    const versionStatus = row._status && row._status.length > 0 ? row._status : "published";
+
+    nextVersionId += 1;
+
+    db.prepare(`
+      INSERT INTO "_case_cards_v" (
+        "id",
+        "parent_id",
+        "version_slug",
+        "version_company",
+        "version_teaser",
+        "version_theme_id",
+        "version_sort_order",
+        "version_is_active",
+        "version_intro",
+        "version_task",
+        "version_solution",
+        "version_result",
+        "version_updated_at",
+        "version_created_at",
+        "version__status",
+        "created_at",
+        "updated_at",
+        "latest"
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      nextVersionId,
+      parentId,
+      row.slug ?? null,
+      row.company ?? null,
+      row.teaser ?? null,
+      row.theme_id ?? null,
+      sortOrder,
+      isActive,
+      row.intro ?? null,
+      row.task ?? null,
+      row.solution ?? null,
+      row.result ?? null,
+      row.updated_at ?? null,
+      row.created_at ?? null,
+      versionStatus,
+      row.created_at ?? null,
+      row.updated_at ?? null,
+      1,
+    );
+
+    const galleryRows = db.prepare(`
+      SELECT "_order", "id", "image_id", "fit", "x", "y"
+      FROM "case_cards_gallery"
+      WHERE "_parent_id" = ?
+      ORDER BY "_order" ASC
+    `).all(parentId) as CaseCardGalleryRow[];
+
+    for (const galleryRow of galleryRows) {
+      nextGalleryVersionId += 1;
+
+      db.prepare(`
+        INSERT INTO "_case_cards_v_version_gallery" (
+          "_order",
+          "_parent_id",
+          "id",
+          "image_id",
+          "fit",
+          "x",
+          "y",
+          "_uuid"
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        toNumber(galleryRow._order),
+        nextVersionId,
+        nextGalleryVersionId,
+        galleryRow.image_id ?? null,
+        galleryRow.fit ?? null,
+        galleryRow.x ?? null,
+        galleryRow.y ?? null,
+        galleryRow.id ?? null,
+      );
+    }
   }
 }
 
@@ -96,6 +283,7 @@ function ensureCasesSchema() {
         "task" text NOT NULL,
         "solution" text NOT NULL,
         "result" text NOT NULL,
+        "_status" text DEFAULT 'draft',
         "updated_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
         "created_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
         FOREIGN KEY ("theme_id") REFERENCES "case_filters"("id") ON UPDATE no action ON DELETE restrict
@@ -118,6 +306,52 @@ function ensureCasesSchema() {
       `CREATE INDEX IF NOT EXISTS "case_cards_gallery_image_idx" ON "case_cards_gallery" ("image_id")`,
       `CREATE INDEX IF NOT EXISTS "case_cards_gallery_order_idx" ON "case_cards_gallery" ("_order")`,
       `CREATE INDEX IF NOT EXISTS "case_cards_gallery_parent_id_idx" ON "case_cards_gallery" ("_parent_id")`,
+      `CREATE TABLE IF NOT EXISTS "_case_cards_v" (
+        "id" integer PRIMARY KEY NOT NULL,
+        "parent_id" integer,
+        "version_slug" text,
+        "version_company" text,
+        "version_teaser" text,
+        "version_theme_id" integer,
+        "version_sort_order" numeric DEFAULT 1,
+        "version_is_active" integer DEFAULT true,
+        "version_intro" text,
+        "version_task" text,
+        "version_solution" text,
+        "version_result" text,
+        "version_updated_at" text,
+        "version_created_at" text,
+        "version__status" text DEFAULT 'draft',
+        "created_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+        "updated_at" text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+        "latest" integer,
+        FOREIGN KEY ("parent_id") REFERENCES "case_cards"("id") ON UPDATE no action ON DELETE set null,
+        FOREIGN KEY ("version_theme_id") REFERENCES "case_filters"("id") ON UPDATE no action ON DELETE set null
+      )`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_parent_idx" ON "_case_cards_v" ("parent_id")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_created_at_idx" ON "_case_cards_v" ("created_at")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_updated_at_idx" ON "_case_cards_v" ("updated_at")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_latest_idx" ON "_case_cards_v" ("latest")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_version_version_slug_idx" ON "_case_cards_v" ("version_slug")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_version_version_theme_idx" ON "_case_cards_v" ("version_theme_id")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_version_version_updated_at_idx" ON "_case_cards_v" ("version_updated_at")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_version_version_created_at_idx" ON "_case_cards_v" ("version_created_at")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_version_version__status_idx" ON "_case_cards_v" ("version__status")`,
+      `CREATE TABLE IF NOT EXISTS "_case_cards_v_version_gallery" (
+        "_order" integer NOT NULL,
+        "_parent_id" integer NOT NULL,
+        "id" integer PRIMARY KEY NOT NULL,
+        "image_id" integer,
+        "fit" text,
+        "x" numeric,
+        "y" numeric,
+        "_uuid" text,
+        FOREIGN KEY ("image_id") REFERENCES "media"("id") ON UPDATE no action ON DELETE set null,
+        FOREIGN KEY ("_parent_id") REFERENCES "_case_cards_v"("id") ON UPDATE no action ON DELETE cascade
+      )`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_version_gallery_image_idx" ON "_case_cards_v_version_gallery" ("image_id")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_version_gallery_order_idx" ON "_case_cards_v_version_gallery" ("_order")`,
+      `CREATE INDEX IF NOT EXISTS "_case_cards_v_version_gallery_parent_id_idx" ON "_case_cards_v_version_gallery" ("_parent_id")`,
     ];
 
     for (const sql of statements) {
@@ -146,6 +380,10 @@ function ensureCasesSchema() {
     ensureColumn(db, "payload_preferences_rels", "cases_page_id");
     ensureColumn(db, "payload_preferences_rels", "case_filters_id");
     ensureColumn(db, "payload_preferences_rels", "case_cards_id");
+    ensureColumn(db, "case_cards", "_status", "text DEFAULT 'draft'");
+
+    publishRowsWithoutStatus(db, "case_cards");
+    seedCaseCardVersions(db);
 
     db.prepare(`CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_cases_page_id_idx" ON "payload_locked_documents_rels" ("cases_page_id")`).run();
     db.prepare(`CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_case_filters_id_idx" ON "payload_locked_documents_rels" ("case_filters_id")`).run();
