@@ -1,7 +1,7 @@
 import "server-only";
 
 import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
-import { cache } from "react";
+import { unstable_noStore as noStore } from "next/cache";
 
 import { defaultRequestCtaContent, type RequestCtaContent } from "./request-cta";
 
@@ -9,7 +9,9 @@ function normalizeMultilineText(value: string) {
   return value.replace(/\r\n?/g, "\n").trim();
 }
 
-export const getRequestCta = cache(async (): Promise<RequestCtaContent> => {
+export async function getRequestCta(): Promise<RequestCtaContent> {
+  noStore();
+
   try {
     const payload = (await getPayloadClient()) as any;
     const global = await payload.findGlobal({
@@ -27,4 +29,4 @@ export const getRequestCta = cache(async (): Promise<RequestCtaContent> => {
   } catch {
     return defaultRequestCtaContent;
   }
-});
+}

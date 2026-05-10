@@ -1,7 +1,7 @@
 import "server-only";
 
 import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
-import { cache } from "react";
+import { unstable_noStore as noStore } from "next/cache";
 
 import { defaultSiteInfo, type SiteInfo, type SocialIcon, type SocialLink } from "./site-info";
 
@@ -43,7 +43,9 @@ function mapSocials(value: unknown): SocialLink[] {
   return socials.length > 0 ? socials : defaultSiteInfo.socials;
 }
 
-export const getSiteInfo = cache(async (): Promise<SiteInfo> => {
+export async function getSiteInfo(): Promise<SiteInfo> {
+  noStore();
+
   try {
     const payload = (await getPayloadClient()) as any;
     const global = await payload.findGlobal({
@@ -62,4 +64,4 @@ export const getSiteInfo = cache(async (): Promise<SiteInfo> => {
   } catch {
     return defaultSiteInfo;
   }
-});
+}

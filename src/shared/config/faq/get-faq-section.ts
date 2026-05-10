@@ -2,7 +2,7 @@ import "server-only";
 
 import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
 import { isPopulatedMedia } from "@/shared/lib/payload/media";
-import { cache } from "react";
+import { unstable_noStore as noStore } from "next/cache";
 
 import { defaultFaqSection, type FaqItem, type FaqSectionData, type FaqSectionImage } from "./faq";
 
@@ -40,12 +40,14 @@ function mapFaqImage(value: unknown, fallback: FaqSectionImage): FaqSectionImage
   };
 }
 
-export const getFaqSection = cache(async (): Promise<FaqSectionData | null> => {
+export async function getFaqSection(): Promise<FaqSectionData | null> {
+  noStore();
+
   try {
     const payload = (await getPayloadClient()) as any;
     const global = await payload.findGlobal({
       slug: "faq",
-      depth: 0,
+      depth: 1,
     });
 
     const title = typeof global.title === "string" ? normalizeMultilineText(global.title) : "";
@@ -63,4 +65,4 @@ export const getFaqSection = cache(async (): Promise<FaqSectionData | null> => {
   } catch {
     return null;
   }
-});
+}
