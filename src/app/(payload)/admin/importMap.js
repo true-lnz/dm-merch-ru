@@ -5,6 +5,7 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { ColourPickerComponent as ColourPickerComponent_599f005a0b518535205a54c1cd9ec06e } from '@nouance/payload-better-fields-plugin/ColourPicker/client'
 import { FolderTypeField as FolderTypeField_2b8867833a34864a02ddf429b0728a40 } from '@payloadcms/next/client'
 import { default as default_362845033ab2c71f76039169b6163768 } from '../../../payload/graphics/AdminIcon.tsx'
 import { default as default_ed37f7db3494fec63ce14db38ae97f38 } from '../../../payload/graphics/AdminLogo.tsx'
@@ -19,6 +20,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@nouance/payload-better-fields-plugin/ColourPicker/client#ColourPickerComponent": ColourPickerComponent_599f005a0b518535205a54c1cd9ec06e,
   "@payloadcms/next/client#FolderTypeField": FolderTypeField_2b8867833a34864a02ddf429b0728a40,
   "./payload/graphics/AdminIcon.tsx#default": default_362845033ab2c71f76039169b6163768,
   "./payload/graphics/AdminLogo.tsx#default": default_ed37f7db3494fec63ce14db38ae97f38,
