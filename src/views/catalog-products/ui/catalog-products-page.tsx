@@ -11,12 +11,9 @@ export function CatalogProductsPage({ data }: { data: CatalogProductsLandingData
     <>
       <WidowFix />
       <CatalogProductsBottomBar categories={data.categories} />
-      <CatalogProductsHero
-        backgroundImageUrl={data.hero.backgroundImageUrl}
-        portraits={data.portraits}
-      />
+      <CatalogProductsHero portraits={data.portraits} />
       <CatalogProductsArticles items={data.articles} />
-      <CatalogProductsCategories items={data.categories} />
+      <CatalogProductsCategories items={data.categories} heading={data.categoriesHeading} />
       <RequestCta />
     </>
   );

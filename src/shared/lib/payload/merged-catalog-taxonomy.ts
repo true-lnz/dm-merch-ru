@@ -7,6 +7,7 @@ type MergedCatalogTaxonomyDoc = {
   key: string;
   displayNameOverride?: string | null;
   isActive?: boolean | null;
+  sortOrder?: number | null;
 };
 
 function normalizeOverride(value: string | null | undefined) {
@@ -14,7 +15,7 @@ function normalizeOverride(value: string | null | undefined) {
   return trimmed ? trimmed : null;
 }
 
-export const getMergedCatalogTaxonomyOverrides = cache(async () => {
+export const getMergedCatalogTaxonomySettings = cache(async () => {
   try {
     const payload = await getPayloadClient();
     const result = await payload.find({
@@ -31,19 +32,18 @@ export const getMergedCatalogTaxonomyOverrides = cache(async () => {
     });
 
     const docs = result.docs as unknown as MergedCatalogTaxonomyDoc[];
-    const overrides = new Map<string, string>();
+    const settings = new Map<string, { override: string | null; sortOrder: number | null }>();
 
     for (const doc of docs) {
-      const override = normalizeOverride(doc.displayNameOverride);
-
-      if (override) {
-        overrides.set(doc.key, override);
-      }
+      settings.set(doc.key, {
+        override: normalizeOverride(doc.displayNameOverride),
+        sortOrder: typeof doc.sortOrder === "number" ? doc.sortOrder : null,
+      });
     }
 
-    return overrides;
+    return settings;
   } catch (error) {
-    console.warn("Failed to load merged catalog taxonomy overrides", error);
-    return new Map<string, string>();
+    console.warn("Failed to load merged catalog taxonomy settings", error);
+    return new Map<string, { override: string | null; sortOrder: number | null }>();
   }
 });

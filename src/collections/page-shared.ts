@@ -8,13 +8,16 @@ export function createSettingsPageCollection(args: {
   plural: string;
   adminGroup: string;
   previewPath: string;
+  defaultColumns?: string[];
   extraFields?: Field[];
+  includeHeroTitle?: boolean;
+  hooks?: CollectionConfig["hooks"];
 }): CollectionConfig {
   return {
     slug: args.slug,
     admin: {
       group: args.adminGroup,
-      defaultColumns: ["heroTitle", "updatedAt"],
+      defaultColumns: args.defaultColumns ?? (args.includeHeroTitle === false ? ["updatedAt"] : ["heroTitle", "updatedAt"]),
       preview: () => buildPreviewURL(args.previewPath),
       livePreview: {
         url: () => buildPreviewURL(args.previewPath),
@@ -30,13 +33,18 @@ export function createSettingsPageCollection(args: {
       update: ({ req }) => Boolean(req.user),
       delete: ({ req }) => Boolean(req.user),
     },
+    hooks: args.hooks,
     fields: [
-      {
-        name: "heroTitle",
-        type: "text",
-        label: "Hero-заголовок",
-        required: true,
-      },
+      ...(args.includeHeroTitle === false
+        ? []
+        : [
+            {
+              name: "heroTitle",
+              type: "text",
+              label: "Hero-заголовок",
+              required: true,
+            } satisfies Field,
+          ]),
       ...(args.extraFields ?? []),
     ],
   };

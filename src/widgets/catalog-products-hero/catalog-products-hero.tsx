@@ -3,16 +3,16 @@ import Image from "next/image";
 import { CatalogProductsHeroCenterSvg } from "./catalog-products-hero-center-svg";
 
 type CatalogProductsHeroProps = {
-  backgroundImageUrl: string;
   portraits: CatalogProductsLandingPortrait[];
 };
 
 const HERO_CARD_HEIGHT = "calc(clamp(112px, 10.5vw, 208px) * 1.1556)";
 const HERO_PORTRAIT_WIDTH = `calc(${HERO_CARD_HEIGHT} * 0.75)`;
+const HERO_BACKGROUND_IMAGE_URL = "/catalog-products/img_hero_catalog_cover.svg";
 
-export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogProductsHeroProps) {
+export function CatalogProductsHero({ portraits }: CatalogProductsHeroProps) {
   const leftPortraits = portraits.slice(0, 3);
-  const rightPortraits = portraits.slice(4, 7);
+  const rightPortraits = portraits.slice(3, 6);
 
   return (
     <section className="relative hidden md:block">
@@ -21,7 +21,7 @@ export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogPr
           className="pointer-events-none absolute inset-0 opacity-90"
           aria-hidden="true"
           style={{
-            backgroundImage: `url("${backgroundImageUrl}")`,
+            backgroundImage: `url("${HERO_BACKGROUND_IMAGE_URL}")`,
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
@@ -56,7 +56,7 @@ export function CatalogProductsHero({ backgroundImageUrl, portraits }: CatalogPr
             <div className="flex items-end gap-[clamp(8px,1.2vw,20px)]">
               {rightPortraits.map((portrait, index) => (
                 <div
-                  key={`${portrait.src}-${index + 4}`}
+                  key={`${portrait.src}-${index + 3}`}
                   className="relative shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
                   style={{ height: HERO_CARD_HEIGHT, width: HERO_PORTRAIT_WIDTH }}
                 >

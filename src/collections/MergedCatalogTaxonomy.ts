@@ -93,5 +93,15 @@ export const MergedCatalogTaxonomy: CollectionConfig = {
       required: true,
       defaultValue: true,
     },
+    {
+      name: "sortOrder",
+      type: "number",
+      label: "Порядок",
+      required: true,
+      defaultValue: 0,
+      admin: {
+        hidden: true,
+      },
+    },
   ],
 };

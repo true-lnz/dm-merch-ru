@@ -3,7 +3,7 @@ import "server-only";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
-import { getMergedCatalogTaxonomyOverrides } from "@/shared/lib/payload/merged-catalog-taxonomy";
+import { getMergedCatalogTaxonomySettings } from "@/shared/lib/payload/merged-catalog-taxonomy";
 import {
   PARTNER_CATALOG_DEFAULT_SORT,
   getPartnerCatalogFilterInputValues,
@@ -144,6 +144,15 @@ export type PartnerCatalogData = {
   products: PartnerCatalogProduct[];
 };
 
+type PartnerCatalogChildSectionWithSort = PartnerCatalogChildSection & {
+  sortOrder: number;
+};
+
+type PartnerCatalogRootSectionWithSort = PartnerCatalogRootSection & {
+  children: PartnerCatalogChildSectionWithSort[];
+  sortOrder: number;
+};
+
 export type PartnerCatalogPageSlice = {
   items: PartnerCatalogProduct[];
   total: number;
@@ -214,8 +223,12 @@ function getChildTaxonomyKey(childId: string) {
   return `child:${childId}`;
 }
 
-function resolveDisplayName(sourceName: string, override: string | undefined) {
+function resolveDisplayName(sourceName: string, override: string | null | undefined) {
   return override?.trim() || sourceName;
+}
+
+function getSortOrder(sortOrder: number | null | undefined, fallback: number) {
+  return typeof sortOrder === "number" ? sortOrder : fallback;
 }
 
 function mapVariant(source: MergedCatalogVariant): PartnerCatalogVariant {
@@ -290,26 +303,43 @@ function getFilteredProducts(products: PartnerCatalogProduct[], filterId: string
 
 const getPartnerCatalogDataset = cache(async (): Promise<PartnerCatalogDataset> => {
   const mergedCatalog = readJsonFile<MergedCatalogDataset>("merged-catalog.json");
-  const taxonomyOverrides = await getMergedCatalogTaxonomyOverrides();
-  const categories = mergedCatalog.categories
+  const taxonomySettings = await getMergedCatalogTaxonomySettings();
+  const categoriesWithSort: PartnerCatalogRootSectionWithSort[] = mergedCatalog.categories
     .map(
-      (rootCategory): PartnerCatalogRootSection => ({
+      (rootCategory, rootIndex): PartnerCatalogRootSectionWithSort => ({
         id: rootCategory.id,
-        name: resolveDisplayName(rootCategory.name, taxonomyOverrides.get(getRootTaxonomyKey(rootCategory.id))),
+        name: resolveDisplayName(rootCategory.name, taxonomySettings.get(getRootTaxonomyKey(rootCategory.id))?.override),
         sourceName: rootCategory.name,
         productCount: rootCategory.productCount,
+        sortOrder: getSortOrder(taxonomySettings.get(getRootTaxonomyKey(rootCategory.id))?.sortOrder, rootIndex),
         children: rootCategory.children
           .map(
-            (childCategory): PartnerCatalogChildSection => ({
+            (childCategory, childIndex): PartnerCatalogChildSectionWithSort => ({
               id: childCategory.id,
-              name: resolveDisplayName(childCategory.name, taxonomyOverrides.get(getChildTaxonomyKey(childCategory.id))),
+              name: resolveDisplayName(childCategory.name, taxonomySettings.get(getChildTaxonomyKey(childCategory.id))?.override),
               sourceName: childCategory.name,
               productCount: childCategory.productCount,
+              sortOrder: getSortOrder(taxonomySettings.get(getChildTaxonomyKey(childCategory.id))?.sortOrder, childIndex),
             }),
-          ),
+          )
+          .sort((left, right) => left.sortOrder - right.sortOrder || left.name.localeCompare(right.name, "ru")),
       }),
     )
-    .filter((rootCategory) => rootCategory.id !== "misc" && rootCategory.productCount > 0);
+    .filter((rootCategory) => rootCategory.id !== "misc" && rootCategory.productCount > 0)
+    .sort((left, right) => left.sortOrder - right.sortOrder || left.name.localeCompare(right.name, "ru"));
+
+  const categories: PartnerCatalogRootSection[] = categoriesWithSort.map((rootCategory) => ({
+    id: rootCategory.id,
+    name: rootCategory.name,
+    sourceName: rootCategory.sourceName,
+    productCount: rootCategory.productCount,
+    children: rootCategory.children.map((childCategory) => ({
+      id: childCategory.id,
+      name: childCategory.name,
+      sourceName: childCategory.sourceName,
+      productCount: childCategory.productCount,
+    })),
+  }));
 
   const categoryQuerySource = categories.map((rootCategory) => ({
     id: rootCategory.id,

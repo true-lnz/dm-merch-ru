@@ -27,6 +27,7 @@ import { FaqGlobal } from "./globals/Faq.ts";
 import { RequestCtaGlobal } from "./globals/RequestCta.ts";
 import { Users } from "./collections/Users.ts";
 import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
+import { ensureCatalogProductsPageColumns, ensureMergedCatalogTaxonomySortOrderColumn } from "./payload/ensure-catalog-products-page-columns.ts";
 import { LIVE_PREVIEW_BREAKPOINTS } from "./payload/preview.ts";
 import { ensureSQLiteMediaPrefixColumn } from "./payload/ensure-sqlite-media-prefix-column.ts";
 import { extendSEOFields } from "./payload/seo-fields.ts";
@@ -70,6 +71,8 @@ if (hasAnyS3Credential && !hasAllS3Credentials) {
 }
 
 ensureSQLiteMediaPrefixColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+ensureCatalogProductsPageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+ensureMergedCatalogTaxonomySortOrderColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
 
 function trimSlashes(value: string) {
   return value.replace(/^\/+|\/+$/g, "");

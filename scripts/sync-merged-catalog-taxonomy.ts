@@ -27,6 +27,7 @@ type TaxonomySyncRecord = {
   sourceRootName: string;
   sourceName: string;
   isActive: boolean;
+  sortOrder: number;
 };
 
 type ExistingTaxonomyRow = TaxonomySyncRecord & {
@@ -61,17 +62,18 @@ function buildExpectedRecords(dataset: MergedCatalogDataset) {
   const records: TaxonomySyncRecord[] = [];
 
   for (const root of dataset.categories) {
-    records.push({
-      key: buildKey("root", root.id),
-      nodeType: "root",
-      nodeId: root.id,
-      rootId: root.id,
-      sourceRootName: root.name,
-      sourceName: root.name,
-      isActive: true,
-    });
+      records.push({
+        key: buildKey("root", root.id),
+        nodeType: "root",
+        nodeId: root.id,
+        rootId: root.id,
+        sourceRootName: root.name,
+        sourceName: root.name,
+        isActive: true,
+        sortOrder: records.filter((record) => record.nodeType === "root").length,
+      });
 
-    for (const child of root.children) {
+    for (const [childIndex, child] of root.children.entries()) {
       records.push({
         key: buildKey("child", child.id),
         nodeType: "child",
@@ -80,6 +82,7 @@ function buildExpectedRecords(dataset: MergedCatalogDataset) {
         sourceRootName: root.name,
         sourceName: child.name,
         isActive: true,
+        sortOrder: childIndex,
       });
     }
   }
@@ -125,7 +128,8 @@ function ensureSchema(db: SQLiteDatabase) {
       source_root_name text NOT NULL,
       source_name text NOT NULL,
       display_name_override text,
-      is_active numeric DEFAULT 1 NOT NULL
+      is_active numeric DEFAULT 1 NOT NULL,
+      sort_order integer DEFAULT 0 NOT NULL
     );
 
     CREATE UNIQUE INDEX IF NOT EXISTS merged_catalog_taxonomy_key_idx
@@ -138,6 +142,14 @@ function ensureSchema(db: SQLiteDatabase) {
 }
 
 function loadExistingRows(db: SQLiteDatabase) {
+  const hasSortOrderColumn = (db.prepare(`PRAGMA table_info("merged_catalog_taxonomy")`).all() as Array<Record<string, unknown>>).some(
+    (column) => column.name === "sort_order",
+  );
+
+  if (!hasSortOrderColumn) {
+    db.prepare(`ALTER TABLE merged_catalog_taxonomy ADD COLUMN sort_order integer DEFAULT 0 NOT NULL`).run();
+  }
+
   const rows = db
     .prepare(`
       SELECT
@@ -149,7 +161,8 @@ function loadExistingRows(db: SQLiteDatabase) {
         source_root_name,
         source_name,
         display_name_override,
-        is_active
+        is_active,
+        sort_order
       FROM merged_catalog_taxonomy
     `)
     .all() as Array<Record<string, unknown>>;
@@ -165,6 +178,7 @@ function loadExistingRows(db: SQLiteDatabase) {
       sourceName: String(row.source_name),
       displayNameOverride: typeof row.display_name_override === "string" ? row.display_name_override : null,
       isActive: Number(row.is_active ?? 0) === 1,
+      sortOrder: Number(row.sort_order ?? 0),
     }),
   );
 }
@@ -178,8 +192,9 @@ function insertRow(db: SQLiteDatabase, record: TaxonomySyncRecord) {
       root_id,
       source_root_name,
       source_name,
-      is_active
-    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+      is_active,
+      sort_order
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     record.key,
     record.nodeType,
@@ -188,10 +203,11 @@ function insertRow(db: SQLiteDatabase, record: TaxonomySyncRecord) {
     record.sourceRootName,
     record.sourceName,
     record.isActive ? 1 : 0,
+    record.sortOrder,
   );
 }
 
-function updateRow(db: SQLiteDatabase, id: number, record: TaxonomySyncRecord) {
+function updateRow(db: SQLiteDatabase, id: number, record: TaxonomySyncRecord, sortOrder: number) {
   db.prepare(`
     UPDATE merged_catalog_taxonomy
     SET
@@ -201,7 +217,8 @@ function updateRow(db: SQLiteDatabase, id: number, record: TaxonomySyncRecord) {
       root_id = ?,
       source_root_name = ?,
       source_name = ?,
-      is_active = ?
+      is_active = ?,
+      sort_order = ?
     WHERE id = ?
   `).run(
     record.nodeType,
@@ -210,6 +227,7 @@ function updateRow(db: SQLiteDatabase, id: number, record: TaxonomySyncRecord) {
     record.sourceRootName,
     record.sourceName,
     record.isActive ? 1 : 0,
+    sortOrder,
     id,
   );
 }
@@ -236,6 +254,7 @@ async function main() {
     const expectedByKey = new Map(expectedRecords.map((record) => [record.key, record]));
     const existingRows = loadExistingRows(db);
     const existingByKey = new Map(existingRows.map((row) => [row.key, row]));
+    const shouldInitializeSortOrder = existingRows.length > 0 && existingRows.every((row) => row.sortOrder === 0);
 
     let created = 0;
     let updated = 0;
@@ -250,11 +269,11 @@ async function main() {
         continue;
       }
 
-      if (!hasChanged(existing, record)) {
+      if (!hasChanged(existing, record) && !(shouldInitializeSortOrder && existing.sortOrder !== record.sortOrder)) {
         continue;
       }
 
-      updateRow(db, existing.id, record);
+      updateRow(db, existing.id, record, shouldInitializeSortOrder ? record.sortOrder : existing.sortOrder);
       updated += 1;
     }
 

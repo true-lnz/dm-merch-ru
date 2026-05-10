@@ -31,12 +31,8 @@ export type CatalogProductsLandingCategory = {
 };
 
 export type CatalogProductsLandingData = {
-  hero: {
-    title: string;
-    description: string;
-    backgroundImageUrl: string;
-  };
   portraits: CatalogProductsLandingPortrait[];
+  categoriesHeading: string;
   articles: CatalogProductsLandingArticle[];
   categories: CatalogProductsLandingCategory[];
 };

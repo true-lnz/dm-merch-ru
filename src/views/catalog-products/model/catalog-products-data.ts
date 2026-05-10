@@ -1,26 +1,38 @@
 import { getBlogPosts } from "@/entities/blog-post";
 import { getCatalogRootIconId } from "@/shared/config/catalog-root-icons";
 import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
+import { isPopulatedMedia } from "@/shared/lib/payload/media";
 import type { CatalogProductsLandingArticle, CatalogProductsLandingData, CatalogProductsLandingPortrait } from "@/widgets/catalog-products/model/types";
 import { PARTNER_CATALOG_ALL_FILTER_ID, getPartnerCatalogData } from "@/views/partner-catalog/model/partner-catalog-data";
 import { getPartnerCatalogPathForFilter } from "@/views/partner-catalog/model/partner-catalog-query";
 
-const HERO_PORTRAITS: CatalogProductsLandingPortrait[] = [
+const DEFAULT_HERO_PORTRAITS: CatalogProductsLandingPortrait[] = [
   { src: "/catalog-products/1.webp", alt: "Изображение каталога продукции 1" },
   { src: "/catalog-products/2.webp", alt: "Изображение каталога продукции 2" },
   { src: "/catalog-products/3.webp", alt: "Изображение каталога продукции 3" },
-  { src: "/catalog-products/4.svg", alt: "Центральное изображение каталога продукции" },
   { src: "/catalog-products/5.webp", alt: "Изображение каталога продукции 5" },
   { src: "/catalog-products/6.webp", alt: "Изображение каталога продукции 6" },
   { src: "/catalog-products/7.webp", alt: "Изображение каталога продукции 7" },
 ] as const;
 
-const DEFAULT_HERO = {
-  title: "Каталог\nпродукции",
-  description:
-    "Собрали в одном входе категории, статьи и реальные разделы каталога, чтобы ориентироваться в мерче было проще и быстрее.",
-  backgroundImageUrl: "/catalog-products/img_hero_catalog_cover.svg",
-} as const;
+const DEFAULT_CATEGORIES_HEADING = "Мерч и корпоративные подарки";
+
+const HERO_IMAGE_KEYS = ["leftTop", "leftMiddle", "leftBottom", "rightTop", "rightMiddle", "rightBottom"] as const;
+
+type HeroImageKey = (typeof HERO_IMAGE_KEYS)[number];
+
+type HeroImagesSource = Partial<Record<HeroImageKey, unknown>>;
+
+function resolvePortrait(source: unknown, fallback: CatalogProductsLandingPortrait): CatalogProductsLandingPortrait {
+  if (!isPopulatedMedia(source) || typeof source.url !== "string" || source.url.length === 0) {
+    return fallback;
+  }
+
+  return {
+    src: source.url,
+    alt: source.alt || fallback.alt,
+  };
+}
 
 export async function getCatalogProductsLandingData(): Promise<CatalogProductsLandingData> {
   const partnerCatalogCategories = (await getPartnerCatalogData()).categories;
@@ -28,11 +40,12 @@ export async function getCatalogProductsLandingData(): Promise<CatalogProductsLa
   const payload = (await getPayloadClient()) as any;
   const catalogProductsPage = await payload.find({
     collection: "catalog-products-page",
-    depth: 0,
+    depth: 1,
     limit: 1,
     pagination: false,
   });
-  const heroSource = catalogProductsPage.docs[0]?.hero;
+  const pageSource = catalogProductsPage.docs[0];
+  const heroImagesSource = pageSource?.heroImages as HeroImagesSource | undefined;
   const articles: CatalogProductsLandingArticle[] = blogPosts.slice(0, 5).map((article) => ({
     id: article.id,
     title: article.pageTitle || article.cardTitle,
@@ -78,16 +91,11 @@ export async function getCatalogProductsLandingData(): Promise<CatalogProductsLa
   }));
 
   return {
-    hero: {
-      title: typeof heroSource?.title === "string" && heroSource.title ? heroSource.title : DEFAULT_HERO.title,
-      description:
-        typeof heroSource?.description === "string" && heroSource.description ? heroSource.description : DEFAULT_HERO.description,
-      backgroundImageUrl:
-        typeof heroSource?.backgroundImageUrl === "string" && heroSource.backgroundImageUrl
-          ? heroSource.backgroundImageUrl
-          : DEFAULT_HERO.backgroundImageUrl,
-    },
-    portraits: [...HERO_PORTRAITS],
+    portraits: HERO_IMAGE_KEYS.map((key, index) => resolvePortrait(heroImagesSource?.[key], DEFAULT_HERO_PORTRAITS[index])),
+    categoriesHeading:
+      typeof pageSource?.categoriesHeading === "string" && pageSource.categoriesHeading.trim()
+        ? pageSource.categoriesHeading
+        : DEFAULT_CATEGORIES_HEADING,
     articles,
     categories,
   };

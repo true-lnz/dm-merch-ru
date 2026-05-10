@@ -7,6 +7,7 @@ import Link from "next/link";
 import { type CSSProperties, useState } from "react";
 
 type CatalogProductsCategoriesProps = {
+  heading: string;
   items: CatalogProductsLandingCategory[];
 };
 
@@ -307,7 +308,7 @@ export function CatalogCategoryIcon({ iconId, className, monochrome = false }: {
   }
 }
 
-export function CatalogProductsCategories({ items }: CatalogProductsCategoriesProps) {
+export function CatalogProductsCategories({ heading, items }: CatalogProductsCategoriesProps) {
   const [expandedMobileCategoryIds, setExpandedMobileCategoryIds] = useState<string[]>([]);
 
   if (items.length === 0) {
@@ -316,7 +317,7 @@ export function CatalogProductsCategories({ items }: CatalogProductsCategoriesPr
 
   return (
     <section className="mt-[35px] md:mt-[45px] md:mb-[45px]">
-      <PageSubheading title="Мерч и корпоративные подарки" />
+      <PageSubheading title={heading} />
 
       <div className="mt-6 grid grid-cols-1 items-stretch md:auto-rows-fr md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6">
         {items.map((category) => {
