@@ -1,6 +1,7 @@
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { FixedToolbarFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
+import { s3Storage } from "@payloadcms/storage-s3";
 import path from "path";
 import { buildConfig } from "payload";
 import { en } from "payload/i18n/en";
@@ -27,6 +28,7 @@ import { RequestCtaGlobal } from "./globals/RequestCta.ts";
 import { Users } from "./collections/Users.ts";
 import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
 import { LIVE_PREVIEW_BREAKPOINTS } from "./payload/preview.ts";
+import { ensureSQLiteMediaPrefixColumn } from "./payload/ensure-sqlite-media-prefix-column.ts";
 import { extendSEOFields } from "./payload/seo-fields.ts";
 import { generateSEODescription, generateSEOImage, generateSEOTitle, generateSEOURL } from "./payload/seo.ts";
 
@@ -34,6 +36,10 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 const DEFAULT_PAYLOAD_SECRET = "dm-merch-local-secret";
 const DEFAULT_DATABASE_URL = `file:${path.resolve(dirname, "..", "dm-merch.db")}`;
+const DEFAULT_S3_BUCKET = "cdn-dm-merch";
+const DEFAULT_S3_ENDPOINT = "https://storage.yandexcloud.net";
+const DEFAULT_S3_REGION = "ru-central1";
+const DEFAULT_S3_PUBLIC_BASE_URL = "https://cdn.dm-merch.ru";
 const ruAdmin = {
   ...ru,
   translations: {
@@ -46,6 +52,39 @@ const ruAdmin = {
     },
   },
 };
+
+const s3Config = {
+  bucket: process.env.S3_BUCKET || DEFAULT_S3_BUCKET,
+  endpoint: process.env.S3_ENDPOINT || DEFAULT_S3_ENDPOINT,
+  publicBaseURL: process.env.S3_PUBLIC_BASE_URL || DEFAULT_S3_PUBLIC_BASE_URL,
+  region: process.env.S3_REGION || DEFAULT_S3_REGION,
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+};
+
+const hasAnyS3Credential = Boolean(s3Config.accessKeyId || s3Config.secretAccessKey);
+const hasAllS3Credentials = Boolean(s3Config.accessKeyId && s3Config.secretAccessKey);
+
+if (hasAnyS3Credential && !hasAllS3Credentials) {
+  throw new Error("S3 storage configuration is incomplete: both S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY are required.");
+}
+
+ensureSQLiteMediaPrefixColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+
+function trimSlashes(value: string) {
+  return value.replace(/^\/+|\/+$/g, "");
+}
+
+function joinURL(base: string, ...parts: Array<string | null | undefined>) {
+  const normalizedBase = base.replace(/\/+$/, "");
+  const normalizedPath = parts
+    .filter((part): part is string => typeof part === "string" && part.length > 0)
+    .map(trimSlashes)
+    .filter(Boolean)
+    .join("/");
+
+  return normalizedPath ? `${normalizedBase}/${normalizedPath}` : normalizedBase;
+}
 
 export default buildConfig({
   admin: {
@@ -112,6 +151,30 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
+    s3Storage({
+      enabled: hasAllS3Credentials,
+      alwaysInsertFields: true,
+      acl: "public-read",
+      bucket: s3Config.bucket,
+      config: {
+        credentials: hasAllS3Credentials
+          ? {
+              accessKeyId: s3Config.accessKeyId!,
+              secretAccessKey: s3Config.secretAccessKey!,
+            }
+          : undefined,
+        endpoint: s3Config.endpoint,
+        forcePathStyle: true,
+        region: s3Config.region,
+      },
+      collections: {
+        media: {
+          disablePayloadAccessControl: true,
+          prefix: "media",
+          generateFileURL: ({ filename, prefix }) => joinURL(s3Config.publicBaseURL, prefix, filename),
+        },
+      },
+    }),
     seoPlugin({
       collections: ["pages", "posts", "home-page", "catalog-page", "blog-page", "catalog-products-page", "contacts-page", "cases-page"],
       fields: ({ defaultFields }) => extendSEOFields(defaultFields),
