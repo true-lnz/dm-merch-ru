@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config) => {
+    config.watchOptions = {
+      ignored: ["**/public/_temp/**", "**/dm-merch.db"],
+    };
+    return config;
+  },
 };
 
 const payloadConfig = withPayload(nextConfig, {
