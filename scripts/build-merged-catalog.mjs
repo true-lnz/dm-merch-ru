@@ -47,10 +47,7 @@ function loadEnvFile(filePath) {
 
       let value = line.slice(separatorIndex + 1).trim();
 
-      if (
-        value.length >= 2 &&
-        ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))
-      ) {
+      if (value.length >= 2 && ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))) {
         value = value.slice(1, -1);
       }
 
@@ -66,7 +63,7 @@ function loadEnvFile(filePath) {
 }
 
 function resolveProject111ImageBase() {
-  const rawValue = process.env.PROJECT111_IMAGE_BASE_URL?.trim() || process.env.S3_PUBLIC_BASE_URL?.trim() || "https://cdn.dm-merch.ru";
+  const rawValue = process.env.PROJECT111_IMAGE_BASE_URL?.trim() || "https://cdn.dm-merch.ru/project111";
 
   if (!rawValue) {
     return "/images/";
@@ -125,7 +122,9 @@ function getTagValue(block, tagName) {
 }
 
 function getAllTagValues(block, tagName) {
-  return [...block.matchAll(new RegExp(`<${tagName}(?:\\s[^>]*)?>([\\s\\S]*?)</${tagName}>`, "g"))].map((match) => decodeXmlEntities(match[1]).trim());
+  return [...block.matchAll(new RegExp(`<${tagName}(?:\\s[^>]*)?>([\\s\\S]*?)</${tagName}>`, "g"))].map((match) =>
+    decodeXmlEntities(match[1]).trim(),
+  );
 }
 
 function getTagAttrValue(block, tagName, attrName) {
@@ -291,9 +290,7 @@ function buildPortobelloAttributes(product) {
     ["Обязательная маркировка", product.mandatoryMarking ? "Требуется" : null],
   ];
 
-  return orderedAttributes
-    .filter(([, value]) => Boolean(value))
-    .map(([label, value]) => ({ label, value }));
+  return orderedAttributes.filter(([, value]) => Boolean(value)).map(([label, value]) => ({ label, value }));
 }
 
 function getPortobelloBaseArticle(article) {
@@ -301,7 +298,10 @@ function getPortobelloBaseArticle(article) {
 }
 
 function stripPortobelloSizeFromTitle(title) {
-  return title.replace(/,\s*размер\s+[^,]+$/i, "").replace(/\s{2,}/g, " ").trim();
+  return title
+    .replace(/,\s*размер\s+[^,]+$/i, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 }
 
 function getPortobelloPrimaryImage(product) {
@@ -382,9 +382,7 @@ function getCategoryByChildId(index, childId, context) {
 }
 
 function formatMappingErrors(errors, source) {
-  return [...errors.entries()]
-    .map(([name, details]) => `- ${name}: ${details.count} тов. (${details.message})`)
-    .join("\n");
+  return [...errors.entries()].map(([name, details]) => `- ${name}: ${details.count} тов. (${details.message})`).join("\n");
 }
 
 function getPortobelloMappedChildByResolver(index, resolver, product) {
@@ -622,8 +620,8 @@ function parsePortobelloDataset(index) {
           }
 
           const stock =
-            (!representative.sizeClothing && stockByProductId.has(representative.id))
-              ? stockByProductId.get(representative.id) ?? 0
+            !representative.sizeClothing && stockByProductId.has(representative.id)
+              ? (stockByProductId.get(representative.id) ?? 0)
               : items.reduce((sum, item) => sum + (stockByProductId.get(item.id) ?? 0), 0);
 
           return {
@@ -736,6 +734,12 @@ function parseProject111Tree() {
   };
 }
 
+function replaceJpgWithWebp(url) {
+  if (!url) return url;
+  // Заменяем .jpg на .webp (в том числе .jpeg)
+  return url.replace(/\.jpe?g(\?.*)?$/i, ".webp$1");
+}
+
 function getProject111Images(block) {
   const images = [];
   const imageKeys = new Set();
@@ -749,7 +753,10 @@ function getProject111Images(block) {
   }
 
   for (const image of [superBigImage, ...galleryImages, bigImage]) {
-    const absolute = ensureAbsoluteUrl(image);
+    let absolute = ensureAbsoluteUrl(image);
+    // ЗАМЕНЯЕМ JPG НА WEBP
+    absolute = replaceJpgWithWebp(absolute);
+
     const imageKey = absolute ? getImageKey(absolute) : null;
 
     if (absolute && imageKey && !imageKeys.has(imageKey)) {
@@ -759,7 +766,10 @@ function getProject111Images(block) {
   }
 
   // Use the 200x200 image only as a last-resort fallback, not as a gallery slide.
-  const fallbackSmallImage = ensureAbsoluteUrl(smallImage);
+  let fallbackSmallImage = ensureAbsoluteUrl(smallImage);
+  // ЗАМЕНЯЕМ JPG НА WEBP ДЛЯ FALLBACK
+  fallbackSmallImage = replaceJpgWithWebp(fallbackSmallImage);
+
   const fallbackSmallImageKey = fallbackSmallImage ? getImageKey(fallbackSmallImage) : null;
 
   if (images.length === 0 && fallbackSmallImage && fallbackSmallImageKey && !imageKeys.has(fallbackSmallImageKey)) {
@@ -786,9 +796,7 @@ function buildProject111Attributes(product) {
     ["Статус", product.status],
   ];
 
-  return orderedAttributes
-    .filter(([, value]) => Boolean(value))
-    .map(([label, value]) => ({ label, value }));
+  return orderedAttributes.filter(([, value]) => Boolean(value)).map(([label, value]) => ({ label, value }));
 }
 
 function formatProject111PackagingDimensions(size) {
@@ -803,10 +811,7 @@ function formatProject111Volume(value) {
 function deriveProject111ColorLabel(productName, groupName, fallbackArticle) {
   const normalizedName = productName.trim();
   const escapedGroupName = escapeRegExp(groupName.trim());
-  const prefixes = [
-    new RegExp(`^${escapedGroupName}\\s*,\\s*`, "i"),
-    new RegExp(`^${escapedGroupName}\\s+`, "i"),
-  ];
+  const prefixes = [new RegExp(`^${escapedGroupName}\\s*,\\s*`, "i"), new RegExp(`^${escapedGroupName}\\s+`, "i")];
 
   for (const prefix of prefixes) {
     const withoutPrefix = normalizedName.replace(prefix, "").trim();
@@ -874,17 +879,14 @@ function parseProject111Dataset(index, project111Tree) {
       .filter((variant) => Boolean(variant.productId));
     const pageIds = [
       ...(pageIdsByProductId.get(topProductId) ?? []),
-      ...nestedVariants.flatMap((variant) => (variant.productId ? pageIdsByProductId.get(variant.productId) ?? [] : [])),
+      ...nestedVariants.flatMap((variant) => (variant.productId ? (pageIdsByProductId.get(variant.productId) ?? []) : [])),
     ];
-    const resolvedPage =
-      pageIds
-        .map((pageId) => pageById.get(pageId))
-        .find((page) => page && rootByChildId.has(page.id)) ?? null;
-    const resolvedRoot = resolvedPage ? rootByChildId.get(resolvedPage.id) ?? null : null;
+    const resolvedPage = pageIds.map((pageId) => pageById.get(pageId)).find((page) => page && rootByChildId.has(page.id)) ?? null;
+    const resolvedRoot = resolvedPage ? (rootByChildId.get(resolvedPage.id) ?? null) : null;
     const matchedChild = resolvedPage
-      ? index.childById.get(resolvedPage.id) ?? null
+      ? (index.childById.get(resolvedPage.id) ?? null)
       : resolveProject111CategoryByName(index, productName, groupName);
-    const matchedRoot = resolvedRoot ?? (matchedChild ? index.rootById.get(matchedChild.rootId) ?? null : null);
+    const matchedRoot = resolvedRoot ?? (matchedChild ? (index.rootById.get(matchedChild.rootId) ?? null) : null);
 
     if (!matchedChild || !matchedRoot) {
       const fallbackKey = `${matchedRoot?.name ?? "Без корня"} / ${resolvedPage?.name ?? "Без раздела"} / ${topProductId}`;
@@ -963,9 +965,7 @@ function parseProject111Dataset(index, project111Tree) {
         .map((product) => {
           const stockCandidates = product.nestedVariants.length > 0 ? product.nestedVariants : [{ productId: product.productId, priceRub: null }];
           const stock = stockCandidates.reduce((sum, item) => sum + (stockByProductId.get(item.productId)?.stock ?? 0), 0);
-          const firstStockSource = stockCandidates
-            .map((item) => stockByProductId.get(item.productId))
-            .find(Boolean);
+          const firstStockSource = stockCandidates.map((item) => stockByProductId.get(item.productId)).find(Boolean);
           const priceRub =
             firstStockSource?.priceRub ??
             product.nestedVariants.find((item) => typeof item.priceRub === "number")?.priceRub ??
@@ -1047,8 +1047,7 @@ function buildMergedCatalog() {
   const categoryIndex = buildCategoryIndex(project111Tree, MERGED_CATALOG_CONFIG);
   const portobello = parsePortobelloDataset(categoryIndex);
   const project111 = parseProject111Dataset(categoryIndex, project111Tree);
-  const products = [...portobello.products, ...project111.products]
-    .sort((left, right) => {
+  const products = [...portobello.products, ...project111.products].sort((left, right) => {
     if (left.rootSectionId !== right.rootSectionId) {
       return compareRu(left.unifiedCategory.rootName, right.unifiedCategory.rootName);
     }
@@ -1058,7 +1057,7 @@ function buildMergedCatalog() {
     }
 
     return compareRu(left.title, right.title);
-    });
+  });
   const categories = buildCategoryStats(categoryIndex, products);
 
   return {
