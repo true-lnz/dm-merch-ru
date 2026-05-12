@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 
 import { requirePreviewUser } from "@/shared/lib/payload/preview-session";
 
+export const dynamic = "force-dynamic";
+
 function getSafeRedirect(value: string | null): string {
   if (!value || !value.startsWith("/")) {
     return "/";

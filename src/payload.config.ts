@@ -71,7 +71,7 @@ if (hasAnyS3Credential && !hasAllS3Credentials) {
 }
 
 function isNextBuildProcess() {
-  return process.argv.includes("build");
+  return process.env.PAYLOAD_SKIP_SQLITE_ENSURE === "true" || process.argv.includes("build");
 }
 
 if (!isNextBuildProcess()) {

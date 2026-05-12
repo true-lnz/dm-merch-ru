@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  typescript: {
+    ignoreBuildErrors: process.env.NEXT_IGNORE_BUILD_ERRORS === "true",
+  },
   images: {
     unoptimized: true,
     qualities: [75, 80, 85, 90, 95],

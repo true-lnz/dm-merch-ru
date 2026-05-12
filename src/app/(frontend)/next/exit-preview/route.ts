@@ -1,6 +1,8 @@
 import { draftMode } from "next/headers";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 function getSafeRedirect(value: string | null): string {
   if (!value || !value.startsWith("/")) {
     return "/";

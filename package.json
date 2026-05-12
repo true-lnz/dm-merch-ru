@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:vps": "node --max-old-space-size=1536 ./node_modules/next/dist/bin/next build",
+    "build:vps": "node scripts/run-next-build-vps.mjs --ignore-build-errors",
+    "build:vps:strict": "node scripts/run-next-build-vps.mjs",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "postinstall": "node --experimental-strip-types scripts/patch-better-fields-slug.ts",
     "db:ensure-posts-slug-lock": "node --experimental-strip-types scripts/ensure-posts-slug-lock.ts",
     "db:reset-payload": "node --experimental-strip-types scripts/reset-payload-db.ts",
