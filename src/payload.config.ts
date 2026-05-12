@@ -70,9 +70,15 @@ if (hasAnyS3Credential && !hasAllS3Credentials) {
   throw new Error("S3 storage configuration is incomplete: both S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY are required.");
 }
 
-ensureSQLiteMediaPrefixColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
-ensureCatalogProductsPageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
-ensureMergedCatalogTaxonomySortOrderColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+function isNextBuildProcess() {
+  return process.argv.includes("build");
+}
+
+if (!isNextBuildProcess()) {
+  ensureSQLiteMediaPrefixColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+  ensureCatalogProductsPageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+  ensureMergedCatalogTaxonomySortOrderColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+}
 
 function trimSlashes(value: string) {
   return value.replace(/^\/+|\/+$/g, "");

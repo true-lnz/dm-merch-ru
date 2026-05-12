@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 type ClientErrorBody = {
   kind?: "error" | "unhandledrejection";
   message?: string;

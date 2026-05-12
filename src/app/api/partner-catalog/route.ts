@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getPartnerCatalogProductsPage, PARTNER_CATALOG_ALL_FILTER_ID } from "@/views/partner-catalog/model/partner-catalog-data";
 import { normalizePartnerCatalogFilters, normalizePartnerCatalogSort } from "@/views/partner-catalog/model/partner-catalog-query";
 
+export const dynamic = "force-dynamic";
+
 const DEFAULT_LIMIT = 16;
 const MAX_LIMIT = 80;
 

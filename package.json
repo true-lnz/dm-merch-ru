@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "next build",
+    "build:vps": "node --max-old-space-size=1536 ./node_modules/next/dist/bin/next build",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "node --experimental-strip-types scripts/patch-better-fields-slug.ts",

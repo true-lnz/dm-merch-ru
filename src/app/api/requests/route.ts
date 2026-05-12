@@ -2,6 +2,8 @@ import type { RequestErrorResponse, RequestPayload, RequestSuccessResponse, Wish
 import { sendRequestEmail } from "@/shared/lib/request-mail/send-request-email";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 const PHONE_PATTERN = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REQUEST_SOURCES = new Set<RequestPayload["source"]>([
