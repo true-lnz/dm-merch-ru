@@ -74,6 +74,8 @@ function isNextBuildProcess() {
   return process.env.PAYLOAD_SKIP_SQLITE_ENSURE === "true" || process.argv.includes("build");
 }
 
+const shouldGeneratePayloadTypes = !isNextBuildProcess();
+
 if (!isNextBuildProcess()) {
   ensureSQLiteMediaPrefixColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
   ensureCatalogProductsPageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
@@ -149,9 +151,13 @@ export default buildConfig({
     supportedLanguages: { ru: ruAdmin, en },
   },
   secret: process.env.PAYLOAD_SECRET || DEFAULT_PAYLOAD_SECRET,
-  typescript: {
-    outputFile: path.resolve(dirname, "payload-types.ts"),
-  },
+  ...(shouldGeneratePayloadTypes
+    ? {
+        typescript: {
+          outputFile: path.resolve(dirname, "payload-types.ts"),
+        },
+      }
+    : {}),
   db: sqliteAdapter({
     client: {
       url: process.env.DATABASE_URL || DEFAULT_DATABASE_URL,

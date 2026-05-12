@@ -1,5 +1,11 @@
+import type { CollectionAfterChangeHook } from "payload";
+
 import { createSettingsPageCollection } from "./page-shared.ts";
-import { syncCatalogProductsTaxonomyOrder } from "./catalog-products-taxonomy-order.ts";
+
+const syncCatalogProductsTaxonomyOrder: CollectionAfterChangeHook = async (args) => {
+  const mod = await import("./catalog-products-taxonomy-order.ts");
+  return mod.syncCatalogProductsTaxonomyOrder(args);
+};
 
 export const CatalogProductsPage = createSettingsPageCollection({
   slug: "catalog-products-page",
