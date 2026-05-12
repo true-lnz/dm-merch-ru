@@ -10,7 +10,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { PageHeading } from "@/shared/ui/page-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
-import { Spinner } from "@/shared/ui/spinner";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { CatalogCategoryIcon } from "@/widgets/catalog-products-categories";
 import { CheckIcon, ChevronDownIcon, FunnelIcon, XIcon } from "lucide-react";
@@ -882,7 +881,6 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const [isFilterApplyPopoverDismissed, setIsFilterApplyPopoverDismissed] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isFetchingProducts, setIsFetchingProducts] = useState(false);
-  const [isGridRefreshing, setIsGridRefreshing] = useState(false);
   const [isMobileCategoryDialogOpen, setIsMobileCategoryDialogOpen] = useState(false);
   const [isMobileFilterDialogOpen, setIsMobileFilterDialogOpen] = useState(false);
   const listStartRef = useRef<HTMLDivElement | null>(null);
@@ -1095,7 +1093,6 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     const nextRequestId = requestIdRef.current + 1;
     requestIdRef.current = nextRequestId;
     setIsFetchingProducts(true);
-    setIsGridRefreshing(!append);
 
     try {
       const nextSlice = await fetchCatalogPageSlice(filterId, nextFilterInputs, nextSortKey, offset, limit);
@@ -1113,7 +1110,6 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     } finally {
       if (requestIdRef.current === nextRequestId) {
         setIsFetchingProducts(false);
-        setIsGridRefreshing(false);
       }
     }
   }
@@ -1329,15 +1325,6 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
                   ))}
                 </div>
 
-                {isGridRefreshing ? (
-                  <div className="absolute inset-0 z-30 flex items-start justify-center rounded-[18px] bg-white/65 pt-6 backdrop-blur-[2px] md:rounded-[22.5px] md:pt-8">
-                    <div className="inline-flex items-center gap-3 rounded-full bg-white/92 px-4 py-2 text-sm font-medium text-[var(--heading)] shadow-[0_12px_30px_rgba(42,42,42,0.12)]">
-                      <Spinner className="size-4 text-[var(--accent)]" />
-                      <span>Обновляем товары...</span>
-                    </div>
-                  </div>
-                ) : null}
-
                 {nextCursor !== null ? (
                   <div className="mt-10 flex justify-center md:mt-12">
                     <button
@@ -1346,14 +1333,14 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
                       disabled={isFetchingProducts}
                       className={cn(buttonVariants({ variant: "white" }), "min-w-44 text-[var(--accent)]")}
                     >
-                      {isFetchingProducts ? "Загрузка..." : "Загрузить еще"}
+                      Загрузить еще
                     </button>
                   </div>
                 ) : null}
               </div>
             ) : (
               <div className="rounded-[18px] bg-[var(--card-bg)] p-4 text-sm leading-[1.4] text-[var(--text-muted)] md:p-6">
-                {isFetchingProducts ? "Загрузка товаров..." : "Для выбранной категории пока нет товаров."}
+                Для выбранной категории пока нет товаров.
               </div>
             )}
           </div>
