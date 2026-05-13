@@ -1,4 +1,11 @@
+import type { CollectionAfterChangeHook } from "payload";
+
 import { createSettingsPageCollection } from "./page-shared.ts";
+
+const syncCatalogProductsTaxonomyOrder: CollectionAfterChangeHook = async (args) => {
+  const mod = await import("./catalog-products-taxonomy-order.ts");
+  return mod.syncCatalogProductsTaxonomyOrder(args);
+};
 
 export const CatalogProductsPage = createSettingsPageCollection({
   slug: "catalog-products-page",
@@ -69,5 +76,36 @@ export const CatalogProductsPage = createSettingsPageCollection({
       required: true,
       defaultValue: "Мерч и корпоративные подарки",
     },
+    {
+      name: "taxonomyOrderManager",
+      type: "ui",
+      label: "Порядок категорий и подкатегорий",
+      admin: {
+        components: {
+          Field: "./payload/admin/CatalogProductsTaxonomyOrderField.tsx#default",
+        },
+        custom: {
+          draftFieldPath: "taxonomyOrderDraft",
+        },
+      },
+    },
+    {
+      name: "taxonomyOrderDraft",
+      type: "textarea",
+      label: "Черновик порядка категорий",
+      admin: {
+        hidden: true,
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value }) => {
+            return typeof value === "string" ? value : "";
+          },
+        ],
+      },
+    },
   ],
+  hooks: {
+    afterChange: [syncCatalogProductsTaxonomyOrder],
+  },
 });

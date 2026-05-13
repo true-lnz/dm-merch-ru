@@ -5,7 +5,7 @@ export const MergedCatalogTaxonomy: CollectionConfig = {
   admin: {
     group: "Страница Каталог продукции",
     useAsTitle: "sourceName",
-    defaultColumns: ["nodeType", "sourceRootName", "sourceName", "displayNameOverride", "isActive"],
+    defaultColumns: ["nodeType", "sourceRootName", "sourceName", "sortOrder", "displayNameOverride", "isActive"],
   },
   labels: {
     singular: "Каталог продукции: категория",
@@ -99,9 +99,6 @@ export const MergedCatalogTaxonomy: CollectionConfig = {
       label: "Порядок",
       required: true,
       defaultValue: 0,
-      admin: {
-        hidden: true,
-      },
     },
   ],
 };
