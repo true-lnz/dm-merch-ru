@@ -4,7 +4,6 @@ import { cn } from "@/shared/lib/cn";
 import { Carousel, CarouselContent, CarouselItem, useCarousel } from "@/shared/ui/carousel";
 import type { CatalogProductsLandingArticle } from "@/widgets/catalog-products/model/types";
 import { ChevronRightIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 type CatalogProductsArticlesProps = {
@@ -85,12 +84,13 @@ export function CatalogProductsArticles({ items }: CatalogProductsArticlesProps)
                   </div>
                   {item.variant === "all-articles" ? null : (
                     <div className="relative aspect-[1740/340] mt-auto overflow-hidden rounded-[12px] border border-[rgba(42,42,42,0.08)] bg-[var(--surface)] md:rounded-[14px]">
-                      <Image
+                      <img
                         src={item.image.src}
                         alt={item.image.alt}
-                        fill
-                        sizes="(max-width: 767px) 88vw, (max-width: 1279px) 52vw, 25vw"
-                        className="object-cover object-center"
+                        loading="eager"
+                        fetchPriority="high"
+                        decoding="sync"
+                        className="absolute inset-0 h-full w-full object-cover object-center"
                       />
                     </div>
                   )}

@@ -1,5 +1,4 @@
 import type { CatalogProductsLandingPortrait } from "@/widgets/catalog-products/model/types";
-import Image from "next/image";
 import { CatalogProductsHeroCenterSvg } from "./catalog-products-hero-center-svg";
 
 type CatalogProductsHeroProps = {
@@ -41,7 +40,14 @@ export function CatalogProductsHero({ portraits }: CatalogProductsHeroProps) {
                   className="relative shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
                   style={{ height: HERO_CARD_HEIGHT, width: HERO_PORTRAIT_WIDTH }}
                 >
-                  <Image src={portrait.src} alt={portrait.alt} fill sizes="(max-width: 1279px) 12vw, 156px" className="object-cover" />
+                  <img
+                    src={portrait.src}
+                    alt={portrait.alt}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
                 </div>
               ))}
             </div>
@@ -60,7 +66,14 @@ export function CatalogProductsHero({ portraits }: CatalogProductsHeroProps) {
                   className="relative shrink-0 overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)]"
                   style={{ height: HERO_CARD_HEIGHT, width: HERO_PORTRAIT_WIDTH }}
                 >
-                  <Image src={portrait.src} alt={portrait.alt} fill sizes="(max-width: 1279px) 12vw, 156px" className="object-cover" />
+                  <img
+                    src={portrait.src}
+                    alt={portrait.alt}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
                 </div>
               ))}
             </div>
