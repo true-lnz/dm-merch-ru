@@ -7,7 +7,6 @@ type MergedCatalogTaxonomyDoc = {
   key: string;
   displayNameOverride?: string | null;
   isActive?: boolean | null;
-  sortOrder?: number | null;
 };
 
 function normalizeOverride(value: string | null | undefined) {
@@ -32,18 +31,17 @@ export const getMergedCatalogTaxonomySettings = cache(async () => {
     });
 
     const docs = result.docs as unknown as MergedCatalogTaxonomyDoc[];
-    const settings = new Map<string, { override: string | null; sortOrder: number | null }>();
+    const settings = new Map<string, { override: string | null }>();
 
     for (const doc of docs) {
       settings.set(doc.key, {
         override: normalizeOverride(doc.displayNameOverride),
-        sortOrder: typeof doc.sortOrder === "number" ? doc.sortOrder : null,
       });
     }
 
     return settings;
   } catch (error) {
     console.warn("Failed to load merged catalog taxonomy settings", error);
-    return new Map<string, { override: string | null; sortOrder: number | null }>();
+    return new Map<string, { override: string | null }>();
   }
 });
