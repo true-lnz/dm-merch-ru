@@ -13,8 +13,8 @@ import { BlogPage } from "./collections/BlogPage.ts";
 import { CaseCards } from "./collections/CaseCards.ts";
 import { CaseFilters } from "./collections/CaseFilters.ts";
 import { CasesPage } from "./collections/CasesPage.ts";
+import { CatalogCategoryPages } from "./collections/CatalogCategoryPages.ts";
 import { CatalogCategories } from "./collections/CatalogCategories.ts";
-import { CatalogPage } from "./collections/CatalogPage.ts";
 import { CatalogProductsPage } from "./collections/CatalogProductsPage.ts";
 import { ContactsPage } from "./collections/ContactsPage.ts";
 import { HomeMarquiz } from "./collections/HomeMarquiz.ts";
@@ -27,7 +27,12 @@ import { FaqGlobal } from "./globals/Faq.ts";
 import { RequestCtaGlobal } from "./globals/RequestCta.ts";
 import { Users } from "./collections/Users.ts";
 import { SiteInfoGlobal } from "./globals/SiteInfo.ts";
-import { ensureCatalogProductsPageColumns, ensureMergedCatalogTaxonomySortOrderColumn } from "./payload/ensure-catalog-products-page-columns.ts";
+import {
+  ensureCatalogCategoryColumns,
+  ensureCatalogCategoryPageColumns,
+  ensureCatalogProductsPageColumns,
+  ensureMergedCatalogTaxonomySortOrderColumn,
+} from "./payload/ensure-catalog-products-page-columns.ts";
 import { LIVE_PREVIEW_BREAKPOINTS } from "./payload/preview.ts";
 import { ensureSQLiteMediaPrefixColumn } from "./payload/ensure-sqlite-media-prefix-column.ts";
 import { extendSEOFields } from "./payload/seo-fields.ts";
@@ -79,6 +84,8 @@ const shouldGeneratePayloadTypes = !isNextBuildProcess();
 if (!isNextBuildProcess()) {
   ensureSQLiteMediaPrefixColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
   ensureCatalogProductsPageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+  ensureCatalogCategoryColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+  ensureCatalogCategoryPageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
   ensureMergedCatalogTaxonomySortOrderColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
 }
 
@@ -131,8 +138,8 @@ export default buildConfig({
     Pages,
     HomePage,
     HomeMarquiz,
-    CatalogPage,
     CatalogCategories,
+    CatalogCategoryPages,
     CatalogProductsPage,
     MergedCatalogTaxonomy,
     CasesPage,
@@ -191,7 +198,7 @@ export default buildConfig({
       },
     }),
     seoPlugin({
-      collections: ["pages", "posts", "home-page", "catalog-page", "blog-page", "catalog-products-page", "contacts-page", "cases-page"],
+      collections: ["pages", "posts", "home-page", "catalog-category-pages", "blog-page", "catalog-products-page", "contacts-page", "cases-page"],
       fields: ({ defaultFields }) => extendSEOFields(defaultFields),
       uploadsCollection: "media",
       tabbedUI: true,

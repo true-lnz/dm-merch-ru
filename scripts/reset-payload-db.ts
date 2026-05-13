@@ -83,6 +83,7 @@ async function main() {
 
   runStep("node", ["--experimental-strip-types", "scripts/import-site-info-to-payload.ts"]);
   runStep("node", ["--experimental-strip-types", "scripts/import-cases-to-payload.ts"]);
+  runStep("node", ["--experimental-strip-types", "scripts/import-catalog-categories-to-payload.ts"]);
   runStep("node", ["--experimental-strip-types", "scripts/sync-merged-catalog-taxonomy.ts"]);
   runStep("node", ["--experimental-strip-types", "scripts/import-pages-and-posts-to-payload.ts"]);
 

@@ -12,18 +12,22 @@ type CatalogProductItem = {
   title: string;
   description: string;
   imageUrl: string;
+  buttonLabel?: string;
+  customLink?: string;
   ctaHref?: string;
 };
 
 function CatalogCard({ item }: { item: CatalogProductItem }) {
-  const ctaNode = item.ctaHref ? (
-    <Link href={item.ctaHref} className={cn(buttonVariants(), "w-full")} aria-label={`Перейти в каталог: ${item.title}`}>
-      Перейти в каталог
+  const href = item.customLink || item.ctaHref;
+  const buttonLabel = item.buttonLabel || (href ? "Перейти в каталог" : "Отправить заявку");
+  const ctaNode = href ? (
+    <Link href={href} className={cn(buttonVariants(), "w-full")} aria-label={`${buttonLabel}: ${item.title}`}>
+      {buttonLabel}
     </Link>
   ) : (
     <RequestDialog source="catalog-product-card" context={item.title}>
-      <button type="button" className={cn(buttonVariants(), "w-full")} aria-label={`Отправить заявку: ${item.title}`}>
-        Отправить заявку
+      <button type="button" className={cn(buttonVariants(), "w-full")} aria-label={`${buttonLabel}: ${item.title}`}>
+        {buttonLabel}
       </button>
     </RequestDialog>
   );

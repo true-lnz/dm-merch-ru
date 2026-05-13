@@ -97,3 +97,69 @@ export function ensureMergedCatalogTaxonomySortOrderColumn(databaseURL: string) 
     db.close();
   }
 }
+
+export function ensureCatalogCategoryColumns(databaseURL: string) {
+  const sqliteFilePath = getSQLiteFilePath(databaseURL);
+
+  if (!sqliteFilePath || !fs.existsSync(sqliteFilePath)) {
+    return;
+  }
+
+  const db = new Database(sqliteFilePath);
+
+  try {
+    const categoryColumns = db.prepare(`PRAGMA table_info("catalog_categories")`).all() as TableInfoRow[];
+
+    if (categoryColumns.length === 0) {
+      return;
+    }
+
+    addColumnIfMissing(db, "catalog_categories", "slug", "TEXT");
+    addColumnIfMissing(db, "catalog_categories", "menu_order", "INTEGER DEFAULT 1 NOT NULL");
+    addColumnIfMissing(db, "catalog_categories", "is_active", "INTEGER DEFAULT 1 NOT NULL");
+  } finally {
+    db.close();
+  }
+}
+
+export function ensureCatalogCategoryPageColumns(databaseURL: string) {
+  const sqliteFilePath = getSQLiteFilePath(databaseURL);
+
+  if (!sqliteFilePath || !fs.existsSync(sqliteFilePath)) {
+    return;
+  }
+
+  const db = new Database(sqliteFilePath);
+
+  try {
+    const pageColumns = db.prepare(`PRAGMA table_info("catalog_category_pages")`).all() as TableInfoRow[];
+
+    if (pageColumns.length === 0) {
+      return;
+    }
+
+    addColumnIfMissing(db, "catalog_category_pages", "slug", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "page_type", "TEXT DEFAULT 'category'");
+    addColumnIfMissing(db, "catalog_category_pages", "category_id", "INTEGER");
+    addColumnIfMissing(db, "catalog_category_pages", "hero_title", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "hero_image_id", "INTEGER");
+    addColumnIfMissing(db, "catalog_category_pages", "cases_layout", "TEXT DEFAULT 'default'");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_title", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_description", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_image_id", "INTEGER");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_keywords", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_canonical_url", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_robots_no_index", "INTEGER");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_robots_no_follow", "INTEGER");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_open_graph_title", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_open_graph_description", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_open_graph_type", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_open_graph_image_alt", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_twitter_card", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_twitter_title", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_twitter_description", "TEXT");
+    addColumnIfMissing(db, "catalog_category_pages", "meta_twitter_image_alt", "TEXT");
+  } finally {
+    db.close();
+  }
+}

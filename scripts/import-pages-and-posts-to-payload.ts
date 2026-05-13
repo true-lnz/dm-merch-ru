@@ -34,7 +34,7 @@ type PayloadInstance = Awaited<ReturnType<typeof getPayload>> & {
   destroy: () => Promise<void>;
 };
 
-type SingletonCollection = "home-page" | "catalog-page" | "blog-page" | "catalog-products-page" | "contacts-page" | "home-marquiz";
+type SingletonCollection = "home-page" | "blog-page" | "catalog-products-page" | "contacts-page" | "home-marquiz";
 
 type PageSeed = {
   slug: "blog" | "catalog" | "catalog-products" | "cases" | "home";
@@ -294,13 +294,6 @@ async function upsertSingletonPages(payload: PayloadInstance) {
     meta: {
       title: "Главная",
       description: "Производство мерча и сувенирной продукции с логотипом для бизнеса. От 50 000₽, цена 25% от рынка, 1571+ проект. Образцы перед поставкой, договор.",
-    },
-  });
-
-  await upsertSingletonPage(payload, "catalog-page", {
-    heroTitle: "Каталог",
-    meta: {
-      title: "Каталог",
     },
   });
 

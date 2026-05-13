@@ -13,6 +13,9 @@ const CATALOG_CASES_TITLE = "Примеры реализованных рабо�
 type CatalogCaseImage = {
   src: string;
   alt: string;
+  fit?: "cover" | "contain";
+  x?: number;
+  y?: number;
 };
 
 type CatalogCaseItem = {
@@ -24,6 +27,25 @@ type CatalogCaseItem = {
 };
 
 type CatalogCasesVariant = "default" | "stacked";
+
+function getImageClassName(image: CatalogCaseImage, includeTopForCover = true) {
+  if (image.fit === "contain") {
+    return "object-contain";
+  }
+
+  return includeTopForCover ? "object-cover object-top" : "object-cover";
+}
+
+function getObjectPosition(image: CatalogCaseImage): string | undefined {
+  if (typeof image.x !== "number" && typeof image.y !== "number") {
+    return undefined;
+  }
+
+  const x = typeof image.x === "number" ? `${image.x}%` : "50%";
+  const y = typeof image.y === "number" ? `${image.y}%` : "50%";
+
+  return `${x} ${y}`;
+}
 
 function CatalogCasesCard({ item, isLast = false }: { item: CatalogCaseItem; isLast?: boolean }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -106,7 +128,8 @@ function CatalogCasesCard({ item, isLast = false }: { item: CatalogCaseItem; isL
               fill
               sizes="100vw"
               draggable={false}
-              className="pointer-events-none select-none object-cover object-top"
+              className={cn("pointer-events-none select-none", getImageClassName(activeImage))}
+              style={{ objectPosition: getObjectPosition(activeImage) }}
             />
           </div>
         </div>
@@ -145,13 +168,27 @@ function CatalogCasesCard({ item, isLast = false }: { item: CatalogCaseItem; isL
           </div>
 
           <div className="relative aspect-[870/878] overflow-hidden rounded-[18px] bg-[var(--surface)]">
-            <Image src={primaryImage.src} alt={primaryImage.alt} fill sizes="(max-width: 1279px) 46vw, 44vw" className="object-cover" />
+            <Image
+              src={primaryImage.src}
+              alt={primaryImage.alt}
+              fill
+              sizes="(max-width: 1279px) 46vw, 44vw"
+              className={getImageClassName(primaryImage, false)}
+              style={{ objectPosition: getObjectPosition(primaryImage) }}
+            />
           </div>
         </article>
       ) : (
         <article className={cn("h-full hidden md:grid md:grid-cols-[1fr_1fr] md:gap-x-5", "md:[grid-template-areas:'square_tall''text_tall']")}>
           <div className="relative aspect-square overflow-hidden rounded-[18px] bg-[var(--surface)] [grid-area:square]">
-            <Image src={primaryImage.src} alt={primaryImage.alt} fill sizes="(max-width: 1279px) 46vw, 22vw" className="object-cover" />
+            <Image
+              src={primaryImage.src}
+              alt={primaryImage.alt}
+              fill
+              sizes="(max-width: 1279px) 46vw, 22vw"
+              className={getImageClassName(primaryImage, false)}
+              style={{ objectPosition: getObjectPosition(primaryImage) }}
+            />
           </div>
 
           <div className="relative h-full min-h-[540px] overflow-hidden rounded-[18px] bg-[var(--surface)] [grid-area:tall]">
@@ -160,7 +197,8 @@ function CatalogCasesCard({ item, isLast = false }: { item: CatalogCaseItem; isL
               alt={secondaryImage.alt}
               fill
               sizes="(max-width: 1279px) 46vw, 22vw"
-              className="object-cover object-top"
+              className={getImageClassName(secondaryImage)}
+              style={{ objectPosition: getObjectPosition(secondaryImage) }}
             />
           </div>
 
@@ -197,7 +235,14 @@ function CatalogCasesStackedCard({ item, isLast = false }: { item: CatalogCaseIt
       </div>
 
       <div className="order-1 md:order-2 md:mt-auto relative aspect-[21/9] overflow-hidden rounded-[18px] bg-[var(--surface)]">
-        <Image src={primaryImage.src} alt={primaryImage.alt} fill sizes="(max-width: 1279px) 100vw, 46vw" className="object-cover object-top" />
+        <Image
+          src={primaryImage.src}
+          alt={primaryImage.alt}
+          fill
+          sizes="(max-width: 1279px) 100vw, 46vw"
+          className={getImageClassName(primaryImage)}
+          style={{ objectPosition: getObjectPosition(primaryImage) }}
+        />
       </div>
     </article>
   );

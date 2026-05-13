@@ -1,11 +1,18 @@
 import type { CollectionConfig, PayloadRequest } from "payload";
 
-type PreviewableCollection = "pages" | "posts" | "blog-page" | "catalog-products-page" | "cases-page";
+type PreviewableCollection =
+  | "pages"
+  | "posts"
+  | "blog-page"
+  | "catalog-products-page"
+  | "cases-page"
+  | "catalog-category-pages";
 type AdminCollectionSlug =
   | "pages"
   | "posts"
   | "home-page"
-  | "catalog-page"
+  | "catalog-categories"
+  | "catalog-category-pages"
   | "catalog-products-page"
   | "cases-page"
   | "blog-page";
@@ -73,6 +80,10 @@ export function resolveDocumentPath(collection: PreviewableCollection, doc: Reco
 
   if (collection === "catalog-products-page") {
     return "/catalog-products";
+  }
+
+  if (collection === "catalog-category-pages" && typeof doc.slug === "string" && doc.slug.length > 0) {
+    return `/catalog/${doc.slug}`;
   }
 
   if (collection === "cases-page") {

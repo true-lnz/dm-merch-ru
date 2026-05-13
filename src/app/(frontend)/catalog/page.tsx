@@ -1,16 +1,16 @@
 import { CatalogPage } from "@/views/catalog";
-import { getCatalogData } from "@/views/catalog/model/catalog-data";
+import { getCatalogRootMetadata, getCatalogRootPageData, normalizeCatalogCategorySlug } from "@/shared/lib/payload/catalog-pages";
 import { getDocumentAdminPath } from "@/payload/preview";
-import { getManagedPageBySlug, isDraftModeEnabled } from "@/shared/lib/payload/page-docs";
-import { getManagedPageMetadata } from "@/shared/lib/payload/page-seo";
+import { isDraftModeEnabled } from "@/shared/lib/payload/page-docs";
 import { AdminBar } from "@/shared/ui/admin-bar";
+import { permanentRedirect } from "next/navigation";
 
 type CatalogSearchParams = {
   category?: string;
 };
 
 export async function generateMetadata() {
-  return getManagedPageMetadata("catalog");
+  return getCatalogRootMetadata();
 }
 
 export default async function Page({
@@ -19,20 +19,26 @@ export default async function Page({
   searchParams: Promise<CatalogSearchParams>;
 }) {
   const { category } = await searchParams;
+
+  if (category) {
+    const normalizedSlug = normalizeCatalogCategorySlug(category);
+
+    permanentRedirect(`/catalog/${encodeURIComponent(normalizedSlug || category)}`);
+  }
+
   const isDraft = await isDraftModeEnabled();
-  const data = getCatalogData(category);
-  const page = await getManagedPageBySlug("catalog");
+  const data = await getCatalogRootPageData();
 
   return (
     <>
-      {isDraft && page ? (
+      {isDraft ? (
         <AdminBar
-          currentPath={category ? `/catalog?category=${encodeURIComponent(category)}` : "/catalog"}
-          editHref={getDocumentAdminPath("pages", page.id)}
-          title={page.title}
+          currentPath="/catalog"
+          editHref={getDocumentAdminPath("catalog-category-pages", data.id)}
+          title="Весь каталог"
         />
       ) : null}
-      <CatalogPage data={data} category={category} />
+      <CatalogPage data={data} />
     </>
   );
 }

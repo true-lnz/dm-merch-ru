@@ -41,6 +41,7 @@ export function generateSEOURL(args: {
     args.collectionSlug === "pages" ||
     args.collectionSlug === "posts" ||
     args.collectionSlug === "blog-page" ||
+    args.collectionSlug === "catalog-category-pages" ||
     args.collectionSlug === "catalog-products-page" ||
     args.collectionSlug === "cases-page"
       ? resolveDocumentPath(args.collectionSlug, args.doc)

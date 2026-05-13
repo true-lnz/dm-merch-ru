@@ -17,6 +17,7 @@
     "download:project111:images": "bash scripts/download-project111-images.sh",
     "download:project111": "bash scripts/download-project111-catalog.sh && bash scripts/download-project111-images.sh",
     "import:cases": "node --experimental-strip-types scripts/import-cases-to-payload.ts",
+    "import:catalog-categories": "node --experimental-strip-types scripts/import-catalog-categories-to-payload.ts",
     "import:site-info": "node --experimental-strip-types scripts/import-site-info-to-payload.ts",
     "import:pages-posts": "jiti scripts/import-pages-and-posts-to-payload.ts",
     "media:migrate:s3": "node --experimental-strip-types scripts/migrate-media-to-s3.ts",

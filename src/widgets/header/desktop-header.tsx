@@ -1,4 +1,4 @@
-import { headerNavigation } from "@/shared/config/navigation";
+import type { HeaderNavigationItem } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
 import {
   NavigationMenu,
@@ -23,7 +23,7 @@ import {
   usePhoneHref,
 } from "./header.shared";
 
-function DesktopNavigation({ pathname }: { pathname: string | null }) {
+function DesktopNavigation({ pathname, headerNavigation }: { pathname: string | null; headerNavigation: HeaderNavigationItem[] }) {
   return (
     <NavigationMenu
       aria-label="Основная навигация"
@@ -104,11 +104,13 @@ function TabletHeaderActions() {
 
 export function DesktopHeader({
   pathname,
+  headerNavigation,
   showWishlist,
   wishlistCount,
   onOpenWishlist,
 }: {
   pathname: string | null;
+  headerNavigation: HeaderNavigationItem[];
   showWishlist: boolean;
   wishlistCount: number;
   onOpenWishlist: () => void;
@@ -120,7 +122,7 @@ export function DesktopHeader({
           <Image src="/logo-dm.svg" alt="Держи Марку" width={273} height={37} className="h-auto w-[178px] lg:w-[204px] xl:w-[273px]" />
         </TransitionLink>
 
-        <DesktopNavigation pathname={pathname} />
+        <DesktopNavigation pathname={pathname} headerNavigation={headerNavigation} />
       </div>
 
       <TabletHeaderActions />
