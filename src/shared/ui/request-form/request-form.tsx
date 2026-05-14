@@ -7,9 +7,8 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
-  startTransition,
   useId,
   useState,
   type ChangeEvent,
@@ -155,7 +154,6 @@ export function RequestForm({
   onSuccess,
 }: RequestFormProps) {
   const messageFieldId = useId();
-  const router = useRouter();
   const pathname = usePathname();
   const [phoneDigits, setPhoneDigits] = useState("");
   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
@@ -309,9 +307,7 @@ export function RequestForm({
 
       onSuccess?.();
 
-      startTransition(() => {
-        router.push(redirectTo);
-      });
+      window.open(redirectTo, "_blank", "noopener,noreferrer");
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Не удалось отправить заявку. Попробуйте еще раз.");
     } finally {
