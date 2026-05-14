@@ -42,7 +42,7 @@ export function FaqSectionContent({ image, items, title }: FaqSectionContentProp
       <div className="-mx-[var(--layout-side-padding)] relative overflow-hidden bg-transparent lg:mx-0 rounded-[18px] md:rounded-[22.5px] lg:bg-white">
         <AspectRatio ratio={2} className="w-full lg:hidden">
           <Image
-            src={image.url}
+            src={image.mobileUrl}
             alt={image.alt}
             fill
             sizes="(max-width: 1023px) 100vw"

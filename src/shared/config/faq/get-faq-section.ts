@@ -35,6 +35,7 @@ function mapFaqImage(value: unknown, fallback: FaqSectionImage): FaqSectionImage
   }
 
   return {
+    mobileUrl: fallback.mobileUrl,
     url: value.url,
     alt: typeof value.alt === "string" ? value.alt : fallback.alt,
   };

@@ -5,6 +5,7 @@ export type FaqItem = {
 
 export type FaqSectionImage = {
   alt: string;
+  mobileUrl: string;
   url: string;
 };
 
@@ -16,6 +17,7 @@ export type FaqSectionData = {
 
 export const defaultFaqSection: FaqSectionData = {
   image: {
+    mobileUrl: "/faq/img_faq_cover_mobile.svg",
     url: "/faq/img_faq_cover_desktop.webp",
     alt: "Фото фирменных бутылок Арт-Квадрат",
   },
