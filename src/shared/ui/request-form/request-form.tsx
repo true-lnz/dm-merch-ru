@@ -243,6 +243,13 @@ export function RequestForm({
     setPhoneCaret(event.currentTarget, removeIndex);
   }
 
+  function resetFormState(form: HTMLFormElement) {
+    form.reset();
+    setPhoneDigits("");
+    setIsPhoneFocused(false);
+    setSubmitError(null);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -305,8 +312,8 @@ export function RequestForm({
 
       const redirectTo = result.redirectTo;
 
+      resetFormState(form);
       onSuccess?.();
-
       window.open(redirectTo, "_blank", "noopener,noreferrer");
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Не удалось отправить заявку. Попробуйте еще раз.");
