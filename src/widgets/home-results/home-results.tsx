@@ -1,11 +1,10 @@
 "use client";
 
 import { RequestDialog } from "@/features/request-dialog";
-import { observeElementResize } from "@/shared/lib/browser-compat";
 import { cn } from "@/shared/lib/cn";
 import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
 type HomeResultSlide = {
@@ -48,46 +47,31 @@ const RESULT_SLIDES = [
   },
 ] satisfies HomeResultSlide[];
 
-type ResultSection = {
+type ResultSectionCardProps = {
   title: string;
   text: string;
+  className?: string;
 };
 
-function getSlideSections(slide: HomeResultSlide): ResultSection[] {
-  return [
-    { title: "Было", text: slide.before },
-    { title: "Стало", text: slide.after },
-    { title: "Результат", text: slide.result },
-  ];
-}
-
-function ResultSectionCard({ section, className }: { section: ResultSection; className?: string }) {
+function ResultSectionCard({ title, text, className }: ResultSectionCardProps) {
   return (
     <article className={cn("flex min-h-0 flex-col", className)}>
-      <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{section.title}</h3>
-      <p className="mt-3 text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] md:text-base">{section.text}</p>
+      <h3 className="font-heading text-3xl leading-none uppercase text-[var(--heading)] md:text-4xl">{title}</h3>
+      <p className="mt-3 h-[6.75em] overflow-hidden text-sm leading-[1.35] tracking-[-0.03em] text-[var(--text-muted)] [display:-webkit-box] [-webkit-line-clamp:5] [-webkit-box-orient:vertical] md:h-auto md:overflow-visible md:[display:block] md:[-webkit-line-clamp:unset] md:[-webkit-box-orient:initial] md:text-base">
+        {text}
+      </p>
     </article>
   );
 }
 
 function ResultSections({ slide }: { slide: HomeResultSlide }) {
-  const sections = getSlideSections(slide);
-  const primarySections = sections.slice(0, 2);
-  const resultSection = sections[2];
-
   return (
     <div className="grid grid-cols-1 gap-y-6 xl:gap-y-7">
       <div className="grid grid-cols-1 gap-y-6 xl:grid-cols-2 xl:gap-x-[18px] xl:gap-y-7">
-        {primarySections.map((section) => (
-          <ResultSectionCard key={section.title} section={section} />
-        ))}
+        <ResultSectionCard title="Было" text={slide.before} />
+        <ResultSectionCard title="Стало" text={slide.after} />
       </div>
-
-      {resultSection ? (
-        <div className="grid grid-cols-1">
-          <ResultSectionCard section={resultSection} />
-        </div>
-      ) : null}
+      <ResultSectionCard title="Результат" text={slide.result} />
     </div>
   );
 }
@@ -121,6 +105,30 @@ function ResultActions({ onPrevClick, onNextClick, dialogContext }: ResultAction
   );
 }
 
+function ResultMedia({ activeIndex }: { activeIndex: number }) {
+  return (
+    <div className="relative aspect-square min-h overflow-hidden rounded-[18px] bg-white sm:aspect-[16/9] md:rounded-[22.5px] xl:h-full xl:min-h-[550px] xl:aspect-square 2xl:aspect-auto">
+      {RESULT_SLIDES.map((slide, index) => (
+        <div
+          key={slide.image.src}
+          className={cn(
+            "absolute inset-0 transition-opacity duration-500 bg-white",
+            index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
+        >
+          <Image
+            src={slide.image.src}
+            alt={slide.image.alt}
+            fill
+            sizes="60vw"
+            className="image-hover-scale object-cover object-top sm:object-contain md:object-cover 3xl:object-contain"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 type ResultSlideLayoutProps = {
   slide: HomeResultSlide;
   activeIndex: number;
@@ -130,44 +138,20 @@ type ResultSlideLayoutProps = {
 
 function ResultSlideLayout({ slide, activeIndex, onPrevClick, onNextClick }: ResultSlideLayoutProps) {
   return (
-    <div
-      className={cn(
-        "grid gap-6",
-        "xl:grid-cols-12 xl:gap-[27px]",
-        "xl:[grid-template-areas:'header_header_header_header_header_header_media_media_media_media_media_media''content_content_content_content_content_content_media_media_media_media_media_media''content_content_content_content_content_content_media_media_media_media_media_media''actions_actions_actions_actions_actions_actions_media_media_media_media_media_media']",
-      )}
-    >
-      <div className="order-1 xl:order-none xl:col-span-6 xl:[grid-area:header]">
+    <div className={cn("grid gap-4", "xl:grid-cols-2 xl:gap-[27px]", "xl:[grid-template-areas:'header_media''content_media''actions_media']")}>
+      <div className="order-1 xl:order-none xl:[grid-area:header]">
         <PageSubheading title={RESULTS_TITLE} description={RESULTS_DESCRIPTION} descriptionPlacement="bottom" />
       </div>
 
-      <div className="order-2 xl:order-none xl:col-span-6 xl:[grid-area:media]">
-        <div className="relative aspect-square sm:aspect-[16/9] overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] min-h xl:h-full xl:min-h-[550px] xl:aspect-auto">
-          {RESULT_SLIDES.map((item, index) => (
-            <div
-              key={item.image.src}
-              className={cn(
-                "absolute inset-0 transition-opacity duration-500",
-                index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
-              )}
-            >
-              <Image
-                src={item.image.src}
-                alt={item.image.alt}
-                fill
-                sizes="60w"
-                className="object-cover sm:object-contain 3xl:object-contain object-top 2xl:object-center image-hover-scale"
-              />
-            </div>
-          ))}
-        </div>
+      <div className="order-2 xl:order-none xl:[grid-area:media]">
+        <ResultMedia activeIndex={activeIndex} />
       </div>
 
-      <div className="order-3 xl:order-none xl:col-span-6 xl:[grid-area:content]">
+      <div className="order-3 xl:order-none xl:[grid-area:content]">
         <ResultSections slide={slide} />
       </div>
 
-      <div className="order-4 xl:order-none xl:col-span-6 xl:[grid-area:actions] xl:self-end">
+      <div className="order-4 xl:order-none xl:self-end xl:[grid-area:actions]">
         <ResultActions onPrevClick={onPrevClick} onNextClick={onNextClick} dialogContext={slide.image.alt} />
       </div>
     </div>
@@ -176,10 +160,6 @@ function ResultSlideLayout({ slide, activeIndex, onPrevClick, onNextClick }: Res
 
 export function HomeResults() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [contentHeight, setContentHeight] = useState(0);
-  const [contentWidth, setContentWidth] = useState(0);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const measureRootRef = useRef<HTMLDivElement | null>(null);
   const activeSlide = RESULT_SLIDES[activeIndex];
 
   const showPreviousSlide = () => {
@@ -190,71 +170,10 @@ export function HomeResults() {
     setActiveIndex((currentIndex) => (currentIndex + 1) % RESULT_SLIDES.length);
   };
 
-  useEffect(() => {
-    const element = contentRef.current;
-
-    if (!element || typeof ResizeObserver === "undefined") {
-      return;
-    }
-
-    const updateWidth = () => {
-      setContentWidth(element.clientWidth);
-    };
-
-    updateWidth();
-
-    const observer = new ResizeObserver(() => {
-      updateWidth();
-    });
-
-    observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    const measureRoot = measureRootRef.current;
-
-    if (!measureRoot || contentWidth === 0) {
-      return;
-    }
-
-    const measureHeights = () => {
-      const measuredSlides = Array.from(measureRoot.querySelectorAll<HTMLElement>("[data-measure-slide='true']"));
-      const nextHeight = measuredSlides.reduce((maxHeight, slideNode) => Math.max(maxHeight, slideNode.offsetHeight), 0);
-      setContentHeight((currentHeight) => (currentHeight === nextHeight ? currentHeight : nextHeight));
-    };
-
-    const frameId = window.requestAnimationFrame(measureHeights);
-    const cleanupResizeObserver = observeElementResize([measureRoot], measureHeights);
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-      cleanupResizeObserver();
-    };
-  }, [activeIndex, contentWidth]);
-
   return (
     <section className="my-[35px] md:my-[45px]">
-      <div className="">
-        <div ref={contentRef} style={contentHeight > 0 ? { height: `${contentHeight}px` } : undefined}>
-          <ResultSlideLayout slide={activeSlide} activeIndex={activeIndex} onPrevClick={showPreviousSlide} onNextClick={showNextSlide} />
-        </div>
-      </div>
-
-      <div
-        ref={measureRootRef}
-        className="pointer-events-none absolute -left-[9999px] top-0 invisible"
-        aria-hidden="true"
-        style={{ width: contentWidth || undefined }}
-      >
-        {RESULT_SLIDES.map((slide) => (
-          <div key={`measure-${slide.image.src}`} data-measure-slide="true">
-            <ResultSlideLayout slide={slide} activeIndex={activeIndex} onPrevClick={() => undefined} onNextClick={() => undefined} />
-          </div>
-        ))}
+      <div>
+        <ResultSlideLayout slide={activeSlide} activeIndex={activeIndex} onPrevClick={showPreviousSlide} onNextClick={showNextSlide} />
       </div>
     </section>
   );
