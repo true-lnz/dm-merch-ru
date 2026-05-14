@@ -2,12 +2,13 @@
 
 import type { RequestSource } from "@/shared/lib/request-mail/types";
 import { cn } from "@/shared/lib/cn";
+import { Button } from "@/shared/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import { RequestForm } from "@/shared/ui/request-form";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
 import type { ComponentPropsWithoutRef, ReactElement, ReactNode } from "react";
-import { forwardRef, useId } from "react";
+import { forwardRef, useId, useState } from "react";
 
 type RequestDialogButtonProps = Omit<ComponentPropsWithoutRef<"button">, "children"> & {
   label?: ReactNode;
@@ -93,11 +94,21 @@ export function RequestDialog({
   context,
   privacyCheckboxId,
 }: RequestDialogProps) {
+  const [open, setOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const generatedPrivacyCheckboxId = useId();
   const resolvedPrivacyCheckboxId = privacyCheckboxId ?? `request-dialog-privacy-${generatedPrivacyCheckboxId}`;
 
+  function handleOpenChange(nextOpen: boolean) {
+    setOpen(nextOpen);
+
+    if (!nextOpen) {
+      setSubmitted(false);
+    }
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger render={children} />
 
       <DialogContent
@@ -119,13 +130,30 @@ export function RequestDialog({
           </DialogClose>
         </div>
 
-        <RequestForm
-          source={source}
-          context={context}
-          includeEmail={false}
-          privacyCheckboxId={resolvedPrivacyCheckboxId}
-          formClassName="space-y-3 xl:space-y-4"
-        />
+        {submitted ? (
+          <div className="space-y-5 xl:space-y-6">
+            <div className="rounded-[14px] bg-white/90 p-5 xl:p-6">
+              <p className="text-xl font-semibold leading-[1.2] tracking-[-0.03em] text-[var(--heading)]">Заявка отправлена</p>
+              <p className="mt-3 text-sm leading-[1.5] tracking-[-0.02em] text-[var(--text)] xl:text-base">
+                Мы получили ваш запрос и скоро свяжемся с вами, чтобы обсудить задачу и подготовить расчет. Страница с подтверждением открыта в новой
+                вкладке.
+              </p>
+            </div>
+
+            <Button type="button" variant="blue" className="h-[47px] w-full text-lg" onClick={() => handleOpenChange(false)}>
+              Закрыть
+            </Button>
+          </div>
+        ) : (
+          <RequestForm
+            source={source}
+            context={context}
+            includeEmail={false}
+            privacyCheckboxId={resolvedPrivacyCheckboxId}
+            formClassName="space-y-3 xl:space-y-4"
+            onSuccess={() => setSubmitted(true)}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
