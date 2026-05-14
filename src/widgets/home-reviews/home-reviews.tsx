@@ -272,9 +272,8 @@ export function HomeReviews() {
               ))}
             </div>
           </div>
-
           <SliderControl
-            className="mt-auto"
+            className="mt-auto justify-center md:justify-start"
             onPrevClick={showPreviousReview}
             onNextClick={showNextReview}
             prevDisabled={isFirstSlide}
