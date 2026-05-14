@@ -1,6 +1,5 @@
-import type { RequestPayload, RequestSource, WishlistRequestItem } from "./types";
-
-const rubFormatter = new Intl.NumberFormat("ru-RU");
+import { formatRub, requestSourceLabels } from "./request-formatters";
+import type { RequestPayload, WishlistRequestItem } from "./types";
 const ACCENT_COLOR = "#0252c5";
 const SITE_ORIGIN = "https://dm-merch.ru";
 const HEADER_LOGO_SVG = `
@@ -45,33 +44,12 @@ const HEADER_LOGO_SVG = `
   </svg>
 `;
 
-const sourceLabels: Record<RequestSource, string> = {
-  "request-cta": "CTA-блок",
-  "home-lead-cta": "Блок с примерами мерча",
-  "request-dialog": "Модалка заявки",
-  "catalog-work-stages": "Этапы работы в каталоге",
-  "catalog-product-card": "Карточка товара",
-  "home-digest-card": "Карточка подборки",
-  "home-hero": "Главный экран",
-  "catalog-hero": "Hero каталога",
-  "catalog-products-hero": "Hero каталога продукции",
-  "home-results": "Блок результатов",
-  "home-services": "Блок услуг",
-  "home-urgent-order": "Срочный заказ",
-  "contacts-page": "Страница контактов",
-  "wishlist-dialog": "Вишлист",
-};
-
 function escapeHtml(value: string) {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 }
 
 function nl2br(value: string) {
   return escapeHtml(value).replaceAll("\n", "<br />");
-}
-
-function formatRub(value: number) {
-  return `${rubFormatter.format(value)} ₽`;
 }
 
 function formatDateTime(value: Date) {
@@ -141,7 +119,7 @@ function renderLayout(title: string, content: string) {
 }
 
 function buildGeneralContent(payload: Extract<RequestPayload, { type: "general" }>, createdAt: Date) {
-  const sourceLabel = sourceLabels[payload.source];
+  const sourceLabel = requestSourceLabels[payload.source];
   const emailValue = payload.email ? escapeHtml(payload.email) : '<span style="color:#9ca3af; font-weight:500;">Не указан</span>';
   const messageValue = payload.message ? nl2br(payload.message) : '<span style="color:#9ca3af; font-weight:500;">Без комментария</span>';
   const quantityValue =
@@ -261,7 +239,7 @@ function buildWishlistContent(payload: Extract<RequestPayload, { type: "wishlist
             ${renderDetailRow("Имя", escapeHtml(payload.name))}
             ${renderDetailRow("Телефон", escapeHtml(payload.phone))}
             ${renderDetailRow("Email", emailValue)}
-            ${renderDetailRow("Источник", escapeHtml(sourceLabels[payload.source]))}
+            ${renderDetailRow("Источник", escapeHtml(requestSourceLabels[payload.source]))}
             ${renderDetailRow("Страница", pageValue)}
             ${renderDetailRow("Получено", escapeHtml(formatDateTime(createdAt)))}
           </table>
@@ -301,7 +279,7 @@ export function buildRequestEmail(payload: RequestPayload) {
     };
   }
 
-  const sourceLabel = sourceLabels[payload.source];
+  const sourceLabel = requestSourceLabels[payload.source];
 
   return {
     subject: `Новая заявка • ${sourceLabel}${payload.context ? ` • ${payload.context}` : ""}`,

@@ -1,4 +1,5 @@
 import type { RequestErrorResponse, RequestPayload, RequestSuccessResponse, WishlistRequestItem } from "@/shared/lib/request-mail/types";
+import { getBitrixLeadErrorDetails, sendBitrixLead } from "@/shared/lib/request-mail/send-bitrix-lead";
 import { sendRequestEmail } from "@/shared/lib/request-mail/send-request-email";
 import { NextResponse } from "next/server";
 
@@ -183,6 +184,16 @@ export async function POST(request: Request) {
     const payload = parseRequestPayload(body);
 
     await sendRequestEmail(payload);
+    try {
+      await sendBitrixLead(payload);
+    } catch (error) {
+      console.error("[requests] failed to create Bitrix24 lead", {
+        requestType: payload.type,
+        source: payload.source,
+        pagePath: payload.pagePath,
+        ...getBitrixLeadErrorDetails(error),
+      });
+    }
 
     const responseBody: RequestSuccessResponse = {
       ok: true,
@@ -214,7 +225,7 @@ export async function POST(request: Request) {
         return buildError("Почтовый сервер недоступен. Повторите попытку позже.", 503);
       }
 
-      console.error("[requests] failed to send request email", error);
+      console.error("[requests] failed to process request", error);
     }
 
     return buildError("Не удалось отправить заявку. Попробуйте еще раз.", 500);
