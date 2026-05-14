@@ -142,7 +142,7 @@ function ResultSlideLayout({ slide, activeIndex, onPrevClick, onNextClick }: Res
       </div>
 
       <div className="order-2 xl:order-none xl:col-span-6 xl:[grid-area:media]">
-        <div className="relative aspect-square overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] min-h xl:h-full xl:min-h-[550px] xl:aspect-auto">
+        <div className="relative aspect-square sm:aspect-[16/9] overflow-hidden rounded-[18px] bg-white md:rounded-[22.5px] min-h xl:h-full xl:min-h-[550px] xl:aspect-auto">
           {RESULT_SLIDES.map((item, index) => (
             <div
               key={item.image.src}
@@ -156,7 +156,7 @@ function ResultSlideLayout({ slide, activeIndex, onPrevClick, onNextClick }: Res
                 alt={item.image.alt}
                 fill
                 sizes="60w"
-                className="object-cover 3xl:object-contain object-top 2xl:object-center image-hover-scale"
+                className="object-cover sm:object-contain 3xl:object-contain object-top 2xl:object-center image-hover-scale"
               />
             </div>
           ))}
