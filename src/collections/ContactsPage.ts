@@ -5,6 +5,7 @@ export const ContactsPage = createSettingsPageCollection({
   singular: "Контакты: настройки",
   plural: "Контакты: настройки",
   adminGroup: "Страница Контактов",
+  allowCreate: false,
   previewPath: "/contacts",
   extraFields: [
     {

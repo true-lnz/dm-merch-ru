@@ -5,5 +5,6 @@ export const BlogPage = createSettingsPageCollection({
   singular: "Блог: настройки",
   plural: "Блог: настройки",
   adminGroup: "Страница Блог",
+  allowCreate: false,
   previewPath: "/blog",
 });

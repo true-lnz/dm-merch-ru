@@ -5,5 +5,6 @@ export const HomePage = createSettingsPageCollection({
   singular: "Главная: настройки",
   plural: "Главная: настройки",
   adminGroup: "Страница Главная",
+  allowCreate: false,
   previewPath: "/",
 });

@@ -12,6 +12,7 @@ export const CatalogProductsPage = createSettingsPageCollection({
   singular: "Каталог продукции: настройки",
   plural: "Каталог продукции: настройки",
   adminGroup: "Страница Каталог продукции",
+  allowCreate: false,
   previewPath: "/catalog-products",
   includeHeroTitle: false,
   defaultColumns: ["categoriesHeading", "updatedAt"],

@@ -5,5 +5,6 @@ export const CasesPage = createSettingsPageCollection({
   singular: "Кейсы: настройки",
   plural: "Кейсы: настройки",
   adminGroup: "Страница Кейсы",
+  allowCreate: false,
   previewPath: "/cases",
 });

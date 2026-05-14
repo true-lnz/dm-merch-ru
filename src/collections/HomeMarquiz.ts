@@ -35,7 +35,7 @@ export const HomeMarquiz: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req }) => Boolean(req.user),
+    create: () => false,
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
   },

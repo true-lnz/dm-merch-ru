@@ -11,6 +11,7 @@ export function createSettingsPageCollection(args: {
   defaultColumns?: string[];
   extraFields?: Field[];
   includeHeroTitle?: boolean;
+  allowCreate?: boolean;
   hooks?: CollectionConfig["hooks"];
 }): CollectionConfig {
   return {
@@ -29,7 +30,7 @@ export function createSettingsPageCollection(args: {
     },
     access: {
       read: () => true,
-      create: ({ req }) => Boolean(req.user),
+      create: ({ req }) => (args.allowCreate ?? true) && Boolean(req.user),
       update: ({ req }) => Boolean(req.user),
       delete: ({ req }) => Boolean(req.user),
     },
