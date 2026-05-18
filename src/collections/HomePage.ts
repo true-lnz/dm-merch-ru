@@ -45,11 +45,31 @@ const featureCardsArrayField = (name: string, label: string): Field => ({
   fields: [textField("title", "Заголовок"), textareaField("description", "Описание"), textField("backgroundImageUrl", "Фон / URL изображения")],
 });
 
+const digestCardGroupField = (name: string, label: string, variant: "default" | "wild"): Field => ({
+  name,
+  type: "group",
+  label,
+  fields: [
+    textareaField("title", "Заголовок"),
+    textareaField("description", "Описание"),
+    ...(variant === "wild"
+      ? [
+          textareaField("mobileDescription", "Короткое описание для мобильной версии", true),
+          textareaField("details", "Дополнительный текст", true),
+          textField("backgroundImageSrc", "Фон расширенной карточки"),
+        ]
+      : []),
+    mediaUploadField("image", "Изображение"),
+  ],
+});
+
 export const HomePage = createSettingsPageCollection({
   slug: "home-page",
   singular: "Главная: настройки",
   plural: "Главная: настройки",
   adminGroup: "Страница Главная",
+  allowCreate: false,
+  includeHeroTitle: false,
   previewPath: "/",
   extraFields: [
     {
@@ -57,7 +77,7 @@ export const HomePage = createSettingsPageCollection({
       type: "group",
       label: "Hero-блок",
       fields: [
-        textField("title", "Заголовок"),
+        textareaField("title", "Заголовок"),
         textareaField("description", "Описание"),
         mediaUploadField("image", "Изображение"),
         {
@@ -69,11 +89,12 @@ export const HomePage = createSettingsPageCollection({
         {
           name: "features",
           type: "array",
-          label: "Преимущества",
+          label: "Блок Преимущества",
           minRows: 1,
+          maxRows: 3,
           labels: {
-            singular: "Преимущество",
-            plural: "Преимущества",
+            singular: "Блок Преимущества",
+            plural: "Блок Преимущества",
           },
           fields: [textareaField("text", "Текст")],
         },
@@ -82,59 +103,22 @@ export const HomePage = createSettingsPageCollection({
     {
       name: "digest",
       type: "group",
-      label: "Дайджест направлений",
+      label: "Блок Дайджест направлений",
       fields: [
-        textField("title", "Заголовок"),
+        textareaField("title", "Заголовок"),
         textareaField("description", "Описание"),
-        {
-          name: "cards",
-          type: "array",
-          label: "Карточки дайджеста",
-          minRows: 1,
-          labels: {
-            singular: "Карточка",
-            plural: "Карточки дайджеста",
-          },
-          fields: [
-            {
-              name: "cardKey",
-              type: "select",
-              label: "Идентификатор карточки",
-              required: true,
-              options: [
-                { label: "Подарки для партнеров", value: "partners" },
-                { label: "Мерч для мероприятий", value: "events" },
-                { label: "Мерч для команды", value: "team" },
-                { label: "Сувенирная продукция", value: "souvenirs" },
-                { label: "Корпоративная униформа", value: "uniform" },
-                { label: "Корпоративная спецодежда", value: "workwear" },
-              ],
-            },
-            {
-              name: "variant",
-              type: "select",
-              label: "Тип карточки",
-              required: true,
-              defaultValue: "default",
-              options: [
-                { label: "Обычная", value: "default" },
-                { label: "Расширенная", value: "wild" },
-              ],
-            },
-            textField("title", "Заголовок"),
-            textareaField("description", "Описание"),
-            textareaField("mobileDescription", "Короткое описание для мобильной версии", false),
-            textareaField("details", "Дополнительный текст", false),
-            textField("backgroundImageSrc", "Фон расширенной карточки", false),
-            mediaUploadField("image", "Изображение"),
-          ],
-        },
+        digestCardGroupField("partnersCard", "Карточка 1 Default", "default"),
+        digestCardGroupField("eventsCard", "Карточка 2 Default", "default"),
+        digestCardGroupField("teamCard", "Карточка 3 Accent", "wild"),
+        digestCardGroupField("souvenirsCard", "Карточка 4 Accent", "wild"),
+        digestCardGroupField("uniformCard", "Карточка 5 Default", "default"),
+        digestCardGroupField("workwearCard", "Карточка 6 Default", "default"),
       ],
     },
     {
       name: "results",
       type: "group",
-      label: "Блок кейсов с результатом",
+      label: "Блок Кейсов с результатом",
       fields: [
         ...linkTitleDescriptionFields(true),
         {
@@ -158,7 +142,7 @@ export const HomePage = createSettingsPageCollection({
     {
       name: "services",
       type: "group",
-      label: "Блок услуг",
+      label: "Блок Услуг",
       fields: [
         textField("title", "Заголовок"),
         mediaUploadField("image", "Изображение"),
@@ -178,19 +162,24 @@ export const HomePage = createSettingsPageCollection({
     {
       name: "benefits",
       type: "group",
-      label: "Блок преимуществ: дизайн-отдел",
+      label: "Блок Преимуществ: дизайн-отдел",
       fields: [textField("title", "Заголовок"), textareaField("description", "Описание", false), featureCardsArrayField("items", "Карточки")],
     },
     {
       name: "leadCta",
       type: "group",
-      label: "Блок отправки примеров",
-      fields: [textField("title", "Заголовок"), textareaField("description", "Описание"), mediaUploadField("image", "Изображение"), textField("submitLabel", "Текст кнопки")],
+      label: "Блок Отправки примеров",
+      fields: [
+        textField("title", "Заголовок"),
+        textareaField("description", "Описание"),
+        mediaUploadField("image", "Изображение"),
+        textField("submitLabel", "Текст кнопки"),
+      ],
     },
     {
       name: "partnerProducts",
       type: "group",
-      label: "Блок каталожных направлений",
+      label: "Блок Каталожных направлений",
       fields: [
         textField("title", "Заголовок"),
         textareaField("description", "Описание"),
@@ -207,7 +196,7 @@ export const HomePage = createSettingsPageCollection({
             textField("title", "Заголовок"),
             textareaField("description", "Описание"),
             mediaUploadField("image", "Изображение"),
-            textField("href", "Ссылка"),
+            textField("href", "Ссылка при клике на кнопку"),
           ],
         },
       ],
@@ -215,9 +204,9 @@ export const HomePage = createSettingsPageCollection({
     {
       name: "urgentOrder",
       type: "group",
-      label: "Блок срочного заказа",
+      label: "Блок Срочного заказа",
       fields: [
-        textField("title", "Заголовок"),
+        textareaField("title", "Заголовок"),
         mediaUploadField("image", "Изображение"),
         textField("ctaLabel", "Текст кнопки"),
         {
@@ -236,13 +225,13 @@ export const HomePage = createSettingsPageCollection({
     {
       name: "reviews",
       type: "group",
-      label: "Отзывы",
+      label: "Блок Отзывов",
       fields: [
-        textField("title", "Заголовок"),
+        textareaField("title", "Заголовок"),
         {
           name: "items",
           type: "array",
-          label: "Отзывы",
+          label: "Карточки отзывов",
           minRows: 1,
           labels: {
             singular: "Отзыв",
@@ -251,7 +240,7 @@ export const HomePage = createSettingsPageCollection({
           fields: [
             textField("company", "Компания"),
             textField("name", "Имя"),
-            textField("role", "Роль"),
+            textField("role", "Должность / Роль"),
             mediaUploadField("image", "Изображение"),
             mediaUploadField("avatar", "Аватар"),
             {
@@ -272,28 +261,29 @@ export const HomePage = createSettingsPageCollection({
     {
       name: "workStages",
       type: "group",
-      label: "Этапы работы",
+      label: "Блок Этапы работы",
       fields: [
-        textField("title", "Заголовок"),
+        textareaField("title", "Заголовок"),
         textareaField("description", "Описание"),
         {
           name: "items",
           type: "array",
           label: "Этапы",
-          minRows: 1,
+          minRows: 4,
+          maxRows: 4,
           labels: {
             singular: "Этап",
             plural: "Этапы",
           },
-          fields: [textField("number", "Номер"), textField("title", "Заголовок"), textareaField("description", "Описание", true, 4)],
+          fields: [textField("number", "Номер"), textareaField("title", "Заголовок"), textareaField("description", "Описание", true, 4)],
         },
       ],
     },
     {
       name: "features",
       type: "group",
-      label: "Блок преимуществ перед конкурентами",
-      fields: [textField("title", "Заголовок"), textareaField("description", "Описание", false), featureCardsArrayField("items", "Карточки")],
+      label: "Блок Преимуществ перед конкурентами",
+      fields: [textareaField("title", "Заголовок"), textareaField("description", "Описание", false), featureCardsArrayField("items", "Карточки")],
     },
     {
       name: "layoutBlocks",

@@ -111,7 +111,7 @@ export function ContentCard({
         <div className="flex flex-1 flex-col justify-between gap-[9px] mb-[18px] md:mb-[18px]">
           <h3
             className={cn(
-              "xl:whitespace-pre-line font-heading text-3xl md:text-4xl leading-[0.95] tracking-[0.01em] text-[var(--heading)]",
+              "whitespace-pre-line font-heading text-3xl md:text-4xl leading-[0.95] tracking-[0.01em] text-[var(--heading)]",
               titleClassName,
             )}
           >

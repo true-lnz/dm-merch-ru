@@ -100,7 +100,7 @@ function DigestDefaultCard({ item, layout, isContentVisible }: { item: HomeDiges
 
       <div className="flex flex-1 flex-col px-5 pb-5 p-[18px] md:p-[27px]">
         <div className={cn("flex-1", contentTransitionClass)}>
-          <h3 className="font-heading text-3xl md:text-5xl leading-[0.94] tracking-[0.015em] text-[var(--heading)] uppercase">{item.title}</h3>
+          <h3 className="font-heading whitespace-pre-line text-3xl md:text-5xl leading-[0.94] tracking-[0.015em] text-[var(--heading)] uppercase">{item.title}</h3>
           <p className="mt-[10px] max-w-[19rem] text-sm md:text-base leading-[1.3] tracking-[-0.04em] text-[#404040] md:mt-3 md:max-w-[17.5rem]">
             {item.description}
           </p>

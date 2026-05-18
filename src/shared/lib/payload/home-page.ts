@@ -194,6 +194,15 @@ const DEFAULT_HOME_DIGEST_CARDS_BY_ID = DIGEST_CARDS.reduce<Record<HomeDigestCar
   return acc;
 }, {} as Record<HomeDigestCardId, HomeDigestCard>);
 
+const HOME_DIGEST_CARD_FIELD_MAP = {
+  partners: "partnersCard",
+  events: "eventsCard",
+  team: "teamCard",
+  souvenirs: "souvenirsCard",
+  uniform: "uniformCard",
+  workwear: "workwearCard",
+} as const satisfies Record<HomeDigestCardId, string>;
+
 export const defaultHomePageData: HomePageData = {
   hero: {
     title: "Мерч, который\nработает на бизнес",
@@ -571,6 +580,12 @@ type HomePageDocument = {
     title?: unknown;
     description?: unknown;
     cards?: unknown;
+    partnersCard?: unknown;
+    eventsCard?: unknown;
+    teamCard?: unknown;
+    souvenirsCard?: unknown;
+    uniformCard?: unknown;
+    workwearCard?: unknown;
   } | null;
   results?: {
     title?: unknown;
@@ -621,6 +636,8 @@ type HomePageDocument = {
   } | null;
   layoutBlocks?: unknown;
 } | null;
+
+type HomeDigestDocument = NonNullable<HomePageDocument>["digest"];
 
 function pickString(value: unknown, fallback: string) {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
@@ -678,7 +695,20 @@ function mapHeroFeatures(value: unknown, fallback: HomeHeroFeature[]) {
   return items.length > 0 ? items : fallback;
 }
 
-function mapDigestCards(value: unknown, fallback: HomeDigestCard[]) {
+function mapDigestCardImage(value: unknown, fallback: HomeDigestCard) {
+  const imageDoc = mapCmsImage(value, fallback.image.alt);
+
+  return imageDoc
+    ? {
+        src: imageDoc.url,
+        alt: imageDoc.alt,
+        sizes: fallback.image.sizes,
+        imageClassName: fallback.image.imageClassName,
+      }
+    : fallback.image;
+}
+
+function mapLegacyDigestCards(value: unknown, fallback: HomeDigestCard[]) {
   if (!Array.isArray(value)) {
     return fallback;
   }
@@ -697,15 +727,7 @@ function mapDigestCards(value: unknown, fallback: HomeDigestCard[]) {
       const variant = item.variant === "wild" ? "wild" : item.variant === "default" ? "default" : null;
       const title = typeof item.title === "string" ? item.title.trim() : "";
       const description = typeof item.description === "string" ? item.description.trim() : "";
-      const imageDoc = mapCmsImage(item.image, DEFAULT_HOME_DIGEST_CARDS_BY_ID[id].image.alt);
-      const image = imageDoc
-        ? {
-            src: imageDoc.url,
-            alt: imageDoc.alt,
-            sizes: DEFAULT_HOME_DIGEST_CARDS_BY_ID[id].image.sizes,
-            imageClassName: DEFAULT_HOME_DIGEST_CARDS_BY_ID[id].image.imageClassName,
-          }
-        : DEFAULT_HOME_DIGEST_CARDS_BY_ID[id].image;
+      const image = mapDigestCardImage(item.image, DEFAULT_HOME_DIGEST_CARDS_BY_ID[id]);
 
       if (!variant || !title || !description) {
         return null;
@@ -743,6 +765,53 @@ function mapDigestCards(value: unknown, fallback: HomeDigestCard[]) {
     .filter((item): item is HomeDigestCard => item !== null);
 
   return items.length > 0 ? items : fallback;
+}
+
+function mapFixedDigestCards(value: HomeDigestDocument, fallback: HomeDigestCard[]) {
+  if (!isRecord(value)) {
+    return fallback;
+  }
+
+  const hasAnyFixedCard = Object.values(HOME_DIGEST_CARD_FIELD_MAP).some((fieldName) => fieldName in value);
+  if (!hasAnyFixedCard) {
+    return fallback;
+  }
+
+  return (Object.entries(HOME_DIGEST_CARD_FIELD_MAP) as [HomeDigestCardId, (typeof HOME_DIGEST_CARD_FIELD_MAP)[HomeDigestCardId]][])
+    .map(([id, fieldName]) => {
+      const fallbackCard = DEFAULT_HOME_DIGEST_CARDS_BY_ID[id];
+      const source = value[fieldName];
+
+      if (!isRecord(source)) {
+        return fallbackCard;
+      }
+
+      const title = pickString(source.title, fallbackCard.title);
+      const description = pickString(source.description, fallbackCard.description);
+      const image = mapDigestCardImage(source.image, fallbackCard);
+
+      if (fallbackCard.variant === "wild") {
+        return {
+          id,
+          variant: "wild",
+          title,
+          description,
+          mobileDescription: pickString(source.mobileDescription, fallbackCard.mobileDescription),
+          details: pickString(source.details, fallbackCard.details),
+          backgroundImageSrc: pickString(source.backgroundImageSrc, fallbackCard.backgroundImageSrc),
+          image,
+        } satisfies HomeDigestCard;
+      }
+
+      return {
+        id,
+        variant: "default",
+        title,
+        description,
+        image,
+      } satisfies HomeDigestCard;
+    })
+    .filter((item): item is HomeDigestCard => item !== null);
 }
 
 function mapResultsSlides(value: unknown, fallback: HomeResultSlide[]) {
@@ -972,7 +1041,7 @@ export const getHomePageData = cache(async (): Promise<HomePageData> => {
       digest: {
         title: pickString(doc.digest?.title, defaultHomePageData.digest.title),
         description: pickString(doc.digest?.description, defaultHomePageData.digest.description),
-        cards: mapDigestCards(doc.digest?.cards, defaultHomePageData.digest.cards),
+        cards: mapFixedDigestCards(doc.digest, mapLegacyDigestCards(doc.digest?.cards, defaultHomePageData.digest.cards)),
       },
       results: {
         title: pickString(doc.results?.title, defaultHomePageData.results.title),

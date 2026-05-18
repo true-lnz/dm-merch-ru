@@ -7,10 +7,17 @@ function trimText(value: string | null | undefined): string {
 }
 
 export function generateSEOTitle(args: { doc: Record<string, unknown> }): string {
+  const heroGroup = args.doc.hero;
+  const heroTitle =
+    heroGroup && typeof heroGroup === "object" && "title" in heroGroup && typeof heroGroup.title === "string"
+      ? heroGroup.title
+      : undefined;
+
   return trimText(
     (args.doc.metaTitle as string | undefined) ||
       (args.doc.title as string | undefined) ||
-      (args.doc.heroTitle as string | undefined),
+      (args.doc.heroTitle as string | undefined) ||
+      heroTitle,
   );
 }
 

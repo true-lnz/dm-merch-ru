@@ -275,7 +275,6 @@ export interface Page {
  */
 export interface HomePage {
   id: number;
-  heroTitle: string;
   hero: {
     title: string;
     description: string;
@@ -1262,7 +1261,6 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
-  heroTitle?: T;
   hero?:
     | T
     | {

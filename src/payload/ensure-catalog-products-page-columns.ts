@@ -17,6 +17,17 @@ type TableInfoRow = {
   name?: unknown;
 };
 
+type HomeDigestCardRow = {
+  _parent_id?: unknown;
+  card_key?: unknown;
+  title?: unknown;
+  description?: unknown;
+  mobile_description?: unknown;
+  details?: unknown;
+  background_image_src?: unknown;
+  image_id?: unknown;
+};
+
 function getSQLiteFilePath(databaseURL: string) {
   if (!databaseURL.startsWith("file:")) {
     return null;
@@ -111,6 +122,76 @@ function rebuildLegacyHomePageDigestCardsTable(db: SQLiteDatabase, digestCardCol
   db.prepare(`CREATE INDEX "home_page_digest_cards_image_idx" ON "home_page_digest_cards" ("image_id")`).run();
   db.prepare(`CREATE INDEX "home_page_digest_cards_order_idx" ON "home_page_digest_cards" ("_order")`).run();
   db.prepare(`CREATE INDEX "home_page_digest_cards_parent_id_idx" ON "home_page_digest_cards" ("_parent_id")`).run();
+}
+
+function backfillHomePageDigestCards(db: SQLiteDatabase, digestCardColumns: TableInfoRow[]) {
+  if (digestCardColumns.length === 0 || !digestCardColumns.some((column) => column.name === "card_key")) {
+    return;
+  }
+
+  const rows = db.prepare(`
+    SELECT
+      "_parent_id",
+      "card_key",
+      "title",
+      "description",
+      "mobile_description",
+      "details",
+      "background_image_src",
+      "image_id"
+    FROM "home_page_digest_cards"
+    WHERE "card_key" IS NOT NULL AND TRIM("card_key") != ''
+  `).all() as HomeDigestCardRow[];
+
+  const cardConfigByKey: Record<string, { prefix: string; isWild: boolean }> = {
+    partners: { prefix: "digest_partners_card", isWild: false },
+    events: { prefix: "digest_events_card", isWild: false },
+    team: { prefix: "digest_team_card", isWild: true },
+    souvenirs: { prefix: "digest_souvenirs_card", isWild: true },
+    uniform: { prefix: "digest_uniform_card", isWild: false },
+    workwear: { prefix: "digest_workwear_card", isWild: false },
+  };
+
+  for (const row of rows) {
+    const parentId = typeof row._parent_id === "number" ? row._parent_id : Number(row._parent_id);
+    const cardKey = typeof row.card_key === "string" ? row.card_key : "";
+    const cardConfig = cardConfigByKey[cardKey];
+
+    if (!cardConfig || !Number.isFinite(parentId)) {
+      continue;
+    }
+
+    const assignments = [
+      `"${cardConfig.prefix}_title" = COALESCE(NULLIF(TRIM("${cardConfig.prefix}_title"), ''), ?)`,
+      `"${cardConfig.prefix}_description" = COALESCE(NULLIF(TRIM("${cardConfig.prefix}_description"), ''), ?)`,
+    ];
+    const params: Array<number | string | null> = [
+      typeof row.title === "string" ? row.title : null,
+      typeof row.description === "string" ? row.description : null,
+    ];
+
+    if (cardConfig.isWild) {
+      assignments.push(
+        `"${cardConfig.prefix}_mobile_description" = COALESCE(NULLIF(TRIM("${cardConfig.prefix}_mobile_description"), ''), ?)`,
+        `"${cardConfig.prefix}_details" = COALESCE(NULLIF(TRIM("${cardConfig.prefix}_details"), ''), ?)`,
+        `"${cardConfig.prefix}_background_image_src" = COALESCE(NULLIF(TRIM("${cardConfig.prefix}_background_image_src"), ''), ?)`,
+      );
+      params.push(
+        typeof row.mobile_description === "string" ? row.mobile_description : null,
+        typeof row.details === "string" ? row.details : null,
+        typeof row.background_image_src === "string" ? row.background_image_src : null,
+      );
+    }
+
+    assignments.push(`"${cardConfig.prefix}_image_id" = COALESCE("${cardConfig.prefix}_image_id", ?)`);
+    params.push(typeof row.image_id === "number" ? row.image_id : row.image_id == null ? null : Number(row.image_id), parentId);
+
+    db.prepare(`
+      UPDATE "home_page"
+      SET ${assignments.join(",\n        ")}
+      WHERE "id" = ?
+    `).run(...params);
+  }
 }
 
 export function ensureCatalogProductsPageColumns(databaseURL: string) {
@@ -253,11 +334,37 @@ export function ensureHomePageColumns(databaseURL: string) {
     }
 
     addColumnIfMissing(db, "home_page", "hero_show_cases_button", "INTEGER DEFAULT true");
+    addColumnIfMissing(db, "home_page", "digest_partners_card_title", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_partners_card_description", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_partners_card_image_id", "INTEGER");
+    addColumnIfMissing(db, "home_page", "digest_events_card_title", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_events_card_description", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_events_card_image_id", "INTEGER");
+    addColumnIfMissing(db, "home_page", "digest_team_card_title", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_team_card_description", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_team_card_mobile_description", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_team_card_details", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_team_card_background_image_src", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_team_card_image_id", "INTEGER");
+    addColumnIfMissing(db, "home_page", "digest_souvenirs_card_title", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_souvenirs_card_description", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_souvenirs_card_mobile_description", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_souvenirs_card_details", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_souvenirs_card_background_image_src", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_souvenirs_card_image_id", "INTEGER");
+    addColumnIfMissing(db, "home_page", "digest_uniform_card_title", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_uniform_card_description", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_uniform_card_image_id", "INTEGER");
+    addColumnIfMissing(db, "home_page", "digest_workwear_card_title", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_workwear_card_description", "TEXT");
+    addColumnIfMissing(db, "home_page", "digest_workwear_card_image_id", "INTEGER");
     let digestCardColumns = db.prepare(`PRAGMA table_info("home_page_digest_cards")`).all() as TableInfoRow[];
     if (digestCardColumns.length > 0) {
       addColumnIfMissing(db, "home_page_digest_cards", "card_key", "TEXT");
       digestCardColumns = db.prepare(`PRAGMA table_info("home_page_digest_cards")`).all() as TableInfoRow[];
       rebuildLegacyHomePageDigestCardsTable(db, digestCardColumns);
+      digestCardColumns = db.prepare(`PRAGMA table_info("home_page_digest_cards")`).all() as TableInfoRow[];
+      backfillHomePageDigestCards(db, digestCardColumns);
     }
 
     db.prepare(`

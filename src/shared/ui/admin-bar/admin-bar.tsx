@@ -9,6 +9,7 @@ type AdminBarProps = {
 export function AdminBar({ currentPath, editHref, title }: AdminBarProps) {
   return (
     <div
+      className="-mx-[var(--layout-side-padding)]"
       style={{
         position: "sticky",
         top: 0,
