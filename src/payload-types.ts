@@ -72,8 +72,8 @@ export interface Config {
     pages: Page;
     'home-page': HomePage;
     'home-marquiz': HomeMarquiz;
-    'catalog-page': CatalogPage;
     'catalog-categories': CatalogCategory;
+    'catalog-category-pages': CatalogCategoryPage;
     'catalog-products-page': CatalogProductsPage;
     'merged-catalog-taxonomy': MergedCatalogTaxonomy;
     'cases-page': CasesPage;
@@ -99,8 +99,8 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'home-marquiz': HomeMarquizSelect<false> | HomeMarquizSelect<true>;
-    'catalog-page': CatalogPageSelect<false> | CatalogPageSelect<true>;
     'catalog-categories': CatalogCategoriesSelect<false> | CatalogCategoriesSelect<true>;
+    'catalog-category-pages': CatalogCategoryPagesSelect<false> | CatalogCategoryPagesSelect<true>;
     'catalog-products-page': CatalogProductsPageSelect<false> | CatalogProductsPageSelect<true>;
     'merged-catalog-taxonomy': MergedCatalogTaxonomySelect<false> | MergedCatalogTaxonomySelect<true>;
     'cases-page': CasesPageSelect<false> | CasesPageSelect<true>;
@@ -121,10 +121,12 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-info': SiteInfo;
+    'request-cta': RequestCta;
     faq: Faq;
   };
   globalsSelect: {
     'site-info': SiteInfoSelect<false> | SiteInfoSelect<true>;
+    'request-cta': RequestCtaSelect<false> | RequestCtaSelect<true>;
     faq: FaqSelect<false> | FaqSelect<true>;
   };
   locale: null;
@@ -187,6 +189,7 @@ export interface User {
 export interface Media {
   id: number;
   alt: string;
+  prefix?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -273,6 +276,169 @@ export interface Page {
 export interface HomePage {
   id: number;
   heroTitle: string;
+  hero: {
+    title: string;
+    description: string;
+    image: number | Media;
+    showCasesButton?: boolean | null;
+    features?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  digest: {
+    title: string;
+    description: string;
+    cards?:
+      | {
+          id: 'partners' | 'events' | 'team' | 'souvenirs' | 'uniform' | 'workwear';
+          variant: 'default' | 'wild';
+          title: string;
+          description: string;
+          mobileDescription?: string | null;
+          details?: string | null;
+          backgroundImageSrc?: string | null;
+          image: number | Media;
+        }[]
+      | null;
+  };
+  results: {
+    title: string;
+    description: string;
+    ctaLabel: string;
+    slides?:
+      | {
+          before: string;
+          after: string;
+          result: string;
+          image: number | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  services: {
+    title: string;
+    image: number | Media;
+    items?:
+      | {
+          title: string;
+          description: string;
+          ctaLabel: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  benefits: {
+    title: string;
+    description?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          backgroundImageUrl: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  leadCta: {
+    title: string;
+    description: string;
+    image: number | Media;
+    submitLabel: string;
+  };
+  partnerProducts: {
+    title: string;
+    description: string;
+    items?:
+      | {
+          title: string;
+          description: string;
+          image: number | Media;
+          href: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  urgentOrder: {
+    title: string;
+    image: number | Media;
+    ctaLabel: string;
+    paragraphs?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  reviews: {
+    title: string;
+    items?:
+      | {
+          company: string;
+          name: string;
+          role: string;
+          image: number | Media;
+          avatar: number | Media;
+          quote?:
+            | {
+                text: string;
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  workStages: {
+    title: string;
+    description: string;
+    items?:
+      | {
+          number: string;
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  features: {
+    title: string;
+    description?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          backgroundImageUrl: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Определяет порядок и видимость блоков на главной странице. FAQ, Marquiz и CTA используют свои текущие источники данных.
+   */
+  layoutBlocks?:
+    | {
+        blockType:
+          | 'hero'
+          | 'digest'
+          | 'results'
+          | 'services'
+          | 'marquiz'
+          | 'benefits'
+          | 'leadCta'
+          | 'partnerProducts'
+          | 'urgentOrder'
+          | 'reviews'
+          | 'workStages'
+          | 'features'
+          | 'faq'
+          | 'requestCta';
+        enabled?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -308,16 +474,99 @@ export interface HomePage {
  */
 export interface HomeMarquiz {
   id: number;
+  title: string;
+  coverImage?: (number | null) | Media;
+  marquiz: {
+    scriptUrl: string;
+    init: {
+      host: string;
+      region: string;
+      id: string;
+      autoOpen?: boolean | null;
+      autoOpenFreq: string;
+      openOnExit?: boolean | null;
+      disableOnMobile?: boolean | null;
+    };
+    inline: {
+      buttonText: string;
+      bgColor: string;
+      textColor: string;
+      shadow: string;
+      rounded?: boolean | null;
+      blicked?: boolean | null;
+      fixed?: boolean | null;
+      buttonOnMobile?: boolean | null;
+      disableOnMobile?: boolean | null;
+      fullWidth?: boolean | null;
+    };
+  };
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "catalog-page".
+ * via the `definition` "catalog-categories".
  */
-export interface CatalogPage {
+export interface CatalogCategory {
   id: number;
+  title: string;
+  /**
+   * Используется в URL и для связи со страницей каталога. Если поле пустое, формируется из названия.
+   */
+  slug: string;
+  menuOrder: number;
+  isActive: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-category-pages".
+ */
+export interface CatalogCategoryPage {
+  id: number;
+  category: number | CatalogCategory;
+  /**
+   * Заполняется автоматически из выбранной категории.
+   */
+  slug: string;
+  /**
+   * Можно вводить текст с переносами строк.
+   */
   heroTitle: string;
+  heroImage: number | Media;
+  subcategories?:
+    | {
+        title: string;
+        description: string;
+        image: number | Media;
+        buttonLabel: string;
+        useCustomLink?: boolean | null;
+        /**
+         * Показывается только если включена кастомная ссылка.
+         */
+        customLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  casesLayout: 'default' | 'stacked';
+  cases?:
+    | {
+        company: string;
+        description: string;
+        result: string;
+        images?:
+          | {
+              image: number | Media;
+              fit?: ('cover' | 'contain') | null;
+              x?: number | null;
+              y?: number | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -349,26 +598,20 @@ export interface CatalogPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "catalog-categories".
- */
-export interface CatalogCategory {
-  id: number;
-  title: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "catalog-products-page".
  */
 export interface CatalogProductsPage {
   id: number;
-  heroTitle: string;
-  hero: {
-    title: string;
-    description: string;
-    backgroundImageUrl: string;
+  heroImages?: {
+    leftTop?: (number | null) | Media;
+    leftMiddle?: (number | null) | Media;
+    leftBottom?: (number | null) | Media;
+    rightTop?: (number | null) | Media;
+    rightMiddle?: (number | null) | Media;
+    rightBottom?: (number | null) | Media;
   };
+  categoriesHeading: string;
+  taxonomyOrderDraft?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -412,6 +655,7 @@ export interface MergedCatalogTaxonomy {
   sourceName: string;
   displayNameOverride?: string | null;
   isActive: boolean;
+  sortOrder: number;
   updatedAt: string;
   createdAt: string;
 }
@@ -506,6 +750,7 @@ export interface CaseCard {
     | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -550,12 +795,17 @@ export interface BlogPage {
 export interface Post {
   id: number;
   title: string;
-  slug: string;
-  pageTitle?: string | null;
   excerpt?: string | null;
   cardImage: number | Media;
-  heroImage: number | Media;
+  slug: string;
+  slugLock?: boolean | null;
+  /**
+   * Уникальное число. Меньшее значение показывается раньше.
+   */
+  sortOrder: number;
+  pageTitle: string;
   breadcrumbCurrentLabel?: string | null;
+  heroImage: number | Media;
   publishedAt?: string | null;
   layout: (
     | {
@@ -628,7 +878,6 @@ export interface Post {
         description: string;
         label?: string | null;
         columns?: ('2' | '3') | null;
-        backgroundAssetUrl?: string | null;
         cards: {
           title: string;
           text: string;
@@ -648,7 +897,6 @@ export interface Post {
         }[];
         image: number | Media;
         variant?: ('default' | 'accent') | null;
-        imageAspectRatio?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'text-image';
@@ -692,7 +940,6 @@ export interface Post {
           id?: string | null;
         }[];
         image: number | Media;
-        imageAspectRatio?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'text-columns-image';
@@ -839,12 +1086,12 @@ export interface PayloadLockedDocument {
         value: number | HomeMarquiz;
       } | null)
     | ({
-        relationTo: 'catalog-page';
-        value: number | CatalogPage;
-      } | null)
-    | ({
         relationTo: 'catalog-categories';
         value: number | CatalogCategory;
+      } | null)
+    | ({
+        relationTo: 'catalog-category-pages';
+        value: number | CatalogCategoryPage;
       } | null)
     | ({
         relationTo: 'catalog-products-page';
@@ -952,6 +1199,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1015,6 +1263,174 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface HomePageSelect<T extends boolean = true> {
   heroTitle?: T;
+  hero?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        showCasesButton?: T;
+        features?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  digest?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        cards?:
+          | T
+          | {
+              id?: T;
+              variant?: T;
+              title?: T;
+              description?: T;
+              mobileDescription?: T;
+              details?: T;
+              backgroundImageSrc?: T;
+              image?: T;
+            };
+      };
+  results?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ctaLabel?: T;
+        slides?:
+          | T
+          | {
+              before?: T;
+              after?: T;
+              result?: T;
+              image?: T;
+              id?: T;
+            };
+      };
+  services?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              ctaLabel?: T;
+              id?: T;
+            };
+      };
+  benefits?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              backgroundImageUrl?: T;
+              id?: T;
+            };
+      };
+  leadCta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        submitLabel?: T;
+      };
+  partnerProducts?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              href?: T;
+              id?: T;
+            };
+      };
+  urgentOrder?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        ctaLabel?: T;
+        paragraphs?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  reviews?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              company?: T;
+              name?: T;
+              role?: T;
+              image?: T;
+              avatar?: T;
+              quote?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+      };
+  workStages?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        items?:
+          | T
+          | {
+              number?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  features?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              backgroundImageUrl?: T;
+              id?: T;
+            };
+      };
+  layoutBlocks?:
+    | T
+    | {
+        blockType?: T;
+        enabled?: T;
+        id?: T;
+      };
   meta?:
     | T
     | {
@@ -1054,15 +1470,91 @@ export interface HomePageSelect<T extends boolean = true> {
  * via the `definition` "home-marquiz_select".
  */
 export interface HomeMarquizSelect<T extends boolean = true> {
+  title?: T;
+  coverImage?: T;
+  marquiz?:
+    | T
+    | {
+        scriptUrl?: T;
+        init?:
+          | T
+          | {
+              host?: T;
+              region?: T;
+              id?: T;
+              autoOpen?: T;
+              autoOpenFreq?: T;
+              openOnExit?: T;
+              disableOnMobile?: T;
+            };
+        inline?:
+          | T
+          | {
+              buttonText?: T;
+              bgColor?: T;
+              textColor?: T;
+              shadow?: T;
+              rounded?: T;
+              blicked?: T;
+              fixed?: T;
+              buttonOnMobile?: T;
+              disableOnMobile?: T;
+              fullWidth?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "catalog-page_select".
+ * via the `definition` "catalog-categories_select".
  */
-export interface CatalogPageSelect<T extends boolean = true> {
+export interface CatalogCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  menuOrder?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-category-pages_select".
+ */
+export interface CatalogCategoryPagesSelect<T extends boolean = true> {
+  category?: T;
+  slug?: T;
   heroTitle?: T;
+  heroImage?: T;
+  subcategories?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        buttonLabel?: T;
+        useCustomLink?: T;
+        customLink?: T;
+        id?: T;
+      };
+  casesLayout?: T;
+  cases?:
+    | T
+    | {
+        company?: T;
+        description?: T;
+        result?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              fit?: T;
+              x?: T;
+              y?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   meta?:
     | T
     | {
@@ -1099,26 +1591,21 @@ export interface CatalogPageSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "catalog-categories_select".
- */
-export interface CatalogCategoriesSelect<T extends boolean = true> {
-  title?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "catalog-products-page_select".
  */
 export interface CatalogProductsPageSelect<T extends boolean = true> {
-  heroTitle?: T;
-  hero?:
+  heroImages?:
     | T
     | {
-        title?: T;
-        description?: T;
-        backgroundImageUrl?: T;
+        leftTop?: T;
+        leftMiddle?: T;
+        leftBottom?: T;
+        rightTop?: T;
+        rightMiddle?: T;
+        rightBottom?: T;
       };
+  categoriesHeading?: T;
+  taxonomyOrderDraft?: T;
   meta?:
     | T
     | {
@@ -1166,6 +1653,7 @@ export interface MergedCatalogTaxonomySelect<T extends boolean = true> {
   sourceName?: T;
   displayNameOverride?: T;
   isActive?: T;
+  sortOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1247,6 +1735,7 @@ export interface CaseCardsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1294,12 +1783,14 @@ export interface BlogPageSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
-  pageTitle?: T;
   excerpt?: T;
   cardImage?: T;
-  heroImage?: T;
+  slug?: T;
+  slugLock?: T;
+  sortOrder?: T;
+  pageTitle?: T;
   breadcrumbCurrentLabel?: T;
+  heroImage?: T;
   publishedAt?: T;
   layout?:
     | T
@@ -1393,7 +1884,6 @@ export interface PostsSelect<T extends boolean = true> {
               description?: T;
               label?: T;
               columns?: T;
-              backgroundAssetUrl?: T;
               cards?:
                 | T
                 | {
@@ -1418,7 +1908,6 @@ export interface PostsSelect<T extends boolean = true> {
                   };
               image?: T;
               variant?: T;
-              imageAspectRatio?: T;
               id?: T;
               blockName?: T;
             };
@@ -1473,7 +1962,6 @@ export interface PostsSelect<T extends boolean = true> {
                     id?: T;
                   };
               image?: T;
-              imageAspectRatio?: T;
               id?: T;
               blockName?: T;
             };
@@ -1665,6 +2153,20 @@ export interface SiteInfo {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "request-cta".
+ */
+export interface RequestCta {
+  id: number;
+  /**
+   * Используйте перенос строки, если заголовок нужно показать в две строки.
+   */
+  title: string;
+  description: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq".
  */
 export interface Faq {
@@ -1702,6 +2204,17 @@ export interface SiteInfoSelect<T extends boolean = true> {
         id?: T;
       };
   copyright?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "request-cta_select".
+ */
+export interface RequestCtaSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

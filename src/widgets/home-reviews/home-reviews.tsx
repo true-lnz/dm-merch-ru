@@ -1,129 +1,22 @@
 "use client";
 
 import { cn } from "@/shared/lib/cn";
+import type { HomeReviewsData } from "@/shared/lib/payload/home-page";
 import { SliderControl } from "@/shared/ui/slider-control";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
-type HomeReview = {
-  company: string;
-  name: string;
-  role: string;
-  quote: string[];
-  image: {
-    src: string;
-    alt: string;
-  };
-  avatar: {
-    src: string;
-    alt: string;
-  };
-};
-
-const TESTIMONIALS_TITLE = "Отзывы наших клиентов";
-
-const TESTIMONIALS = [
-  {
-    company: "Ресторан «Магадан»",
-    name: "Эльнора",
-    role: "Управляющий ресторана",
-    quote: [
-      "Искали подрядчика для формы на фестиваль: важно было, чтобы команда выглядела стильно и премиально, а сотрудникам было удобно работать.",
-      "В итоге получили форму, которая поддержала наш имидж и выглядела уместно на мероприятии, без ощущения промо-одежды.",
-      "Гости фестиваля отдельно спрашивали, можно ли купить дождевики, и это был лучший индикатор, что мерч действительно получился сильным.",
-    ],
-    image: {
-      src: "/home/reviews/img_home_reviews_1.webp",
-      alt: "Команда ресторана в мерче",
-    },
-    avatar: {
-      src: "/home/reviews/img_reviews_avatar_1.webp",
-      alt: "Портрет Эльноры",
-    },
-  },
-  {
-    company: "Городское пространство «Арт‑квадрат»",
-    name: "Айна Федорова",
-    role: "Арт-директор",
-    quote: [
-      'С компанией "Держи Марку!" Арт-КВАДРАТ сотрудничает уже 3 года.',
-      "Все наши сложные и креативные запросы решаются оперативно, партнёры всегда готовы предоставить интересные решения, отражающие специфику нашего бренда. И что немаловажно, всегда можно договориться по экономической стороне вопроса.",
-      "А когда соответствует качество и цена - что может быть лучше?)",
-    ],
-    image: {
-      src: "/home/reviews/img_home_reviews_5.webp",
-      alt: "Отзыв клиента Арт-квадрат",
-    },
-    avatar: {
-      src: "/home/reviews/img_reviews_avatar_2.webp",
-      alt: "Портрет Айны Федоровой",
-    },
-  },
-  {
-    company: "Уфанет",
-    name: "Лилия",
-    role: "Отдел рекламы",
-    quote: [
-      "Работаем с командой около полугода. За это время совместно реализовали несколько проектов: худи, футболки, бутылки и новогодние подарки.",
-      "Ценим, что ребята берут на себя весь процесс целиком — от идеи и проработки деталей до готового результата. В ходе работы всегда присутствует чёткая коммуникация, внимание к деталям и готовность оперативно включаться в задачу, если сроки ограничены.",
-      "Несмотря на то, что сотрудничаем мы недолго, за этот период команда уже показала себя как надежный подрядчик, с которым приятно работать и к которому хочется обращаться снова с новыми проектами.",
-    ],
-    image: {
-      src: "/home/reviews/img_home_reviews_ufanet.webp",
-      alt: "Отзыв клиента Уфанет",
-    },
-    avatar: {
-      src: "/home/reviews/img_reviews_avatar_3.webp",
-      alt: "Портрет Лилии",
-    },
-  },
-  {
-    company: "Уфаойл",
-    name: "Анна",
-    role: "Отдел маркетинга",
-    quote: [
-      "Работаем с компанией не первый проект - делали и юбилейные худи, и подарки для сотрудников, и продукцию для партнеров. Для нас было важно, чтобы мерч не выглядел шаблонно, а действительно отражал нашу компанию и ее историю.",
-      "Понравилось, что команда вникает в задачи, предлагает решения, а не просто принимает ТЗ. В итоге получили продукцию, которой реально пользуются, а не кладут на полку. Мерч стал частью корпоративной культуры, а не разовой акцией.",
-    ],
-    image: {
-      src: "/home/reviews/img_home_reviews_3_2.webp",
-      alt: "Отзыв клиента Уфаойл",
-    },
-    avatar: {
-      src: "/home/reviews/img_reviews_avatar_4.webp",
-      alt: "Портрет Анны",
-    },
-  },
-  {
-    company: "Тихий дом",
-    name: "Дмитрий",
-    role: "Бренд-менеджер",
-    quote: [
-      "Заказывали фирменный набор для наших клиентов и партнёров. Нам хотелось сделать не просто сувенир, а действительно приятный и аккуратный подарок, который будет хорошо выглядеть, вызывать правильное впечатление и которым захочется пользоваться.",
-      "С командой было легко и спокойно работать: помогли с выбором, подсказали по материалам и нанесению, внимательно отнеслись к деталям и всё сделали в срок. В итоге получился именно такой набор, как мы и хотели, — качественный, цельный и достойный. Такие вещи приятно дарить от имени компании, потому что они действительно отражают отношение к людям и к своему бренду.",
-    ],
-    image: {
-      src: "/home/reviews/img_home_reviews_2.webp",
-      alt: "Отзыв клиента Тихий дом",
-    },
-    avatar: {
-      src: "/home/reviews/img_reviews_avatar_5.webp",
-      alt: "Портрет Дмитрия",
-    },
-  },
-] satisfies HomeReview[];
-
-export function HomeReviews() {
+export function HomeReviews({ data }: { data: HomeReviewsData }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isQuoteExpanded, setIsQuoteExpanded] = useState(false);
   const [mobileContentWidth, setMobileContentWidth] = useState(0);
   const [mobileContentHeights, setMobileContentHeights] = useState({ collapsed: 170, expanded: 310 });
   const mobileContentRef = useRef<HTMLDivElement | null>(null);
   const mobileMeasureRef = useRef<HTMLDivElement | null>(null);
-  const activeItem = TESTIMONIALS[activeIndex];
+  const activeItem = data.items[activeIndex];
   const isFirstSlide = activeIndex === 0;
-  const isLastSlide = activeIndex === TESTIMONIALS.length - 1;
+  const isLastSlide = activeIndex === data.items.length - 1;
   const mobileQuoteText = activeItem.quote.join(" ");
   const toggleLabel = isQuoteExpanded ? "Скрыть" : "Раскрыть больше";
 
@@ -185,11 +78,11 @@ export function HomeReviews() {
 
   return (
     <section className="my-[35px] md:my-[45px]">
-      <PageSubheading title={TESTIMONIALS_TITLE} />
+      <PageSubheading title={data.title} />
 
       <div className="mt-8 grid lg:grid-cols-12">
         <div className="relative aspect-3/2 overflow-hidden rounded-[18px] bg-white md:aspect-auto md:min-h-[320px] md:rounded-[22.5px] lg:col-span-7 lg:min-h-[616px]">
-          {TESTIMONIALS.map((item, index) => (
+          {data.items.map((item, index) => (
             <div
               key={item.company}
               className={cn(
@@ -197,7 +90,7 @@ export function HomeReviews() {
                 index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
               )}
             >
-              <Image src={item.image.src} alt={item.image.alt} fill sizes="70vw" className="object-cover object-top image-hover-scale" />
+              <Image src={item.image.url} alt={item.image.alt} fill sizes="70vw" className="object-cover object-top image-hover-scale" />
             </div>
           ))}
         </div>
@@ -205,7 +98,7 @@ export function HomeReviews() {
         <div className="flex flex-col gap-4 rounded-[18px] bg-[var(--accent)] p-[18px] text-white md:gap-5 md:rounded-[22.5px] md:bg-[url('/home/img_card_cover_home_reviews.svg')] md:bg-cover md:bg-center md:p-[27px] lg:col-span-5">
           <div className="flex gap-[18px] md:gap-[22.5px]">
             <div className="relative size-[63px] md:size-[125px] overflow-hidden rounded-[9px] bg-white">
-              {TESTIMONIALS.map((item, index) => (
+              {data.items.map((item, index) => (
                 <div
                   key={`${item.company}-avatar`}
                   className={cn(
@@ -213,7 +106,7 @@ export function HomeReviews() {
                     index === activeIndex ? "opacity-100" : "pointer-events-none opacity-0",
                   )}
                 >
-                  <Image src={item.avatar.src} alt={item.avatar.alt} fill sizes="20vw" className="object-cover" />
+                  <Image src={item.avatar.url} alt={item.avatar.alt} fill sizes="20vw" className="object-cover" />
                 </div>
               ))}
             </div>
@@ -278,8 +171,8 @@ export function HomeReviews() {
             onNextClick={showNextReview}
             prevDisabled={isFirstSlide}
             nextDisabled={isLastSlide}
-            prevAriaLabel={`Предыдущий отзыв (${activeIndex + 1} из ${TESTIMONIALS.length})`}
-            nextAriaLabel={`Следующий отзыв (${activeIndex + 1} из ${TESTIMONIALS.length})`}
+            prevAriaLabel={`Предыдущий отзыв (${activeIndex + 1} из ${data.items.length})`}
+            nextAriaLabel={`Следующий отзыв (${activeIndex + 1} из ${data.items.length})`}
           />
         </div>
       </div>
@@ -290,7 +183,7 @@ export function HomeReviews() {
         aria-hidden="true"
         style={{ width: mobileContentWidth || undefined }}
       >
-        {TESTIMONIALS.map((item) => (
+        {data.items.map((item) => (
           <div key={`${item.company}-collapsed`} data-measure-state="collapsed" className="flex flex-col">
             <h3 className="mb-2 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical] font-heading text-3xl leading-none uppercase">
               {item.company}
@@ -304,7 +197,7 @@ export function HomeReviews() {
           </div>
         ))}
 
-        {TESTIMONIALS.map((item) => (
+        {data.items.map((item) => (
           <div key={`${item.company}-expanded`} data-measure-state="expanded" className="flex flex-col">
             <h3 className="mb-2 font-heading text-3xl leading-none uppercase">{item.company}</h3>
             <div className="space-y-4 text-sm leading-[1.35] tracking-[-0.03em]">

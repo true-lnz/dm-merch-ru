@@ -31,6 +31,7 @@ import {
   ensureCatalogCategoryColumns,
   ensureCatalogCategoryPageColumns,
   ensureCatalogProductsPageColumns,
+  ensureHomePageColumns,
   ensureMergedCatalogTaxonomySortOrderColumn,
 } from "./payload/ensure-catalog-products-page-columns.ts";
 import { LIVE_PREVIEW_BREAKPOINTS } from "./payload/preview.ts";
@@ -86,6 +87,7 @@ if (!isNextBuildProcess()) {
   ensureCatalogProductsPageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
   ensureCatalogCategoryColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
   ensureCatalogCategoryPageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
+  ensureHomePageColumns(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
   ensureMergedCatalogTaxonomySortOrderColumn(process.env.DATABASE_URL || DEFAULT_DATABASE_URL);
 }
 
@@ -166,10 +168,12 @@ export default buildConfig({
       }
     : {}),
   db: sqliteAdapter({
+    busyTimeout: 5000,
     client: {
       url: process.env.DATABASE_URL || DEFAULT_DATABASE_URL,
     },
     push: process.env.PAYLOAD_PUSH_SCHEMA === "true",
+    wal: true,
   }),
   sharp,
   plugins: [

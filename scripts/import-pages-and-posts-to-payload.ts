@@ -4,6 +4,7 @@ import { getPayload } from "payload";
 
 import { blogArticlesMock } from "../src/entities/blog-post/model/mock.ts";
 import type { BlogArticleSection, CmsImage } from "../src/entities/blog-post/model/types.ts";
+import { defaultHomePageData } from "../src/shared/lib/payload/home-page.ts";
 
 const DEFAULT_CONTACTS_MAP_SETTINGS = {
   officeLatitude: 54.756355,
@@ -291,6 +292,102 @@ async function upsertSingletonPage(
 async function upsertSingletonPages(payload: PayloadInstance) {
   await upsertSingletonPage(payload, "home-page", {
     heroTitle: "Главная",
+    hero: {
+      title: defaultHomePageData.hero.title,
+      description: defaultHomePageData.hero.description,
+      image: await ensureMedia(payload, defaultHomePageData.hero.image),
+      showCasesButton: defaultHomePageData.hero.showCasesButton,
+      features: defaultHomePageData.hero.features.map((item) => ({ text: item.text })),
+    },
+    digest: {
+      title: defaultHomePageData.digest.title,
+      description: defaultHomePageData.digest.description,
+      cards: await Promise.all(
+        defaultHomePageData.digest.cards.map(async (card) => ({
+          cardKey: card.id,
+          variant: card.variant,
+          title: card.title,
+          description: card.description,
+          mobileDescription: card.variant === "wild" ? card.mobileDescription : undefined,
+          details: card.variant === "wild" ? card.details : undefined,
+          backgroundImageSrc: card.variant === "wild" ? card.backgroundImageSrc : undefined,
+          image: await ensureMedia(payload, {
+            url: card.image.src,
+            alt: card.image.alt,
+            width: 0,
+            height: 0,
+          }),
+        })),
+      ),
+    },
+    results: {
+      title: defaultHomePageData.results.title,
+      description: defaultHomePageData.results.description,
+      ctaLabel: defaultHomePageData.results.ctaLabel,
+      slides: await Promise.all(
+        defaultHomePageData.results.slides.map(async (slide) => ({
+          before: slide.before,
+          after: slide.after,
+          result: slide.result,
+          image: await ensureMedia(payload, slide.image),
+        })),
+      ),
+    },
+    services: {
+      title: defaultHomePageData.services.title,
+      image: await ensureMedia(payload, defaultHomePageData.services.image),
+      items: defaultHomePageData.services.items,
+    },
+    benefits: defaultHomePageData.benefits,
+    leadCta: {
+      title: defaultHomePageData.leadCta.title,
+      description: defaultHomePageData.leadCta.description,
+      image: await ensureMedia(payload, defaultHomePageData.leadCta.image),
+      submitLabel: defaultHomePageData.leadCta.submitLabel,
+    },
+    partnerProducts: {
+      title: defaultHomePageData.partnerProducts.title,
+      description: defaultHomePageData.partnerProducts.description,
+      items: await Promise.all(
+        defaultHomePageData.partnerProducts.items.map(async (item) => ({
+          title: item.title,
+          description: item.description,
+          image: await ensureMedia(payload, {
+            url: item.imageUrl,
+            alt: item.title,
+            width: 0,
+            height: 0,
+          }),
+          href: item.href,
+        })),
+      ),
+    },
+    urgentOrder: {
+      title: defaultHomePageData.urgentOrder.title,
+      image: await ensureMedia(payload, defaultHomePageData.urgentOrder.image),
+      ctaLabel: defaultHomePageData.urgentOrder.ctaLabel,
+      paragraphs: defaultHomePageData.urgentOrder.paragraphs.map((text) => ({ text })),
+    },
+    reviews: {
+      title: defaultHomePageData.reviews.title,
+      items: await Promise.all(
+        defaultHomePageData.reviews.items.map(async (item) => ({
+          company: item.company,
+          name: item.name,
+          role: item.role,
+          image: await ensureMedia(payload, item.image),
+          avatar: await ensureMedia(payload, item.avatar),
+          quote: item.quote.map((text) => ({ text })),
+        })),
+      ),
+    },
+    workStages: {
+      title: defaultHomePageData.workStages.title,
+      description: defaultHomePageData.workStages.description,
+      items: defaultHomePageData.workStages.items,
+    },
+    features: defaultHomePageData.features,
+    layoutBlocks: defaultHomePageData.layoutBlocks,
     meta: {
       title: "Главная",
       description: "Производство мерча и сувенирной продукции с логотипом для бизнеса. От 50 000₽, цена 25% от рынка, 1571+ проект. Образцы перед поставкой, договор.",

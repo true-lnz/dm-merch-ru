@@ -1,15 +1,15 @@
 ﻿"use client";
 
-import { WORK_STAGES } from "@/shared/config/work-stages";
 import { subscribeToMediaQuery } from "@/shared/lib/browser-compat";
 import { cn } from "@/shared/lib/cn";
+import type { HomeWorkStagesData } from "@/shared/lib/payload/home-page";
 import { isLightWorkStageCard } from "@/shared/lib/work-stage-tone";
 import { WorkStageCard } from "@/shared/ui/work-stage-card";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
-export function HomeWorkStages() {
+export function HomeWorkStages({ data }: { data: HomeWorkStagesData }) {
   const [tapeShiftX, setTapeShiftX] = useState(0);
   const lastScrollYRef = useRef(0);
   const shiftXRef = useRef(0);
@@ -95,15 +95,15 @@ export function HomeWorkStages() {
 
         <div className="relative z-10">
           <PageSubheading
-            title="Этапы работ"
-            description="Прозрачный процесс - от идеи до готового мерча."
+            title={data.title}
+            description={data.description}
             descriptionPlacement="bottom"
             descriptionClassName="text-white"
             titleClassName="text-white"
           />
 
           <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:mt-[36px] xl:grid-cols-3 xl:grid-rows-2 xl:gap-6">
-            {WORK_STAGES.map((stage, index) => {
+            {data.items.map((stage, index) => {
               const isLightOnMobile = isLightWorkStageCard(index, 1);
               const isLightOnDesktop = isLightWorkStageCard(index, 2);
               const layoutClassName =

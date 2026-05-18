@@ -1,26 +1,22 @@
 import { RequestForm } from "@/shared/ui/request-form";
+import type { HomeLeadCtaData } from "@/shared/lib/payload/home-page";
 import Image from "next/image";
 import { PageSubheading } from "../../shared/ui/page-subheading";
 
-const LEAD_CTA_IMAGE = {
-  src: "/home/img_lead_cta_cover2.webp",
-  alt: "Примеры корпоративного мерча",
-};
-
-export function HomeLeadCta() {
+export function HomeLeadCta({ data }: { data: HomeLeadCtaData }) {
   return (
     <section className="my-[35px] md:my-[45px]">
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:items-stretch">
         <div className="rounded-[18px] md:rounded-[22.5px] bg-white">
           <div className="relative aspect-square overflow-hidden rounded-[18px] md:rounded-[22.5px] xl:h-full xl:min-h-[600px] xl:aspect-auto">
-            <Image src={LEAD_CTA_IMAGE.src} alt={LEAD_CTA_IMAGE.alt} fill sizes="100vw" className="object-cover object-top image-hover-scale" />
+            <Image src={data.image.url} alt={data.image.alt} fill sizes="100vw" className="object-cover object-top image-hover-scale" />
           </div>
         </div>
         <div className="rounded-[18px] md:rounded-[22.5px] bg-[var(--accent)] text-white p-[18px] md:p-[54px]">
           <PageSubheading
-            title="Отправим примеры мерча"
+            title={data.title}
             titleClassName="text-white"
-            description="На&nbsp;основе наших работ для 500+ компаний в&nbsp;2025 году"
+            description={data.description}
             descriptionPlacement="bottom"
             descriptionClassName="text-white"
           />
@@ -30,7 +26,7 @@ export function HomeLeadCta() {
               includeEmail={false}
               privacyCheckboxId="home-lead-cta-privacy"
               onAccentSurface
-              submitLabel="Получить примеры мерча"
+              submitLabel={data.submitLabel}
               submitClassName="border-white bg-white text-[var(--accent)] hover:bg-[#f3f7ff]"
             />
           </div>
