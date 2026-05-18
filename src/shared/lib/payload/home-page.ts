@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cache } from "react";
 
 import type { HomeDigestCard, HomeDigestCardId } from "../../../widgets/home-digest/home-digest.data.ts";
@@ -5,6 +6,7 @@ import type { PartnerProductItem } from "../../../widgets/home-partner-products/
 
 import { DIGEST_CARDS } from "../../../widgets/home-digest/home-digest.data.ts";
 import { mapCmsImage, type MappedCmsImage } from "./media.ts";
+import { buildSEOMetadata } from "./seo-metadata.ts";
 
 export type HomePageBlockType =
   | "hero"
@@ -569,12 +571,36 @@ export const defaultHomePageData: HomePageData = {
 };
 
 type HomePageDocument = {
+  id: number | string;
   hero?: {
     title?: unknown;
     description?: unknown;
     image?: unknown;
     features?: unknown;
     showCasesButton?: unknown;
+  } | null;
+  meta?: {
+    canonicalUrl?: null | string;
+    description?: null | string;
+    image?: unknown;
+    keywords?: null | string;
+    openGraph?: {
+      description?: null | string;
+      imageAlt?: null | string;
+      title?: null | string;
+      type?: null | "article" | "website";
+    } | null;
+    robots?: {
+      noFollow?: boolean | null;
+      noIndex?: boolean | null;
+    } | null;
+    title?: null | string;
+    twitter?: {
+      card?: null | "summary" | "summary_large_image";
+      description?: null | string;
+      imageAlt?: null | string;
+      title?: null | string;
+    } | null;
   } | null;
   digest?: {
     title?: unknown;
@@ -1096,3 +1122,41 @@ export const getHomePageData = cache(async (): Promise<HomePageData> => {
     return defaultHomePageData;
   }
 });
+
+export const getHomePageDocument = cache(async (): Promise<HomePageDocument | null> => {
+  try {
+    const { getPayloadClient } = await import("./get-payload-client.ts");
+    const payload = (await getPayloadClient()) as any;
+    const result = await payload.find({
+      collection: "home-page",
+      depth: 1,
+      limit: 1,
+      pagination: false,
+    });
+    const doc = (Array.isArray(result?.docs) ? result.docs[0] : null) as HomePageDocument | null;
+
+    if (!doc || typeof doc.id === "undefined") {
+      return null;
+    }
+
+    return doc;
+  } catch {
+    return null;
+  }
+});
+
+export async function getHomePageMetadata(): Promise<Metadata> {
+  const page = await getHomePageDocument();
+
+  return buildSEOMetadata({
+    fallbackTitle: pickString(page?.hero?.title, defaultHomePageData.hero.title),
+    fallbackDescription: pickString(page?.hero?.description, defaultHomePageData.hero.description),
+    fallbackImage: {
+      alt: defaultHomePageData.hero.image.alt,
+      url: mapCmsImage(page?.hero?.image, defaultHomePageData.hero.image.alt)?.url || defaultHomePageData.hero.image.url,
+    },
+    meta: page?.meta,
+    pathname: "/",
+    socialType: "website",
+  });
+}

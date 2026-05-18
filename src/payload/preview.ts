@@ -15,7 +15,8 @@ type AdminCollectionSlug =
   | "catalog-category-pages"
   | "catalog-products-page"
   | "cases-page"
-  | "blog-page";
+  | "blog-page"
+  | "contacts-page";
 
 export const DEFAULT_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
