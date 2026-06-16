@@ -7,6 +7,17 @@ export const dynamic = "force-dynamic";
 
 const PHONE_PATTERN = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function parsePositiveIntegerEnv(value: string | undefined, fallback: number) {
+  const parsed = Number(value);
+
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+const HONEYPOT_FIELD_NAME = "website";
+const RATE_LIMIT_WINDOW_MS = parsePositiveIntegerEnv(process.env.REQUEST_RATE_LIMIT_WINDOW_MS, 10 * 60 * 1000);
+const RATE_LIMIT_MAX_REQUESTS = parsePositiveIntegerEnv(process.env.REQUEST_RATE_LIMIT_MAX, 5);
+const RATE_LIMIT_SWEEP_INTERVAL_MS = 60 * 1000;
 const REQUEST_SOURCES = new Set<RequestPayload["source"]>([
   "request-cta",
   "home-lead-cta",
@@ -16,12 +27,21 @@ const REQUEST_SOURCES = new Set<RequestPayload["source"]>([
   "home-digest-card",
   "home-hero",
   "catalog-hero",
+  "catalog-products-hero",
   "home-results",
   "home-services",
   "home-urgent-order",
   "contacts-page",
   "wishlist-dialog",
 ]);
+
+type RateLimitBucket = {
+  count: number;
+  resetAt: number;
+};
+
+const requestBuckets = new Map<string, RateLimitBucket>();
+let lastRateLimitSweepAt = 0;
 
 function sanitizeString(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -88,6 +108,68 @@ function buildError(message: string, status = 400) {
   };
 
   return NextResponse.json(body, { status });
+}
+
+function isHoneypotFilled(body: Record<string, unknown>) {
+  return sanitizeString(body[HONEYPOT_FIELD_NAME]).length > 0;
+}
+
+function getClientIp(request: Request) {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+
+  if (forwardedFor) {
+    const [firstIp] = forwardedFor.split(",");
+    const ip = firstIp?.trim();
+
+    if (ip) {
+      return ip;
+    }
+  }
+
+  return request.headers.get("cf-connecting-ip")?.trim() || request.headers.get("x-real-ip")?.trim() || "unknown";
+}
+
+function sweepExpiredRateLimitBuckets(now: number) {
+  if (now - lastRateLimitSweepAt < RATE_LIMIT_SWEEP_INTERVAL_MS) {
+    return;
+  }
+
+  lastRateLimitSweepAt = now;
+
+  for (const [key, bucket] of requestBuckets.entries()) {
+    if (bucket.resetAt <= now) {
+      requestBuckets.delete(key);
+    }
+  }
+}
+
+function checkRequestRateLimit(request: Request) {
+  const now = Date.now();
+  const clientIp = getClientIp(request);
+  const key = `requests:${clientIp}`;
+
+  sweepExpiredRateLimitBuckets(now);
+
+  const existingBucket = requestBuckets.get(key);
+
+  if (!existingBucket || existingBucket.resetAt <= now) {
+    requestBuckets.set(key, {
+      count: 1,
+      resetAt: now + RATE_LIMIT_WINDOW_MS,
+    });
+    return { allowed: true, retryAfterSeconds: 0 };
+  }
+
+  existingBucket.count += 1;
+
+  if (existingBucket.count > RATE_LIMIT_MAX_REQUESTS) {
+    return {
+      allowed: false,
+      retryAfterSeconds: Math.max(1, Math.ceil((existingBucket.resetAt - now) / 1000)),
+    };
+  }
+
+  return { allowed: true, retryAfterSeconds: 0 };
 }
 
 function validateBasePayload(body: Record<string, unknown>) {
@@ -181,6 +263,39 @@ function parseRequestPayload(body: Record<string, unknown>): RequestPayload {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Record<string, unknown>;
+
+    if (isHoneypotFilled(body)) {
+      const responseBody: RequestSuccessResponse = {
+        ok: true,
+        redirectTo: buildRedirectUrl(""),
+      };
+
+      console.warn("[requests] honeypot blocked request", {
+        source: sanitizeOptionalString(body.source),
+        pagePath: sanitizeOptionalString(body.pagePath),
+        clientIp: getClientIp(request),
+      });
+
+      return NextResponse.json(responseBody);
+    }
+
+    const rateLimit = checkRequestRateLimit(request);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Слишком много заявок. Повторите попытку позже.",
+        } satisfies RequestErrorResponse,
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfterSeconds),
+          },
+        },
+      );
+    }
+
     const payload = parseRequestPayload(body);
 
     await sendRequestEmail(payload);

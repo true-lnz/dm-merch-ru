@@ -12,7 +12,7 @@ const baseEnv = {
 
 function runBuildPhase(mode) {
   return new Promise((resolve, reject) => {
-    const child = spawn(process.execPath, ["--max-old-space-size=1536", nextBin, "build", "--experimental-build-mode", mode], {
+    const child = spawn(process.execPath, ["--max-old-space-size=1536", nextBin, "build", "--webpack", "--experimental-build-mode", mode], {
       env: baseEnv,
       stdio: "inherit",
     });

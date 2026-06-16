@@ -20,6 +20,7 @@ import {
 } from "react";
 
 const DEFAULT_PRIVACY_CHECKBOX_ID = "request-form-privacy";
+const HONEYPOT_FIELD_NAME = "website";
 
 const fieldBaseClassName = "rounded-none border-0 border-b bg-transparent px-0 text-base shadow-none focus-visible:ring-0";
 
@@ -154,6 +155,7 @@ export function RequestForm({
   onSuccess,
 }: RequestFormProps) {
   const messageFieldId = useId();
+  const honeypotFieldId = useId();
   const pathname = usePathname();
   const [phoneDigits, setPhoneDigits] = useState("");
   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
@@ -301,7 +303,10 @@ export function RequestForm({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          [HONEYPOT_FIELD_NAME]: String(formData.get(HONEYPOT_FIELD_NAME) ?? "").trim(),
+        }),
       });
 
       const result = (await response.json()) as { ok: boolean; error?: string; redirectTo?: string };
@@ -330,6 +335,11 @@ export function RequestForm({
       noValidate
       onSubmit={handleSubmit}
     >
+      <div aria-hidden="true" className="absolute left-[-10000px] top-auto size-px overflow-hidden">
+        <label htmlFor={honeypotFieldId}>Website</label>
+        <input id={honeypotFieldId} name={HONEYPOT_FIELD_NAME} type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
       <div className="block">
         <Input placeholder="Имя*" name="name" required className={inputClassName} />
       </div>

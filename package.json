@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "build:vps": "node scripts/run-next-build-vps.mjs --ignore-build-errors",
     "build:vps:strict": "node scripts/run-next-build-vps.mjs",
     "start": "next start",

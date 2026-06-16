@@ -18,6 +18,7 @@ function renderBlock(blockType: HomePageBlockType, data: HomePageData) {
   switch (blockType) {
     case "hero":
       return <HomeHero data={data.hero} />;
+    // return <TestHomeHero />;
     case "digest":
       return <HomeDigest data={data.digest} />;
     case "results":
