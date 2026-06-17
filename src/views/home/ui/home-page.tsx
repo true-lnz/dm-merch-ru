@@ -13,12 +13,13 @@ import { HomeReviews } from "@/widgets/home-reviews";
 import { HomeServices } from "@/widgets/home-services";
 import { HomeUrgentOrder } from "@/widgets/home-urgent-order";
 import { HomeWorkStages } from "@/widgets/home-work-stages";
+import { TestHomeHero } from "@/widgets/test-home-hero";
 
 function renderBlock(blockType: HomePageBlockType, data: HomePageData) {
   switch (blockType) {
     case "hero":
-      return <HomeHero data={data.hero} />;
-    // return <TestHomeHero />;
+      // return <HomeHero data={data.hero} />;
+    return <TestHomeHero />;
     case "digest":
       return <HomeDigest data={data.digest} />;
     case "results":

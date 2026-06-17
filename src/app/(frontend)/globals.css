@@ -5,8 +5,15 @@
 @font-face {
   font-family: "Adderley";
   src: url("/fonts/Adderley-Bold.woff") format("woff");
-  font-style: normal;
+  font-style: bold;
   font-weight: 700;
+}
+
+@font-face {
+  font-family: "Adderley";
+  src: url("/fonts/Adderley-Regular.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
 }
 
 @font-face {
@@ -202,6 +209,10 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.font-dm-merch {
+  font-family: "Adderley", "Oswald", "Arial Narrow", sans-serif;
 }
 
 .font-heading {

@@ -229,7 +229,7 @@ export function TestHomeHeroForm() {
   }
 
   return (
-    <form className="max-w-[720px]" noValidate onSubmit={handleSubmit}>
+    <form className="max-w-[720px] md:max-w-[550px]" noValidate onSubmit={handleSubmit}>
       <div aria-hidden="true" className="absolute left-[-10000px] top-auto size-px overflow-hidden">
         <label htmlFor={honeypotFieldId}>Website</label>
         <input id={honeypotFieldId} name={HONEYPOT_FIELD_NAME} type="text" tabIndex={-1} autoComplete="off" />
@@ -252,24 +252,24 @@ export function TestHomeHeroForm() {
           onChange={handlePhoneChange}
           onPaste={handlePhonePaste}
           onKeyDown={handlePhoneKeyDown}
-          className="h-12 flex-1 rounded-[10px] border-white/22 bg-white/8 px-4 text-white placeholder:text-white/58 focus-visible:border-white/60 focus-visible:ring-0"
+          className="h-12 flex-1 rounded-[10px] border-[var(--field-border)] px-4 text-[var(--field-text))] placeholder:text-[var(--text-muted)] focus-visible:border-[var(--field-text)] focus-visible:ring-0"
         />
         <Button
           type="submit"
           variant="white"
           disabled={isSubmitting}
-          className="h-12 w-[220px] rounded-[10px] border-white bg-white text-[var(--accent)] hover:bg-[#edf3ff]"
+          className="h-12 w-[220px] rounded-[10px] bg-white text-[var(--accent)] hover:bg-[#edf3ff]"
         >
           {isSubmitting ? "Отправляем..." : "Получить расчет"}
         </Button>
       </div>
 
-      <div className="mt-3 flex items-start gap-3 text-sm tracking-[-0.03em] text-white/72">
+      <div className="mt-3 flex items-start gap-3 text-sm tracking-[-0.03em] text-[var(--text-muted)]">
         <Checkbox
           id={privacyCheckboxId}
           name="privacy"
           required
-          className="-mt-1 border-white/44 bg-transparent data-checked:border-white data-checked:bg-white data-checked:text-[var(--accent)]"
+          className="-mt-1 border-[var(--field-border)] bg-transparent data-checked:border-white data-checked:bg-white data-checked:text-[var(--accent)]"
         />
         <label htmlFor={privacyCheckboxId}>
           Нажимая на кнопку, вы соглашаетесь с{" "}
@@ -280,7 +280,7 @@ export function TestHomeHeroForm() {
         </label>
       </div>
 
-      {submitError ? <p className="mt-3 text-sm leading-[1.4] tracking-[-0.03em] text-[#ffb4b4]">{submitError}</p> : null}
+      {submitError ? <p className="mt-3 text-sm leading-[1.4] tracking-[-0.03em] text-[var(--destructive)]">{submitError}</p> : null}
     </form>
   );
 }
