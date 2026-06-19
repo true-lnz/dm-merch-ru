@@ -252,7 +252,7 @@ export function TestHomeHeroForm() {
           onChange={handlePhoneChange}
           onPaste={handlePhonePaste}
           onKeyDown={handlePhoneKeyDown}
-          className="h-12 w-full rounded-[10px] border-[var(--field-border)] bg-white/30 px-4 text-[var(--field-text))] placeholder:text-[var(--text-muted)] focus-visible:border-[var(--field-text)] focus-visible:ring-0 md:flex-1"
+          className="h-12 w-full rounded-[10px] border-[var(--field-border)] bg-white/60 md:bg-white/30 px-4 text-[var(--field-text))] placeholder:text-[var(--text-muted)] focus-visible:border-[var(--field-text)] focus-visible:ring-0 md:flex-1"
         />
         <Button
           type="submit"
