@@ -2,9 +2,14 @@ import { getBlogPosts } from "@/entities/blog-post";
 import { getCatalogRootIconId } from "@/shared/config/catalog-root-icons";
 import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
 import { isPopulatedMedia } from "@/shared/lib/payload/media";
-import type { CatalogProductsLandingArticle, CatalogProductsLandingData, CatalogProductsLandingPortrait } from "@/widgets/catalog-products/model/types";
+import type {
+  CatalogProductsLandingArticle,
+  CatalogProductsLandingData,
+  CatalogProductsLandingPortrait,
+  CatalogProductsLandingSearchProduct,
+} from "@/widgets/catalog-products/model/types";
 import { PARTNER_CATALOG_ALL_FILTER_ID, getPartnerCatalogData } from "@/views/partner-catalog/model/partner-catalog-data";
-import { getPartnerCatalogPathForFilter } from "@/views/partner-catalog/model/partner-catalog-query";
+import { getPartnerCatalogPathForFilter, getPartnerCatalogProductPath, getPartnerCatalogSectionContext } from "@/views/partner-catalog/model/partner-catalog-query";
 
 const DEFAULT_HERO_PORTRAITS: CatalogProductsLandingPortrait[] = [
   { src: "/catalog-products/1.webp", alt: "Изображение каталога продукции 1" },
@@ -23,6 +28,10 @@ type HeroImageKey = (typeof HERO_IMAGE_KEYS)[number];
 
 type HeroImagesSource = Partial<Record<HeroImageKey, unknown>>;
 
+function normalizeSearchValue(value: string) {
+  return value.trim().toLocaleLowerCase("ru");
+}
+
 function resolvePortrait(source: unknown, fallback: CatalogProductsLandingPortrait): CatalogProductsLandingPortrait {
   if (!isPopulatedMedia(source) || typeof source.url !== "string" || source.url.length === 0) {
     return fallback;
@@ -35,7 +44,8 @@ function resolvePortrait(source: unknown, fallback: CatalogProductsLandingPortra
 }
 
 export async function getCatalogProductsLandingData(): Promise<CatalogProductsLandingData> {
-  const partnerCatalogCategories = (await getPartnerCatalogData()).categories;
+  const partnerCatalogData = await getPartnerCatalogData();
+  const partnerCatalogCategories = partnerCatalogData.categories;
   const blogPosts = await getBlogPosts();
   const payload = (await getPayloadClient()) as any;
   const catalogProductsPage = await payload.find({
@@ -90,6 +100,26 @@ export async function getCatalogProductsLandingData(): Promise<CatalogProductsLa
     })),
   }));
 
+  const searchProducts: CatalogProductsLandingSearchProduct[] = partnerCatalogData.products
+    .flatMap((product) => {
+      const sectionContext = getPartnerCatalogSectionContext(partnerCatalogCategories, product.sectionId);
+
+      if (!sectionContext) {
+        return [];
+      }
+
+      return product.variants.map((variant) => ({
+        id: variant.id,
+        article: variant.article,
+        normalizedArticle: normalizeSearchValue(variant.article),
+        title: variant.title,
+        normalizedTitle: normalizeSearchValue(variant.title),
+        href: getPartnerCatalogProductPath(partnerCatalogCategories, product.sectionId, variant.id),
+        categoryTitle: sectionContext.rootName,
+      }));
+    })
+    .sort((left, right) => left.article.localeCompare(right.article, "ru"));
+
   return {
     portraits: HERO_IMAGE_KEYS.map((key, index) => resolvePortrait(heroImagesSource?.[key], DEFAULT_HERO_PORTRAITS[index])),
     categoriesHeading:
@@ -98,5 +128,6 @@ export async function getCatalogProductsLandingData(): Promise<CatalogProductsLa
         : DEFAULT_CATEGORIES_HEADING,
     articles,
     categories,
+    searchProducts,
   };
 }

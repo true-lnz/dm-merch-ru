@@ -6,22 +6,61 @@ import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dia
 import { TransitionLink } from "@/shared/ui/page-transition";
 import { WishlistTrigger } from "@/shared/ui/wishlist-trigger";
 import { CatalogCategoryIcon } from "@/widgets/catalog-products-categories";
-import type { CatalogProductsLandingCategory } from "@/widgets/catalog-products/model/types";
+import type { CatalogProductsLandingCategory, CatalogProductsLandingSearchProduct } from "@/widgets/catalog-products/model/types";
 import { ChevronDownIcon, ChevronRightIcon, LayoutGridIcon, SearchIcon, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type ChangeEvent, type RefObject, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
+const PRODUCT_SEARCH_MIN_LENGTH = 3;
+const SEARCH_RESULTS_PAGE_SIZE = 20;
+
 type CatalogProductsBottomBarProps = {
   categories: CatalogProductsLandingCategory[];
+  searchProducts: CatalogProductsLandingSearchProduct[];
 };
 
 type SearchResultItem = {
   id: string;
   href: string;
   title: string;
+  article?: string;
+  categoryTitle?: string;
   subtitle?: string;
-  type: "category" | "subcategory";
+  type: "category" | "subcategory" | "product";
 };
+
+function normalizeSearchValue(value: string) {
+  return value.trim().toLocaleLowerCase("ru");
+}
+
+function useDebouncedValue<T>(value: T, delayMs: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => setDebouncedValue(value), delayMs);
+    return () => window.clearTimeout(timeoutId);
+  }, [delayMs, value]);
+
+  return debouncedValue;
+}
+
+function findFirstProductPrefixMatchIndex(products: CatalogProductsLandingSearchProduct[], query: string) {
+  let left = 0;
+  let right = products.length;
+
+  while (left < right) {
+    const middle = Math.floor((left + right) / 2);
+    const article = products[middle]?.normalizedArticle ?? "";
+
+    if (article < query) {
+      left = middle + 1;
+    } else {
+      right = middle;
+    }
+  }
+
+  return left;
+}
 
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
   useEffect(() => {
@@ -45,7 +84,7 @@ function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => vo
   }, [enabled, onOutside, ref]);
 }
 
-export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBarProps) {
+export function CatalogProductsBottomBar({ categories, searchProducts }: CatalogProductsBottomBarProps) {
   const router = useRouter();
   const { count: wishlistCount } = useWishlist();
   const [isDesktopCategoryMenuOpen, setIsDesktopCategoryMenuOpen] = useState(false);
@@ -55,14 +94,16 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isTwoColumnSubcategoryMenu, setIsTwoColumnSubcategoryMenu] = useState(false);
+  const [visibleResultsLimit, setVisibleResultsLimit] = useState(SEARCH_RESULTS_PAGE_SIZE);
   const categoryMenuRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLDivElement | null>(null);
   const desktopCategoryPanelRef = useRef<HTMLDivElement | null>(null);
   const desktopSubcategorySingleColumnMeasureRef = useRef<HTMLDivElement | null>(null);
 
-  const normalizedQuery = searchQuery.trim().toLocaleLowerCase("ru");
-  const searchResults = useMemo<SearchResultItem[]>(() => {
-    const categoryResults = categories.map((category) => ({
+  const debouncedSearchQuery = useDebouncedValue(searchQuery, 200);
+  const normalizedQuery = normalizeSearchValue(debouncedSearchQuery);
+  const categorySearchResults = useMemo<SearchResultItem[]>(() => {
+    const categoryResults: SearchResultItem[] = categories.map((category) => ({
       id: category.id,
       href: category.href,
       title: category.title,
@@ -86,11 +127,63 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
       return [];
     }
 
-    return searchResults.filter((item) => {
+    const productResults: SearchResultItem[] = [];
+
+    if (normalizedQuery.length >= PRODUCT_SEARCH_MIN_LENGTH) {
+      const firstMatchIndex = findFirstProductPrefixMatchIndex(searchProducts, normalizedQuery);
+
+      for (let index = firstMatchIndex; index < searchProducts.length; index += 1) {
+        const product = searchProducts[index];
+
+        if (!product.normalizedArticle.startsWith(normalizedQuery)) {
+          break;
+        }
+
+        productResults.push({
+          id: product.id,
+          href: product.href,
+          title: product.title,
+          article: product.article,
+          categoryTitle: product.categoryTitle,
+          type: "product",
+        });
+      }
+
+      const seenProductIds = new Set(productResults.map((item) => item.id));
+
+      for (const product of searchProducts) {
+        if (seenProductIds.has(product.id) || !product.normalizedTitle.includes(normalizedQuery)) {
+          continue;
+        }
+
+        seenProductIds.add(product.id);
+        productResults.push({
+          id: product.id,
+          href: product.href,
+          title: product.title,
+          article: product.article,
+          categoryTitle: product.categoryTitle,
+          type: "product",
+        });
+      }
+    }
+
+    const categoryResults: SearchResultItem[] = [];
+
+    for (const item of categorySearchResults) {
       const haystack = `${item.subtitle ? `${item.subtitle} ` : ""}${item.title}`.toLocaleLowerCase("ru");
-      return haystack.includes(normalizedQuery);
-    });
-  }, [normalizedQuery, searchResults]);
+
+      if (!haystack.includes(normalizedQuery)) {
+        continue;
+      }
+
+      categoryResults.push(item);
+    }
+
+    return [...productResults, ...categoryResults];
+  }, [categorySearchResults, normalizedQuery, searchProducts]);
+  const visibleResults = useMemo(() => filteredResults.slice(0, visibleResultsLimit), [filteredResults, visibleResultsLimit]);
+  const hasMoreResults = filteredResults.length > visibleResults.length;
 
   const isSearchResultsOpen = isSearchFocused && normalizedQuery.length > 0;
   const resolvedActiveDesktopCategoryId =
@@ -98,7 +191,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
   const resolvedExpandedMobileCategoryId =
     expandedMobileCategoryId && categories.some((category) => category.id === expandedMobileCategoryId) ? expandedMobileCategoryId : null;
   const activeDesktopCategory = resolvedActiveDesktopCategoryId
-    ? categories.find((category) => category.id === resolvedActiveDesktopCategoryId) ?? null
+    ? (categories.find((category) => category.id === resolvedActiveDesktopCategoryId) ?? null)
     : null;
 
   useOutsideClick(categoryMenuRef, () => setIsDesktopCategoryMenuOpen(false), isDesktopCategoryMenuOpen);
@@ -128,6 +221,10 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
       window.removeEventListener("resize", updateSubcategoryColumns);
     };
   }, [activeDesktopCategory, isDesktopCategoryMenuOpen]);
+
+  useEffect(() => {
+    setVisibleResultsLimit(SEARCH_RESULTS_PAGE_SIZE);
+  }, [normalizedQuery]);
 
   useEffect(() => {
     function handleResize() {
@@ -210,7 +307,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                       ref={desktopCategoryPanelRef}
                       className="w-[520px] overflow-hidden rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white p-2 shadow-[0_20px_50px_rgba(42,42,42,0.16)]"
                     >
-                        <div className="grid grid-cols-2 gap-1">
+                      <div className="grid grid-cols-2 gap-1">
                         {categories.map((category) => {
                           const isActive = category.id === resolvedActiveDesktopCategoryId;
 
@@ -244,14 +341,14 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                         )}
                       >
                         <div className="px-2.5 py-1.5">
-                        <TransitionLink
-                          href={activeDesktopCategory.href}
-                          source="menu"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={handleNavigateFromOverlay}
-                          className="inline-flex rounded-[6px] text-sm font-semibold tracking-[-0.03em] text-[var(--heading)] transition-colors hover:text-[var(--accent)]"
-                        >
+                          <TransitionLink
+                            href={activeDesktopCategory.href}
+                            source="menu"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={handleNavigateFromOverlay}
+                            className="inline-flex rounded-[6px] text-sm font-semibold tracking-[-0.03em] text-[var(--heading)] transition-colors hover:text-[var(--accent)]"
+                          >
                             {activeDesktopCategory.title}
                           </TransitionLink>
                         </div>
@@ -321,7 +418,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                   }}
                   placeholder="Поиск"
                   className="h-10 w-full rounded-[6px] md:rounded-[9px] border border-[rgba(42,42,42,0.08)] bg-[#f7f6f2] pl-9 pr-3 text-base font-medium leading-none tracking-[-0.03em] text-[#404040] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
-                  aria-label="Поиск по категориям и подкатегориям"
+                  aria-label="Поиск по товарам, артикулам, категориям и подкатегориям"
                 />
               </label>
 
@@ -329,7 +426,7 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                 <div className="absolute left-[calc(var(--layout-side-padding)*-1-48px)] right-[calc(var(--layout-side-padding)*-1)] top-[calc(100%+24px)] z-40 w-[86vw] overflow-hidden rounded-[9px] md:rounded-[18px] border border-[rgba(42,42,42,0.08)] bg-white shadow-[0_20px_50px_rgba(42,42,42,0.16)] md:left-0 md:right-auto md:top-[calc(100%+22.5px)] md:w-full">
                   {filteredResults.length > 0 ? (
                     <div className="max-h-[min(60vh,420px)] overflow-y-auto p-2">
-                      {filteredResults.map((item) => (
+                      {visibleResults.map((item) => (
                         <TransitionLink
                           key={`${item.type}-${item.id}`}
                           href={item.href}
@@ -339,21 +436,46 @@ export function CatalogProductsBottomBar({ categories }: CatalogProductsBottomBa
                           onClick={handleNavigateFromOverlay}
                           className="group flex items-center justify-between gap-3 rounded-[10px] px-3 py-2 text-sm leading-[1.35] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)]"
                         >
-                          <span className="min-w-0 flex-1">
-                            {item.subtitle ? (
-                              <>
-                                <span className="text-[var(--text-muted)]">{item.subtitle}</span>
-                                <span className="text-[var(--text-muted)]"> / </span>
-                              </>
-                            ) : null}
-                            <span>{item.title}</span>
-                          </span>
+                          {item.type === "product" ? (
+                            <span className="grid min-w-0 flex-1 grid-cols-1 items-center gap-2 md:grid-cols-4 md:gap-3">
+                              <span className="col-span-1 flex min-w-0 items-center gap-2 md:col-span-3">
+                                <span className="inline-flex shrink-0 items-center rounded-full border border-[rgba(42,42,42,0.06)] bg-[rgba(42,42,42,0.035)] px-2 py-1 text-[11px] font-medium leading-none tracking-[-0.01em] text-[rgba(42,42,42,0.52)]">
+                                  {item.article}
+                                </span>
+                                <span className="min-w-0 truncate">{item.title}</span>
+                              </span>
+                              <span className="hidden min-w-0 truncate text-right text-[var(--text-muted)] md:block md:col-span-1">
+                                {item.categoryTitle}
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="min-w-0 flex-1">
+                              {item.subtitle ? (
+                                <>
+                                  <span className="text-[var(--text-muted)]">{item.subtitle}</span>
+                                  <span className="text-[var(--text-muted)]"> / </span>
+                                </>
+                              ) : null}
+                              <span>{item.title}</span>
+                            </span>
+                          )}
                           <ChevronRightIcon
                             strokeWidth={1.5}
                             className="size-4 shrink-0 translate-x-[-6px] opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
                           />
                         </TransitionLink>
                       ))}
+                      {hasMoreResults ? (
+                        <div className="px-3 pt-2">
+                          <button
+                            type="button"
+                            onClick={() => setVisibleResultsLimit((current) => current + SEARCH_RESULTS_PAGE_SIZE)}
+                            className="w-full cursor-pointer rounded-[10px] border border-[rgba(42,42,42,0.08)] px-3 py-2 text-sm font-semibold leading-[1.35] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)]"
+                          >
+                            Загрузить ещё
+                          </button>
+                        </div>
+                      ) : null}
                     </div>
                   ) : (
                     <div className="px-3 py-3 text-sm text-[var(--text-muted)]">Ничего не найдено</div>

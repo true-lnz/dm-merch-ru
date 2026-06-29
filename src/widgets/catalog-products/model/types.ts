@@ -30,9 +30,20 @@ export type CatalogProductsLandingCategory = {
   subcategories: CatalogProductsLandingSubcategory[];
 };
 
+export type CatalogProductsLandingSearchProduct = {
+  id: string;
+  article: string;
+  normalizedArticle: string;
+  title: string;
+  normalizedTitle: string;
+  href: string;
+  categoryTitle: string;
+};
+
 export type CatalogProductsLandingData = {
   portraits: CatalogProductsLandingPortrait[];
   categoriesHeading: string;
   articles: CatalogProductsLandingArticle[];
   categories: CatalogProductsLandingCategory[];
+  searchProducts: CatalogProductsLandingSearchProduct[];
 };

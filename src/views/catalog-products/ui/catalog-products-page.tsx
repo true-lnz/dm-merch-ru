@@ -17,7 +17,7 @@ export async function CatalogProductsPage({ data }: { data: CatalogProductsLandi
   return (
     <>
       <WidowFix />
-      <CatalogProductsBottomBar categories={data.categories} />
+      <CatalogProductsBottomBar categories={data.categories} searchProducts={data.searchProducts} />
       <CatalogProductsHero portraits={data.portraits} />
       <CatalogProductsArticles items={data.articles} />
       <CatalogProductsCategories items={data.categories} heading={data.categoriesHeading} />

@@ -7,7 +7,7 @@ import { PageBreadcrumb } from "@/shared/ui/breadcrumb";
 import { buttonVariants } from "@/shared/ui/button";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { SliderControl } from "@/shared/ui/slider-control";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, CopyIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ComponentProps, type PointerEvent, type RefObject } from "react";
@@ -455,6 +455,15 @@ export function PartnerCatalogProductPage({ detail, breadcrumb }: PartnerCatalog
     setIsImageZoomed(false);
   }
 
+  async function handleArticleCopy() {
+    try {
+      await navigator.clipboard.writeText(detail.article);
+      toast.success("Артикул скопирован");
+    } catch {
+      toast.error("Не удалось скопировать артикул");
+    }
+  }
+
   return (
     <>
       <section className="mb-[35px] md:mb-[45px]">
@@ -586,7 +595,21 @@ export function PartnerCatalogProductPage({ detail, breadcrumb }: PartnerCatalog
               </div>
 
               <div className="grid gap-3 text-sm leading-[1.35] text-[var(--text-muted)] md:text-base">
-                <p>Артикул: {detail.article}</p>
+                <button
+                  type="button"
+                  onClick={handleArticleCopy}
+                  className="group flex w-fit cursor-pointer items-center gap-2 rounded-[8px] text-left text-sm leading-[1.35] text-[var(--text-muted)] transition-colors hover:text-[var(--heading)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] md:text-base"
+                  aria-label={`Скопировать артикул ${detail.article}`}
+                  title="Скопировать артикул"
+                >
+                  <span>Артикул: {detail.article}</span>
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex size-7 items-center justify-center rounded-full text-[var(--text-muted)] opacity-0 transition-all duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+                  >
+                    <CopyIcon className="size-3.5" strokeWidth={1.9} />
+                  </span>
+                </button>
                 <p className="text-2xl font-semibold leading-none text-[var(--heading)] md:text-[2rem]">{formatRubPrice(detail.priceRub)}</p>
               </div>
             </div>
