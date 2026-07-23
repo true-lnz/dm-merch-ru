@@ -304,12 +304,27 @@ function stripPortobelloSizeFromTitle(title) {
     .trim();
 }
 
+function getPortobelloImageUrls(product) {
+  if (Array.isArray(product.images)) {
+    return product.images.filter(Boolean);
+  }
+
+  if (product.images && typeof product.images === "object") {
+    return Object.entries(product.images)
+      .sort(([left], [right]) => Number(left) - Number(right))
+      .map(([, url]) => url)
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
 function getPortobelloPrimaryImage(product) {
-  return product.images?.find(Boolean) ?? PORTOBELLO_IMAGE_FALLBACK;
+  return getPortobelloImageUrls(product)[0] ?? PORTOBELLO_IMAGE_FALLBACK;
 }
 
 function getPortobelloAllImages(product) {
-  const imageUrls = product.images?.filter(Boolean) ?? [];
+  const imageUrls = getPortobelloImageUrls(product);
   return imageUrls.length > 0 ? imageUrls : [getPortobelloPrimaryImage(product)];
 }
 
@@ -538,9 +553,9 @@ function buildCategoryStats(index, products) {
 }
 
 function parsePortobelloDataset(index) {
-  const catalog = readJson(join(process.cwd(), "public", "_temp", "catalog.json"));
-  const prices = readJson(join(process.cwd(), "public", "_temp", "prices.json"));
-  const stocks = readJson(join(process.cwd(), "public", "_temp", "stocks.json"));
+  const catalog = readJson(join(process.cwd(), "public", "_temp", "portobello", "catalog.json"));
+  const prices = readJson(join(process.cwd(), "public", "_temp", "portobello", "prices.json"));
+  const stocks = readJson(join(process.cwd(), "public", "_temp", "portobello", "stocks.json"));
 
   const sections = Array.isArray(catalog.sections) ? catalog.sections : Object.values(catalog.sections);
   const sectionById = new Map(sections.map((section) => [section.id, section]));
@@ -685,7 +700,7 @@ function parsePortobelloDataset(index) {
 }
 
 function parseProject111Tree() {
-  const xml = readText(join(process.cwd(), "public", "project111", "tree.xml"));
+  const xml = readText(join(process.cwd(), "public", "_temp", "project111", "tree.xml"));
   const pageRe = /<page(?: parent_page_id="([^"]+)")?>\s*<page_id>([^<]+)<\/page_id>\s*<name>([^<]+)<\/name>/g;
   const productRefRe = /<product>\s*<page>([^<]+)<\/page>\s*<product>([^<]+)<\/product>\s*<\/product>/g;
   const pages = [];
@@ -825,7 +840,7 @@ function deriveProject111ColorLabel(productName, groupName, fallbackArticle) {
 }
 
 function parseProject111Stock() {
-  const xml = readText(join(process.cwd(), "public", "project111", "stock.xml"));
+  const xml = readText(join(process.cwd(), "public", "_temp", "project111", "stock.xml"));
   const stockBlocks = [...xml.matchAll(/<stock>([\s\S]*?)<\/stock>/g)];
   const stockByProductId = new Map();
 
@@ -850,7 +865,7 @@ function parseProject111Stock() {
 function parseProject111Dataset(index, project111Tree) {
   const { pageById, rootByChildId, pageIdsByProductId } = project111Tree;
   const stockByProductId = parseProject111Stock();
-  const catalogueXml = readText(join(process.cwd(), "public", "project111", "catalogue.xml"));
+  const catalogueXml = readText(join(process.cwd(), "public", "_temp", "project111", "catalogue.xml"));
   const topLevelProducts = extractCatalogueProductBlocks(catalogueXml);
   const groupedProducts = new Map();
   const unmappedCategories = new Map();

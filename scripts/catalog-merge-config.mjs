@@ -91,5 +91,6 @@ export const MERGED_CATALOG_CONFIG = {
     "000001376": { targetChildId: "1105808" },
     "000001378": { targetChildId: "1105744" },
     "000001380": { targetChildId: "custom-personal-eyeglass-cases" },
+    "000001404": { targetChildId: "1106906" },
   },
 };

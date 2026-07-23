@@ -16,6 +16,7 @@
     "download:project111:catalog": "bash scripts/download-project111-catalog.sh",
     "download:project111:images": "bash scripts/download-project111-images.sh",
     "download:project111": "bash scripts/download-project111-catalog.sh && bash scripts/download-project111-images.sh",
+    "download:portobello": "node scripts/download-portobello-catalog.mjs",
     "import:cases": "node --experimental-strip-types scripts/import-cases-to-payload.ts",
     "import:catalog-categories": "node --experimental-strip-types scripts/import-catalog-categories-to-payload.ts",
     "import:site-info": "node --experimental-strip-types scripts/import-site-info-to-payload.ts",
