@@ -12,6 +12,11 @@ type BitrixLeadFields = {
   UF_CRM_1778571350: string;
   OPPORTUNITY?: number;
   CURRENCY_ID?: "RUB";
+  UTM_SOURCE?: string;
+  UTM_MEDIUM?: string;
+  UTM_CAMPAIGN?: string;
+  UTM_CONTENT?: string;
+  UTM_TERM?: string;
 };
 
 type BitrixSuccessResponse = {
@@ -112,6 +117,15 @@ function buildBitrixLeadFields(payload: RequestPayload, config: BitrixConfig): B
   if (payload.type === "wishlist") {
     fields.OPPORTUNITY = payload.totalRub;
     fields.CURRENCY_ID = "RUB";
+  }
+
+  if (payload.attribution) {
+    const { utmSource, utmMedium, utmCampaign, utmContent, utmTerm } = payload.attribution;
+    if (utmSource) fields.UTM_SOURCE = utmSource;
+    if (utmMedium) fields.UTM_MEDIUM = utmMedium;
+    if (utmCampaign) fields.UTM_CAMPAIGN = utmCampaign;
+    if (utmContent) fields.UTM_CONTENT = utmContent;
+    if (utmTerm) fields.UTM_TERM = utmTerm;
   }
 
   return fields;

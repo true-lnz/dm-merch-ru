@@ -9,6 +9,7 @@ import {
 } from "./constants";
 import { useYandexMetrika } from "./use-yandex-metrika";
 import { YandexMetrikaInitializer } from "./yandex-metrika-initializer";
+import { getRequestAttribution } from "@/shared/lib/request-mail/attribution";
 
 function buildRoute(pathname: string, searchParams: URLSearchParams) {
   const query = searchParams.toString();
@@ -36,6 +37,8 @@ export function YandexMetrikaContainer() {
   });
 
   useEffect(() => {
+    getRequestAttribution();
+
     if (!YANDEX_METRIKA_ENABLED) {
       return;
     }

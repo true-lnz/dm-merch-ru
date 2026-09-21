@@ -23,6 +23,16 @@ export type WishlistRequestItem = {
   unitPriceRub: number;
 };
 
+export type RequestAttribution = {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  landingPage?: string;
+  referrer?: string;
+};
+
 export type GeneralRequestPayload = {
   type: "general";
   source: RequestSource;
@@ -34,6 +44,7 @@ export type GeneralRequestPayload = {
   message?: string;
   quantity?: number;
   context?: string;
+  attribution?: RequestAttribution;
 };
 
 export type WishlistRequestPayload = {
@@ -47,6 +58,7 @@ export type WishlistRequestPayload = {
   message?: string;
   wishlistItems: WishlistRequestItem[];
   totalRub: number;
+  attribution?: RequestAttribution;
 };
 
 export type RequestPayload = GeneralRequestPayload | WishlistRequestPayload;

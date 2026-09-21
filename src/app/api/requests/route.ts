@@ -1,4 +1,4 @@
-import type { RequestErrorResponse, RequestPayload, RequestSuccessResponse, WishlistRequestItem } from "@/shared/lib/request-mail/types";
+import type { RequestAttribution, RequestErrorResponse, RequestPayload, RequestSuccessResponse, WishlistRequestItem } from "@/shared/lib/request-mail/types";
 import { getBitrixLeadErrorDetails, sendBitrixLead } from "@/shared/lib/request-mail/send-bitrix-lead";
 import { sendRequestEmail } from "@/shared/lib/request-mail/send-request-email";
 import { NextResponse } from "next/server";
@@ -110,6 +110,17 @@ function buildError(message: string, status = 400) {
   return NextResponse.json(body, { status });
 }
 
+function parseAttribution(value: unknown): RequestAttribution | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  const input = value as Record<string, unknown>;
+  const result: RequestAttribution = {};
+  for (const key of ["utmSource", "utmMedium", "utmCampaign", "utmContent", "utmTerm", "landingPage", "referrer"] as const) {
+    const normalized = sanitizeOptionalString(input[key]);
+    if (normalized) result[key] = normalized.slice(0, key === "landingPage" || key === "referrer" ? 2000 : 500);
+  }
+  return Object.keys(result).length ? result : undefined;
+}
+
 function isHoneypotFilled(body: Record<string, unknown>) {
   return sanitizeString(body[HONEYPOT_FIELD_NAME]).length > 0;
 }
@@ -180,6 +191,7 @@ function validateBasePayload(body: Record<string, unknown>) {
   const pagePath = sanitizeString(body.pagePath);
   const source = sanitizeString(body.source);
   const pageTitle = sanitizeOptionalString(body.pageTitle);
+  const attribution = parseAttribution(body.attribution);
 
   if (!name) {
     throw new Error("Укажите имя.");
@@ -213,6 +225,7 @@ function validateBasePayload(body: Record<string, unknown>) {
     pagePath,
     source,
     pageTitle,
+    attribution,
   };
 }
 
@@ -239,6 +252,7 @@ function parseRequestPayload(body: Record<string, unknown>): RequestPayload {
       message: base.message,
       wishlistItems,
       totalRub,
+      attribution: base.attribution,
     };
   }
 
@@ -256,7 +270,8 @@ function parseRequestPayload(body: Record<string, unknown>): RequestPayload {
     email: base.email,
     message: base.message,
     quantity: parseQuantity(body.quantity),
-    context: sanitizeOptionalString(body.context),
+      context: sanitizeOptionalString(body.context),
+      attribution: base.attribution,
   };
 }
 

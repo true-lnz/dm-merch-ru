@@ -2,6 +2,7 @@
 
 import { cn } from "@/shared/lib/cn";
 import type { RequestPayload, RequestSource, WishlistRequestItem } from "@/shared/lib/request-mail/types";
+import { getRequestAttribution } from "@/shared/lib/request-mail/attribution";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
@@ -274,6 +275,7 @@ export function RequestForm({
       context,
       pagePath: pathname,
       pageTitle: pageTitle ?? (typeof document !== "undefined" ? document.title : undefined),
+      attribution: getRequestAttribution(),
       name: String(formData.get("name") ?? "").trim(),
       phone: String(formData.get("phone") ?? "").trim(),
       email: String(formData.get("email") ?? "").trim() || undefined,
