@@ -81,9 +81,9 @@ function buildLeadTitle(payload: RequestPayload) {
 function buildGeneralComments(payload: GeneralRequestPayload) {
   if (payload.source === "tilda-lead") {
     const tildaLines = [
-      payload.context ? `Выбранные товары: ${payload.context}` : "",
+      payload.context ? `Выбранные товары:\n${payload.context}` : "",
       payload.message ? `Персональные позиции от клиента: ${payload.message}` : "",
-      payload.quantity ? `Тираж от: ${payload.quantity}` : "",
+      payload.quantity ? `Тираж от:\n${payload.quantity}` : "",
     ];
     return tildaLines.filter(Boolean).join("\n");
   }

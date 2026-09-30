@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       company: text(body.company, 300) || undefined,
       message: requestedPosition,
       quantity: quantity ? Number(quantity.replace(/\s/g, "")) || undefined : undefined,
-      context: products.join(", "),
+      context: products.map((product, index) => `${index + 1}. ${product}`).join("\n"),
     };
     const result = await sendBitrixLead(payload);
     if (result.skipped) throw new Error("BITRIX24_LEAD_ADD_URL is not configured");
