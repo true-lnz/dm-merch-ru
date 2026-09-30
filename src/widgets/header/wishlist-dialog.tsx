@@ -6,6 +6,7 @@ import { RequestForm } from "@/shared/ui/request-form";
 import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { useMemo } from "react";
+import { toast } from "sonner";
 
 type WishlistDialogProps = {
   open: boolean;
@@ -87,10 +88,21 @@ function WishlistProductCard({
 }
 
 export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
-  const { items, updateQuantity, increaseQuantity, decreaseQuantity, removeItem, clear } = useWishlist();
+  const { items, addItem, updateQuantity, increaseQuantity, decreaseQuantity, removeItem, clear } = useWishlist();
 
   const totalRub = useMemo(() => items.reduce((sum, item) => sum + item.unitPriceRub * item.quantity, 0), [items]);
   const shouldDesktopScrollItems = items.length > 4;
+
+  function handleClear() {
+    const removedItems = items;
+    clear();
+    toast("Вишлист очищен", {
+      action: {
+        label: "Отменить",
+        onClick: () => removedItems.forEach((item) => addItem(item, item.quantity)),
+      },
+    });
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -124,7 +136,7 @@ export function WishlistDialog({ open, onOpenChange }: WishlistDialogProps) {
               <p className="text-sm font-medium leading-[1.3] tracking-[-0.03em] text-[#5a5a5a]">Товары в вишлисте: {items.length}</p>
               <button
                 type="button"
-                onClick={clear}
+                onClick={handleClear}
                 className="text-sm leading-[1.3] tracking-[-0.03em] text-[#7a7a7a] underline underline-offset-2 transition-colors hover:text-[#4f4f4f]"
               >
                 Очистить вишлист

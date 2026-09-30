@@ -193,6 +193,7 @@ function validateBasePayload(body: Record<string, unknown>) {
   const source = sanitizeString(body.source);
   const pageTitle = sanitizeOptionalString(body.pageTitle);
   const attribution = parseAttribution(body.attribution);
+  const wishlistItems = Array.isArray(body.wishlistItems) ? parseWishlistItems(body.wishlistItems) : undefined;
 
   if (!name) {
     throw new Error("Укажите имя.");
@@ -227,6 +228,7 @@ function validateBasePayload(body: Record<string, unknown>) {
     source,
     pageTitle,
     attribution,
+    wishlistItems,
   };
 }
 
@@ -270,6 +272,7 @@ function parseRequestPayload(body: Record<string, unknown>): RequestPayload {
     phone: base.phone,
     email: base.email,
     message: base.message,
+    wishlistItems: base.wishlistItems,
     quantity: parseQuantity(body.quantity),
       context: sanitizeOptionalString(body.context),
       attribution: base.attribution,

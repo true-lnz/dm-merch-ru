@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { AddWishlistItemInput, WishlistItem } from "./types";
 
 type WishlistContextValue = {
@@ -16,6 +16,7 @@ type WishlistContextValue = {
 };
 
 const WishlistContext = createContext<WishlistContextValue | null>(null);
+const WISHLIST_STORAGE_KEY = "dm-merch:wishlist:v1";
 
 function sanitizeQuantity(quantity: number) {
   if (!Number.isFinite(quantity)) {
@@ -25,8 +26,78 @@ function sanitizeQuantity(quantity: number) {
   return Math.max(1, Math.floor(quantity));
 }
 
+function parseStoredItems(value: string | null): WishlistItem[] | null {
+  if (!value) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (!Array.isArray(parsed)) return null;
+
+    const items = parsed.filter((item): item is WishlistItem => {
+      if (!item || typeof item !== "object") return false;
+      const candidate = item as Partial<WishlistItem>;
+      return (
+        typeof candidate.id === "string" &&
+        typeof candidate.title === "string" &&
+        typeof candidate.articleNumber === "string" &&
+        typeof candidate.imageUrl === "string" &&
+        typeof candidate.unitPriceRub === "number" &&
+        Number.isFinite(candidate.unitPriceRub) &&
+        typeof candidate.quantity === "number" &&
+        Number.isFinite(candidate.quantity)
+      );
+    });
+
+    return items.map((item) => ({ ...item, quantity: sanitizeQuantity(item.quantity) }));
+  } catch {
+    return null;
+  }
+}
+
+function readStoredItems() {
+  for (const storage of [window.localStorage, window.sessionStorage]) {
+    try {
+      const items = parseStoredItems(storage.getItem(WISHLIST_STORAGE_KEY));
+      if (items) return items;
+    } catch {
+      // Continue with the other storage when browser storage is restricted.
+    }
+  }
+  return [];
+}
+
 export function WishlistProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<WishlistItem[]>([]);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setItems(readStoredItems());
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    const serialized = JSON.stringify(items);
+    for (const storage of [window.localStorage, window.sessionStorage]) {
+      try {
+        storage.setItem(WISHLIST_STORAGE_KEY, serialized);
+      } catch {
+        // Keep the in-memory list if storage is unavailable or full.
+      }
+    }
+  }, [isHydrated, items]);
+
+  useEffect(() => {
+    function handleStorage(event: StorageEvent) {
+      if (event.key !== WISHLIST_STORAGE_KEY || !event.newValue) return;
+      const nextItems = parseStoredItems(event.newValue);
+      if (nextItems) setItems(nextItems);
+    }
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   const addItem = useCallback((item: AddWishlistItemInput, quantity: number) => {
     const safeQuantity = sanitizeQuantity(quantity);

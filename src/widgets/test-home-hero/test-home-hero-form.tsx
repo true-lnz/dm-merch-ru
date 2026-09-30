@@ -2,6 +2,7 @@
 
 import type { RequestErrorResponse, RequestSuccessResponse } from "@/shared/lib/request-mail/types";
 import { getRequestAttribution } from "@/shared/lib/request-mail/attribution";
+import { useWishlist } from "@/shared/lib/wishlist";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
@@ -87,6 +88,7 @@ function countDigitsInRange(start: number, end: number) {
 }
 
 export function TestHomeHeroForm() {
+  const { items: wishlistItems } = useWishlist();
   const privacyCheckboxId = useId();
   const honeypotFieldId = useId();
   const pathname = usePathname();
@@ -208,7 +210,8 @@ export function TestHomeHeroForm() {
           pagePath: pathname,
           pageTitle: typeof document !== "undefined" ? document.title : undefined,
           attribution: getRequestAttribution(),
-          name: "Hero",
+          wishlistItems,
+          name: "Неизвестно",
           phone: maskedPhoneValue,
           [HONEYPOT_FIELD_NAME]: String(formData.get(HONEYPOT_FIELD_NAME) ?? "").trim(),
         }),

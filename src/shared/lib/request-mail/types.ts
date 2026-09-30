@@ -47,6 +47,7 @@ export type GeneralRequestPayload = {
   quantity?: number;
   context?: string;
   attribution?: RequestAttribution;
+  wishlistItems?: WishlistRequestItem[];
 };
 
 export type WishlistRequestPayload = {

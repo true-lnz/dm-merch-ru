@@ -2,6 +2,7 @@
 
 import { cn } from "@/shared/lib/cn";
 import type { RequestPayload, RequestSource, WishlistRequestItem } from "@/shared/lib/request-mail/types";
+import { useWishlist } from "@/shared/lib/wishlist";
 import { getRequestAttribution } from "@/shared/lib/request-mail/attribution";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
@@ -155,6 +156,7 @@ export function RequestForm({
   onAccentSurface = false,
   onSuccess,
 }: RequestFormProps) {
+  const { items: currentWishlistItems } = useWishlist();
   const messageFieldId = useId();
   const honeypotFieldId = useId();
   const pathname = usePathname();
@@ -276,6 +278,14 @@ export function RequestForm({
       pagePath: pathname,
       pageTitle: pageTitle ?? (typeof document !== "undefined" ? document.title : undefined),
       attribution: getRequestAttribution(),
+      wishlistItems: currentWishlistItems.map(({ id, title, articleNumber, productUrl, quantity, unitPriceRub }) => ({
+        id,
+        title,
+        articleNumber,
+        productUrl,
+        quantity,
+        unitPriceRub,
+      })),
       name: String(formData.get("name") ?? "").trim(),
       phone: String(formData.get("phone") ?? "").trim(),
       email: String(formData.get("email") ?? "").trim() || undefined,

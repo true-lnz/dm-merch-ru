@@ -72,10 +72,47 @@ function normalizePhoneForBitrix(phone: string) {
 }
 
 function buildLeadTitle(payload: RequestPayload) {
-  if (payload.type === "general" && payload.source === "tilda-lead") {
-    return `Заявка с лид-формы от ${payload.name}`;
+  if (payload.type !== "general" || payload.source !== "home-hero") {
+    if (payload.type === "general" && payload.source === "tilda-lead") {
+      return `Заявка с лид-формы от ${payload.name}`;
+    }
+
+    return payload.type === "wishlist" ? `Заявка на КП от ${payload.name}` : `Заявка от ${payload.name}`;
   }
-  return payload.type === "wishlist" ? `Заявка на КП от ${payload.name}` : `Заявка от ${payload.name}`;
+
+  const utmSource = payload.attribution?.utmSource?.toLowerCase() ?? "";
+
+  if (utmSource.includes("yandex") || utmSource.includes("яндекс") || utmSource === "ya") {
+    return "Заявка из Яндекс.Директ";
+  }
+
+  if (utmSource.includes("instagram") || utmSource === "insta" || utmSource === "ig") {
+    return "Заявка из Instagram";
+  }
+
+  const date = new Intl.DateTimeFormat("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: "Asia/Yekaterinburg",
+  }).format(new Date());
+
+  return `Заявка от ${date}`;
+}
+
+function buildAttachedWishlistLines(payload: GeneralRequestPayload) {
+  if (!payload.wishlistItems?.length) return [];
+
+  const totalRub = payload.wishlistItems.reduce((sum, item) => sum + item.unitPriceRub * item.quantity, 0);
+  return [
+    "",
+    "Также товары в вишлисте:",
+    `Позиций в вишлисте: ${payload.wishlistItems.length}`,
+    `Итого: ${formatRub(totalRub)}`,
+    "",
+    "Позиции вишлиста:",
+    ...formatWishlistLineItems(payload.wishlistItems),
+  ];
 }
 
 function buildGeneralComments(payload: GeneralRequestPayload) {
@@ -85,13 +122,14 @@ function buildGeneralComments(payload: GeneralRequestPayload) {
       payload.message ? `Персональные позиции от клиента: ${payload.message}` : "",
       payload.quantity ? `Тираж от:\n${payload.quantity}` : "",
     ];
-    return tildaLines.filter(Boolean).join("\n");
+    return [...tildaLines.filter(Boolean), ...buildAttachedWishlistLines(payload)].join("\n");
   }
   const lines = [
     `Источник: ${requestSourceLabels[payload.source]}`,
     "",
     "Комментарий клиента:",
     payload.message || "Без комментария",
+    ...buildAttachedWishlistLines(payload),
   ];
 
   return lines.filter((line) => line !== undefined).join("\n");
