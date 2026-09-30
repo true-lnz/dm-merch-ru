@@ -19,12 +19,17 @@ export function getRequestAttribution(): RequestAttribution | undefined {
   if (typeof window === "undefined") return undefined;
 
   const currentUrl = new URL(window.location.href);
-  const stored = window.sessionStorage.getItem(REQUEST_ATTRIBUTION_STORAGE_KEY);
   let attribution: RequestAttribution = {};
-  try {
-    attribution = stored ? JSON.parse(stored) : {};
-  } catch {
-    window.sessionStorage.removeItem(REQUEST_ATTRIBUTION_STORAGE_KEY);
+  for (const storage of [window.sessionStorage, window.localStorage]) {
+    try {
+      const stored = storage.getItem(REQUEST_ATTRIBUTION_STORAGE_KEY);
+      if (stored) {
+        attribution = { ...attribution, ...JSON.parse(stored) };
+      }
+    } catch {
+      // Storage can be unavailable in private/restricted browser contexts.
+      continue;
+    }
   }
 
   for (const [queryKey, field] of UTM_FIELDS) {
@@ -38,7 +43,14 @@ export function getRequestAttribution(): RequestAttribution | undefined {
   if (!attribution.referrer) attribution.referrer = clean(document.referrer)?.slice(0, 2000);
 
   if (Object.keys(attribution).length > 0) {
-    window.sessionStorage.setItem(REQUEST_ATTRIBUTION_STORAGE_KEY, JSON.stringify(attribution));
+    const serialized = JSON.stringify(attribution);
+    for (const storage of [window.sessionStorage, window.localStorage]) {
+      try {
+        storage.setItem(REQUEST_ATTRIBUTION_STORAGE_KEY, serialized);
+      } catch {
+        // Keep the in-memory attribution when browser storage is blocked.
+      }
+    }
     return attribution;
   }
 

@@ -6,6 +6,7 @@ import { WishlistProvider } from "@/shared/lib/wishlist";
 import { YandexMetrikaContainer } from "@/shared/lib/yandex-metrika";
 import { ClientRuntimeMonitor } from "@/shared/ui/client-runtime-monitor";
 import { PageTransitionProvider } from "@/shared/ui/page-transition";
+import { RequestAttributionCapture } from "@/shared/ui/request-attribution-capture";
 import { Toaster } from "@/shared/ui/sonner";
 import { CookieWarning } from "@/widgets/cookie-warning";
 import { Footer } from "@/widgets/footer";
@@ -79,6 +80,7 @@ export default async function RootLayout({
           <SiteInfoProvider value={siteInfo}>
             <RequestCtaProvider value={requestCta}>
               <PageTransitionProvider>
+                <RequestAttributionCapture />
                 <WishlistProvider>
                   <div className="site-shell">
                     <Header />

@@ -1,6 +1,7 @@
 "use client";
 
 import type { RequestErrorResponse, RequestSuccessResponse } from "@/shared/lib/request-mail/types";
+import { getRequestAttribution } from "@/shared/lib/request-mail/attribution";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
@@ -206,6 +207,7 @@ export function TestHomeHeroForm() {
           source: "home-hero",
           pagePath: pathname,
           pageTitle: typeof document !== "undefined" ? document.title : undefined,
+          attribution: getRequestAttribution(),
           name: "Hero",
           phone: maskedPhoneValue,
           [HONEYPOT_FIELD_NAME]: String(formData.get(HONEYPOT_FIELD_NAME) ?? "").trim(),
