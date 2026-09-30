@@ -98,8 +98,8 @@ function parseWishlistItems(value: unknown): WishlistRequestItem[] {
 }
 
 function buildRedirectUrl(name: string) {
-  const params = new URLSearchParams({ name });
-  return `/request-success?${params.toString()}`;
+  const normalizedName = name.trim();
+  return normalizedName ? `/request-success?${new URLSearchParams({ name: normalizedName }).toString()}` : "/request-success";
 }
 
 function buildError(message: string, status = 400) {
@@ -331,7 +331,7 @@ export async function POST(request: Request) {
 
     const responseBody: RequestSuccessResponse = {
       ok: true,
-      redirectTo: buildRedirectUrl(payload.name),
+      redirectTo: buildRedirectUrl(payload.source === "home-hero" ? "" : payload.name),
     };
 
     return NextResponse.json(responseBody);

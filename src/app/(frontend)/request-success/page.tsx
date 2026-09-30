@@ -11,6 +11,7 @@ const HERO_IMAGE = {
 } as const;
 
 const HEADING_TEMPLATE = "Спасибо\nза обращение,\nТУТ_ИМЯ!";
+const DEFAULT_HEADING = "Спасибо\nза обращение!";
 const SECONDARY_ARROW_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 const HERO_HEIGHT = "clamp(520px, 62vh, 820px)";
 const TG_ICON_PATH =
@@ -24,12 +25,12 @@ type RequestSuccessPageProps = {
   }>;
 };
 
-function resolveName(name: string | string[] | undefined): string {
+function resolveName(name: string | string[] | undefined): string | undefined {
   if (Array.isArray(name)) {
-    return name[0]?.trim() || "клиент";
+    return name[0]?.trim() || undefined;
   }
 
-  return name?.trim() || "клиент";
+  return name?.trim() || undefined;
 }
 
 export default async function RequestSuccessPage({ searchParams }: RequestSuccessPageProps) {
@@ -37,7 +38,8 @@ export default async function RequestSuccessPage({ searchParams }: RequestSucces
   const siteInfo = await getSiteInfo();
   const maxSocialHref = siteInfo.socials.find((social) => social.icon === "max")?.href ?? "#";
   const tgSocialHref = siteInfo.socials.find((social) => social.icon === "tg")?.href ?? "#";
-  const heading = HEADING_TEMPLATE.replace("ТУТ_ИМЯ", resolveName(resolvedSearchParams?.name));
+  const name = resolveName(resolvedSearchParams?.name);
+  const heading = name ? HEADING_TEMPLATE.replace("ТУТ_ИМЯ", name) : DEFAULT_HEADING;
 
   return (
     <section className="relative mt-[35px] mb-[70px] md:mb-[90px]">
