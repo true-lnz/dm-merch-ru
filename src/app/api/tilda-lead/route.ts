@@ -4,14 +4,29 @@ import type { GeneralRequestPayload } from "@/shared/lib/request-mail/types";
 
 export const dynamic = "force-dynamic";
 
-const ALLOWED_ORIGIN = process.env.TILDA_LEAD_ORIGIN?.trim() || "https://lead.dm-merch.ru";
+const DEFAULT_ALLOWED_ORIGIN = "https://lead.dm-merch.ru";
+const ALLOWED_ORIGINS = new Set(
+  (process.env.TILDA_LEAD_ORIGIN?.trim() || DEFAULT_ALLOWED_ORIGIN)
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+    .map((origin) => {
+      try {
+        return new URL(origin).origin;
+      } catch {
+        return origin.replace(/\/$/, "");
+      }
+    }),
+);
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_REQUESTS = 5;
 const buckets = new Map<string, { count: number; resetAt: number }>();
 
 function headers(origin: string | null) {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.has(origin) ? origin : "null";
+
   return {
-    "Access-Control-Allow-Origin": origin === ALLOWED_ORIGIN ? ALLOWED_ORIGIN : "null",
+    "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Vary": "Origin",
@@ -33,7 +48,7 @@ export async function OPTIONS(request: Request) {
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   const responseHeaders = headers(origin);
-  if (origin !== ALLOWED_ORIGIN) return NextResponse.json({ ok: false, error: "Недопустимый источник запроса." }, { status: 403, headers: responseHeaders });
+  if (!origin || !ALLOWED_ORIGINS.has(origin)) return NextResponse.json({ ok: false, error: "Недопустимый источник запроса." }, { status: 403, headers: responseHeaders });
   const now = Date.now();
   const key = clientIp(request);
   const bucket = buckets.get(key);
