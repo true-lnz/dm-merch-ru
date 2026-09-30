@@ -193,7 +193,7 @@ function validateBasePayload(body: Record<string, unknown>) {
   const source = sanitizeString(body.source);
   const pageTitle = sanitizeOptionalString(body.pageTitle);
   const attribution = parseAttribution(body.attribution);
-  const wishlistItems = Array.isArray(body.wishlistItems) ? parseWishlistItems(body.wishlistItems) : undefined;
+  const wishlistItems = Array.isArray(body.wishlistItems) && body.wishlistItems.length > 0 ? parseWishlistItems(body.wishlistItems) : undefined;
 
   if (!name) {
     throw new Error("Укажите имя.");
