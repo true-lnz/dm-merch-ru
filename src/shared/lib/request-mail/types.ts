@@ -8,6 +8,7 @@ export type RequestSource =
   | "home-hero"
   | "catalog-hero"
   | "catalog-products-hero"
+  | "tilda-lead"
   | "home-results"
   | "home-services"
   | "home-urgent-order"
@@ -39,6 +40,7 @@ export type GeneralRequestPayload = {
   pagePath: string;
   pageTitle?: string;
   name: string;
+  company?: string;
   phone: string;
   email?: string;
   message?: string;

@@ -28,6 +28,7 @@ const REQUEST_SOURCES = new Set<RequestPayload["source"]>([
   "home-hero",
   "catalog-hero",
   "catalog-products-hero",
+  "tilda-lead",
   "home-results",
   "home-services",
   "home-urgent-order",

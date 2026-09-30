@@ -6,9 +6,11 @@ const BITRIX_REQUEST_TYPE_SITE_ID = "44";
 type BitrixLeadFields = {
   TITLE: string;
   NAME: string;
+  COMPANY_TITLE?: string;
   PHONE: Array<{ VALUE: string; VALUE_TYPE: "WORK" }>;
   EMAIL?: Array<{ VALUE: string; VALUE_TYPE: "WORK" }>;
   COMMENTS: string;
+  SOURCE_ID?: string;
   UF_CRM_1778571350: string;
   OPPORTUNITY?: number;
   CURRENCY_ID?: "RUB";
@@ -70,10 +72,21 @@ function normalizePhoneForBitrix(phone: string) {
 }
 
 function buildLeadTitle(payload: RequestPayload) {
+  if (payload.type === "general" && payload.source === "tilda-lead") {
+    return `Заявка с лид-формы от ${payload.name}`;
+  }
   return payload.type === "wishlist" ? `Заявка на КП от ${payload.name}` : `Заявка от ${payload.name}`;
 }
 
 function buildGeneralComments(payload: GeneralRequestPayload) {
+  if (payload.source === "tilda-lead") {
+    const tildaLines = [
+      payload.context ? `Выбранные товары: ${payload.context}` : "",
+      payload.message ? `Персональные позиции от клиента: ${payload.message}` : "",
+      payload.quantity ? `Тираж от: ${payload.quantity}` : "",
+    ];
+    return tildaLines.filter(Boolean).join("\n");
+  }
   const lines = [
     `Источник: ${requestSourceLabels[payload.source]}`,
     "",
@@ -110,8 +123,16 @@ function buildBitrixLeadFields(payload: RequestPayload, config: BitrixConfig): B
     UF_CRM_1778571350: config.requestTypeId,
   };
 
+  if (payload.type === "general" && payload.source === "tilda-lead") {
+    fields.SOURCE_ID = "WEBFORM";
+  }
+
   if (payload.email) {
     fields.EMAIL = [{ VALUE: payload.email, VALUE_TYPE: "WORK" }];
+  }
+
+  if (payload.type === "general" && payload.company) {
+    fields.COMPANY_TITLE = payload.company;
   }
 
   if (payload.type === "wishlist") {

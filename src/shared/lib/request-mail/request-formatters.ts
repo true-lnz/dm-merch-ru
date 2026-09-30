@@ -12,6 +12,7 @@ export const requestSourceLabels: Record<RequestSource, string> = {
   "home-hero": "Главный экран",
   "catalog-hero": "Hero каталога",
   "catalog-products-hero": "Hero каталога продукции",
+  "tilda-lead": "Лид-форма Tilda",
   "home-results": "Блок результатов",
   "home-services": "Блок услуг",
   "home-urgent-order": "Срочный заказ",
