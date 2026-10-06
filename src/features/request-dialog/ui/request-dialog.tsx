@@ -27,7 +27,7 @@ type RequestDialogProps = {
 };
 
 const DEFAULT_LABEL = "Обсудить задачу";
-const DEFAULT_CAPTION = "Минимальный заказ - от 50 000 ₽";
+const DEFAULT_CAPTION = "Минимальный заказ - от 100 тыс. ₽";
 const DEFAULT_ICON_SRC = "/icons/ic_link_arrow_button.svg";
 
 export const RequestDialogButton = forwardRef<HTMLButtonElement, RequestDialogButtonProps>(
