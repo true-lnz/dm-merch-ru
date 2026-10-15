@@ -83,6 +83,7 @@ type MergedCatalogRootSection = {
 };
 
 type MergedCatalogDataset = {
+  generatedAt: string;
   categories: MergedCatalogRootSection[];
   products: MergedCatalogProduct[];
 };
@@ -100,6 +101,7 @@ type PartnerCatalogProductDetailSource = {
 };
 
 type PartnerCatalogDataset = {
+  catalogUpdatedAt: string;
   categories: PartnerCatalogRootSection[];
   products: PartnerCatalogProduct[];
   detailSourceByVariantId: Map<string, { product: PartnerCatalogProductDetailSource; variant: PartnerCatalogVariantDetailSource }>;
@@ -162,6 +164,7 @@ export type PartnerCatalogPageSlice = {
 
 export type PartnerCatalogInitialData = {
   categories: PartnerCatalogRootSection[];
+  catalogUpdatedAt: string;
   initialFilterId: string;
   initialExpandedRootId: string | null;
   initialQuery: PartnerCatalogQueryParams;
@@ -402,6 +405,7 @@ const getPartnerCatalogDataset = cache(async (): Promise<PartnerCatalogDataset> 
   }
 
   return {
+    catalogUpdatedAt: mergedCatalog.generatedAt,
     categories,
     products: productDetails.map(
       (product): PartnerCatalogProduct => ({
@@ -445,13 +449,14 @@ export const getPartnerCatalogProductsPage = cache(
 );
 
 export const getPartnerCatalogInitialData = cache(async (limit: number, query: PartnerCatalogQueryParams = {}): Promise<PartnerCatalogInitialData> => {
-  const { categories } = await getPartnerCatalogDataset();
+  const { categories, catalogUpdatedAt } = await getPartnerCatalogDataset();
   const selection = resolvePartnerCatalogSelection(categories, query, PARTNER_CATALOG_ALL_FILTER_ID);
   const filters = normalizePartnerCatalogFilters(query);
   const sort = normalizePartnerCatalogSort(query.sort);
 
   return {
     categories,
+    catalogUpdatedAt,
     initialFilterId: selection.filterId,
     initialExpandedRootId: selection.expandedRootId,
     initialQuery: {

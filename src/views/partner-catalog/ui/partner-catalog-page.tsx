@@ -67,6 +67,27 @@ function formatRubPrice(value: number) {
   return rubFormatter.format(value);
 }
 
+function formatCatalogUpdatedAt(value: string) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  const parts = new Intl.DateTimeFormat("ru-RU", {
+    timeZone: "Europe/Moscow",
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+
+  return `${values.hour}:${values.minute} ${values.day}.${values.month}.${values.year}`;
+}
+
 function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
   if (typeof src === "string") {
     return src;
@@ -1313,6 +1334,11 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
                 onRootCategoryClick={handleRootCategoryClick}
                 onChildCategoryClick={handleChildCategoryClick}
               />
+              {formatCatalogUpdatedAt(initialData.catalogUpdatedAt) ? (
+                <p className="pt-1 text-xs leading-[1.35] text-[var(--text-muted)]">
+                  Каталог актуален на {formatCatalogUpdatedAt(initialData.catalogUpdatedAt)}
+                </p>
+              ) : null}
             </div>
           </aside>
 
@@ -1375,6 +1401,11 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
               onRootCategoryClick={handleMobileRootCategoryClick}
               onChildCategoryClick={handleMobileChildCategoryClick}
             />
+            {formatCatalogUpdatedAt(initialData.catalogUpdatedAt) ? (
+              <p className="pt-1 text-xs leading-[1.35] text-[var(--text-muted)]">
+                Каталог актуален на {formatCatalogUpdatedAt(initialData.catalogUpdatedAt)}
+              </p>
+            ) : null}
           </div>
         </DialogContent>
       </Dialog>
