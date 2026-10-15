@@ -520,7 +520,10 @@ function resolveProject111CategoryByName(index, productName, groupName) {
     return index.childById.get("1105735") ?? null;
   }
 
-  return null;
+  // Project 111 occasionally publishes products without a valid page
+  // reference in tree.xml. Keep such products in the print catalog instead
+  // of aborting the whole catalog update.
+  return index.childById.get("1109728") ?? null;
 }
 
 function buildCategoryStats(index, products) {
@@ -685,7 +688,7 @@ function parsePortobelloDataset(index) {
     .sort((left, right) => compareRu(left.title, right.title));
 
   if (unmappedCategories.size > 0) {
-    throw new Error(`Не замаплены разделы Portobello:\n${formatMappingErrors(unmappedCategories, "portobello")}`);
+    console.warn(`Пропущены незамапленные разделы Portobello:\n${formatMappingErrors(unmappedCategories, "portobello")}`);
   }
 
   return {
@@ -1043,7 +1046,7 @@ function parseProject111Dataset(index, project111Tree) {
     .sort((left, right) => compareRu(left.title, right.title));
 
   if (unmappedCategories.size > 0) {
-    throw new Error(`Не замаплены разделы Project 111:\n${formatMappingErrors(unmappedCategories, "project111")}`);
+    console.warn(`Пропущены незамапленные товары Project 111:\n${formatMappingErrors(unmappedCategories, "project111")}`);
   }
 
   return {
