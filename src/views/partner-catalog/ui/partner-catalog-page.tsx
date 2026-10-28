@@ -189,6 +189,7 @@ async function fetchCatalogPageSlice(
   sort: PartnerCatalogSortKey,
   offset: number,
   limit: number,
+  signal?: AbortSignal,
 ) {
   const params = new URLSearchParams({
     filterId,
@@ -212,7 +213,7 @@ async function fetchCatalogPageSlice(
     params.set(PARTNER_CATALOG_QUERY_SORT_KEY, sort);
   }
 
-  const response = await fetch(`${CATALOG_API_ROUTE}?${params.toString()}`, { cache: "no-store" });
+  const response = await fetch(`${CATALOG_API_ROUTE}?${params.toString()}`, { cache: "no-store", signal });
 
   if (!response.ok) {
     throw new Error("Failed to load partner catalog page slice");
@@ -362,7 +363,8 @@ function ProductCardImage({ variant, href, priority }: { variant: PartnerCatalog
           src={variant.imageUrl}
           alt={variant.title}
           fill
-          preload={priority}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : undefined}
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 1535px) 33vw, 25vw"
           className="object-contain"
         />
@@ -937,6 +939,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const [isMobileFilterDialogOpen, setIsMobileFilterDialogOpen] = useState(false);
   const listStartRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
+  const requestAbortControllerRef = useRef<AbortController | null>(null);
   const skipNextAutoLoadRef = useRef(false);
   const draftPreviewRequestIdRef = useRef(0);
   const activeFilterIdRef = useRef(initialData.initialFilterId);
@@ -1148,10 +1151,13 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     skipNextAutoLoadRef.current = true;
     const nextRequestId = requestIdRef.current + 1;
     requestIdRef.current = nextRequestId;
+    requestAbortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    requestAbortControllerRef.current = abortController;
     setIsFetchingProducts(true);
 
     try {
-      const nextSlice = await fetchCatalogPageSlice(filterId, nextFilterInputs, nextSortKey, offset, limit);
+      const nextSlice = await fetchCatalogPageSlice(filterId, nextFilterInputs, nextSortKey, offset, limit, abortController.signal);
 
       if (requestIdRef.current !== nextRequestId) {
         return;
@@ -1167,6 +1173,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
       }
     } finally {
       if (requestIdRef.current === nextRequestId) {
+        requestAbortControllerRef.current = null;
         setIsFetchingProducts(false);
       }
     }
