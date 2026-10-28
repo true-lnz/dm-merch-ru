@@ -10,7 +10,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { PageHeading } from "@/shared/ui/page-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
-import { Spinner } from "@/shared/ui/spinner";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { CatalogCategoryIcon } from "@/widgets/catalog-products-categories";
 import { CheckIcon, ChevronDownIcon, FunnelIcon, XIcon } from "lucide-react";
@@ -564,6 +563,23 @@ function ProductCardPlaceholder() {
   );
 }
 
+function PartnerCatalogCardSkeleton({ index }: { index: number }) {
+  return (
+    <div className={cn("overflow-hidden rounded-[18px] bg-[var(--card-bg)] md:rounded-[22.5px]", index >= 3 && "hidden md:block")} aria-hidden="true">
+      <Skeleton className="aspect-square w-full rounded-none rounded-t-[18px] bg-[#e7f0ff] md:rounded-t-[22.5px]" />
+      <div className="space-y-3 px-[18px] pt-[10px] pb-[18px] md:px-[22px] md:pt-[12px] md:pb-[22px]">
+        <Skeleton className="h-6 w-3/4 bg-white/80" />
+        <Skeleton className="h-10 w-full bg-white/80" />
+        <div className="flex gap-2">
+          <Skeleton className="h-8 w-20 rounded-full bg-white/80" />
+          <Skeleton className="h-8 w-20 rounded-full bg-white/80" />
+        </div>
+        <Skeleton className="h-11 w-full rounded-full bg-white/80" />
+      </div>
+    </div>
+  );
+}
+
 const PartnerProductCard = memo(function PartnerProductCard({
   item,
   categories,
@@ -898,6 +914,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(24);
   const [products, setProducts] = useState(initialData.initialSlice.items);
   const [totalCount, setTotalCount] = useState(initialData.initialSlice.total);
+  const [displayFilterInputs, setDisplayFilterInputs] = useState<PartnerCatalogFilterInputValues>(initialData.initialFilters);
+  const [displaySortKey, setDisplaySortKey] = useState<PartnerCatalogSortKey>(initialData.initialSort);
   const [draftPreviewTotal, setDraftPreviewTotal] = useState<number | null>(initialData.initialSlice.total);
   const [isFetchingDraftPreview, setIsFetchingDraftPreview] = useState(false);
   const [isFilterApplyPopoverDismissed, setIsFilterApplyPopoverDismissed] = useState(false);
@@ -942,8 +960,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const hasPendingFilterChanges = !areFilterInputValuesEqual(normalizedDraftFilterInputs, appliedFilterInputs);
   const shouldShowFilterApplyPopover = hasPendingFilterChanges && !isFilterApplyPopoverDismissed;
   const displayedProducts = useMemo(
-    () => sortPartnerCatalogProductsForClient(products, normalizePartnerCatalogFilters(appliedFilterInputs), sortKey),
-    [appliedFilterInputs, products, sortKey],
+    () => sortPartnerCatalogProductsForClient(products, normalizePartnerCatalogFilters(displayFilterInputs), displaySortKey),
+    [displayFilterInputs, displaySortKey, products],
   );
 
   useEffect(() => {
@@ -1129,6 +1147,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
       setTotalCount(nextSlice.total);
       setProducts((currentProducts) => (append ? [...currentProducts, ...nextSlice.items] : nextSlice.items));
+      setDisplayFilterInputs(nextFilterInputs);
+      setDisplaySortKey(nextSortKey);
     } catch {
       if (requestIdRef.current === nextRequestId) {
         toast.error("Не удалось загрузить каталог");
@@ -1356,22 +1376,21 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
           <div
             ref={listStartRef}
             aria-busy={isFetchingProducts}
-            className={cn("relative scroll-mt-[88px] transition-opacity duration-150 md:scroll-mt-[112px]", isFetchingProducts && "opacity-60")}
+            className="relative scroll-mt-[88px] md:scroll-mt-[112px]"
           >
             {isFetchingProducts ? (
-              <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center" aria-live="polite">
-                <div className="flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm text-[var(--text-muted)] shadow-[0_8px_24px_rgba(42,42,42,0.12)]">
-                  <Spinner className="size-4 text-[var(--accent)]" />
-                  Обновляем товары
-                </div>
+              <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4" role="status" aria-label="Загрузка товаров">
+                {Array.from({ length: 8 }, (_, index) => (
+                  <PartnerCatalogCardSkeleton key={index} index={index} />
+                ))}
               </div>
             ) : null}
-            {products.length > 0 ? (
+            {!isFetchingProducts && products.length > 0 ? (
               <div className="relative">
                 <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4">
-                  {displayedProducts.map((item) => (
-                    <PartnerProductCard key={item.id} item={item} categories={initialData.categories} filterInputs={appliedFilterInputs} />
-                  ))}
+                    {displayedProducts.map((item) => (
+                      <PartnerProductCard key={item.id} item={item} categories={initialData.categories} filterInputs={displayFilterInputs} />
+                    ))}
                 </div>
 
                 {nextCursor !== null ? (
