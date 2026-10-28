@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
 import type { AddWishlistItemInput, WishlistItem } from "./types";
 
 type WishlistContextValue = {
@@ -66,33 +66,58 @@ function readStoredItems() {
   return [];
 }
 
-export function WishlistProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<WishlistItem[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
+const EMPTY_WISHLIST: WishlistItem[] = [];
+let clientSnapshot: WishlistItem[] | null = null;
+const snapshotListeners = new Set<() => void>();
 
-  useEffect(() => {
-    setItems(readStoredItems());
-    setIsHydrated(true);
-  }, []);
+function getClientSnapshot() {
+  if (clientSnapshot === null) {
+    clientSnapshot = readStoredItems();
+  }
 
-  useEffect(() => {
-    if (!isHydrated) return;
+  return clientSnapshot;
+}
 
-    const serialized = JSON.stringify(items);
-    for (const storage of [window.localStorage, window.sessionStorage]) {
-      try {
-        storage.setItem(WISHLIST_STORAGE_KEY, serialized);
-      } catch {
-        // Keep the in-memory list if storage is unavailable or full.
-      }
+function getServerSnapshot() {
+  return EMPTY_WISHLIST;
+}
+
+function subscribeToWishlistStore(listener: () => void) {
+  snapshotListeners.add(listener);
+
+  return () => snapshotListeners.delete(listener);
+}
+
+function persistItems(items: WishlistItem[]) {
+  const serialized = JSON.stringify(items);
+
+  for (const storage of [window.localStorage, window.sessionStorage]) {
+    try {
+      storage.setItem(WISHLIST_STORAGE_KEY, serialized);
+    } catch {
+      // Keep the in-memory list if storage is unavailable or full.
     }
-  }, [isHydrated, items]);
+  }
+}
+
+function updateWishlistItems(updater: (items: WishlistItem[]) => WishlistItem[]) {
+  const nextItems = updater(getClientSnapshot());
+  clientSnapshot = nextItems;
+  persistItems(nextItems);
+  snapshotListeners.forEach((listener) => listener());
+}
+
+export function WishlistProvider({ children }: { children: ReactNode }) {
+  const items = useSyncExternalStore(subscribeToWishlistStore, getClientSnapshot, getServerSnapshot);
 
   useEffect(() => {
     function handleStorage(event: StorageEvent) {
       if (event.key !== WISHLIST_STORAGE_KEY || !event.newValue) return;
       const nextItems = parseStoredItems(event.newValue);
-      if (nextItems) setItems(nextItems);
+      if (!nextItems) return;
+
+      clientSnapshot = nextItems;
+      snapshotListeners.forEach((listener) => listener());
     }
 
     window.addEventListener("storage", handleStorage);
@@ -102,7 +127,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const addItem = useCallback((item: AddWishlistItemInput, quantity: number) => {
     const safeQuantity = sanitizeQuantity(quantity);
 
-    setItems((currentItems) => {
+    updateWishlistItems((currentItems) => {
       const existing = currentItems.find((wishlistItem) => wishlistItem.id === item.id);
 
       if (!existing) {
@@ -116,25 +141,25 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const removeItem = useCallback((id: string) => {
-    setItems((currentItems) => currentItems.filter((item) => item.id !== id));
+    updateWishlistItems((currentItems) => currentItems.filter((item) => item.id !== id));
   }, []);
 
   const updateQuantity = useCallback((id: string, quantity: number) => {
     const safeQuantity = sanitizeQuantity(quantity);
 
-    setItems((currentItems) =>
+    updateWishlistItems((currentItems) =>
       currentItems.map((item) => (item.id === id ? { ...item, quantity: safeQuantity } : item)),
     );
   }, []);
 
   const increaseQuantity = useCallback((id: string) => {
-    setItems((currentItems) =>
+    updateWishlistItems((currentItems) =>
       currentItems.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item)),
     );
   }, []);
 
   const decreaseQuantity = useCallback((id: string) => {
-    setItems((currentItems) =>
+    updateWishlistItems((currentItems) =>
       currentItems.map((item) =>
         item.id === id ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item,
       ),
@@ -142,7 +167,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clear = useCallback(() => {
-    setItems([]);
+    updateWishlistItems(() => []);
   }, []);
 
   const value = useMemo<WishlistContextValue>(

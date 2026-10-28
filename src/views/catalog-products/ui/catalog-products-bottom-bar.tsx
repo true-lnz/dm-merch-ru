@@ -95,6 +95,7 @@ export function CatalogProductsBottomBar({ categories, searchProducts }: Catalog
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isTwoColumnSubcategoryMenu, setIsTwoColumnSubcategoryMenu] = useState(false);
   const [visibleResultsLimit, setVisibleResultsLimit] = useState(SEARCH_RESULTS_PAGE_SIZE);
+  const [visibleResultsLimitQuery, setVisibleResultsLimitQuery] = useState("");
   const categoryMenuRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLDivElement | null>(null);
   const desktopCategoryPanelRef = useRef<HTMLDivElement | null>(null);
@@ -182,7 +183,11 @@ export function CatalogProductsBottomBar({ categories, searchProducts }: Catalog
 
     return [...productResults, ...categoryResults];
   }, [categorySearchResults, normalizedQuery, searchProducts]);
-  const visibleResults = useMemo(() => filteredResults.slice(0, visibleResultsLimit), [filteredResults, visibleResultsLimit]);
+  const effectiveVisibleResultsLimit = normalizedQuery === visibleResultsLimitQuery ? visibleResultsLimit : SEARCH_RESULTS_PAGE_SIZE;
+  const visibleResults = useMemo(
+    () => filteredResults.slice(0, effectiveVisibleResultsLimit),
+    [effectiveVisibleResultsLimit, filteredResults],
+  );
   const hasMoreResults = filteredResults.length > visibleResults.length;
 
   const isSearchResultsOpen = isSearchFocused && normalizedQuery.length > 0;
@@ -221,10 +226,6 @@ export function CatalogProductsBottomBar({ categories, searchProducts }: Catalog
       window.removeEventListener("resize", updateSubcategoryColumns);
     };
   }, [activeDesktopCategory, isDesktopCategoryMenuOpen]);
-
-  useEffect(() => {
-    setVisibleResultsLimit(SEARCH_RESULTS_PAGE_SIZE);
-  }, [normalizedQuery]);
 
   useEffect(() => {
     function handleResize() {
@@ -469,7 +470,12 @@ export function CatalogProductsBottomBar({ categories, searchProducts }: Catalog
                         <div className="px-3 pt-2">
                           <button
                             type="button"
-                            onClick={() => setVisibleResultsLimit((current) => current + SEARCH_RESULTS_PAGE_SIZE)}
+                            onClick={() => {
+                              setVisibleResultsLimitQuery(normalizedQuery);
+                              setVisibleResultsLimit((current) =>
+                                (normalizedQuery === visibleResultsLimitQuery ? current : SEARCH_RESULTS_PAGE_SIZE) + SEARCH_RESULTS_PAGE_SIZE,
+                              );
+                            }}
                             className="w-full cursor-pointer rounded-[10px] border border-[rgba(42,42,42,0.08)] px-3 py-2 text-sm font-semibold leading-[1.35] tracking-[-0.03em] text-[var(--heading)] transition-colors hover:bg-[var(--card-bg)]"
                           >
                             Загрузить ещё

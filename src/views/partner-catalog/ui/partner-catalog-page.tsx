@@ -1091,7 +1091,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
     setActiveFilterId(resolvedSelection.filterId);
     void loadCatalogSlice(resolvedSelection.filterId, normalizedQueryFilters, querySort, 0, currentPageSize, false);
-  }, [initialData.categories, isDesktop, pageSize, pathname, router, searchParams, searchParamsKey]);
+  }, [initialData.categories, isDesktop, pageSize, pathname, router, searchParams, searchParamsKey, totalCount]);
 
   function getCurrentPageSize() {
     return isDesktop ? pageSize : MOBILE_PAGE_SIZE;

@@ -2,6 +2,7 @@ import "server-only";
 
 import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
 import { unstable_noStore as noStore } from "next/cache";
+import { cache } from "react";
 
 import { defaultSiteInfo, type SiteInfo, type SocialIcon, type SocialLink } from "./site-info";
 
@@ -43,7 +44,7 @@ function mapSocials(value: unknown): SocialLink[] {
   return socials.length > 0 ? socials : defaultSiteInfo.socials;
 }
 
-export async function getSiteInfo(): Promise<SiteInfo> {
+export const getSiteInfo = cache(async function getSiteInfo(): Promise<SiteInfo> {
   noStore();
 
   try {
@@ -64,4 +65,4 @@ export async function getSiteInfo(): Promise<SiteInfo> {
   } catch {
     return defaultSiteInfo;
   }
-}
+});
