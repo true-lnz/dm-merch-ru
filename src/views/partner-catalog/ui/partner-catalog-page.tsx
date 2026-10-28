@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { PageHeading } from "@/shared/ui/page-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { Spinner } from "@/shared/ui/spinner";
 import { WidowFix } from "@/shared/ui/widow-fix";
 import { CatalogCategoryIcon } from "@/widgets/catalog-products-categories";
 import { CheckIcon, ChevronDownIcon, FunnelIcon, XIcon } from "lucide-react";
@@ -906,6 +907,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
   const [isMobileFilterDialogOpen, setIsMobileFilterDialogOpen] = useState(false);
   const listStartRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
+  const skipNextAutoLoadRef = useRef(false);
   const draftPreviewRequestIdRef = useRef(0);
   const activeFilterIdRef = useRef(initialData.initialFilterId);
   const expandedRootIdRef = useRef<string | null>(initialData.initialExpandedRootId);
@@ -960,6 +962,11 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
   useEffect(() => {
     const targetPageSize = isDesktop ? pageSize : MOBILE_PAGE_SIZE;
+
+    if (skipNextAutoLoadRef.current) {
+      skipNextAutoLoadRef.current = false;
+      return;
+    }
 
     if (products.length >= Math.min(targetPageSize, totalCount)) {
       return;
@@ -1078,9 +1085,6 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     if (querySort !== sortKeyRef.current) {
       setSortKey(querySort);
     }
-    setDraftPreviewTotal(totalCount);
-    setIsFetchingDraftPreview(false);
-
     if (
       resolvedSelection.filterId === activeFilterIdRef.current &&
       areFilterInputValuesEqual(normalizedQueryFilters, appliedFilterInputsRef.current) &&
@@ -1091,7 +1095,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
     setActiveFilterId(resolvedSelection.filterId);
     void loadCatalogSlice(resolvedSelection.filterId, normalizedQueryFilters, querySort, 0, currentPageSize, false);
-  }, [initialData.categories, isDesktop, pageSize, pathname, router, searchParams, searchParamsKey, totalCount]);
+  }, [initialData.categories, isDesktop, pageSize, pathname, router, searchParams, searchParamsKey]);
 
   function getCurrentPageSize() {
     return isDesktop ? pageSize : MOBILE_PAGE_SIZE;
@@ -1111,6 +1115,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     limit: number,
     append: boolean,
   ) {
+    skipNextAutoLoadRef.current = true;
     const nextRequestId = requestIdRef.current + 1;
     requestIdRef.current = nextRequestId;
     setIsFetchingProducts(true);
@@ -1141,6 +1146,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     }
 
     const nextPageSize = getCurrentPageSize();
+    activeFilterIdRef.current = nextFilterId;
     setActiveFilterId(nextFilterId);
     syncFilterUrl(nextFilterId, appliedFilterInputs, sortKey);
     void loadCatalogSlice(nextFilterId, appliedFilterInputs, sortKey, 0, nextPageSize, false);
@@ -1211,6 +1217,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
     setDraftFilterInputs(nextFilterInputs);
     setAppliedFilterInputs(nextFilterInputs);
+    draftFilterInputsRef.current = nextFilterInputs;
+    appliedFilterInputsRef.current = nextFilterInputs;
     setDraftPreviewTotal(null);
     syncFilterUrl(activeFilterId, nextFilterInputs, sortKey);
     void loadCatalogSlice(activeFilterId, nextFilterInputs, sortKey, 0, nextPageSize, false);
@@ -1225,6 +1233,8 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
 
     setDraftFilterInputs(clearedFilters);
     setAppliedFilterInputs(clearedFilters);
+    draftFilterInputsRef.current = clearedFilters;
+    appliedFilterInputsRef.current = clearedFilters;
     setDraftPreviewTotal(null);
     syncFilterUrl(activeFilterId, clearedFilters, sortKey);
     void loadCatalogSlice(activeFilterId, clearedFilters, sortKey, 0, getCurrentPageSize(), false);
@@ -1240,6 +1250,7 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
     }
 
     const nextPageSize = getCurrentPageSize();
+    sortKeyRef.current = nextSortKey;
     setSortKey(nextSortKey);
     syncFilterUrl(activeFilterId, appliedFilterInputs, nextSortKey);
     void loadCatalogSlice(activeFilterId, appliedFilterInputs, nextSortKey, 0, nextPageSize, false);
@@ -1342,7 +1353,19 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
             </div>
           </aside>
 
-          <div ref={listStartRef} className="scroll-mt-[88px] md:scroll-mt-[112px]">
+          <div
+            ref={listStartRef}
+            aria-busy={isFetchingProducts}
+            className={cn("relative scroll-mt-[88px] transition-opacity duration-150 md:scroll-mt-[112px]", isFetchingProducts && "opacity-60")}
+          >
+            {isFetchingProducts ? (
+              <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center" aria-live="polite">
+                <div className="flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm text-[var(--text-muted)] shadow-[0_8px_24px_rgba(42,42,42,0.12)]">
+                  <Spinner className="size-4 text-[var(--accent)]" />
+                  Обновляем товары
+                </div>
+              </div>
+            ) : null}
             {products.length > 0 ? (
               <div className="relative">
                 <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4">
