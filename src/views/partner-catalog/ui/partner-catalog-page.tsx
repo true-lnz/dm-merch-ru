@@ -354,11 +354,18 @@ function CatalogImageWithSkeleton({
   );
 }
 
-function ProductCardImage({ variant, href }: { variant: PartnerCatalogVariant; href: string }) {
+function ProductCardImage({ variant, href, priority }: { variant: PartnerCatalogVariant; href: string; priority?: boolean }) {
   return (
     <Link href={href} target="_blank" rel="noreferrer" aria-label={`Открыть товар ${variant.title}`} className="block">
       <div className="relative aspect-square w-full overflow-hidden rounded-t-[18px] md:rounded-t-[22.5px]  bg-[var(--surface)]">
-        <CatalogImageWithSkeleton src={variant.imageUrl} alt={variant.title} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-contain" />
+        <CatalogImageWithSkeleton
+          src={variant.imageUrl}
+          alt={variant.title}
+          fill
+          preload={priority}
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 1535px) 33vw, 25vw"
+          className="object-contain"
+        />
       </div>
     </Link>
   );
@@ -518,6 +525,7 @@ function ProductCardShell({
   productHref,
   className,
   onVariantSelect,
+  priority,
 }: {
   variants: PartnerCatalogVariant[];
   activeVariant: PartnerCatalogVariant;
@@ -525,6 +533,7 @@ function ProductCardShell({
   productHref: string;
   className?: string;
   onVariantSelect: (variantId: string) => void;
+  priority?: boolean;
 }) {
   return (
     <article
@@ -534,7 +543,7 @@ function ProductCardShell({
       )}
     >
       <div className="flex h-full flex-col overflow-hidden rounded-[18px] md:rounded-[22.5px] border border-transparent bg-[var(--card-bg)] transition-[border-color,box-shadow,height] md:group-hover:h-auto md:group-hover:min-h-full md:group-hover:overflow-visible md:group-hover:border-[rgba(42,42,42,0.12)] md:group-hover:shadow-[0_16px_40px_rgba(42,42,42,0.16)]">
-        <ProductCardImage variant={activeVariant} href={productHref} />
+        <ProductCardImage variant={activeVariant} href={productHref} priority={priority} />
         <ProductCardContent
           variants={variants}
           activeVariant={activeVariant}
@@ -584,10 +593,12 @@ const PartnerProductCard = memo(function PartnerProductCard({
   item,
   categories,
   filterInputs,
+  priority,
 }: {
   item: PartnerCatalogProduct;
   categories: PartnerCatalogRootSection[];
   filterInputs: PartnerCatalogFilterInputValues;
+  priority?: boolean;
 }) {
   const [activeVariantId, setActiveVariantId] = useState(item.variants[0]?.id ?? "");
   const normalizedFilters = useMemo(() => normalizePartnerCatalogFilters(filterInputs), [filterInputs]);
@@ -618,6 +629,7 @@ const PartnerProductCard = memo(function PartnerProductCard({
         activeVariantId={activeVariant.id}
         productHref={productHref}
         onVariantSelect={setActiveVariantId}
+        priority={priority}
       />
     </div>
   );
@@ -1388,8 +1400,14 @@ export function PartnerCatalogPage({ initialData }: { initialData: PartnerCatalo
             {!isFetchingProducts && products.length > 0 ? (
               <div className="relative">
                 <div className="grid grid-cols-1 gap-5 overflow-visible md:grid-cols-2 md:gap-7 lg:grid-cols-3 2xl:grid-cols-4">
-                    {displayedProducts.map((item) => (
-                      <PartnerProductCard key={item.id} item={item} categories={initialData.categories} filterInputs={displayFilterInputs} />
+                    {displayedProducts.map((item, index) => (
+                      <PartnerProductCard
+                        key={item.id}
+                        item={item}
+                        categories={initialData.categories}
+                        filterInputs={displayFilterInputs}
+                        priority={index < (isDesktop ? 4 : 3)}
+                      />
                     ))}
                 </div>
 
