@@ -44,14 +44,19 @@ export async function Footer() {
 
         <div className="mt-12 flex flex-col gap-4 text-white/50 md:mt-14 xl:mt-[66px] xl:flex-row xl:items-start xl:justify-between">
           <p className="text-sm leading-normal md:text-base xl:tracking-[-0.02em]">{siteInfo.copyright}</p>
-          <Link
-            href={SITE_PRIVACY_HREF}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-fit text-sm leading-normal transition-opacity hover:opacity-80 md:text-base pt-[2px]"
-          >
-            {SITE_PRIVACY_LABEL}
-          </Link>
+          <div className="flex flex-col gap-2 md:flex-row md:items-start md:gap-6">
+            <a href="https://t.me/lansonz" target="_blank" rel="noopener noreferrer" className="w-fit text-sm leading-normal transition-opacity hover:opacity-80 md:text-base">
+              Разработка сайта
+            </a>
+            <Link
+              href={SITE_PRIVACY_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-fit pt-[2px] text-sm leading-normal transition-opacity hover:opacity-80 md:text-base"
+            >
+              {SITE_PRIVACY_LABEL}
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
