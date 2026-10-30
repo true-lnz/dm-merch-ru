@@ -20,7 +20,7 @@ const HERO_FEATURES = [
 const FEATURE_CHANGE_INTERVAL_MS = 5000;
 const FEATURE_FADE_DURATION_MS = 260;
 
-export function TestHomeHeroFeature() {
+export function HomeHeroFeature() {
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const fadeTimeoutId = useRef<number | null>(null);

@@ -4,7 +4,6 @@ import { WidowFix } from "@/shared/ui/widow-fix";
 import { FaqSection } from "@/widgets/faq-section";
 import { HomeDigest } from "@/widgets/home-digest";
 import { HomeBenefits, HomeFeatures } from "@/widgets/home-feature-cards/home-feature-cards";
-import { HomeHero } from "@/widgets/home-hero";
 import { HomeLeadCta } from "@/widgets/home-lead-cta";
 import { HomeMarquiz } from "@/widgets/home-marquiz";
 import { HomePartnerProducts } from "@/widgets/home-partner-products";
@@ -13,13 +12,13 @@ import { HomeReviews } from "@/widgets/home-reviews";
 import { HomeServices } from "@/widgets/home-services";
 import { HomeUrgentOrder } from "@/widgets/home-urgent-order";
 import { HomeWorkStages } from "@/widgets/home-work-stages";
-import { TestHomeHero } from "@/widgets/test-home-hero";
+import { HomeHero } from "@/widgets/home-hero";
 
 function renderBlock(blockType: HomePageBlockType, data: HomePageData) {
   switch (blockType) {
     case "hero":
       // return <HomeHero data={data.hero} />;
-    return <TestHomeHero />;
+    return <HomeHero />;
     case "digest":
       return <HomeDigest data={data.digest} />;
     case "results":
