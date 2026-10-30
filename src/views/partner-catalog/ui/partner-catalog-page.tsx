@@ -96,12 +96,6 @@ function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
   return "src" in src ? src.src : src.default.src;
 }
 
-function shouldBypassNextImageOptimizer(src: ComponentProps<typeof Image>["src"]) {
-  const imageSrc = getCatalogImageCacheKey(src);
-
-  return imageSrc.startsWith("/images/");
-}
-
 function useOutsideClick(ref: RefObject<HTMLElement | null>, onOutside: () => void, enabled: boolean) {
   useEffect(() => {
     if (!enabled) {

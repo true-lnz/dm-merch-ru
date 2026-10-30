@@ -1,5 +1,6 @@
 import { getBlogPosts } from "@/entities/blog-post";
 import { getCatalogRootIconId } from "@/shared/config/catalog-root-icons";
+import { normalizeSearchValue } from "@/shared/lib/normalize-search-value";
 import { getPayloadClient } from "@/shared/lib/payload/get-payload-client";
 import { isPopulatedMedia } from "@/shared/lib/payload/media";
 import type {
@@ -27,10 +28,6 @@ const HERO_IMAGE_KEYS = ["leftTop", "leftMiddle", "leftBottom", "rightTop", "rig
 type HeroImageKey = (typeof HERO_IMAGE_KEYS)[number];
 
 type HeroImagesSource = Partial<Record<HeroImageKey, unknown>>;
-
-function normalizeSearchValue(value: string) {
-  return value.trim().toLocaleLowerCase("ru");
-}
 
 function resolvePortrait(source: unknown, fallback: CatalogProductsLandingPortrait): CatalogProductsLandingPortrait {
   if (!isPopulatedMedia(source) || typeof source.url !== "string" || source.url.length === 0) {

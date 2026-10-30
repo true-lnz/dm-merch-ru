@@ -51,12 +51,6 @@ function getCatalogImageCacheKey(src: ComponentProps<typeof Image>["src"]) {
   return "src" in src ? src.src : src.default.src;
 }
 
-function shouldBypassNextImageOptimizer(src: ComponentProps<typeof Image>["src"]) {
-  const imageSrc = getCatalogImageCacheKey(src);
-
-  return imageSrc.startsWith("/images/");
-}
-
 type PartnerCatalogProductPageProps = {
   detail: PartnerCatalogProductDetail;
   breadcrumb: PartnerCatalogBreadcrumbData;

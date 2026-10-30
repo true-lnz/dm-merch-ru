@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/shared/lib/cn";
+import { normalizeSearchValue } from "@/shared/lib/normalize-search-value";
 import { openWishlistDialog, useWishlist } from "@/shared/lib/wishlist";
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { TransitionLink } from "@/shared/ui/page-transition";
@@ -28,10 +29,6 @@ type SearchResultItem = {
   subtitle?: string;
   type: "category" | "subcategory" | "product";
 };
-
-function normalizeSearchValue(value: string) {
-  return value.trim().toLocaleLowerCase("ru");
-}
 
 function useDebouncedValue<T>(value: T, delayMs: number) {
   const [debouncedValue, setDebouncedValue] = useState(value);

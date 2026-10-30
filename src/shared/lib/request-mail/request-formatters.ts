@@ -1,6 +1,7 @@
+import { formatRub } from "@/shared/lib/formatters";
 import type { RequestSource, WishlistRequestItem } from "./types";
 
-const rubFormatter = new Intl.NumberFormat("ru-RU");
+export { formatRub } from "@/shared/lib/formatters";
 
 export const requestSourceLabels: Record<RequestSource, string> = {
   "request-cta": "CTA-блок",
@@ -19,10 +20,6 @@ export const requestSourceLabels: Record<RequestSource, string> = {
   "contacts-page": "Страница контактов",
   "wishlist-dialog": "Вишлист",
 };
-
-export function formatRub(value: number) {
-  return `${rubFormatter.format(value)} ₽`;
-}
 
 export function formatWishlistLineItems(items: WishlistRequestItem[]) {
   return items.map((item, index) => {

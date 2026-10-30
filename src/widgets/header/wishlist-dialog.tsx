@@ -1,5 +1,6 @@
 import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/cn";
+import { formatRub } from "@/shared/lib/formatters";
 import { useWishlist, type WishlistItem } from "@/shared/lib/wishlist";
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { RequestForm } from "@/shared/ui/request-form";
@@ -12,12 +13,6 @@ type WishlistDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
-
-const rubFormatter = new Intl.NumberFormat("ru-RU");
-
-function formatRub(value: number) {
-  return `${rubFormatter.format(value)} ₽`;
-}
 
 function WishlistProductCard({
   item,
