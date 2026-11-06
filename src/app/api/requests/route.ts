@@ -1,6 +1,12 @@
-import type { RequestAttribution, RequestErrorResponse, RequestPayload, RequestSuccessResponse, WishlistRequestItem } from "@/shared/lib/request-mail/types";
 import { getBitrixLeadErrorDetails, sendBitrixLead } from "@/shared/lib/request-mail/send-bitrix-lead";
 import { sendRequestEmail } from "@/shared/lib/request-mail/send-request-email";
+import type {
+  RequestAttribution,
+  RequestErrorResponse,
+  RequestPayload,
+  RequestSuccessResponse,
+  WishlistRequestItem,
+} from "@/shared/lib/request-mail/types";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -100,6 +106,82 @@ function parseWishlistItems(value: unknown): WishlistRequestItem[] {
 function buildRedirectUrl(name: string) {
   const normalizedName = name.trim();
   return normalizedName ? `/request-success?${new URLSearchParams({ name: normalizedName }).toString()}` : "/request-success";
+}
+
+/**
+ * Получает идентификатор сессии Calltouch из cookie.
+ */
+function getCalltouchSessionId(request: Request): string | undefined {
+  const cookieHeader = request.headers.get("cookie") ?? "";
+
+  const sessionCookie = cookieHeader
+    .split(";")
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith("_ct_session_id="));
+
+  if (!sessionCookie) {
+    return undefined;
+  }
+
+  const value = sessionCookie.slice("_ct_session_id=".length);
+
+  try {
+    const sessionId = decodeURIComponent(value);
+
+    return sessionId && sessionId !== "undefined" ? sessionId : undefined;
+  } catch {
+    return value || undefined;
+  }
+}
+
+/**
+ * Отправляет заявку в Calltouch.
+ */
+async function sendCalltouchRequest(payload: RequestPayload, request: Request) {
+  const siteId = process.env.CALLTOUCH_SITE_ID;
+
+  if (!siteId) {
+    console.warn("[requests] CALLTOUCH_SITE_ID is not configured");
+    return;
+  }
+
+  const phoneNumber = payload.phone.replace(/\D/g, "");
+
+  const sessionId = getCalltouchSessionId(request);
+
+  const pageUrl = new URL(payload.pagePath.startsWith("/") ? payload.pagePath : "/", request.url).toString();
+
+  const comment = payload.type === "general" ? (payload.message ?? payload.context ?? "") : (payload.message ?? "");
+
+  const data = new URLSearchParams({
+    fio: payload.name,
+    phoneNumber,
+    email: payload.email ?? "",
+    subject: payload.type === "wishlist" ? "Заявка из избранного" : "Заявка с сайта",
+    tags: `${payload.source}, ${payload.type}`,
+    comment,
+    requestUrl: pageUrl,
+  });
+
+  if (sessionId) {
+    data.append("sessionId", sessionId);
+  }
+
+  const response = await fetch(`https://api.calltouch.ru/calls-service/RestAPI/requests/${encodeURIComponent(siteId)}/register/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    },
+    body: data.toString(),
+    cache: "no-store",
+    signal: AbortSignal.timeout(5000),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok || result.error) {
+    throw new Error(`Calltouch API error: ${response.status} ${JSON.stringify(result).slice(0, 500)}`);
+  }
 }
 
 function buildError(message: string, status = 400) {
@@ -264,9 +346,9 @@ function parseRequestPayload(body: Record<string, unknown>): RequestPayload {
   }
 
   return {
-      type: "general",
-      source: base.source as RequestPayload["source"],
-      pagePath: base.pagePath,
+    type: "general",
+    source: base.source as RequestPayload["source"],
+    pagePath: base.pagePath,
     pageTitle: base.pageTitle,
     name: base.name,
     phone: base.phone,
@@ -274,8 +356,8 @@ function parseRequestPayload(body: Record<string, unknown>): RequestPayload {
     message: base.message,
     wishlistItems: base.wishlistItems,
     quantity: parseQuantity(body.quantity),
-      context: sanitizeOptionalString(body.context),
-      attribution: base.attribution,
+    context: sanitizeOptionalString(body.context),
+    attribution: base.attribution,
   };
 }
 
@@ -326,6 +408,18 @@ export async function POST(request: Request) {
         source: payload.source,
         pagePath: payload.pagePath,
         ...getBitrixLeadErrorDetails(error),
+      });
+    }
+
+    // Отправка в Calltouch
+    try {
+      await sendCalltouchRequest(payload, request);
+    } catch (error) {
+      console.error("[requests] failed to create Calltouch request", {
+        requestType: payload.type,
+        source: payload.source,
+        pagePath: payload.pagePath,
+        error,
       });
     }
 
